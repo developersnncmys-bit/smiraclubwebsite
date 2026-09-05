@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img">
+  <defs>
+    <linearGradient id="sky-benefit-off" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#08304f"/><stop offset="0.55" stop-color="#0f5a86"/><stop offset="1" stop-color="#2f96b8"/>
+    </linearGradient>
+    <radialGradient id="glow-benefit-off" cx="0.72" cy="0.44" r="0.5">
+      <stop offset="0" stop-color="#ffd166" stop-opacity="0.95"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="water-benefit-off" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b4762"/><stop offset="1" stop-color="#03202e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#sky-benefit-off)"/>
+  
+  <rect width="1200" height="720" fill="url(#glow-benefit-off)"/>
+  <circle cx="864" cy="316" r="58" fill="#ffe9a8" opacity="0.95"/>
+
+  <path d="M0 470 C 180 402 330 452 470 470 C 640 492 780 436 1000 452 C 1090 458 1150 470 1200 480 L1200 720 L0 720 Z" fill="#0a3a55"/>
+  <path d="M0 528 C 200 470 360 520 540 534 C 720 548 900 508 1200 528 L1200 720 L0 720 Z" fill="#062637"/>
+
+  <rect y="588" width="1200" height="132" fill="url(#water-benefit-off)"/>
+  <g fill="#ffffff" opacity="0.16">
+    <rect x="120" y="620" width="220" height="3" rx="1.5"/>
+    <rect x="430" y="648" width="300" height="3" rx="1.5"/>
+    <rect x="760" y="616" width="250" height="3" rx="1.5"/>
+    <rect x="250" y="678" width="360" height="3" rx="1.5"/>
+  </g>
+  
+    <g transform="translate(120 640) scale(1.25)" fill="rgba(0,0,0,0.62)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(285 640) scale(1.09)" fill="rgba(0,0,0,0.5)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(450 640) scale(0.9299999999999999)" fill="rgba(0,0,0,0.62)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(615 640) scale(0.77)" fill="rgba(0,0,0,0.5)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+</svg>

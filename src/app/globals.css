@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface-soft text-ink-900 antialiased;
+    font-family: var(--font-sans);
+  }
+
+  /* The phone frame keeps its own scroll; nothing should slide sideways. */
+  body {
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-tight;
+  }
+
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  /* The page gutter: tight on a phone, generous on a desktop. */
+  .shell {
+    @apply mx-auto w-full max-w-shell px-4 sm:px-6 lg:px-10 2xl:px-12;
+  }
+
+  /* Breaks a child out of the shell without overshooting the scrollbar. */
+  .bleed {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white shadow-card;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold
+           transition active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700;
+  }
+
+  .btn-action {
+    @apply btn bg-action-500 text-white hover:bg-action-600;
+  }
+
+  .btn-quiet {
+    @apply btn border border-surface-line bg-white text-ink-700 hover:bg-surface-soft;
+  }
+
+  .btn-pill {
+    @apply inline-flex items-center gap-2 rounded-full bg-action-500 px-5 py-2.5
+           text-sm font-bold text-white transition hover:bg-action-600 active:scale-[0.98];
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-surface-line bg-white px-4 py-3 text-[15px]
+           text-ink-900 outline-none transition placeholder:text-ink-400
+           focus:border-brand-400 focus:ring-4 focus:ring-brand-100;
+  }
+
+  .section-title {
+    @apply text-[19px] font-bold text-ink-900 sm:text-xl lg:text-2xl;
+  }
+
+  /* Horizontal scrollers — the phone pattern from the design. */
+  .rail {
+    @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    @apply snap-start shrink-0;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Room for the bottom bar on a phone, and for the home indicator on iOS. */
+  .pb-nav {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}

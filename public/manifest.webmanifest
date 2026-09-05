@@ -1,0 +1,10 @@
+{
+  "name": "Smira Club",
+  "short_name": "Smira",
+  "description": "Memberships, free stays, hotels, villas and packages at member prices.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#175074",
+  "icons": []
+}
