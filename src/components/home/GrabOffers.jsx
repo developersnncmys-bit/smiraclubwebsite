@@ -4,10 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ChevronRight } from 'lucide-react';
-import { offers, offerTabs } from '@/lib/content';
+import { offerTabs } from '@/lib/content';
 
 /** Grab Offers, with the four tabs the design puts above the cards. */
-export default function GrabOffers() {
+export default function GrabOffers({ offers = [] }) {
   const [tab, setTab] = useState('All');
   const shown = tab === 'All' ? offers : offers.filter((o) => o.tab === tab);
 

@@ -1,6 +1,10 @@
 /**
  * Everything the home screen says, straight off the Figma.
  *
+ * `image` is a slot name, not a path — lib/images.js turns it into a real
+ * photo the moment one is dropped into public/img/ under that name, and falls
+ * back to the committed placeholder until then. See public/img/MANIFEST.md.
+ *
  * The artwork in /public/img is placeholder scenery drawn as SVG, so a page
  * never renders as broken alt text when the network is unhappy. Swap these
  * paths for the real photography when it lands.
@@ -27,8 +31,7 @@ export const heroSlides = [
     suffix: 'off',
     copy: 'Hotels, Packages, Villas & more at exclusive member prices.',
     cta: { label: 'Book now', href: '/membership' },
-    image:
-      '/img/hero-benefits.svg',
+    image: 'hero-benefits',
     alt: 'A lit hotel and pool at dusk',
   },
   {
@@ -40,8 +43,7 @@ export const heroSlides = [
     suffix: 'free nights',
     copy: 'Members only pay for food. The room is on us.',
     cta: { label: 'See free stays', href: '/free-stay' },
-    image:
-      '/img/hero-freestay.svg',
+    image: 'hero-freestay',
     alt: 'A hotel room with a city view',
   },
   {
@@ -53,8 +55,7 @@ export const heroSlides = [
     suffix: 'a night',
     copy: 'Whole villas in Goa, Alibaug, Lonavala and Coorg.',
     cta: { label: 'Browse villas', href: '/villas' },
-    image:
-      '/img/hero-villas.svg',
+    image: 'hero-villas',
     alt: 'A villa with a private pool',
   },
 ];
@@ -102,32 +103,28 @@ export const memberBenefits = [
     kicker: 'Complimentary',
     title: 'Hotel Stay',
     note: 'Only Pay For Food',
-    image:
-      '/img/benefit-stay.svg',
+    image: 'benefit-stay',
   },
   {
     id: 'off',
     kicker: 'Up To',
     title: '40% OFF',
     note: 'On Luxury Hotels',
-    image:
-      '/img/benefit-off.svg',
+    image: 'benefit-off',
   },
   {
     id: 'experiences',
     kicker: 'Best Travel',
     title: 'Experiences',
     note: 'Curated For Members',
-    image:
-      '/img/benefit-experiences.svg',
+    image: 'benefit-experiences',
   },
   {
     id: 'special',
     kicker: 'Offers For',
     title: 'Specials Days',
     note: 'Curated For Members',
-    image:
-      '/img/benefit-special.svg',
+    image: 'benefit-special',
   },
 ];
 
@@ -166,8 +163,7 @@ export const offers = [
     badge: 'Weekend getaway',
     title: 'Perfect Escapes for your weekend',
     tone: 'from-[#2b1e63] to-[#3d2a86]',
-    image:
-      '/img/offer-weekend.svg',
+    image: 'offer-weekend',
   },
   {
     id: 'seasonal',
@@ -175,8 +171,7 @@ export const offers = [
     badge: 'Seasonal',
     title: 'Amazing Deals this season',
     tone: 'from-[#0f3f77] to-[#1c62b0]',
-    image:
-      '/img/offer-seasonal.svg',
+    image: 'offer-seasonal',
   },
   {
     id: 'salon',
@@ -184,8 +179,7 @@ export const offers = [
     badge: 'Salon & Spa',
     title: 'Unwind at member rates',
     tone: 'from-[#5b2333] to-[#8c3b52]',
-    image:
-      '/img/offer-salon.svg',
+    image: 'offer-salon',
   },
   {
     id: 'dining',
@@ -193,8 +187,7 @@ export const offers = [
     badge: 'Dining',
     title: 'Table for two, on the house',
     tone: 'from-[#14532d] to-[#1f7a43]',
-    image:
-      '/img/offer-dining.svg',
+    image: 'offer-dining',
   },
 ];
 
@@ -205,32 +198,28 @@ export const stories = [
     title: 'Uncover the hidden gems of the Bali',
     author: '@Siya Sharma',
     video: false,
-    image:
-      '/img/story-bali.svg',
+    image: 'story-bali',
   },
   {
     id: 'dandeli',
     title: 'Dandeli Adventures Trip',
     author: '@Smira Club',
     video: true,
-    image:
-      '/img/story-dandeli.svg',
+    image: 'story-dandeli',
   },
   {
     id: 'srilanka',
     title: 'Must see wonders of Sri Lanka',
     author: '@Smira Club',
     video: true,
-    image:
-      '/img/story-srilanka.svg',
+    image: 'story-srilanka',
   },
   {
     id: 'kerala',
     title: 'A Charming Port City in Kerala',
     author: '@Kushal Gowda',
     video: false,
-    image:
-      '/img/story-kerala.svg',
+    image: 'story-kerala',
   },
 ];
 

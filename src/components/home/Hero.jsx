@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { heroSlides } from '@/lib/content';
+import { heroSlides as fallbackSlides } from '@/lib/content';
 
 /**
  * The membership banner. Full-bleed and short on a phone, a rounded wide
  * panel on a desktop. It advances itself, and stops the moment anyone takes
  * hold of it.
  */
-export default function Hero() {
+export default function Hero({ slides }) {
+  const heroSlides = slides?.length ? slides : fallbackSlides;
   const [at, setAt] = useState(0);
   const [paused, setPaused] = useState(false);
 

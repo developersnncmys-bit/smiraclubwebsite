@@ -37,7 +37,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={poppins.variable}>
-      <body>
+      {/* Extensions (ColorZilla, Grammarly and friends) add attributes to the
+          body before React hydrates; that mismatch is theirs, not ours. */}
+      <body suppressHydrationWarning>
         <Header />
         {/* The bottom bar takes its room back on a phone only. */}
         <main className="pb-nav lg:pb-0">{children}</main>

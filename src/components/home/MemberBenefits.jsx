@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import Section from '@/components/ui/Section';
 import { memberBenefits } from '@/lib/content';
+import { image } from '@/lib/images';
 
 /** The four image cards, then the way through to the plans. */
 export default function MemberBenefits() {
@@ -18,7 +19,7 @@ export default function MemberBenefits() {
                 className="group relative aspect-[4/5] overflow-hidden rounded-2xl lg:aspect-[3/4]"
               >
                 <Image
-                  src={benefit.image}
+                  src={image(benefit.image)}
                   alt=""
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"

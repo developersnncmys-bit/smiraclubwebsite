@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Play } from 'lucide-react';
 import Section from '@/components/ui/Section';
 import { stories } from '@/lib/content';
+import { image } from '@/lib/images';
 
 /**
  * Watch & Explore. Two across on a phone as drawn, four on a desktop, with
@@ -17,7 +18,7 @@ export default function WatchExplore() {
             <Link key={story.id} href={`/stories/${story.id}`} className="group overflow-hidden rounded-2xl bg-white shadow-card">
               <div className="relative aspect-[4/5] lg:aspect-[3/4]">
                 <Image
-                  src={story.image}
+                  src={image(story.image)}
                   alt=""
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
