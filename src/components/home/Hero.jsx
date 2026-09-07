@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { heroSlides as fallbackSlides } from '@/lib/content';
+import { toSrc } from '@/lib/imageSlot';
 
 /**
  * The membership banner. Full-bleed and short on a phone, a rounded wide
@@ -12,7 +13,11 @@ import { heroSlides as fallbackSlides } from '@/lib/content';
  * hold of it.
  */
 export default function Hero({ slides }) {
-  const heroSlides = slides?.length ? slides : fallbackSlides;
+  // Normalised, so a render without the server's props still shows something.
+  const heroSlides = (slides?.length ? slides : fallbackSlides).map((s) => ({
+    ...s,
+    image: toSrc(s.image),
+  }));
   const [at, setAt] = useState(0);
   const [paused, setPaused] = useState(false);
 

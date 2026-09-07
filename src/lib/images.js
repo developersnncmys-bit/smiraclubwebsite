@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { toSrc } from './imageSlot';
 
 /**
  * Which file actually backs an image slot.
@@ -25,7 +26,7 @@ const resolved = new Map();
 export function image(slot) {
   if (resolved.has(slot)) return resolved.get(slot);
 
-  let found = `/img/${slot}.svg`;
+  let found = toSrc(slot);
 
   try {
     for (const ext of PREFERRED) {

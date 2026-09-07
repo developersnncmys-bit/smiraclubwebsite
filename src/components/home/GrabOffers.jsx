@@ -4,12 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ChevronRight } from 'lucide-react';
-import { offerTabs } from '@/lib/content';
+import { offerTabs, offers as fallbackOffers } from '@/lib/content';
+import { toSrc } from '@/lib/imageSlot';
 
 /** Grab Offers, with the four tabs the design puts above the cards. */
-export default function GrabOffers({ offers = [] }) {
+export default function GrabOffers({ offers }) {
   const [tab, setTab] = useState('All');
-  const shown = tab === 'All' ? offers : offers.filter((o) => o.tab === tab);
+
+  // Same guard as the hero: never hand next/image a bare slot name.
+  const cards = (offers?.length ? offers : fallbackOffers).map((o) => ({
+    ...o,
+    image: toSrc(o.image),
+  }));
+  const shown = tab === 'All' ? cards : cards.filter((o) => o.tab === tab);
 
   return (
     <div className="bg-white py-6 lg:bg-transparent lg:py-10">
