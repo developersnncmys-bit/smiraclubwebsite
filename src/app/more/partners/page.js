@@ -94,11 +94,11 @@ export default function Page() {
                 Partner with us
               </span>
 
-              <h1 className="mt-4 text-[28px] font-extrabold leading-[1.15] tracking-tight text-ink-900 sm:text-4xl lg:text-[44px]">
+              <h1 className="mt-5 max-w-2xl text-[28px] font-extrabold leading-[1.28] tracking-tight text-ink-900 sm:text-4xl lg:text-[42px] lg:leading-[1.22]">
                 List your property and earn from members who travel all year.
               </h1>
 
-              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink-500 lg:text-lg">
+              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink-500 lg:text-lg">
                 Hotels, villas, homestays, transport and experiences. Tell us about yours and our
                 partnerships desk will call you within two working days.
               </p>
