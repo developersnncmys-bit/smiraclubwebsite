@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
@@ -26,7 +26,6 @@ export default function SearchPanel() {
   /** One entry per child, holding that child's age — the design asks for both. */
   const [childAges, setChildAges] = useState([]);
   const [guestsOpen, setGuestsOpen] = useState(false);
-  const guestsField = useRef(null);
 
   /** 'Adults/ Room' when nobody brings a child, and says so when they do. */
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -127,7 +126,6 @@ export default function SearchPanel() {
 
             <div className="relative">
               <button
-                ref={guestsField}
                 type="button"
                 onClick={() => setGuestsOpen((o) => !o)}
                 className="flex w-full items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 text-left lg:w-[13rem]"
@@ -147,7 +145,6 @@ export default function SearchPanel() {
               <GuestsPicker
                 open={guestsOpen}
                 onClose={() => setGuestsOpen(false)}
-                anchorRef={guestsField}
                 rooms={rooms}
                 setRooms={setRooms}
                 adults={adults}
