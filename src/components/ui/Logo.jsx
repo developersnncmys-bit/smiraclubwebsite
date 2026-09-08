@@ -1,31 +1,31 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
- * The Smira mark, drawn rather than shipped as an image so it stays sharp and
- * costs nothing to load. Swap in the real asset when it arrives.
+ * The real Smira Club lockup, transcribed from the client's artwork.
+ *
+ * It stays an SVG rather than becoming a PNG because a wordmark sitting beside
+ * 13px nav links has to hold up at every screen density, and because the whole
+ * file weighs less than a photograph of it would.
+ *
+ * `compact` only changes the height. The tagline is part of the artwork and
+ * reads as a texture at small sizes, which is how the design uses it.
  */
 export default function Logo({ className = '', compact = false }) {
   return (
-    <Link href="/" aria-label="Smira Club — home" className={`inline-flex items-center gap-2 ${className}`}>
-      <svg viewBox="0 0 32 32" className="h-8 w-8 shrink-0" role="presentation">
-        <path
-          d="M22 5c-4.5 0-7 2.6-7 5.6 0 5.6 10 4.2 10 9.9C25 24 21.5 27 16 27c-3.3 0-6-1-7.7-2.6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          className="text-brand-600"
-        />
-        <circle cx="10" cy="8" r="2.6" className="fill-brand-400" />
-      </svg>
-      <span className="leading-none">
-        <span className="block text-[15px] font-extrabold tracking-[0.14em] text-brand-700">SMIRA</span>
-        {!compact && (
-          <span className="mt-0.5 block text-[8px] font-semibold uppercase tracking-[0.18em] text-ink-400">
-            Club
-          </span>
-        )}
-      </span>
+    <Link
+      href="/"
+      aria-label="Smira Club — home"
+      className={`inline-flex shrink-0 items-center ${className}`}
+    >
+      <Image
+        src="/img/smira-logo.svg"
+        alt="Smira Club"
+        width={360}
+        height={82}
+        priority
+        className={compact ? 'h-7 w-auto' : 'h-8 w-auto lg:h-10'}
+      />
     </Link>
   );
 }
