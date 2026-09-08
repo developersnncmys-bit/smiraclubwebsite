@@ -330,3 +330,54 @@ export const footerColumns = [
     ],
   },
 ];
+
+/* -- Profile ------------------------------------------------------------ */
+
+/**
+ * The signed-in member. These are the design's own values; nothing here is
+ * wired to an account yet, so swapping this object for what `api.me()`
+ * returns is all /profile needs to go live.
+ */
+export const member = {
+  name: 'Ananya',
+  phone: '9899999989',
+  active: true,
+  tier: 'Platinum Member',
+  memberId: 'SM123456789',
+  validTill: '31 Dec 2028',
+  /** Percent complete — the ring and the bar both read this one number. */
+  completion: 40,
+  savings: 12999,
+  savedAcross: 6,
+};
+
+/** Your Information — the two grouped lists, in the order the design runs. */
+export const profileMenu = [
+  {
+    id: 'account',
+    items: [
+      { label: 'Change Password', icon: 'Pencil', href: '/profile/password' },
+      { label: 'My Bookings', icon: 'Briefcase', href: '/profile/bookings' },
+      { label: 'My Membership', icon: 'Ticket', href: '/membership' },
+      { label: 'My Travel Year', icon: 'PlaneTakeoff', href: '/profile/travel-year' },
+      { label: 'Refer & Earn', icon: 'Wallet', href: '/profile/referrals' },
+      { label: 'Claim Your Gifts', icon: 'Gift', href: '/profile/rewards' },
+      { label: 'My Reviews', icon: 'Star', href: '/profile/reviews' },
+      { label: 'Saved Address', icon: 'MapPin', href: '/profile/addresses' },
+      { label: 'Saved Payments', icon: 'CreditCard', href: '/profile/payments' },
+    ],
+  },
+  {
+    id: 'support',
+    items: [
+      { label: 'Get Help', icon: 'Headset', href: '/more/support' },
+      { label: 'Account Settings', icon: 'Settings', href: '/profile/settings' },
+      { label: 'Language Settings', icon: 'Languages', href: '/profile/language' },
+      { label: 'Privacy Policy', icon: 'FileText', href: '/more/privacy' },
+      { label: 'Terms & Conditions', icon: 'ScrollText', href: '/more/terms' },
+      { label: 'Refund Policy', icon: 'HandCoins', href: '/more/refunds' },
+      { label: 'Cancellation Policy', icon: 'FileX2', href: '/more/cancellation' },
+      { label: 'Delete Account', icon: 'Trash2', href: '/profile/delete' },
+    ],
+  },
+];

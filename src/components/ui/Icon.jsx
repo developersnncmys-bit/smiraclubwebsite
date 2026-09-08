@@ -3,6 +3,8 @@ import {
   UtensilsCrossed, Gamepad2, Sparkles, Waves, Mountain, Clapperboard, HeartPulse,
   Heart, Search, CircleUser, MoreHorizontal, MapPin, Bell, ChevronDown, ChevronRight,
   ChevronLeft, Calendar, User, Play, ArrowRight, Crown, X, Menu, Check, Star, Phone,
+  Pencil, Briefcase, Ticket, PlaneTakeoff, Wallet, Gift, CreditCard, Headset,
+  Settings, Languages, FileText, ScrollText, HandCoins, FileX2, Trash2, Info, LogOut,
 } from 'lucide-react';
 
 const ICONS = {
@@ -10,6 +12,8 @@ const ICONS = {
   UtensilsCrossed, Gamepad2, Sparkles, Waves, Mountain, Clapperboard, HeartPulse,
   Heart, Search, CircleUser, MoreHorizontal, MapPin, Bell, ChevronDown, ChevronRight,
   ChevronLeft, Calendar, User, Play, ArrowRight, Crown, X, Menu, Check, Star, Phone,
+  Pencil, Briefcase, Ticket, PlaneTakeoff, Wallet, Gift, CreditCard, Headset,
+  Settings, Languages, FileText, ScrollText, HandCoins, FileX2, Trash2, Info, LogOut,
 };
 
 /** One lookup, so content files can name an icon as a string. */

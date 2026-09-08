@@ -65,3 +65,11 @@ I will switch the tiles over.
 
 The **Smira Club logo** is drawn in code for now. Export the real mark as
 `public/img/logo.svg` and I will swap it in.
+
+## Profile — the Become a Partner thumbnail
+
+| Filename | What the Figma shows | Best size |
+|---|---|---|
+| `partner-property.*` | The palm-lined pool beside "Become a Partner" | 920 × 720 |
+
+It renders small and wide (about 92 × 72), so keep the subject centred.
