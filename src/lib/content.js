@@ -381,3 +381,36 @@ export const profileMenu = [
     ],
   },
 ];
+
+/** The starter prompts on the AI Search screen. */
+export const aiPrompts = [
+  { key: 'goa-resorts', text: 'Find best resorts in Goa for a weekend', image: 'ai-goa-resorts' },
+  { key: 'lonavala-family', text: 'Suggest Family Activities in Lonavala', image: 'ai-lonavala-family' },
+];
+
+/** What the screen suggests before anybody has asked it anything. */
+export const aiRecommendations = [
+  {
+    key: 'parasailing',
+    title: 'Parasailing Adventure',
+    blurb: 'Stay Close To Beach With Fun Activities',
+    price: 1499,
+    was: 1999,
+    unit: 'Per Adult',
+    image: 'ai-parasailing',
+    href: '/packages',
+  },
+  {
+    key: 'spa',
+    title: 'Spa & Saloon Experience',
+    blurb: 'Pamper Yourself With Relaxing Experiences.',
+    price: 2999,
+    was: 3499,
+    unit: 'Per Adult',
+    image: 'ai-spa',
+    href: '/offers',
+  },
+];
+
+/** What the search box suggests you might type. */
+export const aiSearchPlaceholder = 'Plan a 3 day trip to Goa';

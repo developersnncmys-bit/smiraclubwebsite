@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img">
+  <defs>
+    <linearGradient id="sky-goa" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ec9e8"/><stop offset="0.6" stop-color="#cfe9f4"/><stop offset="1" stop-color="#eaf5f8"/>
+    </linearGradient>
+    <linearGradient id="pool-goa" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3ea9c9"/><stop offset="1" stop-color="#1d7fa1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#sky-goa)"/>
+  <path d="M0 470 C 160 430 300 452 420 462 C 560 474 680 448 800 458 L800 800 L0 800 Z" fill="#2f6a4e"/>
+  <path d="M180 300 l150 -90 150 90 v150 h-300 z" fill="#f6f3ec"/>
+  <path d="M150 306 l180 -108 180 108 -18 22 -162 -96 -162 96 z" fill="#8a5a3b"/>
+  <rect x="250" y="380" width="60" height="70" fill="#c8b79f"/>
+  <rect x="360" y="360" width="70" height="46" rx="6" fill="#7fc8de"/>
+  <rect x="0" y="560" width="800" height="180" fill="url(#pool-goa)"/>
+  <g fill="#ffffff" opacity="0.5">
+    <rect x="60" y="600" width="180" height="8" rx="4"/>
+    <rect x="330" y="640" width="240" height="8" rx="4"/>
+    <rect x="120" y="682" width="150" height="8" rx="4"/>
+  </g>
+  <g fill="#1f5741">
+    <rect x="596" y="380" width="16" height="180"/>
+    <path d="M604 372 c -60 -30 -96 -8 -108 22 c 40 -18 76 -14 108 6 z"/>
+    <path d="M604 372 c 60 -30 96 -8 108 22 c -40 -18 -76 -14 -108 6 z"/>
+    <path d="M604 372 c -22 -56 -6 -88 24 -104 c -14 40 -10 74 -6 104 z"/>
+  </g>
+  <circle cx="650" cy="150" r="52" fill="#ffe9a8"/>
+</svg>

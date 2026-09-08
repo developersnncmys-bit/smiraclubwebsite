@@ -73,3 +73,15 @@ The **Smira Club logo** is drawn in code for now. Export the real mark as
 | `partner-property.*` | The palm-lined pool beside "Become a Partner" | 920 × 720 |
 
 It renders small and wide (about 92 × 72), so keep the subject centred.
+
+## AI Search — the prompt thumbnails and the two recommendations
+
+| Filename | What the Figma shows | Best size |
+|---|---|---|
+| `ai-goa-resorts.*` | "Find best resorts in Goa for a weekend" — the thatched pool villa | 800 × 800 |
+| `ai-lonavala-family.*` | "Suggest Family Activities in Lonavala" — the festoon lights at dusk | 800 × 800 |
+| `ai-parasailing.*` | "Parasailing Adventure" — the orange canopy over the sea | 1000 × 700 |
+| `ai-spa.*` | "Spa & Saloon Experience" — the head massage by the pool | 1000 × 700 |
+
+The first two are square thumbnails beside the prompt text; the last two head
+the recommendation cards at 4:3.
