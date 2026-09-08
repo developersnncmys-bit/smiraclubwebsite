@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
+import GuestsPicker from '@/components/home/GuestsPicker';
 import { searchTabs } from '@/lib/content';
 import { defaultStay, shortDate } from '@/lib/format';
 
@@ -22,11 +23,35 @@ export default function SearchPanel() {
   const [to, setTo] = useState(stay.to.toISOString().slice(0, 10));
   const [adults, setAdults] = useState(2);
   const [rooms, setRooms] = useState(1);
+  /** One entry per child, holding that child's age — the design asks for both. */
+  const [childAges, setChildAges] = useState([]);
   const [guestsOpen, setGuestsOpen] = useState(false);
+  const guestsField = useRef(null);
+
+  /** 'Adults/ Room' when nobody brings a child, and says so when they do. */
+  const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  const summary = [
+    plural(adults, 'Adult'),
+    childAges.length ? plural(childAges.length, 'Child').replace('Childs', 'Children') : null,
+  ]
+    .filter(Boolean)
+    .join(', ')
+    .concat(`/ ${plural(rooms, 'Room')}`);
 
   const submit = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams({ kind: tab, destination, from, to, adults: String(adults), rooms: String(rooms) });
+    const params = new URLSearchParams({
+      kind: tab,
+      destination,
+      from,
+      to,
+      adults: String(adults),
+      rooms: String(rooms),
+      children: String(childAges.length),
+    });
+    // A hotel prices a nine-year-old differently from a two-year-old, so the
+    // ages travel with the search rather than just the count.
+    if (childAges.length) params.set('ages', childAges.join(','));
     router.push(`/search?${params.toString()}`);
   };
 
@@ -102,6 +127,7 @@ export default function SearchPanel() {
 
             <div className="relative">
               <button
+                ref={guestsField}
                 type="button"
                 onClick={() => setGuestsOpen((o) => !o)}
                 className="flex w-full items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 text-left lg:w-[13rem]"
@@ -113,49 +139,22 @@ export default function SearchPanel() {
                     Guests
                   </span>
                   <span className="block truncate text-[13px] font-semibold text-ink-900 lg:text-sm">
-                    {adults} Adults/ {rooms} Room
+                    {summary}
                   </span>
                 </span>
               </button>
 
-              {guestsOpen && (
-                <div className="absolute left-0 top-full z-30 mt-2 w-64 rounded-xl border border-surface-line bg-white p-4 shadow-lift">
-                  {[
-                    ['Adults', adults, setAdults, 1],
-                    ['Rooms', rooms, setRooms, 1],
-                  ].map(([label, value, set, min]) => (
-                    <div key={label} className="flex items-center justify-between py-2">
-                      <span className="text-sm font-semibold text-ink-700">{label}</span>
-                      <span className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => set(Math.max(min, value - 1))}
-                          className="grid h-8 w-8 place-items-center rounded-full border border-surface-line text-lg leading-none text-ink-600"
-                          aria-label={`One fewer ${label.toLowerCase()}`}
-                        >
-                          −
-                        </button>
-                        <span className="w-5 text-center text-sm font-bold">{value}</span>
-                        <button
-                          type="button"
-                          onClick={() => set(value + 1)}
-                          className="grid h-8 w-8 place-items-center rounded-full border border-surface-line text-lg leading-none text-ink-600"
-                          aria-label={`One more ${label.toLowerCase()}`}
-                        >
-                          +
-                        </button>
-                      </span>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => setGuestsOpen(false)}
-                    className="btn-primary mt-3 w-full py-2.5"
-                  >
-                    Done
-                  </button>
-                </div>
-              )}
+              <GuestsPicker
+                open={guestsOpen}
+                onClose={() => setGuestsOpen(false)}
+                anchorRef={guestsField}
+                rooms={rooms}
+                setRooms={setRooms}
+                adults={adults}
+                setAdults={setAdults}
+                childAges={childAges}
+                setChildAges={setChildAges}
+              />
             </div>
           </div>
 
