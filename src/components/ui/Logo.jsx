@@ -24,7 +24,7 @@ export default function Logo({ className = '', compact = false }) {
         width={360}
         height={82}
         priority
-        className={compact ? 'h-7 w-auto' : 'h-8 w-auto lg:h-10'}
+        className={compact ? 'h-9 w-auto' : 'h-11 w-auto lg:h-14'}
       />
     </Link>
   );
