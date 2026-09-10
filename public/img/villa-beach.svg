@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800" role="img">
+  <defs>
+    <linearGradient id="g-villa-beach" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fc6ec"/><stop offset="0.6" stop-color="#aadcef"/><stop offset="1" stop-color="#dff1f6"/>
+    </linearGradient>
+    <linearGradient id="w-villa-beach" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2ec0dd"/><stop offset="1" stop-color="#0d7d9c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="800" fill="url(#g-villa-beach)"/>
+  <circle cx="499.20000000000005" cy="160" r="60" fill="#fff5cc" opacity="0.9"/>
+
+  <path d="M0 352 C 128 280 268.8 376 396.8 336 C 512 304 588.8000000000001 368 640 336 L640 800 L0 800 Z" fill="#2f8f74"/>
+  <path d="M0 408 C 160 360 320 440 473.6 416 C 563.2 400 608 424 640 408 L640 800 L0 800 Z" fill="#1f6b57"/>
+
+  <rect y="480" width="640" height="320" fill="#f3e6ce"/>
+  <rect x="166.4" y="480" width="307.2" height="320" fill="url(#w-villa-beach)"/>
+  <g fill="#ffffff" opacity="0.2">
+    <rect x="198.4" y="552" width="128" height="3" rx="1.5"/>
+    <rect x="256" y="632" width="166.4" height="3" rx="1.5"/>
+    <rect x="192" y="712" width="192" height="3" rx="1.5"/>
+  </g>
+
+    <g transform="translate(320 472)">
+      <path d="M-110 0 L0 -132 L110 0 Z" fill="#8a5a3b"/>
+      <rect x="-96" y="0" width="192" height="120" fill="#f4efe6"/>
+      <g fill="#f7c66a">
+        <rect x="-80.64" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+        <rect x="-23.04" y="19.2" width="46.08" height="62.400000000000006" rx="3"/>
+        <rect x="38.400000000000006" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+      </g>
+      <rect x="-106" y="120" width="212" height="5" rx="2.5" fill="#8a5a3b" opacity="0.75"/>
+    </g>
+
+    <g transform="translate(44.800000000000004 448) scale(1)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(96 448) scale(1.3888888888888888)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(550.4 448) scale(1)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(601.5999999999999 448) scale(1.3888888888888888)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+</svg>

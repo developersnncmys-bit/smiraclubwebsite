@@ -1,0 +1,23 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 300' width='420' height='300' role='img'>
+  <rect width='420' height='300' fill='#ffffff'/>
+  <rect x='196' y='26' width='10' height='40' fill='#6b5a4a'/>
+  <path d='M172 66 h60 l-12 22 h-36z' fill='#e8a33d'/>
+  <ellipse cx='210' cy='214' rx='96' ry='26' fill='#c9925c'/>
+  <rect x='114' y='210' width='192' height='10' rx='5' fill='#a87443'/>
+  <g fill='#3f6f52'>
+    <path d='M64 214 q-6 -52 22 -70 q10 30 2 70z'/><path d='M356 214 q6 -52 -22 -70 q-10 30 -2 70z'/>
+  </g>
+  <g fill='#d9a077'>
+    <circle cx='120' cy='128' r='19'/><circle cx='210' cy='118' r='19'/><circle cx='300' cy='128' r='19'/>
+  </g>
+  <path d='M96 214 q4 -50 24 -50 q20 0 24 50z' fill='#6d4bd8'/>
+  <path d='M186 208 q4 -52 24 -52 q20 0 24 52z' fill='#e8dcc8'/>
+  <path d='M276 214 q4 -50 24 -50 q20 0 24 50z' fill='#3d8bfd'/>
+  <g fill='#2b2b2b'>
+    <path d='M101 122 q4 -20 19 -20 q15 0 19 20 q-8 -10 -19 -10 q-11 0 -19 10z'/>
+    <path d='M191 112 q4 -20 19 -20 q15 0 19 20 q-8 -10 -19 -10 q-11 0 -19 10z'/>
+    <path d='M281 122 q4 -20 19 -20 q15 0 19 20 q-8 -10 -19 -10 q-11 0 -19 10z'/>
+  </g>
+  <rect x='168' y='196' width='84' height='10' rx='4' fill='#f2f5f8'/>
+  <circle cx='150' cy='198' r='8' fill='#f2f5f8'/><circle cx='272' cy='198' r='8' fill='#f2f5f8'/>
+</svg>

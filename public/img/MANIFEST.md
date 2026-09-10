@@ -85,3 +85,44 @@ It renders small and wide (about 92 × 72), so keep the subject centred.
 
 The first two are square thumbnails beside the prompt text; the last two head
 the recommendation cards at 4:3.
+
+## Villas & Home Stays
+
+The banner carousel — wide and short, the caption sits centred over the
+bottom third, so keep that band uncluttered.
+
+| Filename | What the Figma shows | Best size |
+|---|---|---|
+| `villa-hero-luxury.*` | "Luxury villas for your perfect stay" — the villa in the palms | 2400 × 1000 |
+| `villa-hero-beach.*` | The beachfront home at sunset | 2400 × 1000 |
+| `villa-hero-hilltop.*` | The hilltop house above the valley | 2400 × 1000 |
+| `villa-hero-private.*` | The private villa lit after dark | 2400 × 1000 |
+
+Explore Villa Collections — the six tiles. Square, with the label over a dark
+gradient along the bottom.
+
+| Filename | What the Figma shows | Best size |
+|---|---|---|
+| `villa-luxury.*` | Luxury Villa | 800 × 800 |
+| `villa-family.*` | Family Villa | 800 × 800 |
+| `villa-beach.*` | Beach Escapes | 800 × 800 |
+| `villa-hilltop.*` | Hilltop Villas | 800 × 800 |
+| `villa-private.*` | Private Villa | 800 × 800 |
+| `villa-pet.*` | Pet Friendly Villas — the dog by the pool | 800 × 800 |
+
+Recommended Villas — the card photographs, 16:10.
+
+| Filename | What the Figma shows | Best size |
+|---|---|---|
+| `villa-ocean-pearl.*` | Ocean Pearl Villa, Maldives — the overwater villa | 1600 × 1000 |
+| `villa-hilltop-lonavala.*` | Hilltop Villa, Lonavala — the glass house in the mist | 1600 × 1000 |
+
+### A note on the villa photographs
+
+The fifteen `villa-*.jpg` files are **Unsplash stock**, dropped in as real
+photography while the client's own shoot is outstanding. They are free for
+commercial use under the Unsplash licence, but they are not Smira's and other
+sites use them too, so treat them as better placeholders rather than as final
+artwork. Replacing one is the same one-step job as any other slot: drop the
+real photo in under the same name. The `.svg` next to each is the drawn
+fallback and is what shows if the `.jpg` is ever removed.

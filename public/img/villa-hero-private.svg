@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img">
+  <defs>
+    <linearGradient id="g-villa-hero-private" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f4f74"/><stop offset="0.6" stop-color="#5c82a8"/><stop offset="1" stop-color="#9db9cf"/>
+    </linearGradient>
+    <linearGradient id="w-villa-hero-private" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#276e8e"/><stop offset="1" stop-color="#0c3d54"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#g-villa-hero-private)"/>
+  <circle cx="936" cy="144" r="54" fill="#ffe6a8" opacity="0.9"/>
+
+  <path d="M0 309.6 C 240 244.8 504 331.20000000000005 744 295.20000000000005 C 960 266.40000000000003 1104 324 1200 295.20000000000005 L1200 720 L0 720 Z" fill="#284d42"/>
+  <path d="M0 360 C 300 316.8 600 388.8 888 367.20000000000005 C 1056 352.8 1140 374.40000000000003 1200 360 L1200 720 L0 720 Z" fill="#1b352f"/>
+
+  <rect y="482.40000000000003" width="1200" height="237.59999999999997" fill="#cfc9ba"/>
+  <rect x="312" y="482.40000000000003" width="576" height="237.59999999999997" fill="url(#w-villa-hero-private)"/>
+  <g fill="#ffffff" opacity="0.2">
+    <rect x="372" y="547.2" width="240" height="3" rx="1.5"/>
+    <rect x="480" y="619.2" width="312" height="3" rx="1.5"/>
+    <rect x="360" y="691.2" width="360" height="3" rx="1.5"/>
+  </g>
+
+    <g transform="translate(600 475.20000000000005)">
+      <path d="M-194 0 L0 -118.80000000000001 L194 0 Z" fill="#6b4a30"/>
+      <rect x="-180" y="0" width="360" height="108" fill="#efe3d2"/>
+      <g fill="#ffcf7a">
+        <rect x="-151.2" y="17.28" width="79.2" height="56.160000000000004" rx="3"/>
+        <rect x="-43.199999999999996" y="17.28" width="86.39999999999999" height="56.160000000000004" rx="3"/>
+        <rect x="72" y="17.28" width="79.2" height="56.160000000000004" rx="3"/>
+      </g>
+      <rect x="-190" y="108" width="380" height="5" rx="2.5" fill="#6b4a30" opacity="0.75"/>
+    </g>
+
+    <g transform="translate(84.00000000000001 396) scale(0.9)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(180 396) scale(1.25)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(1032 396) scale(0.9)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(1128 396) scale(1.25)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+</svg>

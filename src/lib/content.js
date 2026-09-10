@@ -60,32 +60,36 @@ export const heroSlides = [
   },
 ];
 
-/** The four tabs above the search panel. */
+/**
+ * The four tabs above the search panel. Each is a way through to that
+ * category's own screen, which is how the prototype moves between them.
+ */
 export const searchTabs = [
-  { key: 'free-stay', label: 'Free Stay', icon: 'BedDouble' },
-  { key: 'hotel', label: 'Hotel', icon: 'Building2' },
-  { key: 'package', label: 'Package', icon: 'Palmtree' },
-  { key: 'villa', label: 'Villa', icon: 'Home' },
+  { key: 'free-stay', label: 'Free Stay', icon: 'BedDouble', href: '/free-stay' },
+  { key: 'hotel', label: 'Hotel', icon: 'Building2', href: '/hotels' },
+  { key: 'package', label: 'Package', icon: 'Palmtree', href: '/packages' },
+  { key: 'villa', label: 'Villa', icon: 'Home', href: '/villas' },
 ];
 
-/** All Services — the sixteen tiles, in the order the design lists them. */
+/**
+ * All Services — the twelve tiles, in the order the Figma lays them out.
+ *
+ * Free Stay, Hotel, Package and Villa are not here: they are the four tabs
+ * above the search panel, which is where the design puts them.
+ */
 export const services = [
-  { key: 'free-stay', label: 'Free Stay', icon: 'BedDouble', href: '/free-stay' },
-  { key: 'hotel', label: 'Hotel Booking', icon: 'Building2', href: '/hotels' },
-  { key: 'india', label: 'India package', icon: 'Landmark', href: '/packages?region=india' },
   { key: 'international', label: 'International Trip', icon: 'Plane', href: '/packages?region=international' },
   { key: 'group', label: 'Group Departure', icon: 'Users', href: '/packages?kind=group' },
-  { key: 'island', label: 'Island Trip', icon: 'Palmtree', href: '/packages?kind=island' },
-  { key: 'villa', label: 'Villa & Homestays', icon: 'Home', href: '/villas' },
-  { key: 'camping', label: 'Camping Booking', icon: 'Tent', href: '/packages?kind=camping' },
   { key: 'support', label: 'Travel Support', icon: 'LifeBuoy', href: '/more/support' },
-  { key: 'restaurant', label: 'Restaurant Offers', icon: 'UtensilsCrossed', href: '/offers?kind=dining' },
+  { key: 'homestay', label: 'Home Stay', icon: 'Home', href: '/villas?collection=homestay' },
+  { key: 'restaurant', label: 'Restuarant Offers', icon: 'UtensilsCrossed', href: '/offers?kind=dining' },
+  { key: 'waterpark', label: 'Waterpark & Themepark', icon: 'Waves', href: '/offers?kind=parks' },
   { key: 'games', label: 'Games Zone', icon: 'Gamepad2', href: '/offers?kind=games' },
   { key: 'salon', label: 'Saloon & Spa', icon: 'Sparkles', href: '/offers?kind=salon' },
-  { key: 'waterpark', label: 'Waterpark & Themepark', icon: 'Waves', href: '/offers?kind=parks' },
-  { key: 'adventure', label: 'Adventure', icon: 'Mountain', href: '/packages?kind=adventure' },
-  { key: 'entertainment', label: 'Entertainment', icon: 'Clapperboard', href: '/offers?kind=entertainment' },
-  { key: 'health', label: 'Health', icon: 'HeartPulse', href: '/offers?kind=health' },
+  { key: 'luxury', label: 'Luxury Experiences', icon: 'Palmtree', href: '/offers?kind=luxury' },
+  { key: 'camping', label: 'Camping & Adventure', icon: 'Tent', href: '/packages?kind=camping' },
+  { key: 'flight', label: 'Flight Booking', icon: 'Plane', href: '/more/support' },
+  { key: 'train', label: 'Train & Bus', icon: 'Ticket', href: '/more/support' },
 ];
 
 /** What the member looked at last. */
@@ -414,3 +418,1542 @@ export const aiRecommendations = [
 
 /** What the search box suggests you might type. */
 export const aiSearchPlaceholder = 'Plan a 3 day trip to Goa';
+
+/* -- Villas & Home Stays ------------------------------------------------ */
+
+/** The banner at the top of the villas screen — four slides, four dots. */
+export const villaHero = [
+  {
+    id: 'luxury',
+    title: 'Luxury villas for your perfect stay',
+    copy: 'Your perfect getaway starts with Smira Club.',
+    image: 'villa-hero-luxury',
+    alt: 'A villa above a lit pool, framed by palms',
+  },
+  {
+    id: 'beach',
+    title: 'Wake up to the sea',
+    copy: 'Beachfront homes with the water a few steps away.',
+    image: 'villa-hero-beach',
+    alt: 'A beach villa at sunset',
+  },
+  {
+    id: 'hilltop',
+    title: 'Above the clouds, all to yourself',
+    copy: 'Hilltop homes with the valley for a view.',
+    image: 'villa-hero-hilltop',
+    alt: 'A hilltop villa among pines',
+  },
+  {
+    id: 'private',
+    title: 'The whole place, no one else',
+    copy: 'Private villas booked end to end for your group.',
+    image: 'villa-hero-private',
+    alt: 'A private villa lit after dark',
+  },
+];
+
+/** What the member banner inside the villa search says. */
+export const villaMemberOffer = {
+  kicker: 'Smira Club Member Get',
+  headline: 'Up to 40% OFF on Villa Bookings',
+  note: 'Exclusive discounts for members',
+};
+
+/** Explore Villa Collections — the six tiles, in the design's order. */
+export const villaCollections = [
+  { key: 'luxury', label: 'Luxury Villa', image: 'villa-luxury' },
+  { key: 'family', label: 'Family Villa', image: 'villa-family' },
+  { key: 'beach', label: 'Beach Escapes', image: 'villa-beach' },
+  { key: 'hilltop', label: 'Hilltop Villas', image: 'villa-hilltop' },
+  { key: 'private', label: 'Private Villa', image: 'villa-private' },
+  { key: 'pet', label: 'Pet Friendly Villas', image: 'villa-pet' },
+];
+
+/**
+ * Recommended Villas.
+ *
+ * `price` is the member rate and `was` the public one, which is the whole
+ * point of the strike-through. `taxes` is per night on top, as the design
+ * spells out under the price.
+ */
+export const villas = [
+  {
+    id: 'ocean-pearl',
+    name: 'Ocean Pearl Villa',
+    place: 'Maldives',
+    verified: true,
+    badge: 'Most Popular',
+    rating: 4.4,
+    reviews: 412,
+    layout: 'Entire 3-Bedroom Villa',
+    notes: ['Breakfast available at extra charges'],
+    freeCancellation: false,
+    price: 14999,
+    was: 17999,
+    taxes: 2499,
+    highlight:
+      'Enjoy premium amenities including a private pool, game room, sea view, and private kitchen.',
+    image: 'villa-ocean-pearl',
+    alt: 'An overwater villa on a turquoise lagoon',
+  },
+  {
+    id: 'hilltop-lonavala',
+    name: 'Hilltop Villa',
+    place: 'Lonavala',
+    verified: true,
+    badge: null,
+    rating: 4.4,
+    reviews: 412,
+    layout: 'Entire 2-Bedroom Villa',
+    notes: ['Breakfast available at extra charges'],
+    freeCancellation: true,
+    price: 10999,
+    was: 14999,
+    taxes: 1999,
+    highlight:
+      'Enjoy a peaceful hilltop stay with panoramic views, a private pool, spacious outdoor areas, and a fully equipped kitchen.',
+    image: 'villa-hilltop-lonavala',
+    alt: 'A glass villa on a forested hillside',
+  },
+];
+
+/**
+ * The villa search results, as the design shows them for Goa.
+ *
+ * There is no inventory API yet, so a search returns this set whatever is
+ * typed — the destination in the summary bar is the one the member asked
+ * for. Swap this array for what `api.inventory()` gives back and the screen
+ * is live.
+ */
+export const villaResults = [
+  {
+    id: 'palm-grove',
+    name: 'Palm Grove Pool Villa',
+    place: 'Anjuna, Goa',
+    verified: true,
+    badge: 'Most Popular',
+    rating: 4.2,
+    reviews: 212,
+    layout: 'Entire 3-Bedroom Villa',
+    notes: ['Breakfast available at extra charges'],
+    freeCancellation: false,
+    price: 12999,
+    was: 14999,
+    taxes: 2499,
+    highlight:
+      'Enjoy a private pool, sun deck, fully equipped kitchen and air-conditioned bedrooms.',
+    image: 'villa-palm-grove',
+    alt: 'A pool villa under palms in Anjuna',
+  },
+  {
+    id: 'casa-de-goa',
+    name: 'Casa De Goa Villa',
+    place: 'Candolim, Goa',
+    verified: true,
+    badge: null,
+    rating: 4.4,
+    reviews: 142,
+    layout: 'Entire 3-Bedroom Villa',
+    notes: ['Breakfast available at extra charges'],
+    freeCancellation: true,
+    price: 16999,
+    was: 17999,
+    taxes: 1999,
+    highlight:
+      'Relax with a private pool, peaceful garden, spacious living area and private kitchen.',
+    image: 'villa-casa-de-goa',
+    alt: 'A beachfront villa with a deck in Candolim',
+  },
+  {
+    id: 'coconut-groove',
+    name: 'Coconut Groove Villa',
+    place: 'Colva, Goa',
+    verified: true,
+    badge: null,
+    rating: 4.4,
+    reviews: 412,
+    layout: 'Entire 2-Bedroom Villa',
+    notes: ['Breakfast available at extra charges'],
+    freeCancellation: true,
+    price: 10999,
+    was: 14999,
+    taxes: 1999,
+    highlight:
+      'Experience a relaxing family stay with a private pool, tropical garden, spacious lounge and kitchen.',
+    image: 'villa-coconut-groove',
+    alt: 'A villa among coconut palms in Colva',
+  },
+];
+
+/** The blurb under EXPLORE VILLA COLLECTIONS on the results screen. */
+export const villaCollectionsBlurb =
+  'Find the perfect stay for every mood from Poolside Villas and Peaceful Escapes to Beachfront Retreats and Luxury Getaways';
+
+/** The controls above the results. Sort is wired; the other two are not yet. */
+export const villaSortOptions = [
+  { key: 'recommended', label: 'Recommended' },
+  { key: 'price-low', label: 'Price: low to high' },
+  { key: 'price-high', label: 'Price: high to low' },
+  { key: 'rating', label: 'Rating' },
+];
+
+/* -- A villa's own page ------------------------------------------------- */
+
+export const villaHost = {
+  title: 'Hosted By Smira Stays',
+  speaks: 'Speaks Hindi, English, Marati',
+  blurb:
+    'Whether you are travelling for relaxation or family getaways what matters the most, is your privacy. Enjoy your holidays with your loved ones.',
+};
+
+export const villaStay = { checkIn: '2 PM', checkOut: '12 PM' };
+
+/** The amenity grid. The unit-size tile is added per villa, so it leads. */
+export const villaAmenities = [
+  { key: 'pool', label: 'Private Pool', icon: 'Waves' },
+  { key: 'wifi', label: 'Wifi', icon: 'Wifi' },
+  { key: 'games', label: 'Game Room', icon: 'Gamepad2' },
+  { key: 'dining', label: 'Multiple Dining', icon: 'UtensilsCrossed' },
+  { key: 'bar', label: 'Bar & Lounge', icon: 'Martini' },
+];
+
+export const villaDetailTabs = [
+  { key: 'overview', label: 'Overview' },
+  { key: 'amenities', label: 'Amenities' },
+  { key: 'reviews', label: 'Reviews' },
+  { key: 'location', label: 'Location' },
+  { key: 'guidelines', label: 'Stay Guidelines' },
+];
+
+export const villaReviews = [
+  {
+    id: 'r1',
+    score: 4.0,
+    name: 'Ananya Sharma',
+    kind: 'Family',
+    body: 'Amazing Stay! The rooms were stunning and the service was top notch. Highly Recommended.',
+    date: '18 Aug, 2025',
+  },
+  {
+    id: 'r2',
+    score: 4.0,
+    name: 'Rohit Menon',
+    kind: 'Family',
+    body: 'Amazing Stay! The rooms were stunning and the service was top notch. Highly Recommended.',
+    date: '16 July, 2025',
+  },
+];
+
+export const villaWhatsIncluded = ['No Meals Included'];
+
+export const villaRules = [
+  { title: 'Couple/ Bachelor Rules', body: 'Unmarried couples allowed.' },
+  { body: 'Primary guest should be atleast 18 years of age.' },
+  { body: 'Passport, Aadhar and Govt. ID are accepted as ID proof(s).' },
+];
+
+export const villaGuidelines = [
+  {
+    title: 'Check-in & Check-out',
+    lines: ['Early check-in / late check-out is subject to availability.'],
+  },
+  {
+    title: 'Guest Policy',
+    lines: [
+      'Valid ID is required at check-in.',
+      'Maximum occupancy depends on the selected room.',
+      'Children must be accompanied by an adult.',
+    ],
+  },
+  {
+    title: 'Cancellation & Booking',
+    lines: [
+      'Cancellation and refund policies vary by room and rate plan.',
+      'Non-refundable bookings cannot be cancelled or modified.',
+      'Changes are subject to availability and applicable charges.',
+    ],
+  },
+  {
+    title: 'Property Guidelines',
+    lines: [
+      'Outside food may be restricted in certain areas.',
+      'Pets are allowed only in designated rooms/areas, if applicable.',
+      'Guests are expected to follow the safety and conduct guidelines of the property.',
+    ],
+  },
+];
+
+export const villaGuidelinesNote =
+  'Please check the cancellation, occupancy and meal policies of the selected room before booking.';
+
+/** The two unit cards under Property Layout. */
+const ROOMS = [
+  {
+    id: 'b1',
+    name: 'Bedroom 1',
+    floor: 'Ground Floor',
+    tag: 'Private',
+    photos: 4,
+    image: 'villa-room-1',
+    lines: ['1 double Bed, Extra 1 Mattress available', 'Pool View, Attached Bathroom'],
+  },
+  {
+    id: 'b2',
+    name: 'Bedroom 2',
+    floor: 'Ground Floor',
+    tag: 'Private',
+    photos: 4,
+    image: 'villa-room-2',
+    lines: ['1 double Bed, Extra 1 Mattress available', 'Pool View, Attached Bathroom'],
+  },
+];
+
+/**
+ * Per-property detail, keyed by villa id.
+ *
+ * Only one property is specified in the design, so the rest carry the same
+ * shape with their own numbers and address. All of it is placeholder copy
+ * until the inventory API supplies it per property.
+ */
+export const villaDetails = {
+  'palm-grove': {
+    bedrooms: 3, beds: '3 Double beds', baths: 4, sleeps: 6, extra: 4, unit: 'Single Unit',
+    about:
+      'Experience the perfect blend of luxury and comfort at our Palm Grove Pool villa, with spacious rooms and a private pool. The villa is ideal for family getaways and group holidays.',
+    address: 'Ashvem Beach, Pernem North Goa, Goa 403527',
+    nearby: [
+      { place: 'Anjuna Beach', km: '1.2 km' },
+      { place: 'Vagator Beach', km: '3.5 Km' },
+      { place: 'Chapora Fort', km: '4 km' },
+      { place: 'Anjuna Flea market', km: '2 Km' },
+      { place: 'Thalassa Restaurant', km: '3 Km' },
+    ],
+    rooms: ROOMS,
+  },
+  'casa-de-goa': {
+    bedrooms: 3, beds: '3 Double beds', baths: 3, sleeps: 6, extra: 2, unit: 'Single Unit',
+    about:
+      'A calm three-bedroom house a short walk from Candolim beach, with a private pool, a garden to sit out in and a kitchen you are welcome to use.',
+    address: 'Candolim, Bardez North Goa, Goa 403515',
+    nearby: [
+      { place: 'Candolim Beach', km: '0.8 km' },
+      { place: 'Fort Aguada', km: '3 Km' },
+      { place: 'Calangute Beach', km: '4 Km' },
+      { place: 'Sinquerim Beach', km: '2 Km' },
+    ],
+    rooms: ROOMS,
+  },
+  'coconut-groove': {
+    bedrooms: 2, beds: '2 Double beds', baths: 2, sleeps: 4, extra: 2, unit: 'Single Unit',
+    about:
+      'A two-bedroom family villa set among coconut palms in Colva, with a private pool, a tropical garden and a lounge big enough for everyone.',
+    address: 'Colva, Salcete South Goa, Goa 403708',
+    nearby: [
+      { place: 'Colva Beach', km: '1 km' },
+      { place: 'Benaulim Beach', km: '3 Km' },
+      { place: 'Margao Market', km: '6 Km' },
+    ],
+    rooms: ROOMS,
+  },
+  'ocean-pearl': {
+    bedrooms: 3, beds: '3 Double beds', baths: 3, sleeps: 6, extra: 2, unit: 'Single Unit',
+    about:
+      'An overwater villa with the lagoon underfoot, a private pool, a game room and a kitchen of your own.',
+    address: 'North Male Atoll, Maldives',
+    nearby: [
+      { place: 'House Reef', km: '0.1 km' },
+      { place: 'Dive Centre', km: '0.4 Km' },
+      { place: 'Velana International Airport', km: '32 Km' },
+    ],
+    rooms: ROOMS,
+  },
+  'hilltop-lonavala': {
+    bedrooms: 2, beds: '2 Double beds', baths: 2, sleeps: 4, extra: 2, unit: 'Single Unit',
+    about:
+      'A quiet hilltop house above Lonavala with the valley for a view, a private pool and a fully equipped kitchen.',
+    address: 'Tungarli, Lonavala, Maharashtra 410401',
+    nearby: [
+      { place: 'Tungarli Lake', km: '1.5 km' },
+      { place: 'Bhushi Dam', km: '4 Km' },
+      { place: 'Rajmachi Point', km: '6 Km' },
+    ],
+    rooms: ROOMS,
+  },
+};
+
+/**
+ * Review Booking.
+ *
+ * The discount is the flat one the design shows against the base price;
+ * everything about it is placeholder until the rate plans are real.
+ */
+export const villaBooking = {
+  discount: 500,
+  meals: ['Stay Only', 'Meals available at extra charges'],
+  refund: {
+    title: 'Non-Refundable',
+    body: 'Refund is not applicable for this booking',
+  },
+};
+
+/* -- Search results, across every category ------------------------------ */
+
+/**
+ * The chips over the results. Villa sits beside Package because a search
+ * from the home screen can turn up any of the four.
+ */
+export const resultFilters = [
+  { key: 'hotel', label: 'Hotels', icon: 'Building2' },
+  { key: 'free-stay', label: 'Free Stay', icon: 'Gift' },
+  { key: 'package', label: 'Package', icon: 'Landmark' },
+  { key: 'villa', label: 'Villa', icon: 'Home' },
+];
+
+export const resultSortOptions = [
+  { key: 'recommended', label: 'Recommended' },
+  { key: 'price-low', label: 'Price: low to high' },
+  { key: 'price-high', label: 'Price: high to low' },
+  { key: 'rating', label: 'Rating' },
+];
+
+/**
+ * What a search turns up.
+ *
+ * One shape covers all four kinds; `kind` decides which chip it answers to,
+ * and `priceNote` carries the difference between a per-night rate and a
+ * per-person package. Swap this for `api.inventory()` and the screen is live.
+ */
+export const searchResults = [
+  {
+    id: 'la-calypso',
+    kind: 'hotel',
+    freeStay: true,
+    name: 'La Calypso Beach Resort & Casino',
+    place: 'Baga, Goa',
+    verified: true,
+    rating: 4.4,
+    reviews: 412,
+    amenities: [
+      { label: 'Pool', icon: 'Waves' },
+      { label: 'Wifi', icon: 'Wifi' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Gift',
+      title: 'Complimentary stay for members',
+      note: 'Pay for food · Breakfast & Dinner included',
+    },
+    priceLabel: 'From',
+    price: 3999,
+    was: 4999,
+    priceNote: 'Per Night before taxes & fees',
+    image: 'villa-hero-beach',
+    href: '/hotels/la-calypso',
+  },
+  {
+    id: 'phoenix-park-inn',
+    kind: 'hotel',
+    name: 'Phoenix park inn by radisson',
+    place: 'Candolim, Goa',
+    rating: 4.2,
+    reviews: 319,
+    amenities: [
+      { label: 'Pool', icon: 'Waves' },
+      { label: 'Wifi', icon: 'Wifi' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Percent',
+      title: 'Up to 40% Off for members',
+      note: 'Limited time offer',
+    },
+    priceLabel: 'From',
+    price: 4999,
+    was: 7999,
+    priceNote: 'Per Night before taxes & fees',
+    image: 'villa-hero-private',
+    href: '/hotels/phoenix-park-inn',
+  },
+  {
+    id: 'goa-escape',
+    kind: 'package',
+    name: 'Goa Escape Package',
+    place: '4 Nights/ 5 Days',
+    rating: 4.6,
+    reviews: 412,
+    amenities: [
+      { label: 'Free Stay', icon: 'Building2' },
+      { label: 'Meals', icon: 'Coffee' },
+    ],
+    more: 2,
+    promo: null,
+    priceLabel: 'Starting From',
+    price: 24999,
+    was: 28999,
+    priceNote: 'Per Person before taxes & fees',
+    image: 'villa-beach',
+    href: '/packages',
+  },
+  {
+    id: 'postcard-cuelim',
+    kind: 'villa',
+    name: 'The Postcard Cuelim',
+    place: 'Cansaulim, South Goa',
+    rating: 4.8,
+    reviews: 99,
+    amenities: [
+      { label: 'Pool', icon: 'Waves' },
+      { label: 'Dining', icon: 'Utensils' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'violet',
+      icon: 'Tag',
+      title: 'Up to 20% Off for members',
+      note: 'Book your perfect villa',
+    },
+    priceLabel: 'From',
+    price: 9999,
+    was: 10999,
+    priceNote: 'Per Night before taxes & fees',
+    image: 'villa-hero-luxury',
+    href: '/villas/postcard-cuelim',
+  },
+];
+
+/* -- A hotel's own page -------------------------------------------------- */
+
+/** The green card under the price. */
+export const hotelMemberBenefits = {
+  title: 'Smira Club Member Benefits',
+  note: 'More Value, More Experiences',
+  points: [
+    'Luxury Hotel Discounts',
+    'Long-Term Validity',
+    'Multiple Room Options',
+    'Discounts Up to 40%',
+  ],
+};
+
+/** Amenities For Couple — the six the design shows before See all. */
+export const hotelAmenities = [
+  { key: 'room', label: 'Luxury Room', icon: 'BedDouble' },
+  { key: 'pool', label: 'Private Pool', icon: 'Waves' },
+  { key: 'wifi', label: 'Wifi', icon: 'Wifi' },
+  { key: 'beach', label: 'Private Beach', icon: 'Palmtree' },
+  { key: 'dining', label: 'Multiple Dining', icon: 'Utensils' },
+  { key: 'bar', label: 'Bar & Lounge', icon: 'Martini' },
+];
+
+export const hotelReviews = [
+  {
+    id: 'r1',
+    score: 4.0,
+    name: 'Siya Sharma',
+    kind: 'Couple',
+    body: 'Amazing Stay! The sea view from the room was stunning and the service was top notch. Highly Recommended.',
+    date: '16 Aug, 2025',
+    room: 'Deluxe Room Sea View',
+  },
+  {
+    id: 'r2',
+    score: 4.2,
+    name: 'Anajali Prasad',
+    kind: 'Family',
+    body: 'Loved the Stay! The sea view from the room was amazing and the service was top notch.',
+    date: '08 July, 2025',
+    room: 'Deluxe Room Sea View',
+  },
+  {
+    id: 'r3',
+    score: 4.6,
+    name: 'Rahul Nair',
+    kind: 'Group',
+    body: 'Booked four rooms for a reunion. The staff moved things around for us without being asked and the pool was ours most evenings.',
+    date: '22 June, 2025',
+    room: 'Garden View Room',
+  },
+  {
+    id: 'r4',
+    score: 3.8,
+    name: 'Meera Iyer',
+    kind: 'Couple',
+    body: 'Beautiful property and a lovely breakfast. Check-in took a while on a busy evening, which is the only reason this is not a five.',
+    date: '02 June, 2025',
+    room: 'Premium Ocean View',
+  },
+];
+
+/** The bars on the Ratings & Review screen. */
+export const hotelRatingSummary = {
+  word: 'Excellent',
+  breakdown: [
+    { label: 'Excellent', pct: 71 },
+    { label: 'Very Good', pct: 21 },
+    { label: 'Average', pct: 6 },
+    { label: 'Poor', pct: 2 },
+    { label: 'Bad', pct: 1 },
+  ],
+};
+
+/** Who the review was left by — the four tabs over All Reviews. */
+export const reviewFilters = [
+  { key: 'everyone', label: 'Everyone' },
+  { key: 'Group', label: 'Group' },
+  { key: 'Couple', label: 'Couple' },
+  { key: 'Family', label: 'Family' },
+];
+
+export const reviewSortOptions = [
+  { key: 'relevant', label: 'Most relevant' },
+  { key: 'recent', label: 'Most recent' },
+  { key: 'high', label: 'Highest rated' },
+  { key: 'low', label: 'Lowest rated' },
+];
+
+/** Recommended Packages, at the foot of a hotel's page. */
+export const recommendedPackages = [
+  {
+    id: 'goa-escape',
+    name: 'Goa Escape Package',
+    duration: '4 Nights/ 5 Days',
+    rating: 4.6,
+    reviews: 412,
+    chips: [
+      { label: 'Hotel Stay', icon: 'Building2' },
+      { label: 'Meals', icon: 'Coffee' },
+    ],
+    more: 2,
+    price: 24999,
+    unit: 'Per Person',
+    image: 'villa-beach',
+  },
+  {
+    id: 'goa-premium',
+    name: 'Goa Premium Escape',
+    duration: '4 Nights/ 5 Days',
+    rating: 4.6,
+    reviews: 412,
+    chips: [
+      { label: 'Luxury Stay', icon: 'Building2' },
+      { label: 'Bar', icon: 'Martini' },
+    ],
+    more: 4,
+    price: 36999,
+    unit: 'Per Person',
+    image: 'villa-hero-private',
+  },
+];
+
+/**
+ * The hotels, with their rooms and rate plans.
+ *
+ * A room is what you sleep in; a plan is what it costs and what it includes,
+ * and a room can carry several. The plan is what gets selected, which is why
+ * the price in the bottom bar moves when you pick one.
+ */
+export const hotels = [
+  {
+    id: 'la-calypso',
+    name: 'La Calypso Beach Resort & Casino',
+    place: 'Baga, Goa',
+    locality: 'Calangute | 80 m walk to Baga Beach',
+    taxes: 999,
+    verified: true,
+    rating: 4.4,
+    reviews: 412,
+    from: 3999,
+    was: 4999,
+    image: 'villa-hero-beach',
+    about:
+      'Overlooking the Arabian Sea, La Calypso Beach Resort & Casino offers luxurious rooms, world-class dining, relaxing spa experiences and endless water activities.',
+    address: '614, Calangute - Baga Rd, Baga, Calangute, Goa 403516',
+    nearby: [
+      { place: 'Baga Beach', km: '80 m' },
+      { place: 'Calangute Beach', km: '1 Km' },
+      { place: 'Casino Palms', km: '230 m' },
+      { place: "Tito's Lane", km: '560 m' },
+      { place: 'Candolim Beach', km: '3 Km' },
+    ],
+    defaultPlan: 'exec-breakfast',
+    roomGroups: [
+      {
+        id: 'premium',
+        label: 'Premium Rooms',
+        room: {
+          name: 'Garden View Room',
+          guests: '2 Adults',
+          size: '180 sq.ft (17 sq.mt)',
+          bed: '1 Double Bed',
+          view: 'Garden View',
+          photos: 9,
+          image: 'villa-room-1',
+        },
+        plans: [
+          {
+            id: 'premium-breakfast',
+            name: 'Room with Breakfast',
+            lines: ['Breakfast Included', 'Non-Refundable'],
+            price: 3999,
+            was: 4499,
+          },
+        ],
+      },
+      {
+        id: 'executive',
+        label: 'Executive',
+        room: {
+          name: 'Sea View Room',
+          guests: '2 Adults',
+          size: '200 sq.ft (19 sq.mt)',
+          bed: '1 Double Bed',
+          view: 'Sea View',
+          photos: 9,
+          image: 'villa-room-2',
+        },
+        plans: [
+          {
+            id: 'exec-only',
+            name: 'Room Only',
+            lines: ['Non-Refundable'],
+            price: 3099,
+            was: 3999,
+          },
+          {
+            id: 'exec-breakfast',
+            name: 'Room with Breakfast',
+            lines: ['Breakfast Included', 'Non-Refundable'],
+            price: 4999,
+            was: 5999,
+          },
+          {
+            id: 'exec-breakfast-plus',
+            name: 'Room with Breakfast',
+            lines: [
+              'Enjoy 30% Off on Drinks',
+              'Complimentary session of 30 mins Spa',
+              'Non-Refundable',
+            ],
+            price: 5999,
+            was: 6999,
+          },
+        ],
+      },
+      {
+        id: 'suite',
+        label: 'Suite',
+        room: {
+          name: 'Premium Ocean View',
+          guests: '2 Adults',
+          size: '460 sq.ft (43 sq.mt)',
+          bed: '1 Double Bed',
+          view: 'Ocean View',
+          photos: 9,
+          image: 'villa-hero-luxury',
+        },
+        plans: [
+          {
+            id: 'suite-only',
+            name: 'Room Only',
+            lines: ['Non-Refundable'],
+            price: 3999,
+            was: 4999,
+          },
+          {
+            id: 'suite-breakfast',
+            name: 'Room with Breakfast',
+            lines: ['Breakfast Included', 'Non-Refundable'],
+            price: 5999,
+            was: 6999,
+          },
+          {
+            id: 'suite-breakfast-plus',
+            name: 'Room with Breakfast',
+            lines: [
+              'Enjoy 30% Off on Drinks',
+              'Complimentary session of 30 mins Spa',
+              'Non-Refundable',
+            ],
+            price: 6999,
+            was: 7999,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'phoenix-park-inn',
+    name: 'Phoenix park inn by radisson',
+    place: 'Candolim, Goa',
+    locality: 'Candolim | 400 m walk to Candolim Beach',
+    taxes: 899,
+    verified: true,
+    rating: 4.2,
+    reviews: 319,
+    from: 4999,
+    was: 7999,
+    image: 'villa-hero-private',
+    about:
+      'A short walk from Candolim beach, Phoenix Park Inn pairs a large pool and gardens with easy access to the north Goa strip.',
+    address: 'Candolim Beach Rd, Candolim, Bardez, Goa 403515',
+    nearby: [
+      { place: 'Candolim Beach', km: '400 m' },
+      { place: 'Fort Aguada', km: '3 Km' },
+      { place: 'Calangute Beach', km: '4 Km' },
+      { place: 'Sinquerim Beach', km: '2 Km' },
+    ],
+    defaultPlan: 'phoenix-breakfast',
+    roomGroups: [
+      {
+        id: 'deluxe',
+        label: 'Deluxe Rooms',
+        room: {
+          name: 'Garden Facing Room',
+          guests: '2 Adults',
+          size: '190 sq.ft (18 sq.mt)',
+          bed: '1 Double Bed',
+          view: 'Garden View',
+          photos: 9,
+          image: 'villa-room-1',
+        },
+        plans: [
+          {
+            id: 'phoenix-only',
+            name: 'Room Only',
+            lines: ['Non-Refundable'],
+            price: 4999,
+            was: 7999,
+          },
+          {
+            id: 'phoenix-breakfast',
+            name: 'Room with Breakfast',
+            lines: ['Breakfast Included', 'Non-Refundable'],
+            price: 5799,
+            was: 8499,
+          },
+        ],
+      },
+      {
+        id: 'phoenix-suite',
+        label: 'Suite',
+        room: {
+          name: 'Pool View Suite',
+          guests: '2 Adults',
+          size: '420 sq.ft (39 sq.mt)',
+          bed: '1 Double Bed',
+          view: 'Pool View',
+          photos: 9,
+          image: 'villa-room-2',
+        },
+        plans: [
+          {
+            id: 'phoenix-suite-breakfast',
+            name: 'Room with Breakfast',
+            lines: ['Breakfast Included', 'Non-Refundable'],
+            price: 7499,
+            was: 9999,
+          },
+        ],
+      },
+    ],
+  },
+];
+
+/** The five steps of Complete Your Profile, in order. */
+export const profileSteps = [
+  { key: 'details', label: 'Your Details' },
+  { key: 'special', label: 'Special Days' },
+  { key: 'address', label: 'Gift Address' },
+  { key: 'updates', label: 'Updates' },
+  { key: 'submit', label: 'Submit' },
+];
+
+/** For the State dropdown on the gift address. */
+export const indianStates = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
+  'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
+  'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan',
+  'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+  'Andaman & Nicobar Islands', 'Chandigarh', 'Dadra & Nagar Haveli and Daman & Diu', 'Delhi',
+  'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry',
+];
+
+/* -- Smira Club Membership ---------------------------------------------- */
+
+/** The three tabs over the plans. */
+export const membershipTabs = [
+  { key: 'plans', label: 'Explore Membership Plans' },
+  { key: 'match', label: 'Find Your Perfect Membership' },
+  { key: 'versus', label: 'Smira Vs Other' },
+];
+
+/**
+ * The four tiers.
+ *
+ * Only Gold's numbers come from the Figma; the other three are set to sit
+ * either side of it so the screen reads sensibly while you are choosing.
+ * Replace them with the real rate card when it lands.
+ */
+export const membershipPlans = [
+  {
+    key: 'silver',
+    label: 'Silver',
+    audience: 'Beginner',
+    title: 'Easy Starter',
+    blurb: 'For travellers taking their first trips with us',
+    fee: 9999,
+    tone: 'from-[#c3c9cf] to-[#98a1a9]',
+    stats: [
+      { figure: '30 Days', note: 'Free Hotel Stay' },
+      { figure: '2 Years', note: 'Membership Validity' },
+      { figure: '2 - 4 People', note: 'Covered per stay' },
+      { figure: '1 Room', note: 'Allowed Per Booking' },
+    ],
+    privileges: 1,
+  },
+  {
+    key: 'gold',
+    label: 'Gold',
+    audience: 'Smart Traveller',
+    title: 'Smart Traveller',
+    blurb: 'For Families who travel few times a year',
+    fee: 19999,
+    tone: 'from-[#d8a41f] to-[#b8860b]',
+    stats: [
+      { figure: '75 Days', note: 'Free Hotel Stay' },
+      { figure: '3 Years', note: 'Membership Validity' },
+      { figure: '4 - 8 People', note: 'Covered per stay' },
+      { figure: '2 Rooms', note: 'Allowed Per Booking' },
+    ],
+    privileges: 3,
+  },
+  {
+    key: 'platinum',
+    label: 'Platinum',
+    audience: 'Frequent Travellers',
+    title: 'Frequent Explorer',
+    blurb: 'For families on the road several times a year',
+    fee: 34999,
+    popular: true,
+    tone: 'from-[#8fa8b8] to-[#5d7d90]',
+    stats: [
+      { figure: '120 Days', note: 'Free Hotel Stay' },
+      { figure: '5 Years', note: 'Membership Validity' },
+      { figure: '6 - 10 People', note: 'Covered per stay' },
+      { figure: '3 Rooms', note: 'Allowed Per Booking' },
+    ],
+    privileges: 5,
+  },
+  {
+    key: 'diamond',
+    label: 'Diamond',
+    audience: 'Luxury Travellers',
+    title: 'Luxury Collector',
+    blurb: 'For members who travel first class, every time',
+    fee: 59999,
+    tone: 'from-[#4fbfc4] to-[#25868f]',
+    stats: [
+      { figure: '180 Days', note: 'Free Hotel Stay' },
+      { figure: '7 Years', note: 'Membership Validity' },
+      { figure: '8 - 12 People', note: 'Covered per stay' },
+      { figure: '4 Rooms', note: 'Allowed Per Booking' },
+    ],
+    privileges: 10,
+  },
+];
+
+/** What's Included — the same for every tier. */
+export const membershipIncluded = [
+  {
+    title: 'No Utility or Maintenance fee',
+    body: 'Stay without paying extra hotel charges',
+  },
+  {
+    title: 'Member Connect Services',
+    body: 'Booking reminders and Updates from your concierge.',
+  },
+  {
+    title: 'Exclusive Lifestyle Discount',
+    body: 'Up To 40% Off On Lifestyle Experiences Such As Saloon & Spa, Games Zone, Restaurant Offers, Waterpark & Theme Park & Many More.',
+  },
+];
+
+/** Smira Privilege Rate — ten to pick from, how many depends on the tier. */
+export const membershipPrivileges = [
+  { key: 'villa', label: 'Villa Booking', body: 'Enjoy special member benefits on premium villa stays.' },
+  { key: 'homestay', label: 'Home Stay', body: 'Access comfortable homestays for your travel needs.' },
+  { key: 'hotel', label: 'Hotel Booking', body: 'Get exclusive member rates on eligible hotel bookings' },
+  { key: 'tour', label: 'Tour Package', body: 'Explore curated travel packages at member benefits.' },
+  { key: 'international', label: 'International Trip', body: 'Plan International journeys with exclusive member support.' },
+  { key: 'group', label: 'Group Departure', body: 'Join specially planned group trips and departures.' },
+  { key: 'support', label: 'Travel Support', body: 'Join specially planned group trips and departures.' },
+  { key: 'luxury', label: 'Luxury Experiences', body: 'Enjoy access to Yacht rides, helicopter & other exclusive premium experiences.' },
+  { key: 'flight', label: 'Flight Booking', body: 'Access flight booking support and applicable member benefits.' },
+  { key: 'train', label: 'Train & Bus', body: 'Get convenient support for train and bus bookings.' },
+];
+
+/** The purple countdown card. `endsInHours` is measured from page load. */
+export const membershipOffer = {
+  title: 'Limited Time Offer',
+  body: 'Get Diamond Jewellery worth ₹10,000',
+  note: 'Offers Ends In',
+  endsInHours: 34,
+};
+
+export const membershipGifts = [
+  { key: 'jewellery', label: 'Diamond Jewellery', note: 'Exclusive Offer', image: 'gift-jewellery' },
+  { key: 'bag', label: 'Travel Bag', note: 'Premium Quality', image: 'gift-bag' },
+  { key: 'kit', label: 'Travel Accessories Kit', note: 'Neck Pillow, Pouch & more', image: 'gift-kit' },
+  { key: 'voucher', label: 'Smira Club Travel Voucher worth ₹1,000', note: '', image: 'gift-voucher' },
+];
+
+export const membershipGiftConditions = [
+  'Valid for Gold membership only',
+  'Gifts will be delivered after successful member activation & first booking',
+];
+
+/** Sharing your benefits is a paid add-on, and the coupon the design shows. */
+export const membershipSharing = { price: 4999, label: 'To share your member benefits' };
+export const membershipCoupon = { code: 'SMIRA500', off: 500 };
+
+/* -- Find Your Perfect Membership --------------------------------------- */
+
+export const membershipQuizIntro = {
+  title: 'Tell us about your travel',
+  body: 'Help us understand your travel preferences so we can find the membership and benefits that suit you best.',
+};
+
+/**
+ * The questionnaire.
+ *
+ * `weight` is what an answer is worth when working out which tier fits — the
+ * further down an option sits, the more travel it implies. Questions with no
+ * weight are asked because the desk wants to know, not because they change
+ * the recommendation.
+ */
+export const membershipQuiz = [
+  {
+    key: 'frequency',
+    icon: 'Globe',
+    label: 'How Often do you travel?',
+    type: 'chips',
+    weight: true,
+    options: ['1-2 times a year', '3-5 times a year', '6+ times a year'],
+  },
+  {
+    key: 'rooms',
+    icon: 'BedDouble',
+    label: 'How many rooms do you usually book?',
+    type: 'select',
+    weight: true,
+    options: ['1 Room', '2 Rooms', '3 Rooms', '4+ Rooms'],
+  },
+  {
+    key: 'people',
+    icon: 'Users',
+    label: 'How many people usually travel?',
+    type: 'select',
+    weight: true,
+    options: ['1-2 people', '3-4 people', '5-8 people', '9+ people'],
+  },
+  {
+    key: 'with',
+    icon: 'Users',
+    label: 'Who do you usually travel with?',
+    type: 'chips',
+    options: ['Solo', 'Couple', 'Family', 'Friends', 'Group'],
+  },
+  {
+    key: 'trip',
+    icon: 'Briefcase',
+    label: 'What type of trip do you prefer?',
+    type: 'chips',
+    options: ['Family', 'Weekend', 'Business', 'Adventure'],
+  },
+  {
+    key: 'where',
+    icon: 'Plane',
+    label: 'Where do you usually travel?',
+    type: 'chips',
+    options: ['Domestic', 'International', 'Both'],
+  },
+  {
+    key: 'hotel',
+    icon: 'Building2',
+    label: 'What hotel experience do you prefer?',
+    type: 'chips',
+    weight: true,
+    options: ['3 Star', '4 Star', '5 Star', 'Other'],
+  },
+  {
+    key: 'services',
+    icon: 'Ticket',
+    label: 'Which travel services do you use most?',
+    type: 'pills',
+    options: [
+      'Villa Booking', 'Hotel Privilege Rate', 'Tour Package', 'International Trip',
+      'Group Departure', 'Flight booking', 'Train & Bus Booking', 'Travel Support',
+      'Luxury Experiences', 'Home Stay',
+    ],
+  },
+  {
+    key: 'budget',
+    icon: 'Wallet',
+    label: 'What is your average travel budget?',
+    type: 'select',
+    weight: true,
+    options: ['Below 10K', '10K - 25K', '25K - 50K', '50K - 1L', 'Above 1L'],
+  },
+  {
+    key: 'needs',
+    icon: 'FileText',
+    label: 'Any specific travel needs?',
+    type: 'text',
+    placeholder: 'Tell us anything else about your travel preferences..',
+    max: 120,
+  },
+];
+
+/** Why the recommended tier is the right one, in its own words. */
+export const membershipReasons = {
+  silver: [
+    '2 Years Validity',
+    'Stay for 4 persons allowed',
+    '1 Room per booking',
+    'Ideal for solo travellers and couples',
+    'A gentle way into member rates',
+    'The lowest fee of the four',
+  ],
+  gold: [
+    '3 Years Validity',
+    'Stay for 8 persons allowed',
+    '2 Rooms per booking',
+    'Ideal for couples & small families',
+    'Access to premium hotels & experiences',
+    'Great value for your budget',
+  ],
+  platinum: [
+    '5 Years Validity',
+    'Stay for 10 persons allowed',
+    '3 Rooms per booking',
+    'Ideal for families on the road often',
+    'Five privileges instead of three',
+    'Priority booking and upgrades',
+  ],
+  diamond: [
+    '7 Years Validity',
+    'Stay for 12 persons allowed',
+    '4 Rooms per booking',
+    'Ideal for large families and groups',
+    'Every one of the ten privileges',
+    'Yacht, helicopter and concierge access',
+  ],
+};
+
+export const membershipQuizOutro = {
+  title: 'Need a different Plan?',
+  body: 'You can explore and compare all plans to find the best fit for your travel goals',
+  cta: 'Explore All Plans',
+};
+
+/* -- Smira Vs Other ------------------------------------------------------ */
+
+/** The versus tab swaps the banner; the other two share one. */
+export const membershipCompareHero = {
+  title: 'See What Makes Smira Different',
+  body: 'Compare choice, booking flexibility, travel benefits, member services side by side.',
+  image: 'compare-landmarks',
+};
+
+/**
+ * The comparison, row by row.
+ *
+ * Every row is a tick for Smira and a cross for everyone else, which is what
+ * the design shows. `other` is a field rather than assumed so an honest row —
+ * one where the competition does the same thing — can be added later without
+ * touching the table.
+ */
+export const membershipCompare = [
+  { key: 'choice', label: 'Choice of Hotel', body: 'Access to a wide range of hotel options', smira: true, other: false },
+  { key: 'express', label: 'Express Booking', body: 'Instant & seamless booking', smira: true, other: false },
+  { key: 'package', label: 'Travel Package', body: 'Complete travel package support', smira: true, other: false },
+  { key: 'transfer', label: 'Booking Transferable', body: 'Transfer you booking easily', smira: true, other: false },
+  { key: 'seasonal', label: 'Seasonal Booking', body: 'Book during peak seasons', smira: true, other: false },
+  { key: 'connect', label: 'Membership Connect', body: 'Stay Connected with members & Updates', smira: true, other: false },
+  { key: 'lifestyle', label: 'Lifestyle Offers', body: 'Exclusive lifestyle discounts & benefits', smira: true, other: false },
+  { key: 'utility', label: 'No Utility Fee', body: 'No Hidden Charges', smira: true, other: false },
+  { key: 'maintenance', label: 'No Maintenance', body: 'No Maintenance charges', smira: true, other: false },
+  { key: 'villa', label: 'Villa', body: 'Access to premium villa stays', smira: true, other: false },
+];
+
+/** The help card at the foot of the comparison. */
+export const membershipHelp = {
+  title: 'Need Help?',
+  body: 'We’re here to assist you',
+  whatsapp: 'https://wa.me/919820011223',
+  phone: '+919820011223',
+};
+
+/* -- Claim Your Gifts ---------------------------------------------------- */
+
+export const rewardsHero = {
+  title: 'Complete the requirement to claim the gift',
+  body: 'Keep going, great rewards are waiting for you.',
+  image: 'rewards-hero',
+};
+
+/**
+ * The gifts and what stands between a member and each one.
+ *
+ * `state` is the whole screen: it picks the chip, what the card says under
+ * the requirement, and which button appears. A gift with `progress` shows
+ * how far along it is instead of a flat "not yet".
+ */
+export const rewards = [
+  {
+    key: 'travel-bag',
+    label: 'Travel Bag',
+    requirement: 'Buy Platinum Membership',
+    state: 'unlocked',
+    image: 'gift-bag',
+    cta: { label: 'Claim now', href: null },
+  },
+  {
+    key: 'glasses',
+    label: 'Glasses',
+    requirement: 'Buy Diamond Membership',
+    state: 'locked',
+    image: 'gift-glasses',
+    cta: { label: 'Upgrade now', href: '/membership' },
+  },
+  {
+    key: 'solitaire',
+    label: '₹10,000 Solitaire Voucher',
+    requirement: 'Complete 5 Hotel Bookings',
+    state: 'progress',
+    progress: { done: 3, of: 5, noun: 'Booking' },
+    image: 'gift-voucher',
+    cta: { label: 'View my bookings', href: '/profile/bookings' },
+  },
+  {
+    key: 'couple-dinner',
+    label: 'Couple Dinner',
+    requirement: 'Complete 1 Travel Booking',
+    state: 'new',
+    image: 'gift-dinner',
+    cta: { label: 'Book now', href: '/hotels' },
+  },
+];
+
+export const rewardsNote = 'Gifts are non-transferable and valid for a limited. T&C Apply.';
+
+/* -- My Reviews and Saved Address ---------------------------------------- */
+
+/** The member's own reviews, newest first. */
+export const myReviews = [
+  {
+    id: 'own-1',
+    score: 4.0,
+    name: member.name === 'Ananya' ? 'Ananya Sharma' : member.name,
+    kind: 'Couple',
+    body: 'Amazing Stay! The sea view from the room was stunning and the service was top notch. Highly Recommended.',
+    date: '16 Aug, 2025',
+    room: 'Deluxe Room Sea View',
+    helpful: 2,
+  },
+  {
+    id: 'own-2',
+    score: 4.2,
+    name: member.name === 'Ananya' ? 'Ananya Sharma' : member.name,
+    kind: 'Family',
+    body: 'Loved the Stay! The sea view from the room was amazing and the service was top notch.',
+    date: '08 July, 2025',
+    room: 'Deluxe Room Sea View',
+    helpful: 2,
+  },
+];
+
+/**
+ * Saved addresses.
+ *
+ * `label` is what the member calls it and `icon` follows from that, so Home
+ * and Work read differently at a glance in a long list.
+ */
+export const savedAddresses = [
+  {
+    id: 'home',
+    label: 'Home',
+    icon: 'Home',
+    lines: ['D-Block JP Nagar, Mysuru,', 'Karnataka 570031'],
+    phone: '9890900089',
+  },
+];
+
+/** What the two buttons over the list do. */
+export const addressActions = {
+  add: 'Add New Address',
+  request: 'Request Address',
+};
+
+/* -- My Bookings --------------------------------------------------------- */
+
+export const bookingTabs = ['All Bookings', 'Confirmed', 'Completed', 'Cancelled'];
+
+/** The five stages every booking moves through, in order. */
+export const bookingStages = [
+  'Check Availability',
+  'Payment Received',
+  'Booking Confirmed',
+  'Check In',
+  'Check Out',
+];
+
+/**
+ * What the member has booked.
+ *
+ * `stage` is how far along the five stages it has reached, and `status` is
+ * what to call it — the two together decide the chip, the stepper and the
+ * footer, so a booking is described once rather than in three places.
+ */
+export const myBookings = [
+  {
+    id: 'CHK-12',
+    kind: 'Hotel booking',
+    status: 'confirmed',
+    stage: 5,
+    name: 'La Calypso Beach Resort & Casino',
+    place: 'Baga, Goa',
+    image: 'villa-hero-beach',
+    from: '2026-08-28T10:00',
+    to: '2026-08-30T12:00',
+    href: '/hotels/la-calypso',
+  },
+  {
+    id: 'CHK-11',
+    kind: 'Villa booking',
+    status: 'pending',
+    stage: 2,
+    name: 'The Postcard Cuelim',
+    place: 'cansaulim, South Goa',
+    image: 'villa-hero-luxury',
+    from: '2026-08-22T10:00',
+    to: '2026-08-24T12:00',
+    href: '/villas/postcard-cuelim',
+  },
+  {
+    id: 'CHK-09',
+    kind: 'Villa booking',
+    status: 'cancelled',
+    stage: 1,
+    name: 'Hilltop Villa',
+    place: 'Lonavala',
+    image: 'villa-hilltop-lonavala',
+    from: '2026-07-11T14:00',
+    to: '2026-07-13T12:00',
+    href: '/villas/hilltop-lonavala',
+  },
+];
+
+/* -- My Travel Year ------------------------------------------------------ */
+
+/**
+ * The year's trips, keyed by year so the pager has something to page.
+ * Nights come from the dates rather than being stored, so a changed date
+ * cannot leave the duration saying something else.
+ */
+export const travelYears = {
+  2026: [
+    {
+      id: 'goa',
+      title: 'Goa Getaway',
+      origin: 'Mumbai',
+      destination: 'Goa',
+      start: '2026-09-29',
+      end: '2026-10-01',
+      image: 'villa-beach',
+    },
+    {
+      id: 'maldives',
+      title: 'Madives Escape',
+      origin: 'Banglore',
+      destination: 'Maldives',
+      start: '2026-11-04',
+      end: '2026-11-12',
+      image: 'villa-ocean-pearl',
+    },
+  ],
+  2025: [
+    {
+      id: 'coorg',
+      title: 'Coorg Long Weekend',
+      origin: 'Bengaluru',
+      destination: 'Coorg',
+      start: '2025-12-19',
+      end: '2025-12-22',
+      image: 'villa-hilltop',
+    },
+  ],
+};
+
+/* -- Refer & Earn -------------------------------------------------------- */
+
+/**
+ * The referral offer.
+ *
+ * Amounts live here rather than in the copy, so the headline total is worked
+ * out from them and cannot drift when the offer changes.
+ */
+export const referral = {
+  title: 'Refer & Earn',
+  cap: 1000,
+  steps: [
+    {
+      key: 'signup',
+      label: 'Step 1',
+      headline: 'Your Friend signs up on Smira Club',
+      split: [
+        { who: 'You get', amount: 50, image: 'refer-you' },
+        { who: 'Your Friend Gets', amount: 100, image: 'refer-friend' },
+      ],
+    },
+    {
+      key: 'booking',
+      label: 'Step 2',
+      headline: 'Your Friend completes her first booking',
+      single: {
+        who: 'You get an additional amount of',
+        amount: 250,
+        image: 'refer-you',
+        note: 'Credited once their first stay is completed.',
+      },
+    },
+  ],
+  note: 'You can earn cash only from 10 referrals',
+  code: 'smi23039s',
+};
+
+/* -- Get Help ------------------------------------------------------------ */
+
+export const helpDesk = {
+  greeting: 'Hi,',
+  body: 'We are here to assist you at every step. Please Browse through the option below and tap on what you’re looking for.',
+  image: 'help-desk',
+  trip: {
+    title: 'Need help with your trip?',
+    body: 'View and manage booking by entering the booking ID here. For verifying the details, an OTP will be sent to your registered number used during the booking.',
+    hint: 'The ID on your confirmation, like CHK-12.',
+  },
+};
+
+/* -- Language Settings --------------------------------------------------- */
+
+/** No design for this one yet — built to the same shape as the other lists. */
+export const languages = [
+  { code: 'en', label: 'English', native: 'English' },
+  { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
+  { code: 'kn', label: 'Kannada', native: 'ಕನ್ನಡ' },
+  { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
+  { code: 'te', label: 'Telugu', native: 'తెలుగు' },
+  { code: 'ml', label: 'Malayalam', native: 'മലയാളം' },
+  { code: 'mr', label: 'Marathi', native: 'मराठी' },
+  { code: 'bn', label: 'Bengali', native: 'বাংলা' },
+];
+
+/* -- More ---------------------------------------------------------------- */
+
+export const moreIntro = {
+  title: 'Smira Club',
+  tagline: 'Travel more. Save more. Enjoy more with your Smira Club membership.',
+  image: 'more-hero',
+  heading: 'Why Smira Club?',
+  body: 'Smira Club is a premier membership-based travel and lifestyle organization that offers complimentary hotel stays, exclusive trip packages, and top-tier recreational benefits. We provide access to 14+ international destinations, 8 islands, 225 hotels, and 300+ top brands.',
+};
+
+/**
+ * Browse Topics — everything reachable from More, in the design's order.
+ *
+ * A topic with no `href` has no screen yet; the list says so rather than
+ * sending anyone to a dead route.
+ */
+export const moreTopics = [
+  {
+    key: 'guidelines',
+    icon: 'Crown',
+    label: 'Membership Guidelines',
+    body: 'Membership Benefits, Usage rules, Important terms & conditions.',
+    href: '/more/terms',
+  },
+  {
+    key: 'how-it-works',
+    icon: 'Users',
+    label: 'How Smira Club Works',
+    body: 'Step-by-Step guide to understand everything.',
+    href: null,
+  },
+  {
+    key: 'privacy',
+    icon: 'FileText',
+    label: 'Privacy Policy',
+    body: 'Know how we protect your data and privacy.',
+    href: '/more/privacy',
+  },
+  {
+    key: 'blogs',
+    icon: 'BookOpen',
+    label: 'Blogs',
+    body: 'Travel Blogs & Destination Inspirations.',
+    href: '/stories',
+  },
+  {
+    key: 'faqs',
+    icon: 'CircleHelp',
+    label: 'FAQs',
+    body: 'Find answers to frequently asked questions.',
+    href: null,
+  },
+  {
+    key: 'cancellation',
+    icon: 'FileX2',
+    label: 'Cancellation Policy',
+    body: 'Cancellation Rules & Applicable charges.',
+    href: '/more/cancellation',
+  },
+  {
+    key: 'refund',
+    icon: 'HandCoins',
+    label: 'Refund Policy',
+    body: 'Refund eligibility, process and timeline.',
+    href: '/more/refunds',
+  },
+  {
+    key: 'wishlist',
+    icon: 'Heart',
+    label: 'Wishlist',
+    body: 'View your saved hotels, destinations & experiences.',
+    href: '/wishlist',
+  },
+  {
+    key: 'refer',
+    icon: 'Wallet',
+    label: 'Refer & Earn',
+    body: 'Share refer & earn exciting rewards.',
+    href: '/profile/referrals',
+  },
+  {
+    key: 'reviews',
+    icon: 'Star',
+    label: 'Membership Reviews',
+    body: 'Read member reviews, ratings & testimonials.',
+    href: '/profile/reviews',
+  },
+  {
+    key: 'sla',
+    icon: 'ScrollText',
+    label: 'SLA- Service Legal Agreement',
+    body: 'Read our service legal agreements and your rights.',
+    href: null,
+  },
+];

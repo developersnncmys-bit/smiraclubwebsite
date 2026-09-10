@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
@@ -12,12 +14,16 @@ import { defaultStay, shortDate } from '@/lib/format';
  * The four tabs and the search form. Stacked on a phone exactly as drawn; on
  * a desktop the three fields and the button sit on one line, which is what
  * anyone booking on a laptop expects.
+ *
+ * The tabs are links, not a filter: each opens that category's own screen,
+ * the way the prototype moves between them. `active` is which of the four is
+ * lit and the kind a search is submitted under, so a category page can render
+ * this same panel with its own tab already chosen.
  */
-export default function SearchPanel() {
+export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
   const router = useRouter();
   const stay = defaultStay();
 
-  const [tab, setTab] = useState(searchTabs[0].key);
   const [destination, setDestination] = useState('');
   const [from, setFrom] = useState(stay.from.toISOString().slice(0, 10));
   const [to, setTo] = useState(stay.to.toISOString().slice(0, 10));
@@ -40,7 +46,7 @@ export default function SearchPanel() {
   const submit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams({
-      kind: tab,
+      kind: active,
       destination,
       from,
       to,
@@ -51,38 +57,51 @@ export default function SearchPanel() {
     // A hotel prices a nine-year-old differently from a two-year-old, so the
     // ages travel with the search rather than just the count.
     if (childAges.length) params.set('ages', childAges.join(','));
-    router.push(`/search?${params.toString()}`);
+    router.push(`/results?${params.toString()}`);
   };
 
   return (
     <div className="shell">
       <div className="lg:card lg:relative lg:z-10 lg:-mt-20 lg:p-7">
         {/* -- The four tabs -------------------------------------------- */}
-        <div
-          role="tablist"
+        <nav
           aria-label="What are you looking for"
           className="grid grid-cols-4 overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
         >
           {searchTabs.map((t) => {
-            const on = t.key === tab;
+            const on = t.key === active;
             return (
-              <button
+              <Link
                 key={t.key}
-                role="tab"
-                aria-selected={on}
-                onClick={() => setTab(t.key)}
+                href={t.href}
+                aria-current={on ? 'page' : undefined}
                 className={`flex flex-col items-center gap-1.5 px-2 py-3 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
                   on
                     ? 'bg-white text-ink-900 shadow-card lg:bg-brand-50 lg:text-brand-700 lg:shadow-none'
                     : 'text-ink-500 hover:text-ink-700'
                 }`}
               >
-                <Icon name={t.icon} size={22} className={on ? 'text-brand-600' : 'text-ink-500'} strokeWidth={1.7} />
+                {art[t.key] ? (
+                  <Image
+                    src={art[t.key]}
+                    alt=""
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 object-contain"
+                  />
+                ) : (
+                  <Icon
+                    name={t.icon}
+                    size={22}
+                    className={on ? 'text-brand-600' : 'text-ink-500'}
+                    strokeWidth={1.7}
+                  />
+                )}
                 {t.label}
-              </button>
+              </Link>
             );
           })}
-        </div>
+        </nav>
 
         {/* -- The form -------------------------------------------------- */}
         <form onSubmit={submit} className="mt-4 space-y-3 lg:mt-5 lg:flex lg:items-end lg:gap-3 lg:space-y-0">

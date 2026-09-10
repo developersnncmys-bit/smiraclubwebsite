@@ -1,0 +1,43 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 500' width='600' height='500' role='img'>
+  <defs><linearGradient id='cl-sky' x1='0' y1='0' x2='0' y2='1'>
+    <stop offset='0' stop-color='#2ea6e8'/><stop offset='1' stop-color='#a9dcf5'/></linearGradient></defs>
+  <rect width='600' height='500' fill='url(#cl-sky)'/>
+  <g fill='#ffffff' opacity='0.5'>
+    <ellipse cx='110' cy='96' rx='46' ry='20'/><ellipse cx='150' cy='86' rx='32' ry='16'/>
+    <ellipse cx='470' cy='140' rx='52' ry='22'/><ellipse cx='512' cy='130' rx='34' ry='16'/>
+  </g>
+
+  <!-- Big Ben -->
+  <g fill='#8a6a44'>
+    <rect x='96' y='150' width='54' height='300'/>
+    <rect x='88' y='186' width='70' height='10'/>
+    <rect x='100' y='196' width='46' height='40' fill='#c8a878'/>
+    <circle cx='123' cy='216' r='15' fill='#f4ead4'/>
+    <path d='M123 206 L123 216 L131 220' stroke='#6b4f31' stroke-width='2.5' fill='none'/>
+    <path d='M96 150 L123 108 L150 150 Z'/>
+  </g>
+
+  <!-- Eiffel Tower -->
+  <g fill='#7b6a55'>
+    <path d='M300 60 L292 96 L308 96 Z'/>
+    <path d='M282 96 h36 v10 h-36 z'/>
+    <path d='M292 106 L262 250 L338 250 L308 106 Z' fill='none' stroke='#7b6a55' stroke-width='11'/>
+    <path d='M262 250 L226 450 L374 450 L338 250 Z' fill='none' stroke='#7b6a55' stroke-width='13'/>
+    <rect x='252' y='244' width='96' height='11'/>
+    <rect x='236' y='352' width='128' height='10'/>
+    <path d='M244 450 q56 -70 112 0' fill='none' stroke='#7b6a55' stroke-width='9'/>
+  </g>
+
+  <!-- Leaning Tower of Pisa -->
+  <g transform='rotate(7 470 300)'>
+    <rect x='444' y='168' width='54' height='282' fill='#e6ddc9'/>
+    <g fill='#cfc3a8'>
+      <rect x='440' y='196' width='62' height='7'/><rect x='440' y='240' width='62' height='7'/>
+      <rect x='440' y='284' width='62' height='7'/><rect x='440' y='328' width='62' height='7'/>
+      <rect x='440' y='372' width='62' height='7'/>
+    </g>
+    <rect x='452' y='142' width='38' height='28' fill='#ded3ba'/>
+  </g>
+
+  <rect y='450' width='600' height='50' fill='#6fbf5c'/>
+</svg>

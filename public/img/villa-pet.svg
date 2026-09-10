@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800" role="img">
+  <defs>
+    <linearGradient id="g-villa-pet" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd0ea"/><stop offset="0.6" stop-color="#c3e6f2"/><stop offset="1" stop-color="#e9f5f8"/>
+    </linearGradient>
+    <linearGradient id="w-villa-pet" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3aaed4"/><stop offset="1" stop-color="#157291"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="800" fill="url(#g-villa-pet)"/>
+  <circle cx="499.20000000000005" cy="160" r="60" fill="#fff7d8" opacity="0.9"/>
+
+  <path d="M0 328 C 128 256 268.8 352 396.8 312 C 512 280 588.8000000000001 344 640 312 L640 800 L0 800 Z" fill="#48926b"/>
+  <path d="M0 384 C 160 336 320 416 473.6 392 C 563.2 376 608 400 640 384 L640 800 L0 800 Z" fill="#336f51"/>
+
+  <rect y="504" width="640" height="296" fill="#f0e5d2"/>
+  <rect x="166.4" y="504" width="307.2" height="296" fill="url(#w-villa-pet)"/>
+  <g fill="#ffffff" opacity="0.2">
+    <rect x="198.4" y="576" width="128" height="3" rx="1.5"/>
+    <rect x="256" y="656" width="166.4" height="3" rx="1.5"/>
+    <rect x="192" y="736" width="192" height="3" rx="1.5"/>
+  </g>
+
+    <g transform="translate(320 496)">
+      <path d="M-110 0 L0 -132 L110 0 Z" fill="#8a5a3b"/>
+      <rect x="-96" y="0" width="192" height="120" fill="#f4efe6"/>
+      <g fill="#f7c66a">
+        <rect x="-80.64" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+        <rect x="-23.04" y="19.2" width="46.08" height="62.400000000000006" rx="3"/>
+        <rect x="38.400000000000006" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+      </g>
+      <rect x="-106" y="120" width="212" height="5" rx="2.5" fill="#8a5a3b" opacity="0.75"/>
+    </g>
+
+    <g transform="translate(44.800000000000004 424) scale(1)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(96 424) scale(1.3888888888888888)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(550.4 424) scale(1)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+    <g transform="translate(601.5999999999999 424) scale(1.3888888888888888)" fill="rgba(12,40,32,0.72)">
+      <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+      <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+      <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+      <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+      <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+      <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+    </g>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 260" width="320" height="260" role="img">
+  <defs>
+    <linearGradient id="bc-roof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f6ea8"/><stop offset="1" stop-color="#1f5484"/>
+    </linearGradient>
+    <linearGradient id="bc-glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd98a"/><stop offset="1" stop-color="#f6b545"/>
+    </linearGradient>
+  </defs>
+
+  <!-- The house -->
+  <rect x="96" y="104" width="128" height="96" rx="6" fill="#f2f5f8"/>
+  <path d="M86 106 L160 56 L234 106 Z" fill="url(#bc-roof)"/>
+  <rect x="96" y="100" width="128" height="12" rx="4" fill="#2f6ea8"/>
+
+  <!-- Upper storey -->
+  <rect x="112" y="118" width="44" height="34" rx="4" fill="url(#bc-glass)"/>
+  <rect x="166" y="118" width="44" height="34" rx="4" fill="url(#bc-glass)"/>
+  <rect x="131" y="118" width="3" height="34" fill="#e9edf1" opacity="0.8"/>
+  <rect x="185" y="118" width="3" height="34" fill="#e9edf1" opacity="0.8"/>
+
+  <!-- Ground floor: door and window -->
+  <rect x="112" y="162" width="38" height="38" rx="4" fill="url(#bc-glass)"/>
+  <rect x="162" y="162" width="30" height="38" rx="3" fill="#2f6ea8"/>
+  <circle cx="186" cy="182" r="2.5" fill="#ffd98a"/>
+
+  <!-- Balcony rail -->
+  <rect x="104" y="152" width="112" height="5" rx="2.5" fill="#cfd9e2"/>
+
+  <!-- Ground -->
+  <rect x="72" y="200" width="176" height="8" rx="4" fill="#dfe6ec"/>
+
+  <!-- Palms, the same silhouette the rest of the set uses -->
+  <g transform="translate(84 200) scale(0.62)" fill="rgba(31,84,132,0.85)">
+    <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+    <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+    <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+    <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+    <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+    <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+  </g>
+  <g transform="translate(246 200) scale(0.5)" fill="rgba(31,84,132,0.6)">
+    <path d="M0 0 C -1.6 -22 -1.2 -44 1.8 -66 L5.4 -66 C 3 -44 2.4 -22 3.6 0 Z"/>
+    <path d="M3 -66 C -8 -76 -22 -78 -33 -72 C -21 -80 -6 -80 3 -70 Z"/>
+    <path d="M3 -66 C 14 -76 28 -78 39 -72 C 27 -80 12 -80 3 -70 Z"/>
+    <path d="M3 -66 C -4 -80 -4 -94 2 -105 C 6 -93 6 -79 3 -68 Z"/>
+    <path d="M3 -66 C 12 -74 26 -72 34 -63 C 24 -68 11 -69 3 -63 Z"/>
+    <path d="M3 -66 C -6 -74 -20 -72 -28 -63 C -18 -68 -5 -69 3 -63 Z"/>
+  </g>
+
+  <!-- The tick, which is the whole point of the picture -->
+  <circle cx="222" cy="186" r="34" fill="#ffffff"/>
+  <circle cx="222" cy="186" r="28" fill="#1273e6"/>
+  <path d="M209 186 L218 195 L236 177" fill="none" stroke="#ffffff" stroke-width="6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

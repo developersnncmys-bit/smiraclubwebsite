@@ -9,12 +9,15 @@ export function shortDate(date) {
   return new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
 }
 
-/** A default stay: tomorrow, one night. */
+/**
+ * A default stay: tomorrow, two nights — which is what the booking screens
+ * are drawn against, and the length most weekend trips actually are.
+ */
 export function defaultStay() {
   const from = new Date();
   from.setDate(from.getDate() + 1);
   const to = new Date(from);
-  to.setDate(to.getDate() + 1);
+  to.setDate(to.getDate() + 2);
   return { from, to };
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import { services } from '@/lib/content';
@@ -9,10 +10,13 @@ import { services } from '@/lib/content';
 /**
  * All Services. A phone shows eight and offers the rest behind View more —
  * the toggle the design draws. A desktop has the room for all of them.
+ *
+ * `art` maps a service key to its illustration, resolved on the server by
+ * lib/serviceArt.js. A tile with artwork shows it; a tile without keeps its
+ * Lucide icon, so the grid holds together while the set is part-exported.
  */
-export default function Services() {
+export default function Services({ art = {} }) {
   const [open, setOpen] = useState(false);
-  const shown = open ? services : services.slice(0, 8);
 
   return (
     <section className="bg-white py-6 lg:bg-transparent lg:py-10">
@@ -29,8 +33,18 @@ export default function Services() {
                 i >= 8 && !open ? 'hidden lg:flex' : 'flex'
               }`}
             >
-              <span className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-100 group-active:scale-95 lg:h-16 lg:w-16">
-                <Icon name={service.icon} size={26} strokeWidth={1.6} />
+              <span className="relative grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-100 group-active:scale-95 lg:h-[72px] lg:w-[72px]">
+                {art[service.key] ? (
+                  <Image
+                    src={art[service.key]}
+                    alt=""
+                    fill
+                    sizes="64px"
+                    className="object-contain p-0.5"
+                  />
+                ) : (
+                  <Icon name={service.icon} size={26} strokeWidth={1.6} />
+                )}
               </span>
               <span className="text-[11px] font-semibold leading-tight text-ink-700 lg:text-xs">
                 {service.label}

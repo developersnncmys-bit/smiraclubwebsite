@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800" role="img">
+  <defs>
+    <linearGradient id="g-villa-hilltop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0a878"/><stop offset="0.6" stop-color="#f7cfa6"/><stop offset="1" stop-color="#f6e6d6"/>
+    </linearGradient>
+    <linearGradient id="w-villa-hilltop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4b8fa8"/><stop offset="1" stop-color="#1e566d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="800" fill="url(#g-villa-hilltop)"/>
+  <circle cx="499.20000000000005" cy="160" r="60" fill="#fff0c0" opacity="0.9"/>
+
+  <path d="M0 304 C 128 232 268.8 328 396.8 288 C 512 256 588.8000000000001 320 640 288 L640 800 L0 800 Z" fill="#3a6d54"/>
+  <path d="M0 360 C 160 312 320 392 473.6 368 C 563.2 352 608 376 640 360 L640 800 L0 800 Z" fill="#24503d"/>
+
+  <rect y="544" width="640" height="256" fill="#dcd8ca"/>
+  <rect x="166.4" y="544" width="307.2" height="256" fill="url(#w-villa-hilltop)"/>
+  <g fill="#ffffff" opacity="0.2">
+    <rect x="198.4" y="616" width="128" height="3" rx="1.5"/>
+    <rect x="256" y="696" width="166.4" height="3" rx="1.5"/>
+    <rect x="192" y="776" width="192" height="3" rx="1.5"/>
+  </g>
+
+    <g transform="translate(320 536)">
+      <path d="M-110 0 L0 -132 L110 0 Z" fill="#3c4650"/>
+      <rect x="-96" y="0" width="192" height="120" fill="#e8e4dc"/>
+      <g fill="#ffd487">
+        <rect x="-80.64" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+        <rect x="-23.04" y="19.2" width="46.08" height="62.400000000000006" rx="3"/>
+        <rect x="38.400000000000006" y="19.2" width="42.24" height="62.400000000000006" rx="3"/>
+      </g>
+      <rect x="-106" y="120" width="212" height="5" rx="2.5" fill="#3c4650" opacity="0.75"/>
+    </g>
+
+    <g transform="translate(51.2 384) scale(0.5555555555555556)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(108.80000000000001 384) scale(0.7555555555555555)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(563.2 384) scale(0.5555555555555556)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(608 384) scale(0.7555555555555555)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+</svg>

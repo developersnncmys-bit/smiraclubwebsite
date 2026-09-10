@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" role="img">
+  <defs>
+    <linearGradient id="g-villa-hilltop-lonavala" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ab6c6"/><stop offset="0.6" stop-color="#c6d8e0"/><stop offset="1" stop-color="#e6eef1"/>
+    </linearGradient>
+    <linearGradient id="w-villa-hilltop-lonavala" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#487f96"/><stop offset="1" stop-color="#1d4c60"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="640" fill="url(#g-villa-hilltop-lonavala)"/>
+  <circle cx="780" cy="128" r="48" fill="#f4f6ee" opacity="0.9"/>
+
+  <path d="M0 243.2 C 200 185.6 420 262.4 620 230.39999999999998 C 800 204.79999999999998 920 256 1000 230.39999999999998 L1000 640 L0 640 Z" fill="#37624e"/>
+  <path d="M0 288 C 250 249.6 500 313.6 740 294.4 C 880 281.59999999999997 950 300.79999999999995 1000 288 L1000 640 L0 640 Z" fill="#224537"/>
+
+  <rect y="422.40000000000003" width="1000" height="217.59999999999997" fill="#d5d8cd"/>
+  <rect x="260" y="422.40000000000003" width="480" height="217.59999999999997" fill="url(#w-villa-hilltop-lonavala)"/>
+  <g fill="#ffffff" opacity="0.2">
+    <rect x="310" y="480" width="200" height="3" rx="1.5"/>
+    <rect x="400" y="544" width="260" height="3" rx="1.5"/>
+    <rect x="300" y="608" width="300" height="3" rx="1.5"/>
+  </g>
+
+    <g transform="translate(500 416.00000000000006)">
+      <path d="M-164 0 L0 -105.60000000000001 L164 0 Z" fill="#3c4650"/>
+      <rect x="-150" y="0" width="300" height="96" fill="#e8e4dc"/>
+      <g fill="#ffd487">
+        <rect x="-126" y="15.36" width="66" height="49.92" rx="3"/>
+        <rect x="-36" y="15.36" width="72" height="49.92" rx="3"/>
+        <rect x="60" y="15.36" width="66" height="49.92" rx="3"/>
+      </g>
+      <rect x="-160" y="96" width="320" height="5" rx="2.5" fill="#3c4650" opacity="0.75"/>
+    </g>
+
+    <g transform="translate(80 307.2) scale(0.4444444444444444)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(170 307.2) scale(0.6044444444444443)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(880 307.2) scale(0.4444444444444444)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+    <g transform="translate(950 307.2) scale(0.6044444444444443)" fill="rgba(16,48,36,0.8)">
+      <rect x="-3" y="-18" width="6" height="20" rx="2"/>
+      <path d="M0 -104 L26 -54 L12 -54 L32 -14 L-32 -14 L-12 -54 L-26 -54 Z"/>
+    </g>
+</svg>

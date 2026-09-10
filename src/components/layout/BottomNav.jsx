@@ -5,9 +5,23 @@ import { usePathname } from 'next/navigation';
 import Icon from '@/components/ui/Icon';
 import { primaryNav } from '@/lib/content';
 
+/**
+ * Screens that pin their own price bar to the bottom: a property's page and
+ * Review Booking. The design gives those the bottom edge outright, and it is
+ * right to — two stacked bars is one too many, and the tab bar undercuts the
+ * one action the screen is asking for.
+ */
+const OWNS_THE_BOTTOM = [
+  /^\/(hotels|villas)\/[^/]+(\/book)?$/,
+  /^\/profile\/edit$/,
+  /^\/membership$/,
+];
+
 /** The phone's tab bar. It leaves the page entirely on a desktop. */
 export default function BottomNav() {
   const pathname = usePathname();
+
+  if (OWNS_THE_BOTTOM.some((route) => route.test(pathname))) return null;
 
   return (
     <nav

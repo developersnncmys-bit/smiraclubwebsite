@@ -7,8 +7,9 @@ import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
 import ClosingLine from '@/components/home/ClosingLine';
-import { heroSlides, offers } from '@/lib/content';
+import { heroSlides, offers, searchTabs, services } from '@/lib/content';
 import { image } from '@/lib/images';
+import { serviceArt } from '@/lib/serviceArt';
 
 /** The home screen, in the order the design scrolls. */
 export default function HomePage() {
@@ -20,8 +21,8 @@ export default function HomePage() {
   return (
     <>
       <Hero slides={slides} />
-      <SearchPanel />
-      <Services />
+      <SearchPanel art={serviceArt(searchTabs.map((t) => t.key))} />
+      <Services art={serviceArt(services.map((s) => s.key))} />
       <RecentSearches />
       <MemberBenefits />
       <ClubBanner />
