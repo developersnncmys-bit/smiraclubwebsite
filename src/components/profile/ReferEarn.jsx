@@ -64,7 +64,7 @@ export default function ReferEarn({ art = {} }) {
   };
 
   return (
-    <div className="shell py-6 lg:mx-auto lg:max-w-lg">
+    <div className="shell py-6">
       <header className="text-center">
         <h1 className="text-3xl font-bold text-action-500">{referral.title}</h1>
         <p className="mt-2 text-[17px] text-ink-700">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight, Plane } from 'lucide-react';
 import { travelYears } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
@@ -65,7 +66,7 @@ export default function TravelYear({ art = {} }) {
         </div>
       </div>
 
-      <div className="shell py-6 lg:mx-auto lg:max-w-2xl">
+      <div className="shell py-6">
         {trips.length === 0 ? (
           <p className="card p-10 text-center text-[15px] text-ink-500">
             Nothing booked in {year} yet.
@@ -87,7 +88,7 @@ export default function TravelYear({ art = {} }) {
                       />
                       <Plane size={19} className="relative mt-1 shrink-0 text-ink-700" />
 
-                      <article className="card flex min-w-0 flex-1 gap-4 p-3">
+                      <Link href={`/profile/travel-year/${trip.id}`} className="card flex min-w-0 flex-1 gap-4 p-3 transition hover:shadow-lift">
                         <span className="relative h-[104px] w-[104px] shrink-0 overflow-hidden rounded-xl sm:h-[118px] sm:w-[124px]">
                           <Image
                             src={toSrc(art[trip.id] || trip.image)}
@@ -123,7 +124,7 @@ export default function TravelYear({ art = {} }) {
                             {nights + 1} Days/{nights} Nights
                           </p>
                         </div>
-                      </article>
+                      </Link>
                     </li>
                   );
                 })}

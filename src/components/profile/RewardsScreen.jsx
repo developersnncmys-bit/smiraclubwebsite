@@ -76,7 +76,7 @@ export default function RewardsScreen({ hero, art = {} }) {
       </section>
 
       {/* -- The gifts --------------------------------------------- */}
-      <div className="shell space-y-5 py-6 lg:mx-auto lg:max-w-2xl">
+      <div className="shell space-y-5 py-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
         {rewards.map((gift) => {
           const state = STATES[gift.state];
           const Glyph = state.icon;

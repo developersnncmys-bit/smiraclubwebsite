@@ -29,7 +29,7 @@ export default function GetHelp({ art }) {
     <div className="pb-10">
       {/* -- Who is asking ----------------------------------------- */}
       <section className="bg-white">
-        <div className="shell flex items-start gap-4 py-6 lg:mx-auto lg:max-w-2xl">
+        <div className="shell flex items-start gap-4 py-6">
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl font-bold text-ink-900">{helpDesk.greeting}</h1>
             <p className="mt-2 text-[16px] font-semibold leading-relaxed text-ink-900">
@@ -48,7 +48,7 @@ export default function GetHelp({ art }) {
       </section>
 
       {/* -- What they want ---------------------------------------- */}
-      <form onSubmit={submit} className="shell py-6 lg:mx-auto lg:max-w-2xl">
+      <form onSubmit={submit} className="shell py-6">
         <h2 className="text-xl font-bold text-ink-900">{helpDesk.trip.title}</h2>
         <p className="mt-3 text-[16px] leading-relaxed text-ink-600">{helpDesk.trip.body}</p>
 

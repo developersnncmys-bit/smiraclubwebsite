@@ -78,7 +78,7 @@ export const searchTabs = [
  * above the search panel, which is where the design puts them.
  */
 export const services = [
-  { key: 'international', label: 'International Trip', icon: 'Plane', href: '/packages?region=international' },
+  { key: 'international', label: 'International Trip', icon: 'Plane', href: '/packages/international' },
   { key: 'group', label: 'Group Departure', icon: 'Users', href: '/packages?kind=group' },
   { key: 'support', label: 'Travel Support', icon: 'LifeBuoy', href: '/more/support' },
   { key: 'homestay', label: 'Home Stay', icon: 'Home', href: '/villas?collection=homestay' },
@@ -1774,6 +1774,36 @@ export const travelYears = {
       start: '2026-09-29',
       end: '2026-10-01',
       image: 'villa-beach',
+      guests: 2,
+      specialDays: [
+        {
+          id: 'anniversary',
+          label: 'Anniversary',
+          date: '30 Sep 2026',
+          note: 'Celebrate your anniversary with a memorable getaway in Goa. 💕🏖',
+          image: 'gift-dinner',
+        },
+      ],
+      activities: [
+        {
+          id: 'parasailing',
+          title: 'Parasailing Adventure',
+          note: 'Stay Close To Beach With Fun Activities',
+          price: 1499,
+          was: 1999,
+          unit: 'Per Adult',
+          image: 'ai-parasailing',
+        },
+        {
+          id: 'spa',
+          title: 'Spa & Saloon Experience',
+          note: 'Pamper Yourself With Relaxing Experiences.',
+          price: 2999,
+          was: 3499,
+          unit: 'Per Adult',
+          image: 'ai-spa',
+        },
+      ],
     },
     {
       id: 'maldives',
@@ -1783,6 +1813,19 @@ export const travelYears = {
       start: '2026-11-04',
       end: '2026-11-12',
       image: 'villa-ocean-pearl',
+      guests: 2,
+      specialDays: [],
+      activities: [
+        {
+          id: 'reef',
+          title: 'Reef Snorkelling',
+          note: 'See the house reef with a guide.',
+          price: 3499,
+          was: 4499,
+          unit: 'Per Adult',
+          image: 'villa-ocean-pearl',
+        },
+      ],
     },
   ],
   2025: [
@@ -1884,14 +1927,14 @@ export const moreTopics = [
     icon: 'Crown',
     label: 'Membership Guidelines',
     body: 'Membership Benefits, Usage rules, Important terms & conditions.',
-    href: '/more/terms',
+    href: '/more/guidelines',
   },
   {
     key: 'how-it-works',
     icon: 'Users',
     label: 'How Smira Club Works',
     body: 'Step-by-Step guide to understand everything.',
-    href: null,
+    href: '/more/how-it-works',
   },
   {
     key: 'privacy',
@@ -1905,14 +1948,14 @@ export const moreTopics = [
     icon: 'BookOpen',
     label: 'Blogs',
     body: 'Travel Blogs & Destination Inspirations.',
-    href: '/stories',
+    href: '/blogs',
   },
   {
     key: 'faqs',
     icon: 'CircleHelp',
     label: 'FAQs',
     body: 'Find answers to frequently asked questions.',
-    href: null,
+    href: '/more/faqs',
   },
   {
     key: 'cancellation',
@@ -1947,13 +1990,899 @@ export const moreTopics = [
     icon: 'Star',
     label: 'Membership Reviews',
     body: 'Read member reviews, ratings & testimonials.',
-    href: '/profile/reviews',
+    href: '/more/reviews',
   },
   {
     key: 'sla',
     icon: 'ScrollText',
     label: 'SLA- Service Legal Agreement',
     body: 'Read our service legal agreements and your rights.',
-    href: null,
+    href: '/more/sla',
+  },
+];
+
+/* -- Blogs --------------------------------------------------------------- */
+
+export const blogHero = {
+  title: 'Travel Stories, Tips & Inspirations',
+  body: 'Explore travel guides, hidden destinations & expert tips for your next trip.',
+  image: 'blog-hero',
+};
+
+export const blogCategories = [
+  { key: 'all', label: 'All', icon: 'LayoutGrid' },
+  { key: 'guide', label: 'Travel Guide', icon: 'BookOpen' },
+  { key: 'hotel', label: 'Hotel Stays', icon: 'Building2' },
+  { key: 'destination', label: 'Destinations', icon: 'Globe' },
+];
+
+/**
+ * The blogs. `popular` is an editor's pick rather than a computed view count
+ * — that is what the design implies and what the desk can actually control
+ * today, and a fake counter would be worse than an honest choice.
+ */
+export const blogs = [
+  {
+    id: 'beach-destinations',
+    category: 'guide',
+    tag: 'Travel Guides',
+    title: 'Top 10 Beach Destinations In India for a Perfect Getaway',
+    excerpt:
+      'From the serene beaches to vibrant coastlines, explore the ten stretches of Indian coast worth planning a whole trip around.',
+    date: 'May 2026',
+    image: 'villa-beach',
+    latest: true,
+    popular: true,
+  },
+  {
+    id: 'hotel-stay-tips',
+    category: 'hotel',
+    tag: 'Hotel Stay',
+    title: 'How to make most of your Smira Club Hotel Stay',
+    excerpt:
+      'Tips to enhance your stay experience and enjoy maximum value from the benefits your membership already includes.',
+    date: 'May 2026',
+    image: 'villa-room-1',
+    latest: true,
+  },
+  {
+    id: 'first-international-trip',
+    category: 'guide',
+    tag: 'Travel Guides',
+    title: 'A complete guide to your first International trip',
+    excerpt:
+      'Everything you need to know before planning your first International trip, from documents to what to book first.',
+    date: 'May 2026',
+    image: 'villa-hero-private',
+    popular: true,
+  },
+  {
+    id: 'hidden-goa',
+    category: 'destination',
+    tag: 'Destinations',
+    title: 'The quieter side of Goa, beyond the beach shacks',
+    excerpt:
+      'South Goa, the spice farms and the backroads most visitors drive straight past on the way to Baga.',
+    date: 'Apr 2026',
+    image: 'villa-hero-luxury',
+    popular: true,
+  },
+];
+
+/* -- FAQs ---------------------------------------------------------------- */
+
+/**
+ * Three groups, as the design splits them.
+ *
+ * The answers follow the policies rather than restating them, so a change to
+ * the Cancellation Policy cannot leave an FAQ quietly contradicting it.
+ */
+export const faqGroups = [
+  {
+    id: 'membership',
+    title: 'Membership FAQ’s',
+    items: [
+      {
+        q: 'What is Smira Club membership?',
+        a: 'Smira Club membership gives you access to eligible travel, hotel, package and other membership benefits based on your selected membership plan.',
+      },
+      {
+        q: 'What membership plans are available?',
+        a: 'Silver, Gold, Platinum and Diamond. Each states its own fee, validity period, complimentary nights, how many people a stay covers and how many rooms you may book at a time.',
+      },
+      {
+        q: 'How do I use my membership benefits?',
+        a: 'Sign in and book through the website. Member rates, privilege rates and complimentary nights are applied automatically while your membership is active.',
+      },
+      {
+        q: 'How do I use membership benefits for a hotel stay?',
+        a: 'Search for the property and dates, pick a room and rate plan, and your member rate is shown on the Review Booking screen before you pay. Complimentary nights are drawn from your allowance at that point.',
+      },
+      {
+        q: 'How do Smira Club offers and discounts work?',
+        a: 'Offers vary by location, date, service provider, membership eligibility and availability. Some premium hotel bookings depend on real-time availability.',
+      },
+      {
+        q: 'Can I use my membership benefits multiple times?',
+        a: 'Yes, within the limits of your plan — its validity period, its complimentary nights, and the number of rooms and guests it covers.',
+      },
+      {
+        q: 'Can I share my membership with someone else?',
+        a: 'Yes, with the membership sharing add-on. Named relatives or friends may then use your benefits, drawing on the same allowance as your own membership.',
+      },
+      {
+        q: 'How can I renew my membership?',
+        a: 'Renew from My Membership on your profile before the validity period ends. Renewing before expiry keeps benefits that would otherwise lapse.',
+      },
+    ],
+  },
+  {
+    id: 'booking',
+    title: 'Booking FAQ’s',
+    items: [
+      {
+        q: 'How do I make a booking?',
+        a: 'Select your preferred experience or service, choose the date and time, enter the required details, and confirm your booking.',
+      },
+      {
+        q: 'Where can I view my upcoming bookings?',
+        a: 'In My Bookings on your profile. Each booking shows its status, dates, booking ID and how far along it is.',
+      },
+      {
+        q: 'Can I modify my booking?',
+        a: 'Where the property allows it, we will move a booking rather than cancel it. A date change depends on availability and any difference in rate. On a Non-Refundable rate, changes are at the property’s discretion.',
+      },
+      {
+        q: 'Will I receive a booking confirmation?',
+        a: 'Yes. A booking is confirmed once payment is received and a booking ID is issued, and the confirmation goes to the email and number on the booking.',
+      },
+      {
+        q: 'Can I book for someone else?',
+        a: 'Yes. Choose Someone Else on the Review Booking screen and enter their details. You can add more than one guest to the same booking.',
+      },
+      {
+        q: 'What happens if my preferred time slot is unavailable?',
+        a: 'We will offer the nearest available dates, or an alternative property of a comparable standard. Nothing is charged until you accept one.',
+      },
+    ],
+  },
+  {
+    id: 'cancellation',
+    title: 'Cancellation & refund FAQ’s',
+    items: [
+      {
+        q: 'Can I cancel my booking?',
+        a: 'Yes, you can cancel eligible bookings from the My Bookings section, subject to the cancellation policy.',
+      },
+      {
+        q: 'Will I receive a refund after cancelling?',
+        a: 'It depends on your rate plan. Free Cancellation Available bookings are refunded in full within their window; Non-Refundable bookings are not refunded other than government taxes where the law requires it.',
+      },
+      {
+        q: 'Can I modify my booking?',
+        a: 'Often, yes — see the booking questions above. Moving a booking is usually better than cancelling one.',
+      },
+      {
+        q: 'How long will it take to receive my refund?',
+        a: 'We process an approved refund within 3 working days. Your bank or card issuer then takes a further 5 to 7 working days to show it.',
+      },
+      {
+        q: 'Can I get a refund for a missed booking?',
+        a: 'No. A booking you do not arrive for and have not cancelled is treated as a no-show, and the full amount is retained. Cancelling, even at short notice, is always better than not arriving.',
+      },
+      {
+        q: 'Where can I check the cancellation policy?',
+        a: 'The rate plan is shown against every room before you pay, and the full Cancellation Policy is under More.',
+      },
+    ],
+  },
+];
+
+/* -- Membership Reviews -------------------------------------------------- */
+
+export const memberTestimonials = [
+  {
+    id: 't1',
+    score: 5,
+    body: 'We enjoyed our family time at Sunkissed Plaza with hassle free booking by Smira Club. Excellent service and great support from the team',
+    name: 'Sayeeli Worlikar',
+    image: 'villa-hero-beach',
+  },
+  {
+    id: 't2',
+    score: 4.5,
+    body: 'We enjoyed our family time at Sunkissed RoofTop with hassle free booking by Smira Club. Excellent service and great support from the team',
+    name: 'Ajith Prasad',
+    image: 'villa-luxury',
+  },
+  {
+    id: 't3',
+    score: 5,
+    body: 'The desk moved our dates twice without a fuss when work got in the way. That alone paid for the membership.',
+    name: 'Rahul Nair',
+    image: null,
+  },
+];
+
+/* -- Deactivate Account -------------------------------------------------- */
+
+/**
+ * Deactivate Account.
+ *
+ * The profile list calls this Delete Account, but the screen deactivates: the
+ * account and its data are held for a recovery window and only then deleted.
+ * The copy here is the honest version, and the two names want reconciling.
+ */
+export const deactivateAccount = {
+  title: 'Deactivate Account',
+  lead: 'We’re sorry to see you go! Before proceeding, please note that deactivating your Smira Club account will temporarily disable your access to:',
+
+  /** What goes away, each with the icon the design puts beside it. */
+  losing: [
+    { key: 'membership', icon: 'CalendarHeart', label: 'Your membership details & benefits' },
+    { key: 'bookings', icon: 'Home', label: 'All upcoming and past bookings' },
+    { key: 'trips', icon: 'Briefcase', label: 'Your saved trips & travel plans' },
+    { key: 'year', icon: 'CalendarCheck', label: 'Plan My Year events and reminders' },
+    { key: 'offers', icon: 'BadgePercent', label: 'Your saved offers & wishlists' },
+    { key: 'profile', icon: 'UserRound', label: 'Your profile & account information' },
+  ],
+
+  /** How long you have to change your mind — one number, used everywhere. */
+  recoveryDays: 60,
+
+  note: 'Your account will be deactivated. You can reactivate and resume your account within {days} days by simply logging in.',
+
+  warning: {
+    title: 'Resume within {days} days',
+    body: 'Your data, membership and benefits will be safely stored for {days} days. If you don’t login within this period, your account and data will be permanently deleted.',
+  },
+
+  confirm: 'Deactivate Account',
+  cancel: 'No, I don’t want to deactivate',
+};
+
+/* -- Plan My Trip -------------------------------------------------------- */
+
+export const planTripHero = {
+  title: 'Where would you like to go next?',
+  body: 'Start planning your year with your upcoming trips.',
+  image: 'plan-trip-hero',
+};
+
+/**
+ * Everything the trip form asks.
+ *
+ * The option lists live here so the desk can add a transport mode or a meal
+ * plan without touching the form, and so the success screen and My Travel
+ * Year read the same vocabulary back.
+ */
+export const planTrip = {
+  companions: ['Solo', 'Couple', 'Family', 'Friends', 'Group'],
+  tripTypes: ['Family', 'Weekend', 'Business', 'Adventure'],
+  partySizes: ['1-2 people', '3-4 people', '5-8 people', '9+ people'],
+  occasions: ['Birthday', 'Anniversary', 'Honeymoon', 'Family Vacation', 'Other'],
+
+  transport: [
+    { key: 'flight', label: 'Flight', icon: 'Plane' },
+    { key: 'train', label: 'Train', icon: 'Train' },
+    { key: 'bus', label: 'Bus', icon: 'Bus' },
+    { key: 'cab', label: 'Cab', icon: 'Car' },
+  ],
+
+  pickupFrom: ['Airport', 'Railway Station', 'Bus Stand', 'Home'],
+  pickupTo: ['Hotel/Resort', 'Villa', 'Homestay', 'Other'],
+
+  mealPlans: [
+    'Breakfast & Dinner',
+    'Breakfast only',
+    'All meals',
+    'No meals',
+  ],
+
+  /** The coloured markers the design puts against each diet. */
+  mealTypes: [
+    { key: 'veg', label: 'Veg', dots: ['#16a34a'] },
+    { key: 'non-veg', label: 'Non-Veg', dots: ['#dc2626'] },
+    { key: 'jain', label: 'Jain', dots: ['#65a30d'], leaf: true },
+    { key: 'both', label: 'Veg & Non-Veg', dots: ['#16a34a', '#dc2626'] },
+  ],
+
+  extras: [
+    'Room on higher floor',
+    'Near Beach/Sea View',
+    'Early Check-In',
+    'Late Check-Out',
+  ],
+};
+
+/** What the screen says once a trip is saved. */
+export const planTripDone = {
+  title: 'Your Trip is Planned!',
+  note: 'We’ll remind you before your trip and notify you regarding your special days, relevant offers & experiences.',
+  primary: 'View My Travel Plan',
+  secondary: 'Add Another Trip',
+};
+
+/* -- The Offers screen --------------------------------------------------- */
+
+export const offerCategories = ['All', 'Packages', 'Restaurant Offers', 'Water Park'];
+
+/**
+ * The package offers — a coloured panel with the price, and a photograph
+ * behind it. `tone` is the gradient the design gives each one.
+ */
+export const packageOffers = [
+  {
+    id: 'free-stay',
+    badge: 'Free Hotel Stay',
+    from: '₹999/₹1249',
+    tone: 'from-[#1b1560] to-[#2e2794]',
+    image: 'villa-room-1',
+    href: '/free-stay',
+  },
+  {
+    id: 'india',
+    badge: 'India Package',
+    from: '₹1,999',
+    tone: 'from-[#0f3f8f] to-[#1b5bc4]',
+    image: 'more-hero',
+    href: '/packages?region=india',
+  },
+  {
+    id: 'group',
+    badge: 'Group Departure',
+    from: '₹4,999',
+    duration: '5N/6D',
+    tone: 'from-[#14532d] to-[#1f7a43]',
+    image: 'plan-trip-hero',
+    href: '/packages?kind=group',
+  },
+  {
+    id: 'international',
+    badge: 'International Trip',
+    from: '₹17,999',
+    duration: '3N/4D',
+    tone: 'from-[#0d4f8b] to-[#1a74c4]',
+    image: 'compare-landmarks',
+    href: '/packages?region=international',
+  },
+  {
+    id: 'island',
+    badge: 'Island Trip',
+    from: '₹22,999',
+    duration: '3N/4D',
+    tone: 'from-[#43248c] to-[#6d4bd8]',
+    image: 'villa-beach',
+    href: '/packages?kind=island',
+  },
+];
+
+/** The two wide banners under the packages. */
+export const promoOffers = [
+  {
+    id: 'weekend',
+    badge: 'Weekend Getaway',
+    title: 'Amazing Deals for this season',
+    tone: 'from-[#1b1560] to-[#2e2794]',
+    image: 'offer-weekend',
+    href: '/offers?kind=weekend',
+  },
+  {
+    id: 'seasonal',
+    badge: 'Seasonal Getaway',
+    title: 'Perfect Escapes for your weekend',
+    tone: 'from-[#0f3f8f] to-[#1b5bc4]',
+    image: 'offer-seasonal',
+    href: '/offers?kind=seasonal',
+  },
+];
+
+/**
+ * The torn-ticket offers. `ink` is the colour the brand and the discount are
+ * set in, which changes per card in the design rather than following one
+ * accent.
+ */
+export const couponOffers = [
+  {
+    id: 'barbeque-nation',
+    category: 'Restaurant Offers',
+    brand: 'Barbeque Nation',
+    deal: '20%',
+    tone: 'from-[#fcdfc8] to-[#f7c39b]',
+    ink: '#9a4a12',
+    lines: ['Save on bill of ₹1000', 'Valid for dine-in • All over India'],
+  },
+  {
+    id: 'pizza-hut',
+    category: 'Restaurant Offers',
+    brand: 'Pizza Hut',
+    deal: '20%',
+    tone: 'from-[#fbd2d2] to-[#f5abab]',
+    ink: '#b3261e',
+    lines: ['Save on bill of ₹1000', 'Valid for dine-in • All over India'],
+  },
+  {
+    id: 'maharaja-bhog',
+    category: 'Restaurant Offers',
+    brand: 'Maharaja Bhog',
+    deal: '₹150',
+    tone: 'from-[#f8e2ac] to-[#e6be62]',
+    ink: '#8a5a0a',
+    lines: ['Save ₹150 off per person', 'Valid for dine-in • In multiple locations'],
+  },
+  {
+    id: 'imagicaa',
+    category: 'Water Park',
+    brand: 'Imagicaa Water Park',
+    deal: '₹300',
+    tone: 'from-[#d2e2fb] to-[#b2c9f0]',
+    ink: '#1d4ed8',
+    lines: ['Save ₹300 on all tickets', 'Valid till 30 Sep 2026'],
+  },
+  {
+    id: 'water-kingdom',
+    category: 'Water Park',
+    brand: 'Water Kingdom',
+    deal: '₹150',
+    tone: 'from-[#dcdcdc] to-[#b4b4b4]',
+    ink: '#374151',
+    lines: [
+      'Asia’s largest theme water park',
+      'Save ₹150 on all tickets',
+      'Valid till 04 Oct 2026',
+    ],
+  },
+  {
+    id: 'great-escape',
+    category: 'Water Park',
+    brand: 'The Great Escape Water Park',
+    deal: '₹150',
+    tone: 'from-[#f6f279] to-[#e7e03f]',
+    ink: '#166534',
+    lines: ['Save ₹150 on every ticket', 'Valid till 30 Sep 2026'],
+  },
+];
+
+/* -- Notifications ------------------------------------------------------- */
+
+/** The colourways the design gives each kind of notification. */
+export const notificationTones = {
+  reminder: { dot: 'bg-[#c2456b]', label: 'text-ink-500' },
+  offer: { dot: 'bg-[#5b3ec4]', label: 'text-[#5b3ec4]' },
+};
+
+export const notifications = [
+  {
+    id: 'n1',
+    kind: 'Trip Reminder',
+    tone: 'reminder',
+    icon: 'PlaneTakeoff',
+    title: 'Goa Getaway',
+    body: 'Your trip to Goa is in 30 Days!',
+    when: '30m ago',
+    unread: true,
+    href: '/profile/travel-year/goa',
+  },
+  {
+    id: 'n2',
+    kind: 'Exclusive Offer',
+    tone: 'offer',
+    icon: 'Percent',
+    title: 'Goa Trip Special Offer',
+    body: 'Get up to 25% OFF on top experiences, hotels & more!',
+    when: '40m ago',
+    unread: true,
+    cta: { label: 'View Offers', href: '/offers' },
+  },
+  {
+    id: 'n3',
+    kind: 'Booking Update',
+    tone: 'reminder',
+    icon: 'CircleCheck',
+    title: 'La Calypso Beach Resort & Casino',
+    body: 'Your booking CHK-12 is confirmed. The property has your arrival time.',
+    when: '2d ago',
+    unread: false,
+    href: '/profile/bookings',
+  },
+];
+
+/* -- Flash Offers -------------------------------------------------------- */
+
+/**
+ * The offers on a clock.
+ *
+ * `endsInHours` is measured from when the page opens rather than a fixed
+ * date, so the section never shows an expired deal while there is no backend
+ * feeding it real deadlines. Swap it for an end timestamp when there is.
+ */
+export const flashOffers = [
+  {
+    id: 'phoenix-dining',
+    badge: 'Restaurant Offer',
+    brand: 'Phoenix Park Inn By Radison',
+    place: 'Candolim, Goa',
+    deal: 'Get Up To 40% OFF',
+    endsInHours: 34,
+    tone: 'from-[#10284a] to-[#1b4b7e]',
+    href: '/offers?kind=restaurant-offers',
+  },
+  {
+    id: 'imagicaa-flash',
+    badge: 'Water Park',
+    brand: 'Imagicaa Water Park',
+    place: 'Khopoli, Maharashtra',
+    deal: 'Flat ₹300 OFF on tickets',
+    endsInHours: 20,
+    tone: 'from-[#1b1560] to-[#3b2f9c]',
+    href: '/offers?kind=water-park',
+  },
+  {
+    id: 'salon-flash',
+    badge: 'Saloon & Spa',
+    brand: 'Tattva Spa',
+    place: 'Across 14 cities',
+    deal: 'Up To 35% OFF on spa days',
+    endsInHours: 52,
+    tone: 'from-[#3d1f4a] to-[#6d3b6f]',
+    href: '/offers?kind=restaurant-offers',
+  },
+];
+
+/** The badge the header wears once a membership is active. */
+export const memberBadge = { label: 'Gold Member', href: '/membership' };
+
+/* -- International Trips ------------------------------------------------- */
+
+export const intlTabs = ['Customised Tours', 'Fixed departure'];
+
+/** The three reassurances the design puts under the tabs. */
+export const intlTrust = [
+  { key: 'price', icon: 'Award', label: 'Best Price Guaranteed' },
+  { key: 'help', icon: 'Sparkles', label: 'Personalized Assistance' },
+  { key: 'safe', icon: 'ShieldCheck', label: '100% Safe & Secure' },
+];
+
+/** What the customised-tour form asks on top of the usual trip questions. */
+export const intlForm = {
+  hotelPreferences: ['Free Stay', '3 Star', '4 Star', '5 Star', 'Villa', 'Any'],
+  durations: [
+    '3 Nights / 4 Days',
+    '4 Nights / 5 Days',
+    '5 Nights / 6 Days',
+    '7 Nights / 8 Days',
+    '10 Nights / 11 Days',
+  ],
+  childAges: Array.from({ length: 18 }, (_, i) => `${i} Year${i === 1 ? '' : 's'}`),
+  dropFrom: ['Hotel/Resort', 'Villa', 'Homestay'],
+  dropTo: ['Airport', 'Railway Station', 'Bus Stand'],
+  support: [
+    'Visa Assistance',
+    'Currency Exchange',
+    'Travel Sim (International)',
+    'Travel Insurance',
+  ],
+};
+
+/** Where the fixed-departure tab suggests going. */
+export const popularDestinations = [
+  { key: 'bali', label: 'Bali, Indonesia', image: 'story-bali' },
+  { key: 'sri-lanka', label: 'Sri Lanka', image: 'story-srilanka' },
+  { key: 'mauritius', label: 'Mauritius', image: 'villa-ocean-pearl' },
+];
+
+/** How the results screen slices the packages. */
+export const packageFilters = [
+  { key: 'all', label: 'All packages' },
+  { key: 'honeymoon', label: 'Honeymoon' },
+  { key: 'premium', label: 'Premium' },
+];
+
+/**
+ * The packages.
+ *
+ * One shape serves the listing and the detail screen: the cards read the top
+ * of it, the detail page reads the rest. A package described once cannot end
+ * up priced differently in two places.
+ */
+export const packages = [
+  {
+    id: 'bali-bliss',
+    name: 'Bali Bliss Getaway',
+    place: 'Bali, Indonesia',
+    destination: 'bali',
+    kinds: ['honeymoon', 'premium'],
+    verified: true,
+    rating: 4.4,
+    reviews: 412,
+    nights: 4,
+    chips: [
+      { label: 'Flight', icon: 'Plane' },
+      { label: 'Hotel', icon: 'Building2' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Gift',
+      title: 'Complimentary stay for members',
+      note: 'Pay for food · Breakfast & Dinner included',
+    },
+    price: 64999,
+    was: 67999,
+    image: 'story-bali',
+    about:
+      'Experience the best of Bali with our exclusive package including luxurious stays, exciting sightseeing and unforgettable memories.',
+    highlights: [
+      'Return Flights',
+      '4 Nights Accommodation',
+      'Daily Breakfast & Dinner',
+      'Travel Insurance',
+      'Airport Transfers',
+      'Sightseeing & City Tours',
+    ],
+    info: {
+      bestTime: 'Apr - Oct',
+      groupSize: '15 - 20',
+      kind: 'International Trip',
+    },
+    itinerary: [
+      {
+        day: 1,
+        title: 'Arrival In Bali',
+        body: 'Arrival at Ngurah Rai International Airport. Meet & Greet and transfer to hotel. Check-in and relax.',
+        meals: 'Hotel Stay',
+      },
+      {
+        day: 2,
+        title: 'Ubud & Kintamani Tour',
+        body: 'Visit Tegenungan waterfall, Ubud Art market, and Kintamani volcano view point.',
+        meals: 'Breakfast, Lunch, Hotel Stay',
+      },
+      {
+        day: 3,
+        title: 'Nusa Penida Island Tour',
+        body: 'Full day Island Tour with scenic views and natural attractions.',
+        meals: 'Breakfast, Lunch, Hotel Stay',
+      },
+      {
+        day: 4,
+        title: 'Leisure Day',
+        body: 'Free day at leisure. Optional water sports and activities.',
+        meals: 'Breakfast, Lunch, Hotel Stay',
+      },
+      {
+        day: 5,
+        title: 'Departure',
+        body: 'Check-out and transfer to Airport for you return flight',
+        meals: null,
+      },
+    ],
+    inclusions: [
+      'Return Economy Class Flights',
+      '4 Nights Accommodation (3 star Hotel)',
+      'Daily Breakfast & Dinner',
+      'Travel Insurance',
+      'Airport Transfers (Pick-up & Drop)',
+      'All Sightseeing & City Tours as per Itinerary',
+      '24/7 Travel Assistance',
+    ],
+  },
+  {
+    id: 'mauritius-paradise',
+    name: 'Mauritius Paradise',
+    place: 'Mauritius',
+    destination: 'mauritius',
+    kinds: ['premium'],
+    rating: 4.2,
+    reviews: 214,
+    nights: 5,
+    chips: [
+      { label: 'Flight', icon: 'Plane' },
+      { label: 'Hotel', icon: 'Building2' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Percent',
+      title: 'Up to 40% Off for members',
+      note: 'Limited time offer',
+    },
+    price: 54999,
+    was: 57999,
+    image: 'villa-ocean-pearl',
+    about:
+      'Lagoons, reefs and a whole island to slow down on. Five nights with transfers, breakfast and the snorkelling included.',
+    highlights: [
+      'Return Flights',
+      '5 Nights Accommodation',
+      'Daily Breakfast',
+      'Airport Transfers',
+      'Catamaran Cruise',
+    ],
+    info: { bestTime: 'May - Dec', groupSize: '12 - 18', kind: 'International Trip' },
+    itinerary: [
+      { day: 1, title: 'Arrival in Mauritius', body: 'Meet & Greet and transfer to your resort.', meals: 'Hotel Stay' },
+      { day: 2, title: 'North Island Tour', body: 'Port Louis, Caudan Waterfront and the botanical gardens.', meals: 'Breakfast, Hotel Stay' },
+      { day: 3, title: 'Catamaran Cruise', body: 'A day on the water with lunch aboard and snorkelling stops.', meals: 'Breakfast, Lunch, Hotel Stay' },
+      { day: 4, title: 'South Island Tour', body: 'Chamarel, the seven-coloured earths and Black River Gorges.', meals: 'Breakfast, Hotel Stay' },
+      { day: 5, title: 'Leisure Day', body: 'Free day at the resort or optional excursions.', meals: 'Breakfast, Hotel Stay' },
+      { day: 6, title: 'Departure', body: 'Check-out and transfer to the airport.', meals: null },
+    ],
+    inclusions: [
+      'Return Economy Class Flights',
+      '5 Nights Accommodation (4 star Resort)',
+      'Daily Breakfast',
+      'Airport Transfers (Pick-up & Drop)',
+      'Catamaran Cruise with lunch',
+      '24/7 Travel Assistance',
+    ],
+  },
+  {
+    id: 'vietnam-explorer',
+    name: 'Vietnam Explorer',
+    place: 'Vietnam',
+    destination: 'vietnam',
+    kinds: ['premium'],
+    rating: 4.1,
+    reviews: 91,
+    nights: 5,
+    chips: [
+      { label: 'Flight', icon: 'Plane' },
+      { label: 'Hotel', icon: 'Building2' },
+    ],
+    more: 2,
+    promo: null,
+    price: 44999,
+    was: 47999,
+    image: 'villa-hero-hilltop',
+    about:
+      'Hanoi, Ha Long Bay and Da Nang across five nights, with the flights, transfers and the bay cruise arranged.',
+    highlights: [
+      'Return Flights',
+      '5 Nights Accommodation',
+      'Daily Breakfast',
+      'Ha Long Bay Cruise',
+      'Airport Transfers',
+    ],
+    info: { bestTime: 'Feb - Apr', groupSize: '15 - 20', kind: 'International Trip' },
+    itinerary: [
+      { day: 1, title: 'Arrival in Hanoi', body: 'Transfer to the hotel and an evening walk of the Old Quarter.', meals: 'Hotel Stay' },
+      { day: 2, title: 'Ha Long Bay', body: 'Overnight cruise through the limestone karsts.', meals: 'Breakfast, Lunch, Dinner' },
+      { day: 3, title: 'Back to Hanoi', body: 'Morning on the bay, then the drive back and a free evening.', meals: 'Breakfast, Hotel Stay' },
+      { day: 4, title: 'Da Nang & Golden Bridge', body: 'Fly to Da Nang and visit the Ba Na Hills and Golden Bridge.', meals: 'Breakfast, Hotel Stay' },
+      { day: 5, title: 'Hoi An', body: 'The lantern-lit old town and the tailoring street.', meals: 'Breakfast, Hotel Stay' },
+      { day: 6, title: 'Departure', body: 'Check-out and transfer to the airport.', meals: null },
+    ],
+    inclusions: [
+      'Return Economy Class Flights',
+      '5 Nights Accommodation (3 star Hotel)',
+      'Daily Breakfast',
+      'Ha Long Bay overnight cruise',
+      'Airport Transfers (Pick-up & Drop)',
+      '24/7 Travel Assistance',
+    ],
+  },
+  {
+    id: 'bali-adventure',
+    name: 'Bali Adventure',
+    place: 'Bali, Indonesia',
+    destination: 'bali',
+    kinds: ['honeymoon'],
+    rating: 4.2,
+    reviews: 214,
+    nights: 4,
+    chips: [
+      { label: 'Flight', icon: 'Plane' },
+      { label: '3 Star Hotel', icon: 'Building2' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Percent',
+      title: 'Up to 40% Off for members',
+      note: 'Limited time offer',
+    },
+    price: 54999,
+    was: 57999,
+    image: 'villa-beach',
+    about: 'The same island at a quicker pace — rafting, volcano sunrise and the reef.',
+    highlights: ['Return Flights', '4 Nights Accommodation', 'Daily Breakfast', 'Airport Transfers'],
+    info: { bestTime: 'Apr - Oct', groupSize: '15 - 20', kind: 'International Trip' },
+    itinerary: [
+      { day: 1, title: 'Arrival In Bali', body: 'Transfer to hotel and check in.', meals: 'Hotel Stay' },
+      { day: 2, title: 'Ayung River Rafting', body: 'White water rafting through the gorge.', meals: 'Breakfast, Lunch' },
+      { day: 3, title: 'Mount Batur Sunrise', body: 'Early trek for the sunrise over the caldera.', meals: 'Breakfast' },
+      { day: 4, title: 'Reef Day', body: 'Snorkelling and a free afternoon.', meals: 'Breakfast' },
+      { day: 5, title: 'Departure', body: 'Check-out and airport transfer.', meals: null },
+    ],
+    inclusions: [
+      'Return Economy Class Flights',
+      '4 Nights Accommodation (3 star Hotel)',
+      'Daily Breakfast',
+      'Airport Transfers (Pick-up & Drop)',
+      '24/7 Travel Assistance',
+    ],
+  },
+  {
+    id: 'bali-escape',
+    name: 'Bali Escape',
+    place: 'Bali, Indonesia',
+    destination: 'bali',
+    kinds: ['premium'],
+    rating: 4.1,
+    reviews: 91,
+    nights: 4,
+    chips: [
+      { label: 'Flight', icon: 'Plane' },
+      { label: '4 Star Hotel', icon: 'Building2' },
+    ],
+    more: 2,
+    promo: null,
+    price: 44999,
+    was: 47999,
+    image: 'villa-hero-luxury',
+    about: 'Four nights in Seminyak with the beach clubs and the sunsets, and very little else on the schedule.',
+    highlights: ['Return Flights', '4 Nights Accommodation', 'Daily Breakfast', 'Airport Transfers'],
+    info: { bestTime: 'Apr - Oct', groupSize: '10 - 15', kind: 'International Trip' },
+    itinerary: [
+      { day: 1, title: 'Arrival In Bali', body: 'Transfer to Seminyak and check in.', meals: 'Hotel Stay' },
+      { day: 2, title: 'Beach Day', body: 'Free day on the beach and at the clubs.', meals: 'Breakfast' },
+      { day: 3, title: 'Uluwatu & Kecak', body: 'The clifftop temple and the fire dance at sunset.', meals: 'Breakfast' },
+      { day: 4, title: 'Leisure Day', body: 'Spa, shopping or simply nothing at all.', meals: 'Breakfast' },
+      { day: 5, title: 'Departure', body: 'Check-out and airport transfer.', meals: null },
+    ],
+    inclusions: [
+      'Return Economy Class Flights',
+      '4 Nights Accommodation (4 star Hotel)',
+      'Daily Breakfast',
+      'Airport Transfers (Pick-up & Drop)',
+      '24/7 Travel Assistance',
+    ],
+  },
+];
+
+/** The tabs on a package's own page. */
+export const packageTabs = [
+  { key: 'overview', label: 'Overview' },
+  { key: 'itinerary', label: 'Itinerary' },
+  { key: 'inclusions', label: 'Inclusions' },
+  { key: 'policies', label: 'Policies' },
+];
+
+/** The member banner on a package page. */
+export const packageMemberBenefit = {
+  title: 'Smira Club Member Benefits',
+  body: 'Up to 40% on this Package',
+  note: 'Exclusive discounts for members',
+  cta: 'View Benefits',
+};
+
+/**
+ * Package policies. These follow the Cancellation and Refund policies rather
+ * than inventing their own numbers — a package that promised something
+ * different from the policy pages would be the one people quote back.
+ */
+export const packagePolicies = [
+  {
+    title: 'Cancellation Policy',
+    lines: [
+      'More than 30 days before departure: Full refund',
+      '15 - 30 days before departure: 50% refund',
+      'Less than 15 days before departure: No refund',
+    ],
+  },
+  {
+    title: 'Reschedule Policy',
+    lines: ['Reschedule allowed 15 days before departure with applicable charges.'],
+  },
+  {
+    title: 'Payment Policy',
+    lines: [
+      '50% advance at the time of booking. Balance should be paid before 15 days of departure.',
+    ],
+  },
+  {
+    title: 'Travel Policy',
+    lines: ['Passport should be valid for atleast 6 months from travel date.'],
   },
 ];

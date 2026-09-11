@@ -5,7 +5,8 @@ import {
   ChevronLeft, Calendar, User, Play, ArrowRight, Crown, X, Menu, Check, Star, Phone,
   Pencil, Briefcase, Ticket, PlaneTakeoff, Wallet, Gift, CreditCard, Headset,
   Settings, Languages, FileText, ScrollText, HandCoins, FileX2, Trash2, Info, LogOut,
-  BookOpen, CircleHelp,
+  BookOpen, CircleHelp, CalendarHeart, CalendarCheck, BadgePercent, UserRound,
+  Cake, Bus, Car, Train, Luggage,
   Wifi, Martini, Percent, Tag, Coffee, Utensils, MoreVertical,
 } from 'lucide-react';
 
@@ -16,7 +17,8 @@ const ICONS = {
   ChevronLeft, Calendar, User, Play, ArrowRight, Crown, X, Menu, Check, Star, Phone,
   Pencil, Briefcase, Ticket, PlaneTakeoff, Wallet, Gift, CreditCard, Headset,
   Settings, Languages, FileText, ScrollText, HandCoins, FileX2, Trash2, Info, LogOut,
-  BookOpen, CircleHelp,
+  BookOpen, CircleHelp, CalendarHeart, CalendarCheck, BadgePercent, UserRound,
+  Cake, Bus, Car, Train, Luggage,
   Wifi, Martini, Percent, Tag, Coffee, Utensils, MoreVertical,
 };
 

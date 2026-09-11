@@ -28,12 +28,63 @@ function Points({ items }) {
  * JavaScript.
  */
 export default function LegalDocument({ doc }) {
+  /**
+   * A numbered document reads straight down and its headings carry their own
+   * ordering, so it gets plain black headings and no contents rail — the list
+   * would just repeat the numbers already on the page.
+   */
+  const numbered = Boolean(doc.numbered);
+  const heading = numbered
+    ? 'text-xl font-bold text-ink-900 lg:text-2xl'
+    : 'text-xl font-bold text-brand-700 underline underline-offset-4 lg:text-2xl';
+
   return (
-    <article className="shell py-6 lg:mx-auto lg:max-w-2xl">
+    <div className="shell py-6 lg:grid lg:grid-cols-12 lg:gap-10">
+      {/*
+        Fourteen sections is a lot to scroll past looking for the one clause
+        you came for, so a desktop gets a contents list pinned beside the
+        document rather than a column of text and two empty margins.
+
+        Plain anchors, so this stays a server component and needs no script.
+      */}
+      <nav
+        aria-label="On this page"
+        className={`hidden lg:sticky lg:top-24 lg:col-span-3 ${numbered ? '' : 'lg:block'}`}
+      >
+        <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-ink-400">
+          On this page
+        </p>
+
+        <ol className="mt-3 space-y-1 border-l border-surface-line">
+          {doc.sections.map((section) => (
+            <li key={section.id}>
+              <a
+                href={`#${section.id}`}
+                className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[15px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
+              >
+                {section.title}
+              </a>
+            </li>
+          ))}
+          {doc.contact && (
+          <li>
+            <a
+              href="#contact-us"
+              className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[15px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
+            >
+              {doc.contact.title}
+            </a>
+          </li>
+          )}
+        </ol>
+      </nav>
+
+      <article className={numbered ? 'lg:col-span-12' : 'lg:col-span-9'}>
       <h1 className="text-2xl font-bold uppercase leading-snug tracking-tight text-brand-700 lg:text-3xl">
         {doc.title}
       </h1>
 
+      {doc.intro.length > 0 && (
       <div className="mt-6 space-y-5 border-b border-surface-line pb-8">
         {doc.intro.map((para) => (
           <p key={para} className="text-[16px] leading-relaxed text-ink-700">
@@ -41,10 +92,11 @@ export default function LegalDocument({ doc }) {
           </p>
         ))}
       </div>
+      )}
 
       {doc.sections.map((section) => (
         <section key={section.id} id={section.id} className="scroll-mt-20 pt-10">
-          <h2 className="text-xl font-bold text-brand-700 underline underline-offset-4 lg:text-2xl">
+          <h2 className={heading}>
             {section.title}
           </h2>
 
@@ -79,8 +131,9 @@ export default function LegalDocument({ doc }) {
       ))}
 
       {/* -- How to reach a person about any of it ------------------- */}
+      {doc.contact && (
       <section id="contact-us" className="scroll-mt-20 pt-10">
-        <h2 className="text-xl font-bold text-brand-700 underline underline-offset-4 lg:text-2xl">
+        <h2 className={heading}>
           {doc.contact.title}
         </h2>
 
@@ -106,8 +159,12 @@ export default function LegalDocument({ doc }) {
           <p className="mt-5 text-[16px] leading-relaxed text-ink-700">{doc.contact.note}</p>
         )}
       </section>
+      )}
 
-      <p className="mt-10 text-[16px] font-bold text-ink-900">Last Updated: {doc.updated}</p>
-    </article>
+        {doc.updated && (
+          <p className="mt-10 text-[16px] font-bold text-ink-900">Last Updated: {doc.updated}</p>
+        )}
+      </article>
+    </div>
   );
 }

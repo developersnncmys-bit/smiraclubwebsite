@@ -40,7 +40,7 @@ export default async function Page({ searchParams }) {
   const kind = params.kind === 'villa' ? 'villa' : 'stay';
 
   return (
-    <div className="shell py-4 lg:mx-auto lg:max-w-xl lg:py-10">
+    <div className="shell py-4 lg:py-10">
       <Link
         href="/"
         aria-label="Back to home"

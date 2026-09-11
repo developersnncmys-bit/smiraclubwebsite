@@ -24,7 +24,7 @@ export default function MyReviews() {
   }, [sort, withImages]);
 
   return (
-    <div className="shell py-5 lg:mx-auto lg:max-w-2xl">
+    <div className="shell py-5">
       <section className="card p-4 sm:p-5">
         <h1 className="text-lg font-bold text-ink-900">All Reviews</h1>
 

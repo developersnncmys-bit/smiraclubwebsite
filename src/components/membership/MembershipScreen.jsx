@@ -8,6 +8,7 @@ import {
   membershipCompareHero, membershipOffer, membershipPlans, membershipPrivileges,
   membershipSharing, membershipTabs,
 } from '@/lib/content';
+import Countdown from '@/components/ui/Countdown';
 import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
 import { toSrc } from '@/lib/imageSlot';
@@ -23,40 +24,6 @@ function Tick({ on }) {
     >
       {on && <Check size={13} strokeWidth={3.5} />}
     </span>
-  );
-}
-
-/** The countdown, which only starts once the page is on a screen. */
-function Countdown({ hours }) {
-  const [left, setLeft] = useState(null);
-
-  useEffect(() => {
-    const ends = Date.now() + hours * 3600 * 1000;
-    const tick = () => {
-      const ms = Math.max(0, ends - Date.now());
-      setLeft({
-        Days: Math.floor(ms / 86400000),
-        Hrs: Math.floor(ms / 3600000) % 24,
-        Mins: Math.floor(ms / 60000) % 60,
-        Sec: Math.floor(ms / 1000) % 60,
-      });
-    };
-    tick();
-    const timer = setInterval(tick, 1000);
-    return () => clearInterval(timer);
-  }, [hours]);
-
-  return (
-    <div className="flex shrink-0 gap-1.5">
-      {['Days', 'Hrs', 'Mins', 'Sec'].map((unit) => (
-        <span key={unit} className="w-[46px] rounded-lg bg-white px-1 py-1.5 text-center">
-          <span className="block text-[17px] font-bold leading-none text-ink-900">
-            {left ? String(left[unit]).padStart(2, '0') : '--'}
-          </span>
-          <span className="block text-[11px] text-ink-500">{unit}</span>
-        </span>
-      ))}
-    </div>
   );
 }
 
@@ -132,7 +99,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   };
 
   return (
-    <div className="pb-40 lg:pb-44">
+    <div className="pb-40 lg:pb-12">
       {/*
         The pitch. The comparison makes a different argument from the plans,
         so it gets its own banner rather than being sold the same way twice.
@@ -197,7 +164,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
       ) : versus ? (
         <MembershipCompare />
       ) : (
-        <div className="shell space-y-4 py-5 lg:mx-auto lg:max-w-3xl">
+        <div className="shell py-5 lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
+          <div className="space-y-4 lg:col-span-8">
           {/* -- Pick a tier --------------------------------------- */}
           <div className="rail items-end gap-3 pt-4">
             {membershipPlans.map((p) => {
@@ -499,6 +467,38 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             <ShieldCheck size={19} className="text-ink-400" />
             100% Secure Payments
           </p>
+          </div>
+
+          {/*
+            What you are buying.
+
+            A phone gets the pinned bar it has room for. A desktop gets this
+            rail instead — a card floating across the middle of the page sits
+            on top of the very plan you are reading.
+          */}
+          <aside className="hidden lg:col-span-4 lg:block lg:sticky lg:top-24">
+            <div className="overflow-hidden rounded-2xl bg-white shadow-card">
+              <p className="flex items-center gap-2 bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-5 py-3 text-[15px] font-semibold text-white">
+                <Check size={17} strokeWidth={3} />
+                Selected Plan ({plan.label} Membership)
+              </p>
+
+              <div className="p-5">
+                <p className="text-[15px] text-ink-700">Total Amount</p>
+                <p className="text-2xl font-extrabold text-ink-900">{inr(total)}</p>
+                <p className="text-[13px] text-ink-500">(Taxes Included)</p>
+
+                <button
+                  type="button"
+                  disabled={!agreed}
+                  title={agreed ? undefined : 'Agree to the terms first'}
+                  className="btn-primary mt-5 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+                >
+                  Pay now
+                </button>
+              </div>
+            </div>
+          </aside>
         </div>
       )}
 
@@ -510,8 +510,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
         not picked — the design leaves it off, and it is right to.
       */}
       {tab === 'plans' && (
-      <div className="fixed inset-x-0 bottom-0 z-40 lg:bottom-6">
-        <div className="overflow-hidden border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:mx-auto lg:max-w-3xl lg:rounded-2xl lg:border lg:shadow-lift">
+      <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
+        <div className="overflow-hidden border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
           <p className="flex items-center gap-2 bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-4 py-2.5 text-[15px] font-semibold text-white sm:px-6">
             <Check size={17} strokeWidth={3} />
             Selected Plan ({plan.label} Membership)
@@ -531,7 +531,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
               type="button"
               disabled={!agreed}
               title={agreed ? undefined : 'Agree to the terms first'}
-              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide lg:min-w-[13rem]"
+              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide"
             >
               Pay now
             </button>

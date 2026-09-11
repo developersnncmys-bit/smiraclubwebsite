@@ -151,7 +151,7 @@ export default function CompleteProfile() {
 
   return (
     <div className="pb-28 lg:pb-12">
-      <div className="shell py-4 lg:mx-auto lg:max-w-2xl">
+      <div className="shell py-4">
         <button
           type="button"
           onClick={back}
@@ -476,7 +476,7 @@ export default function CompleteProfile() {
         stuck across the bottom of a roomy page is just in the way.
       */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:static lg:border-0 lg:bg-transparent lg:shadow-none">
-        <div className="shell py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:mx-auto lg:max-w-2xl lg:pb-0 lg:pt-6">
+        <div className="shell py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:pb-0 lg:pt-6">
           <button
             type="button"
             onClick={next}

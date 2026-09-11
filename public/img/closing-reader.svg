@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 320' width='420' height='320' role='img'>
+  <ellipse cx='300' cy='96' rx='74' ry='58' fill='#2f7fd6'/>
+  <ellipse cx='248' cy='120' rx='50' ry='40' fill='#3c93e6'/>
+  <ellipse cx='350' cy='124' rx='48' ry='38' fill='#256bb8'/>
+  <rect x='292' y='146' width='14' height='96' rx='6' fill='#6b4a30'/>
+  <path d='M256 250 q46 -22 92 0z' fill='#8fc45f'/>
+  <g>
+    <path d='M196 250 q6 -54 34 -54 q28 0 34 54z' fill='#1f4e79'/>
+    <circle cx='230' cy='178' r='20' fill='#f4d7bd'/>
+    <path d='M212 172 q18 -18 36 0 q-6 -16 -18 -16 q-12 0 -18 16z' fill='#2b2b3a'/>
+    <rect x='196' y='226' width='68' height='10' rx='5' fill='#12395c'/>
+  </g>
+  <g transform='rotate(-8 176 226)'>
+    <rect x='150' y='208' width='52' height='38' rx='4' fill='#f6f1e6'/>
+    <rect x='174' y='208' width='4' height='38' fill='#d8cfbe'/>
+    <g stroke='#cfc5b2' stroke-width='2'>
+      <path d='M156 218h14M156 226h14M156 234h14M182 218h14M182 226h14M182 234h14'/>
+    </g>
+  </g>
+  <rect y='274' width='420' height='46' fill='#8fc45f'/>
+  <g fill='#7ab04f'>
+    <ellipse cx='72' cy='276' rx='42' ry='12'/><ellipse cx='366' cy='278' rx='50' ry='13'/>
+  </g>
+  <g fill='#ffd166' opacity='0.9'>
+    <circle cx='96' cy='64' r='22'/>
+  </g>
+</svg>

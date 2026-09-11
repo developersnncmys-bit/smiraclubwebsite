@@ -69,7 +69,7 @@ export default function MyBookings({ art = {} }) {
     <div className="pb-8">
       {/* -- Find one --------------------------------------------- */}
       <div className="shell pt-4">
-        <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 shadow-card lg:mx-auto lg:max-w-2xl">
+        <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 shadow-card">
           <Search size={20} className="shrink-0 text-ink-500" />
           <input
             value={query}
@@ -92,7 +92,7 @@ export default function MyBookings({ art = {} }) {
 
       {/* -- Narrow them ------------------------------------------ */}
       <div className="shell mt-4">
-        <div className="rail gap-2 lg:mx-auto lg:max-w-2xl">
+        <div className="rail gap-2">
           {bookingTabs.map((t) => {
             const on = t === tab;
             return (
@@ -115,7 +115,7 @@ export default function MyBookings({ art = {} }) {
       </div>
 
       {/* -- What is booked --------------------------------------- */}
-      <div className="shell mt-4 space-y-4 lg:mx-auto lg:max-w-2xl">
+      <div className="shell mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
         {shown.length === 0 ? (
           <p className="card p-10 text-center text-[15px] text-ink-500">
             {query ? 'Nothing matches that search.' : `No ${tab.toLowerCase()} yet.`}

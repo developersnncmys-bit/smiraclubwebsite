@@ -70,7 +70,7 @@ export default function ChangePassword() {
   };
 
   return (
-    <form onSubmit={submit} className="shell space-y-7 py-6 lg:mx-auto lg:max-w-lg">
+    <form onSubmit={submit} className="shell space-y-7 py-6 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-7 lg:space-y-0">
       <Secret
         label="Current password"
         value={current}
@@ -95,7 +95,7 @@ export default function ChangePassword() {
       />
 
       {done && (
-        <p className="rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-[15px] font-semibold text-green-700">
+        <p className="rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-[15px] font-semibold text-green-700 lg:col-span-2">
           Password updated. You will use the new one next time you sign in.
         </p>
       )}
@@ -103,7 +103,7 @@ export default function ChangePassword() {
       <button
         type="submit"
         disabled={!ready}
-        className={`w-full rounded-xl py-4 text-[17px] font-bold transition ${
+        className={`w-full rounded-xl py-4 text-[17px] font-bold transition lg:col-span-2 ${
           ready
             ? 'bg-brand-600 text-white hover:bg-brand-700'
             : 'cursor-not-allowed bg-[#d6d6d6] text-white'

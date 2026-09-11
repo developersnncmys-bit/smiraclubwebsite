@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Bell, Heart, Search } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
+import { memberBadge } from '@/lib/content';
 
 /**
  * One header, two shapes.
@@ -21,7 +22,14 @@ export default function Header() {
         <div className="relative flex h-14 items-center justify-between lg:hidden">
           <Logo compact />
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
+            <Link
+              href={memberBadge.href}
+              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-3.5 py-1.5 text-[13px] font-bold text-white transition hover:brightness-105"
+            >
+              {memberBadge.label}
+            </Link>
+
             <Link href="/wishlist" className="p-2" aria-label="Wishlist">
               <Heart size={21} className="text-ink-700" />
             </Link>
@@ -40,6 +48,25 @@ export default function Header() {
           <Logo />
 
           <div className="ml-auto flex items-center gap-3">
+            <Link
+              href={memberBadge.href}
+              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-3.5 py-1.5 text-[13px] font-bold text-white transition hover:brightness-105"
+            >
+              {memberBadge.label}
+            </Link>
+
+            {/*
+              The bottom tab bar is a phone idea, so More has no way in on a
+              desktop without this — and More is where the policies, the
+              guidelines and the FAQs live.
+            */}
+            <Link
+              href="/more"
+              className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition hover:bg-surface-soft hover:text-ink-900"
+            >
+              More
+            </Link>
+
             <Link
               href="/search"
               className="grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"

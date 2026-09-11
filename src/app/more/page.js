@@ -83,7 +83,7 @@ export default function Page() {
         </div>
       </section>
 
-      <div className="shell lg:mx-auto lg:max-w-2xl">
+      <div className="shell">
         <section className="border-b border-surface-line py-6">
           <h2 className="text-xl font-bold text-ink-900">{moreIntro.heading}</h2>
           <p className="mt-3 text-[16px] leading-relaxed text-ink-600">{moreIntro.body}</p>

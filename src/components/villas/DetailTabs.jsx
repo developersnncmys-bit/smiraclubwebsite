@@ -11,11 +11,11 @@ import { villaDetailTabs } from '@/lib/content';
  * section you have actually scrolled to, so the bar never lies about where
  * you are.
  */
-export default function DetailTabs() {
-  const [active, setActive] = useState(villaDetailTabs[0].key);
+export default function DetailTabs({ tabs = villaDetailTabs }) {
+  const [active, setActive] = useState(tabs[0].key);
 
   useEffect(() => {
-    const sections = villaDetailTabs
+    const sections = tabs
       .map((t) => document.getElementById(t.key))
       .filter(Boolean);
     if (!sections.length) return undefined;
@@ -32,7 +32,7 @@ export default function DetailTabs() {
 
     sections.forEach((s) => spy.observe(s));
     return () => spy.disconnect();
-  }, []);
+  }, [tabs]);
 
   return (
     <nav
@@ -41,7 +41,7 @@ export default function DetailTabs() {
     >
       <div className="shell">
         <div className="rail gap-6 sm:gap-8">
-          {villaDetailTabs.map((t) => {
+          {tabs.map((t) => {
             const on = t.key === active;
             return (
               <a

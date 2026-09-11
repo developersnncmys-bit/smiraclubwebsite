@@ -16,7 +16,7 @@ export default function LanguageSettings() {
   const [chosen, setChosen] = useState('en');
 
   return (
-    <div className="shell py-5 lg:mx-auto lg:max-w-lg">
+    <div className="shell py-5">
       <ul className="card divide-y divide-surface-line overflow-hidden">
         {languages.map((lang) => {
           const on = lang.code === chosen;

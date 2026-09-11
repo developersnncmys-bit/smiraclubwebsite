@@ -87,7 +87,7 @@ export default function MembershipQuiz({ helper, onPick }) {
   };
 
   return (
-    <div className="shell space-y-4 py-5 lg:mx-auto lg:max-w-2xl">
+    <div className="shell space-y-4 py-5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
       <section className="card p-4 sm:p-5">
         <h2 className="text-xl font-bold text-action-500">{membershipQuizIntro.title}</h2>
         <p className="mt-2 text-[15px] leading-relaxed text-ink-600">{membershipQuizIntro.body}</p>

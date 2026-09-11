@@ -3,6 +3,7 @@ import SearchPanel from '@/components/home/SearchPanel';
 import Services from '@/components/home/Services';
 import RecentSearches from '@/components/home/RecentSearches';
 import MemberBenefits from '@/components/home/MemberBenefits';
+import FlashOffers from '@/components/home/FlashOffers';
 import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
@@ -25,6 +26,7 @@ export default function HomePage() {
       <Services art={serviceArt(services.map((s) => s.key))} />
       <RecentSearches />
       <MemberBenefits />
+      <FlashOffers />
       <ClubBanner />
       <GrabOffers offers={offerCards} />
       <WatchExplore />

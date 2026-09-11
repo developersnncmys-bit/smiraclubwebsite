@@ -44,6 +44,8 @@ export default function BookingForm({
   showEmptyDiscount = false,
   bar = { mode: 'per-night', notes: [] },
   confirm = {},
+  /** The read-back cards above the form, so they share the left column. */
+  children,
 }) {
   const router = useRouter();
   const [coupon, setCoupon] = useState('');
@@ -96,53 +98,74 @@ export default function BookingForm({
 
   const field = 'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
-  return (
-    <form onSubmit={submit} className="space-y-4">
-      {/* -- Price summary ------------------------------------------- */}
-      <section className="card p-4 sm:p-5">
-        <h2 className="text-lg font-bold text-ink-900">Price Summary</h2>
+  /**
+   * The price breakdown. Declared once and mounted twice — in the flow on a
+   * phone, in the sticky rail on a desktop — because the two places want the
+   * same numbers and a second copy of this markup would be a second place for
+   * them to go wrong.
+   */
+  const Summary = () => (
+    <section className="card p-4 sm:p-5">
+      <h2 className="text-lg font-bold text-ink-900">Price Summary</h2>
 
-        <dl className="mt-4 text-[15px]">
-          <div className="flex items-start justify-between gap-4 border-b border-dashed border-surface-line pb-3">
-            <dt>
-              <span className="block font-semibold text-ink-900">Base price</span>
-              {baseNote && <span className="block text-[14px] text-ink-500">{baseNote}</span>}
-            </dt>
-            <dd className="shrink-0 font-semibold text-ink-900">{inr(price)}</dd>
-          </div>
+      <dl className="mt-4 text-[15px]">
+        <div className="flex items-start justify-between gap-4 border-b border-dashed border-surface-line pb-3">
+          <dt>
+            <span className="block font-semibold text-ink-900">Base price</span>
+            {baseNote && <span className="block text-[14px] text-ink-500">{baseNote}</span>}
+          </dt>
+          <dd className="shrink-0 font-semibold text-ink-900">{inr(price)}</dd>
+        </div>
 
-          {(discount > 0 || showEmptyDiscount) && (
-            <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
-              <dt className="text-green-600">Discount By Property</dt>
-              <dd className="shrink-0 font-semibold text-green-600">
-                {discount > 0 ? `-${discount}` : '-'}
-              </dd>
-            </div>
-          )}
-
-          {discount > 0 && (
-            <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
-              <dt className="font-semibold text-ink-900">Price after Discount</dt>
-              <dd className="shrink-0 font-semibold text-ink-900">{inr(afterDiscount)}</dd>
-            </div>
-          )}
-
+        {(discount > 0 || showEmptyDiscount) && (
           <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
-            <dt className="flex items-center gap-1.5 text-ink-700">
-              Taxes &amp; Service Fees
-              <span title="Government taxes and the platform service fee.">
-                <Info size={15} className="text-ink-400" />
-              </span>
-            </dt>
-            <dd className="shrink-0 font-semibold text-ink-900">{inr(taxes)}</dd>
+            <dt className="text-green-600">Discount By Property</dt>
+            <dd className="shrink-0 font-semibold text-green-600">
+              {discount > 0 ? `-${discount}` : '-'}
+            </dd>
           </div>
+        )}
 
-          <div className="flex items-center justify-between gap-4 pt-3">
-            <dt className="text-[16px] font-bold text-ink-900">Total Amount to be paid</dt>
-            <dd className="shrink-0 text-[16px] font-bold text-ink-900">{inr(total)}</dd>
+        {discount > 0 && (
+          <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
+            <dt className="font-semibold text-ink-900">Price after Discount</dt>
+            <dd className="shrink-0 font-semibold text-ink-900">{inr(afterDiscount)}</dd>
           </div>
-        </dl>
-      </section>
+        )}
+
+        <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
+          <dt className="flex items-center gap-1.5 text-ink-700">
+            Taxes &amp; Service Fees
+            <span title="Government taxes and the platform service fee.">
+              <Info size={15} className="text-ink-400" />
+            </span>
+          </dt>
+          <dd className="shrink-0 font-semibold text-ink-900">{inr(taxes)}</dd>
+        </div>
+
+        <div className="flex items-center justify-between gap-4 pt-3">
+          <dt className="text-[16px] font-bold text-ink-900">Total Amount to be paid</dt>
+          <dd className="shrink-0 text-[16px] font-bold text-ink-900">{inr(total)}</dd>
+        </div>
+      </dl>
+    </section>
+  );
+
+  return (
+    <form onSubmit={submit} className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
+      {/*
+        A phone reads this top to bottom. A desktop splits it: what you fill
+        in on the left, what it costs pinned on the right, so the total stays
+        in view while you work down the form instead of being a card floating
+        over the middle of the page.
+      */}
+      <div className="space-y-4 lg:col-span-7">
+        {children}
+
+      {/* On a phone the summary reads here, as the design has it. */}
+      <div className="lg:hidden">
+        <Summary />
+      </div>
 
       {/* -- Coupons -------------------------------------------------- */}
       <section className="card p-4 sm:p-5">
@@ -332,10 +355,10 @@ export default function BookingForm({
         It sits flush to the bottom rather than clearing a tab bar, because
         Review Booking hides the tab bar — see BottomNav.
       */}
-      <div className="fixed inset-x-0 bottom-0 z-40 lg:bottom-6">
-        <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:mx-auto lg:max-w-3xl lg:rounded-2xl lg:border lg:shadow-lift">
+      <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
+        <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
           <div
-            className="flex items-center gap-4 px-4 py-3.5 sm:px-6 lg:px-6"
+            className="flex items-center gap-4 px-4 py-3.5 sm:px-6"
             style={{ paddingBottom: 'max(0.875rem, env(safe-area-inset-bottom))' }}
           >
             <div className="min-w-0 flex-1">
@@ -364,14 +387,43 @@ export default function BookingForm({
             */}
             <button
               type="submit"
-              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide lg:min-w-[13rem]"
+              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide"
             >
               Continue
             </button>
           </div>
         </div>
       </div>
+      </div>
 
+      {/* -- The rail: what it costs, and the way on ----------------- */}
+      <aside className="hidden lg:col-span-5 lg:block lg:sticky lg:top-24 lg:space-y-4">
+        <Summary />
+
+        <div className="card p-5">
+          <p className="flex flex-wrap items-baseline justify-between gap-2">
+            <span className="text-[16px] font-bold text-ink-900">
+              {bar.mode === 'total' ? 'Total' : 'Per night'}
+            </span>
+            <span className="text-2xl font-extrabold text-ink-900">
+              {inr(bar.mode === 'total' ? total : price)}
+            </span>
+          </p>
+
+          {bar.notes.map((note) => (
+            <p key={note} className="text-right text-[13px] leading-tight text-ink-500">
+              {note}
+            </p>
+          ))}
+
+          <button
+            type="submit"
+            className="btn-primary mt-4 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+          >
+            Continue
+          </button>
+        </div>
+      </aside>
     </form>
   );
 }

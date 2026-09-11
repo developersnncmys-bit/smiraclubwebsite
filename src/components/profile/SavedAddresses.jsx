@@ -67,7 +67,7 @@ export default function SavedAddresses() {
   };
 
   return (
-    <div className="shell space-y-5 py-5 lg:mx-auto lg:max-w-2xl">
+    <div className="shell space-y-5 py-5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
       {/* -- The two ways to get one on the list ------------------- */}
       <div className="grid grid-cols-2 gap-4">
         <button

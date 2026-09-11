@@ -2,19 +2,27 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { X } from 'lucide-react';
 
 /**
  * Logging out asks first, because the design puts this at the end of a long
- * scroll where a stray tap is easy. There is no session to clear yet — when
- * auth lands, drop the token clear into `confirmLogout` and nothing else here
- * needs to change.
+ * scroll where a stray tap is easy.
+ *
+ * Cancel is the filled button and Yes, Log Out the outlined one — the design
+ * has it that way round, and it is right to: the safe choice should be the
+ * one your thumb lands on.
+ *
+ * There is no session to clear yet. When auth lands, drop the token clear
+ * into `confirmLogout` and nothing else here needs to change.
  */
 export default function LogoutButton() {
   const router = useRouter();
   const [asking, setAsking] = useState(false);
 
+  const close = () => setAsking(false);
+
   const confirmLogout = () => {
-    setAsking(false);
+    close();
     router.push('/');
   };
 
@@ -33,28 +41,48 @@ export default function LogoutButton() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="logout-title"
-          className="fixed inset-0 z-50 grid place-items-end sm:place-items-center"
+          className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center"
         >
-          <div className="absolute inset-0 bg-ink-900/40" onClick={() => setAsking(false)} />
+          <div className="absolute inset-0 bg-ink-900/45" onClick={close} />
 
-          <div className="relative w-full rounded-t-2xl bg-white p-6 shadow-lift sm:max-w-sm sm:rounded-2xl">
-            <h2 id="logout-title" className="text-lg font-bold text-ink-900">
-              Log out of Smira Club?
+          {/* The round close button the design floats above the sheet. */}
+          <div className="relative flex justify-center pb-4">
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close"
+              className="grid h-12 w-12 place-items-center rounded-full bg-white text-ink-900 shadow-lift transition hover:bg-surface-soft"
+            >
+              <X size={22} />
+            </button>
+          </div>
+
+          <div className="relative w-full overflow-hidden rounded-t-2xl bg-white sm:mx-auto sm:max-w-md sm:rounded-2xl">
+            <h2
+              id="logout-title"
+              className="px-6 py-7 text-[20px] font-bold leading-snug text-ink-900"
+            >
+              Are You Sure You Want To Log Out?
             </h2>
-            <p className="mt-2 text-[15px] text-ink-500">
-              You will need your phone number to sign back in.
-            </p>
 
-            <div className="mt-5 flex gap-3">
-              <button type="button" onClick={() => setAsking(false)} className="btn-quiet flex-1">
-                Stay
+            <div
+              className="flex gap-4 border-t border-surface-line p-5"
+              style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
+            >
+              <button
+                type="button"
+                onClick={close}
+                className="flex-1 rounded-xl bg-brand-700 py-4 text-[17px] font-bold text-white transition hover:bg-brand-800"
+              >
+                Cancel
               </button>
+
               <button
                 type="button"
                 onClick={confirmLogout}
-                className="btn flex-1 bg-red-600 text-white hover:bg-red-700"
+                className="flex-1 rounded-xl border-2 border-action-500 bg-white py-4 text-[17px] font-bold text-action-500 transition hover:bg-brand-50"
               >
-                Log out
+                Yes, Log Out
               </button>
             </div>
           </div>

@@ -32,7 +32,7 @@ function Mark({ yes }) {
  */
 export default function MembershipCompare() {
   return (
-    <div className="shell space-y-6 py-6 lg:mx-auto lg:max-w-3xl">
+    <div className="shell space-y-6 py-6">
       <div className="overflow-hidden rounded-2xl bg-white shadow-card">
         <table className="w-full border-collapse text-left">
           <thead>

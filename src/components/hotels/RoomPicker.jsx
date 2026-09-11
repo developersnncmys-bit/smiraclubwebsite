@@ -26,10 +26,10 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
 
   return (
     <>
-      <section id="rooms" className="scroll-mt-24">
-        <h2 className="text-lg font-bold text-ink-900 lg:text-xl">Select Room</h2>
+      <section id="rooms" className="scroll-mt-24 lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
+        <h2 className="text-lg font-bold text-ink-900 lg:col-span-12 lg:text-xl">Select Room</h2>
 
-        <div className="mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
+        <div className="mt-4 space-y-4 lg:col-span-8 lg:mt-6 lg:space-y-6">
           {groups.map((group) => (
             <article key={group.id} className="card overflow-hidden">
               <p className="px-4 pt-4 text-[15px] font-semibold text-ink-500 sm:px-5">
@@ -133,6 +133,51 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
             </article>
           ))}
         </div>
+
+        {/* -- The rail: what you picked, and the way on -------------- */}
+        <aside className="hidden lg:col-span-4 lg:mt-6 lg:block lg:sticky lg:top-24">
+          <div className="card p-5">
+            <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
+              Your selection
+            </p>
+
+            <p className="mt-2 text-[17px] font-bold leading-snug text-ink-900">
+              {chosen?.room.name}
+            </p>
+            <p className="text-[15px] text-ink-500">{chosen?.plan.name}</p>
+
+            <ul className="mt-4 space-y-1.5 border-t border-surface-line pt-4">
+              {chosen?.plan.lines.map((line) => (
+                <li key={line} className="flex gap-2 text-[14px] text-ink-600">
+                  <span aria-hidden="true" className="text-ink-400">&bull;</span>
+                  {line}
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-4 flex flex-wrap items-baseline justify-between gap-2 border-t border-surface-line pt-4">
+              <span className="text-[15px] text-ink-700">Per night</span>
+              <span className="flex items-baseline gap-2">
+                <span className="text-2xl font-extrabold text-ink-900">
+                  {inr(chosen?.plan.price ?? 0)}
+                </span>
+                {chosen?.plan.was && (
+                  <span className="text-[15px] font-semibold text-red-500 line-through">
+                    {inr(chosen.plan.was)}
+                  </span>
+                )}
+              </span>
+            </p>
+            <p className="text-right text-[13px] text-ink-500">(Taxes Included)</p>
+
+            <Link
+              href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
+              className="btn-primary mt-4 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+            >
+              Book room
+            </Link>
+          </div>
+        </aside>
       </section>
 
       {/*
@@ -143,8 +188,8 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
         button end up at opposite ends of the screen with nothing between
         them, which reads as two stray controls rather than one bar.
       */}
-      <div className="fixed inset-x-0 bottom-0 z-40 lg:bottom-6">
-        <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:mx-auto lg:max-w-3xl lg:rounded-2xl lg:border lg:shadow-lift">
+      <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
+        <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
           <div
             className="flex items-center gap-4 px-4 py-3.5 sm:px-6 lg:px-6"
             style={{ paddingBottom: 'max(0.875rem, env(safe-area-inset-bottom))' }}
