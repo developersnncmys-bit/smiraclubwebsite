@@ -275,10 +275,14 @@ export const plans = [
 ];
 
 /** The bottom bar on a phone, and the account menu on a desktop. */
+/**
+ * AI Search is not in here: it has the floating button in the home screen's
+ * bottom-right corner instead, and a tab saying the same thing would be the
+ * second way into one screen.
+ */
 export const primaryNav = [
   { key: 'home', label: 'Home', href: '/', icon: 'Home' },
   { key: 'wishlist', label: 'Wishlist', href: '/wishlist', icon: 'Heart' },
-  { key: 'search', label: 'AI Search', href: '/search', icon: 'Search' },
   { key: 'profile', label: 'Profile', href: '/profile', icon: 'CircleUser' },
   { key: 'more', label: 'More', href: '/more', icon: 'MoreHorizontal' },
 ];

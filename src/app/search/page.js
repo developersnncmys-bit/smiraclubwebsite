@@ -29,6 +29,8 @@ export default function Page() {
       {/* -- The ask -------------------------------------------------------- */}
       <section className="bg-brand-50">
         <div className="shell py-5 sm:py-8 lg:py-12">
+          {/* The screen had no heading of its own — only the input's label. */}
+          <h1 className="sr-only">AI Search</h1>
           <AiSearchBar placeholder={aiSearchPlaceholder} prompts={prompts} />
         </div>
       </section>
@@ -42,7 +44,7 @@ export default function Page() {
           <p className="mt-1 text-[14px] text-ink-500">Based on your Interest</p>
 
           <ul className="mt-5 grid grid-cols-2 gap-4 lg:mt-7 lg:grid-cols-4 lg:gap-6">
-            {aiRecommendations.map((r) => (
+            {aiRecommendations.map((r, i) => (
               <li key={r.key} className="card flex flex-col overflow-hidden">
                 <span className="relative block aspect-[4/3] w-full">
                   <Image
@@ -50,6 +52,11 @@ export default function Page() {
                     alt=""
                     fill
                     sizes="(min-width: 1024px) 22vw, 45vw"
+                    /* The first two are above the fold on a phone and one of
+                       them is the largest thing painted, so they load eagerly
+                       rather than waiting their turn. */
+                    loading={i < 2 ? 'eager' : 'lazy'}
+                    fetchPriority={i === 0 ? 'high' : 'auto'}
                     className="object-cover"
                   />
                 </span>

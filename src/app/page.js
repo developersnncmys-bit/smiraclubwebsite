@@ -8,6 +8,7 @@ import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
 import ClosingLine from '@/components/home/ClosingLine';
+import AiSearchFab from '@/components/home/AiSearchFab';
 import { heroSlides, offers, searchTabs, services } from '@/lib/content';
 import { image } from '@/lib/images';
 import { serviceArt } from '@/lib/serviceArt';
@@ -31,6 +32,7 @@ export default function HomePage() {
       <GrabOffers offers={offerCards} />
       <WatchExplore />
       <ClosingLine />
+      <AiSearchFab />
     </>
   );
 }
