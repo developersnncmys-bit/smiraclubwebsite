@@ -29,11 +29,11 @@ export default function LanguageSettings() {
                 className="flex w-full items-center gap-4 px-4 py-4 text-left transition hover:bg-surface-soft sm:px-5"
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[16px] font-semibold text-ink-900">
+                  <span className="block text-[15px] font-semibold text-ink-900">
                     {lang.label}
                   </span>
                   {lang.native !== lang.label && (
-                    <span className="block text-[15px] text-ink-500">{lang.native}</span>
+                    <span className="block text-[14px] text-ink-500">{lang.native}</span>
                   )}
                 </span>
 
@@ -50,7 +50,7 @@ export default function LanguageSettings() {
         })}
       </ul>
 
-      <p className="mt-4 flex gap-2.5 text-[15px] leading-snug text-ink-500">
+      <p className="mt-4 flex gap-2.5 text-[14px] leading-snug text-ink-500">
         <Info size={18} className="mt-0.5 shrink-0 text-ink-400" />
         Only English is translated so far. Choosing another language records the preference and
         the site switches over as each translation lands.

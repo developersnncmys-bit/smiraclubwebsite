@@ -21,7 +21,7 @@ export default function ClubBanner() {
         <h3 className="mt-4 text-2xl font-extrabold uppercase tracking-tight text-ink-900 lg:text-3xl">
           {banner.title}
         </h3>
-        <p className="mt-2 max-w-sm text-[15px] leading-snug text-ink-600 lg:max-w-lg lg:text-base">
+        <p className="mt-2 max-w-sm text-[14px] leading-snug text-ink-600 lg:max-w-lg lg:text-base">
           {banner.copy}
         </p>
 

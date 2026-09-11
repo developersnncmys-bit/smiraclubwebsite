@@ -28,7 +28,7 @@ export default function VillaCollections({ collections }) {
             className="object-cover transition duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <span className="absolute inset-x-0 bottom-0 p-2.5 text-[13px] font-bold leading-tight text-white lg:p-3 lg:text-[15px]">
+          <span className="absolute inset-x-0 bottom-0 p-2.5 text-[13px] font-bold leading-tight text-white lg:p-3 lg:text-[14px]">
             {c.label}
           </span>
         </Link>

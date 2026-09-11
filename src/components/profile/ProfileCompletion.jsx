@@ -13,8 +13,8 @@ export default function ProfileCompletion() {
     <section className="card p-5 sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-[17px] font-bold text-ink-900">Profile Completion</h2>
-          <p className="mt-1.5 text-[22px] font-bold text-action-500">{pct}% Completed</p>
+          <h2 className="text-[15px] font-bold text-ink-900">Profile Completion</h2>
+          <p className="mt-1.5 text-[19px] font-bold text-action-500">{pct}% Completed</p>
         </div>
 
         <div className="relative shrink-0">
@@ -52,13 +52,13 @@ export default function ProfileCompletion() {
         <div className="h-full rounded-full bg-action-500" style={{ width: `${pct}%` }} />
       </div>
 
-      <p className="mt-4 text-[15px] leading-relaxed text-ink-700">
+      <p className="mt-4 text-[14px] leading-relaxed text-ink-700">
         You&rsquo;re half way there! Complete your profile to unlock personalized Smira Benefits
       </p>
 
       <Link
         href="/profile/edit"
-        className="mt-3 inline-flex items-center gap-2 text-[15px] font-bold text-action-500 transition hover:text-action-600"
+        className="mt-3 inline-flex items-center gap-2 text-[14px] font-bold text-action-500 transition hover:text-action-600"
       >
         <Pencil size={16} />
         Complete Profile

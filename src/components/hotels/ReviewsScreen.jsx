@@ -48,7 +48,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
           </button>
           <div className="min-w-0">
             <h1 className="truncate text-xl font-bold leading-tight text-ink-900">{title}</h1>
-            <p className="truncate text-[15px] text-ink-600">{subtitle}</p>
+            <p className="truncate text-[14px] text-ink-600">{subtitle}</p>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
                   type="button"
                   onClick={() => setWho(f.key)}
                   aria-pressed={on}
-                  className={`shrink-0 border-b-2 py-3.5 text-[15px] font-bold uppercase tracking-[0.04em] transition ${
+                  className={`shrink-0 border-b-2 py-3.5 text-[14px] font-bold uppercase tracking-[0.04em] transition ${
                     on
                       ? 'border-action-500 text-action-500'
                       : 'border-transparent text-ink-500 hover:text-ink-700'
@@ -88,12 +88,12 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
             </span>
             <span className="text-xl font-bold text-action-500">{hotelRatingSummary.word}</span>
           </p>
-          <p className="mt-2 text-[15px] text-ink-600">({reviewCount} reviews)</p>
+          <p className="mt-2 text-[14px] text-ink-600">({reviewCount} reviews)</p>
 
           <dl className="mt-5 space-y-3">
             {hotelRatingSummary.breakdown.map((b) => (
               <div key={b.label} className="flex items-center gap-4">
-                <dt className="w-[92px] shrink-0 text-[14px] font-semibold uppercase tracking-[0.03em] text-ink-800 underline sm:w-[110px]">
+                <dt className="w-[92px] shrink-0 text-[13px] font-semibold uppercase tracking-[0.03em] text-ink-800 underline sm:w-[110px]">
                   {b.label}
                 </dt>
                 <dd className="flex flex-1 items-center gap-3">
@@ -103,7 +103,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
                       style={{ width: `${b.pct}%` }}
                     />
                   </span>
-                  <span className="w-10 shrink-0 text-right text-[14px] text-ink-600">
+                  <span className="w-10 shrink-0 text-right text-[13px] text-ink-600">
                     {b.pct}%
                   </span>
                 </dd>
@@ -117,7 +117,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
           <h2 className="text-lg font-bold text-ink-900">All Reviews</h2>
 
           <div className="mt-4 flex flex-wrap gap-3">
-            <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[15px] font-medium text-ink-900">
+            <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[14px] font-medium text-ink-900">
               <span className="sr-only">Sort reviews by</span>
               Sort By:
               <select
@@ -138,7 +138,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
               type="button"
               onClick={() => setWithImages((v) => !v)}
               aria-pressed={withImages}
-              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[15px] font-medium transition ${
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[14px] font-medium transition ${
                 withImages
                   ? 'border-action-500 bg-action-500 text-white'
                   : 'border-surface-line text-ink-900 hover:bg-surface-soft'
@@ -150,7 +150,7 @@ export default function ReviewsScreen({ title, subtitle, backHref, rating, revie
           </div>
 
           {shown.length === 0 ? (
-            <p className="mt-8 text-center text-[15px] text-ink-500">
+            <p className="mt-8 text-center text-[14px] text-ink-500">
               {withImages
                 ? 'No reviews with photos yet in this group.'
                 : 'No reviews from this group yet.'}

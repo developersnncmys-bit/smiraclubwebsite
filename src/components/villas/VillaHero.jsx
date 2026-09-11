@@ -64,10 +64,10 @@ export default function VillaHero({ slides }) {
 
       <div className="relative flex h-full flex-col items-center justify-end pb-7 text-center lg:pb-24">
         <div className="shell">
-          <h2 className="text-[19px] font-extrabold uppercase leading-tight tracking-tight text-white drop-shadow sm:text-2xl lg:text-4xl">
+          <h2 className="text-[17px] font-extrabold uppercase leading-tight tracking-tight text-white drop-shadow sm:text-2xl lg:text-4xl">
             {slide.title}
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-[13px] leading-snug text-white/90 sm:text-[15px] lg:max-w-xl lg:text-lg">
+          <p className="mx-auto mt-2 max-w-md text-[13px] leading-snug text-white/90 sm:text-[14px] lg:max-w-xl lg:text-lg">
             {slide.copy}
           </p>
         </div>

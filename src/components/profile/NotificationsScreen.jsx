@@ -29,7 +29,7 @@ export default function NotificationsScreen() {
         <button
           type="button"
           onClick={markAll}
-          className="text-[16px] font-semibold text-action-500"
+          className="text-[15px] font-semibold text-action-500"
         >
           {allRead ? 'Mark as Unread' : 'Mark as Read'}
         </button>
@@ -57,12 +57,12 @@ export default function NotificationsScreen() {
                       {n.kind}
                     </span>
                     <span className="flex shrink-0 items-center gap-2.5">
-                      <span className="text-[14px] text-ink-500">{n.when}</span>
+                      <span className="text-[13px] text-ink-500">{n.when}</span>
                     </span>
                   </span>
 
                   <span className="mt-1 flex items-start justify-between gap-3">
-                    <span className="text-[19px] font-bold leading-snug text-ink-900">
+                    <span className="text-[17px] font-bold leading-snug text-ink-900">
                       {n.title}
                     </span>
                     {unread && (
@@ -73,14 +73,14 @@ export default function NotificationsScreen() {
                     )}
                   </span>
 
-                  <span className="mt-1 block text-[16px] leading-snug text-ink-600">
+                  <span className="mt-1 block text-[15px] leading-snug text-ink-600">
                     {n.body}
                   </span>
                 </span>
               </span>
 
               {n.cta && (
-                <span className="mt-4 flex items-center justify-end gap-2 text-[16px] font-semibold text-action-500">
+                <span className="mt-4 flex items-center justify-end gap-2 text-[15px] font-semibold text-action-500">
                   {n.cta.label}
                   <ArrowRight size={17} />
                 </span>

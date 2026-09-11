@@ -86,13 +86,13 @@ export default async function Page({ params, searchParams }) {
                 <div className="min-w-0">
                   <h1 className="text-xl font-bold leading-tight text-ink-900">{hotel.name}</h1>
 
-                  <p className="mt-2 flex items-center gap-1.5 text-[15px] text-ink-700">
+                  <p className="mt-2 flex items-center gap-1.5 text-[14px] text-ink-700">
                     <Star size={16} className="text-gold" fill="currentColor" strokeWidth={0} />
                     <span className="font-bold text-ink-900">{hotel.rating}</span>
                     <span className="text-ink-500">({hotel.reviews} reviews)</span>
                   </p>
 
-                  <p className="mt-2 text-[15px] leading-snug text-ink-600">{hotel.locality}</p>
+                  <p className="mt-2 text-[14px] leading-snug text-ink-600">{hotel.locality}</p>
                 </div>
 
                 <span className="relative h-[92px] w-[120px] shrink-0 overflow-hidden rounded-xl">
@@ -103,15 +103,15 @@ export default async function Page({ params, searchParams }) {
 
             {/* -- When -------------------------------------------------- */}
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[15px] text-ink-500">Preferred Slot</p>
-              <p className="mt-1 text-[16px] font-bold text-ink-900">{slotLabel(from, to)}</p>
-              <p className="text-[15px] text-ink-600">{stay}</p>
+              <p className="text-[14px] text-ink-500">Preferred Slot</p>
+              <p className="mt-1 text-[15px] font-bold text-ink-900">{slotLabel(from, to)}</p>
+              <p className="text-[14px] text-ink-600">{stay}</p>
             </div>
 
             {/* -- Who --------------------------------------------------- */}
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[15px] text-ink-500">Guests</p>
-              <p className="text-[16px] font-bold text-ink-900">
+              <p className="text-[14px] text-ink-500">Guests</p>
+              <p className="text-[15px] font-bold text-ink-900">
                 {adults} Adult{adults === 1 ? '' : 's'}
               </p>
             </div>
@@ -122,16 +122,16 @@ export default async function Page({ params, searchParams }) {
             <h2 className="p-4 text-lg font-bold leading-snug text-ink-900 sm:p-5">{hotel.name}</h2>
 
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[16px] font-semibold text-ink-900">{chosen.plan.name}</p>
+              <p className="text-[15px] font-semibold text-ink-900">{chosen.plan.name}</p>
               <ul className="mt-2 space-y-1.5">
                 {chosen.plan.lines.map((line) => (
-                  <li key={line} className="flex gap-2.5 text-[15px] text-ink-600">
+                  <li key={line} className="flex gap-2.5 text-[14px] text-ink-600">
                     <span aria-hidden="true" className="text-ink-400">&bull;</span>
                     {line}
                   </li>
                 ))}
               </ul>
-              <button type="button" className="mt-4 text-[15px] font-bold text-ink-900 underline">
+              <button type="button" className="mt-4 text-[14px] font-bold text-ink-900 underline">
                 Cancellation Policy
               </button>
             </div>
@@ -146,11 +146,11 @@ export default async function Page({ params, searchParams }) {
                   {rule.title && (
                     <p className="font-semibold text-ink-900 underline">{rule.title}</p>
                   )}
-                  <p className="mt-1 text-[15px] leading-relaxed text-ink-600">{rule.body}</p>
+                  <p className="mt-1 text-[14px] leading-relaxed text-ink-600">{rule.body}</p>
                 </li>
               ))}
             </ul>
-            <button type="button" className="mt-4 text-[15px] font-bold text-ink-900 underline">
+            <button type="button" className="mt-4 text-[14px] font-bold text-ink-900 underline">
               View more
             </button>
           </section>

@@ -16,14 +16,14 @@ export default function MembershipCard() {
         </span>
 
         <div className="min-w-0">
-          <h2 className="text-xl font-bold leading-tight sm:text-[22px]">{member.tier}</h2>
-          <p className="mt-0.5 text-[15px] text-white/85">Member ID: {member.memberId}</p>
+          <h2 className="text-xl font-bold leading-tight sm:text-[19px]">{member.tier}</h2>
+          <p className="mt-0.5 text-[14px] text-white/85">Member ID: {member.memberId}</p>
         </div>
       </div>
 
       <Link
         href="/membership"
-        className="mt-5 flex items-center justify-between gap-3 rounded-xl bg-white px-5 py-3.5 text-[15px] font-bold text-ink-900 transition hover:bg-surface-soft"
+        className="mt-5 flex items-center justify-between gap-3 rounded-xl bg-white px-5 py-3.5 text-[14px] font-bold text-ink-900 transition hover:bg-surface-soft"
       >
         Explore membership Benefits
         <ChevronRight size={18} className="shrink-0 text-ink-500" />

@@ -29,8 +29,8 @@ function Stepper({ label, note, value, min = 0, max = 30, onChange }) {
   return (
     <div className="flex items-center justify-between gap-4 py-5">
       <span className="min-w-0">
-        <span className="block text-[19px] font-bold leading-tight text-ink-900">{label}</span>
-        {note && <span className="mt-1 block text-[14px] text-ink-500">{note}</span>}
+        <span className="block text-[17px] font-bold leading-tight text-ink-900">{label}</span>
+        {note && <span className="mt-1 block text-[13px] text-ink-500">{note}</span>}
       </span>
 
       <span className="flex shrink-0 items-center rounded-xl border border-brand-200">
@@ -39,11 +39,11 @@ function Stepper({ label, note, value, min = 0, max = 30, onChange }) {
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           aria-label={`One fewer ${label.toLowerCase()}`}
-          className="grid h-11 w-11 place-items-center rounded-l-xl text-[19px] font-semibold text-action-500 transition hover:bg-brand-50 disabled:pointer-events-none disabled:text-ink-400/40"
+          className="grid h-11 w-11 place-items-center rounded-l-xl text-[17px] font-semibold text-action-500 transition hover:bg-brand-50 disabled:pointer-events-none disabled:text-ink-400/40"
         >
           -
         </button>
-        <span aria-live="polite" className="w-8 text-center text-[17px] font-bold text-ink-900">
+        <span aria-live="polite" className="w-8 text-center text-[15px] font-bold text-ink-900">
           {value}
         </span>
         <button
@@ -51,7 +51,7 @@ function Stepper({ label, note, value, min = 0, max = 30, onChange }) {
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           aria-label={`One more ${label.toLowerCase()}`}
-          className="grid h-11 w-11 place-items-center rounded-r-xl text-[19px] font-semibold text-action-500 transition hover:bg-brand-50 disabled:pointer-events-none disabled:text-ink-400/40"
+          className="grid h-11 w-11 place-items-center rounded-r-xl text-[17px] font-semibold text-action-500 transition hover:bg-brand-50 disabled:pointer-events-none disabled:text-ink-400/40"
         >
           +
         </button>
@@ -120,7 +120,7 @@ export default function GuestsPicker({
           >
             <X size={22} strokeWidth={2.2} />
           </button>
-          <h2 className="text-[20px] font-bold text-ink-900">Select rooms &amp; Guests</h2>
+          <h2 className="text-[17px] font-bold text-ink-900">Select rooms &amp; Guests</h2>
         </header>
 
         <div className="flex-1 overflow-y-auto px-5 pb-5">
@@ -137,7 +137,7 @@ export default function GuestsPicker({
 
           {children > 0 && (
             <div className="pt-3">
-              <h3 className="text-[19px] font-bold text-ink-900">Age of Children</h3>
+              <h3 className="text-[17px] font-bold text-ink-900">Age of Children</h3>
 
               <div className="mt-5 space-y-5">
                 {childAges.map((age, i) => (
@@ -145,14 +145,14 @@ export default function GuestsPicker({
                   // adding one never reorders the ages already set.
                   // eslint-disable-next-line react/no-array-index-key
                   <label key={i} className="block">
-                    <span className="mb-2 block text-[15px] font-bold text-ink-900">
+                    <span className="mb-2 block text-[14px] font-bold text-ink-900">
                       Child {i + 1} Age
                     </span>
                     <span className="relative block">
                       <select
                         value={age}
                         onChange={(e) => setAge(i, Number(e.target.value))}
-                        className="w-full appearance-none rounded-xl border border-surface-line bg-white px-4 py-4 pr-11 text-[16px] font-medium text-ink-900 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
+                        className="w-full appearance-none rounded-xl border border-surface-line bg-white px-4 py-4 pr-11 text-[15px] font-medium text-ink-900 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
                       >
                         {AGES.map((a) => (
                           <option key={a} value={a}>
@@ -169,7 +169,7 @@ export default function GuestsPicker({
                 ))}
               </div>
 
-              <p className="mt-6 text-[15px] leading-relaxed text-ink-400">
+              <p className="mt-6 text-[14px] leading-relaxed text-ink-400">
                 Please provide right number of children along with their right age for best options
                 and prices.
               </p>
@@ -178,7 +178,7 @@ export default function GuestsPicker({
         </div>
 
         <div className="shrink-0 border-t border-surface-line p-5">
-          <button type="button" onClick={onClose} className="btn-action w-full py-4 text-[16px]">
+          <button type="button" onClick={onClose} className="btn-action w-full py-4 text-[15px]">
             Done
           </button>
         </div>

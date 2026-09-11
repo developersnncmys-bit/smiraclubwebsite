@@ -10,8 +10,8 @@ export const metadata = { title: 'Booking Confirmed' };
 function Row({ label, children }) {
   return (
     <div className="flex items-start justify-between gap-6 py-3.5">
-      <dt className="shrink-0 text-[15px] text-ink-600">{label}</dt>
-      <dd className="min-w-0 text-right text-[15px] font-bold leading-snug text-ink-900">
+      <dt className="shrink-0 text-[14px] text-ink-600">{label}</dt>
+      <dd className="min-w-0 text-right text-[14px] font-bold leading-snug text-ink-900">
         {children}
       </dd>
     </div>
@@ -58,10 +58,10 @@ export default async function Page({ searchParams }) {
           className="mx-auto h-auto w-[160px] lg:w-[200px]"
         />
 
-        <h1 className="mt-6 text-[26px] font-extrabold text-ink-900 lg:text-3xl">
+        <h1 className="mt-6 text-[23px] font-extrabold text-ink-900 lg:text-3xl">
           Booking Confirmed!
         </h1>
-        <p className="mt-2 text-[15px] text-ink-500 lg:text-base">
+        <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
           Your {kind} is booked successfully.
         </p>
       </div>
@@ -79,21 +79,21 @@ export default async function Page({ searchParams }) {
 
         <Row label="Total Amount Paid">
           {inr(total)}
-          <span className="block text-[14px] font-normal text-ink-500">(Incl. taxes &amp; fees)</span>
+          <span className="block text-[13px] font-normal text-ink-500">(Incl. taxes &amp; fees)</span>
         </Row>
       </dl>
 
       <div className="mt-8 space-y-3">
         <Link
           href="/profile/bookings"
-          className="btn-primary w-full rounded-xl py-4 text-[16px] normal-case tracking-normal"
+          className="btn-primary w-full rounded-xl py-4 text-[15px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
         >
           View Booking Details
         </Link>
 
         <Link
           href="/"
-          className="flex w-full items-center justify-center rounded-xl border-2 border-action-500 px-5 py-4 text-[16px] font-bold text-action-500 transition hover:bg-brand-50"
+          className="flex w-full items-center justify-center rounded-xl border-2 border-action-500 px-5 py-4 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
         >
           Back to Home
         </Link>

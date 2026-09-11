@@ -19,18 +19,18 @@ export default function IdentityCard() {
         </span>
 
         <div className="min-w-0">
-          <h1 className="truncate pr-16 text-[22px] font-bold leading-tight sm:pr-20 sm:text-2xl">
+          <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl">
             Hey {member.name}!
           </h1>
 
-          <p className="mt-2 flex items-center gap-2 text-[15px] font-medium text-white/95">
+          <p className="mt-2 flex items-center gap-2 text-[14px] font-medium text-white/95">
             <Phone size={15} fill="currentColor" strokeWidth={0} />
             {member.phone}
           </p>
 
           <Link
             href="/profile/edit"
-            className="mt-1.5 inline-flex items-center gap-2 text-[15px] font-semibold transition hover:text-white/80"
+            className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-semibold transition hover:text-white/80"
           >
             <Pencil size={15} />
             Edit Profile

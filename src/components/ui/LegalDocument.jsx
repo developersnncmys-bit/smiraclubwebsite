@@ -6,7 +6,7 @@ function Points({ items }) {
   return (
     <ul className="mt-2 space-y-1.5">
       {items.map((item) => (
-        <li key={item} className="flex gap-2.5 pl-1 text-[16px] leading-relaxed text-ink-700">
+        <li key={item} className="flex gap-2.5 pl-1 text-[15px] leading-relaxed text-ink-700">
           <span aria-hidden="true" className="text-ink-400">&middot;</span>
           {item}
         </li>
@@ -60,7 +60,7 @@ export default function LegalDocument({ doc }) {
             <li key={section.id}>
               <a
                 href={`#${section.id}`}
-                className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[15px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
+                className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[14px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
               >
                 {section.title}
               </a>
@@ -70,7 +70,7 @@ export default function LegalDocument({ doc }) {
           <li>
             <a
               href="#contact-us"
-              className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[15px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
+              className="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-[14px] leading-snug text-ink-600 transition hover:border-action-500 hover:text-action-500"
             >
               {doc.contact.title}
             </a>
@@ -87,7 +87,7 @@ export default function LegalDocument({ doc }) {
       {doc.intro.length > 0 && (
       <div className="mt-6 space-y-5 border-b border-surface-line pb-8">
         {doc.intro.map((para) => (
-          <p key={para} className="text-[16px] leading-relaxed text-ink-700">
+          <p key={para} className="text-[15px] leading-relaxed text-ink-700">
             {para}
           </p>
         ))}
@@ -101,17 +101,17 @@ export default function LegalDocument({ doc }) {
           </h2>
 
           {section.lead && (
-            <p className="mt-4 text-[16px] leading-relaxed text-ink-700">{section.lead}</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-ink-700">{section.lead}</p>
           )}
 
           {section.blocks.map((block, i) => (
             <div key={block.subtitle || i} className="mt-5">
               {block.subtitle && (
-                <h3 className="text-[17px] font-bold text-ink-900">{block.subtitle}</h3>
+                <h3 className="text-[15px] font-bold text-ink-900">{block.subtitle}</h3>
               )}
 
               {lines(block.lead, block.leads).map((line) => (
-                <p key={line} className="mt-2 text-[16px] leading-relaxed text-ink-700">
+                <p key={line} className="mt-2 text-[15px] leading-relaxed text-ink-700">
                   {line}
                 </p>
               ))}
@@ -119,7 +119,7 @@ export default function LegalDocument({ doc }) {
               {block.items && <Points items={block.items} />}
 
               {lines(block.close, block.closes).map((line) => (
-                <p key={line} className="mt-2 text-[16px] leading-relaxed text-ink-700">
+                <p key={line} className="mt-2 text-[15px] leading-relaxed text-ink-700">
                   {line}
                 </p>
               ))}
@@ -137,15 +137,15 @@ export default function LegalDocument({ doc }) {
           {doc.contact.title}
         </h2>
 
-        <p className="mt-4 text-[16px] leading-relaxed text-ink-700">{doc.contact.lead}</p>
+        <p className="mt-4 text-[15px] leading-relaxed text-ink-700">{doc.contact.lead}</p>
 
-        <p className="mt-2 text-[16px] font-bold text-ink-900">
+        <p className="mt-2 text-[15px] font-bold text-ink-900">
           Email:{' '}
           <a href={`mailto:${doc.contact.email}`} className="text-action-500 underline">
             {doc.contact.email}
           </a>
         </p>
-        <p className="text-[16px] font-bold text-ink-900">
+        <p className="text-[15px] font-bold text-ink-900">
           Phone:{' '}
           <a
             href={`tel:${doc.contact.phone.replace(/\s/g, '')}`}
@@ -156,13 +156,13 @@ export default function LegalDocument({ doc }) {
         </p>
 
         {doc.contact.note && (
-          <p className="mt-5 text-[16px] leading-relaxed text-ink-700">{doc.contact.note}</p>
+          <p className="mt-5 text-[15px] leading-relaxed text-ink-700">{doc.contact.note}</p>
         )}
       </section>
       )}
 
         {doc.updated && (
-          <p className="mt-10 text-[16px] font-bold text-ink-900">Last Updated: {doc.updated}</p>
+          <p className="mt-10 text-[15px] font-bold text-ink-900">Last Updated: {doc.updated}</p>
         )}
       </article>
     </div>

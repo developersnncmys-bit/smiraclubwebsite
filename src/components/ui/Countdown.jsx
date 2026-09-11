@@ -11,8 +11,9 @@ const UNITS = ['Days', 'Hrs', 'Mins', 'Sec'];
  * on the first paint — a clock rendered on the server is wrong by the time it
  * reaches the browser, and React would flag the mismatch.
  *
- * `tone` picks between the light chips the membership offer uses and the
- * dark ones on the flash offers.
+ * `tone` picks the treatment: light or dark chips, or 'plain' — bare numbers
+ * split by colons, which is how the flash offers read inside the white panel
+ * in their corner, where there is nothing for a chip to sit against.
  */
 export default function Countdown({ hours, tone = 'light', className = '' }) {
   const [left, setLeft] = useState(null);
@@ -35,6 +36,24 @@ export default function Countdown({ hours, tone = 'light', className = '' }) {
     return () => clearInterval(timer);
   }, [hours]);
 
+  if (tone === 'plain') {
+    return (
+      <div className={`flex items-end gap-1 ${className}`}>
+        {UNITS.map((unit, i) => (
+          <span key={unit} className="flex items-end gap-1">
+            {i > 0 && <span className="pb-3 text-[12px] font-bold text-ink-400">:</span>}
+            <span className="text-center">
+              <span className="block text-[15px] font-extrabold leading-none text-ink-900">
+                {left ? String(left[unit]).padStart(2, '0') : '--'}
+              </span>
+              <span className="mt-1 block text-[9px] font-bold text-ink-600">{unit}</span>
+            </span>
+          </span>
+        ))}
+      </div>
+    );
+  }
+
   const chip =
     tone === 'dark'
       ? 'bg-white/15 text-white'
@@ -45,7 +64,7 @@ export default function Countdown({ hours, tone = 'light', className = '' }) {
     <div className={`flex shrink-0 gap-1.5 ${className}`}>
       {UNITS.map((unit) => (
         <span key={unit} className={`w-[42px] rounded-lg px-1 py-1 text-center ${chip}`}>
-          <span className="block text-[15px] font-bold leading-none">
+          <span className="block text-[14px] font-bold leading-none">
             {left ? String(left[unit]).padStart(2, '0') : '--'}
           </span>
           <span className={`block text-[10px] ${label}`}>{unit}</span>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
 const FIELD =
-  'w-full rounded-xl border border-surface-line bg-white px-4 py-4 pr-12 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-500 focus:border-action-500';
+  'w-full rounded-xl border border-surface-line bg-white px-4 py-4 pr-12 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-500 focus:border-action-500';
 
 /** One password box, with the reveal toggle each of them needs. */
 function Secret({ label, value, onChange, placeholder, error }) {
@@ -12,7 +12,7 @@ function Secret({ label, value, onChange, placeholder, error }) {
 
   return (
     <label className="block">
-      <span className="text-[17px] font-bold text-ink-900">{label}</span>
+      <span className="text-[15px] font-bold text-ink-900">{label}</span>
 
       <span className="relative mt-3 block">
         <input
@@ -95,7 +95,7 @@ export default function ChangePassword() {
       />
 
       {done && (
-        <p className="rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-[15px] font-semibold text-green-700 lg:col-span-2">
+        <p className="rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-[14px] font-semibold text-green-700 lg:col-span-2">
           Password updated. You will use the new one next time you sign in.
         </p>
       )}
@@ -103,7 +103,7 @@ export default function ChangePassword() {
       <button
         type="submit"
         disabled={!ready}
-        className={`w-full rounded-xl py-4 text-[17px] font-bold transition lg:col-span-2 ${
+        className={`w-full rounded-xl py-4 text-[15px] font-bold transition lg:col-span-2 ${
           ready
             ? 'bg-brand-600 text-white hover:bg-brand-700'
             : 'cursor-not-allowed bg-[#d6d6d6] text-white'

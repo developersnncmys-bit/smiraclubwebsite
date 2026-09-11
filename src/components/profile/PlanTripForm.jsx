@@ -11,7 +11,7 @@ import { toSrc } from '@/lib/imageSlot';
 import { nightsBetween } from '@/lib/format';
 
 const FIELD =
-  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
 /** The heading each block of the form opens with. */
 function Ask({ icon: Glyph, title, note }) {
@@ -19,8 +19,8 @@ function Ask({ icon: Glyph, title, note }) {
     <div className="flex items-start gap-3">
       <Glyph size={22} className="mt-0.5 shrink-0 text-ink-500" strokeWidth={1.8} />
       <div>
-        <h2 className="text-[17px] font-bold leading-snug text-ink-900">{title}</h2>
-        {note && <p className="text-[14px] text-ink-500">{note}</p>}
+        <h2 className="text-[15px] font-bold leading-snug text-ink-900">{title}</h2>
+        {note && <p className="text-[13px] text-ink-500">{note}</p>}
       </div>
     </div>
   );
@@ -33,7 +33,7 @@ function Chip({ on, onClick, children }) {
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`inline-flex items-center gap-2.5 rounded-xl border px-4 py-3 text-[15px] transition ${
+      className={`inline-flex items-center gap-2.5 rounded-xl border px-4 py-3 text-[14px] transition ${
         on ? 'border-action-500 bg-brand-50 text-ink-900' : 'border-surface-line bg-white text-ink-900 hover:bg-surface-soft'
       }`}
     >
@@ -56,7 +56,7 @@ function Pill({ on, onClick, children }) {
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`rounded-xl border px-4 py-3 text-[15px] transition ${
+      className={`rounded-xl border px-4 py-3 text-[14px] transition ${
         on
           ? 'border-action-500 bg-brand-50 font-semibold text-action-500'
           : 'border-surface-line bg-white text-ink-900 hover:bg-surface-soft'
@@ -138,7 +138,7 @@ export default function PlanTripForm({ hero, doneImage }) {
           </span>
 
           <h1 className="mt-6 text-2xl font-extrabold text-ink-900">{planTripDone.title}</h1>
-          <p className="mt-2 text-[16px] leading-relaxed text-ink-500">
+          <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
             {saved.to.split(',')[0]} is now part of your {year} Travel Plan.
           </p>
         </div>
@@ -155,31 +155,31 @@ export default function PlanTripForm({ hero, doneImage }) {
           </span>
 
           <div className="min-w-0 flex-1 self-center">
-            <h2 className="text-[17px] font-bold text-ink-900">{saved.name}</h2>
-            <p className="mt-1.5 flex items-center gap-2 text-[15px] text-ink-700">
+            <h2 className="text-[15px] font-bold text-ink-900">{saved.name}</h2>
+            <p className="mt-1.5 flex items-center gap-2 text-[14px] text-ink-700">
               {saved.from.split(',')[0]}
               <ArrowRight size={15} className="shrink-0 text-ink-500" />
               {saved.to.split(',')[0]}
             </p>
-            <p className="mt-1 flex items-center gap-2 text-[15px] text-ink-700">
+            <p className="mt-1 flex items-center gap-2 text-[14px] text-ink-700">
               {day(saved.start)}
               <ArrowRight size={15} className="shrink-0 text-ink-500" />
               {day(saved.end)} {year}
             </p>
-            <p className="mt-1 text-[15px] text-ink-700">
+            <p className="mt-1 text-[14px] text-ink-700">
               {nights + 1} Days/{nights} Night{nights === 1 ? '' : 's'}
             </p>
           </div>
         </article>
 
-        <p className="mt-6 text-center text-[15px] leading-relaxed text-ink-500">
+        <p className="mt-6 text-center text-[14px] leading-relaxed text-ink-500">
           {planTripDone.note}
         </p>
 
         <div className="mt-auto space-y-3 pt-10">
           <Link
             href="/profile/travel-year"
-            className="btn-primary w-full rounded-xl py-4 text-[17px]"
+            className="btn-primary w-full rounded-xl py-4 text-[15px] lg:w-auto lg:px-10 lg:py-3.5"
           >
             {planTripDone.primary}
           </Link>
@@ -190,7 +190,7 @@ export default function PlanTripForm({ hero, doneImage }) {
               setSaved(null);
               router.refresh();
             }}
-            className="w-full rounded-xl border-2 border-action-500 bg-white py-4 text-[17px] font-bold text-action-500 transition hover:bg-brand-50"
+            className="w-full rounded-xl border-2 border-action-500 bg-white py-4 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
           >
             {planTripDone.secondary}
           </button>
@@ -217,7 +217,7 @@ export default function PlanTripForm({ hero, doneImage }) {
           <h1 className="text-xl font-extrabold uppercase leading-snug text-brand-700 lg:text-2xl">
             {planTripHero.title}
           </h1>
-          <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-ink-600">
+          <p className="mx-auto mt-3 max-w-sm text-[14px] leading-relaxed text-ink-600">
             {planTripHero.body}
           </p>
         </div>
@@ -233,7 +233,7 @@ export default function PlanTripForm({ hero, doneImage }) {
               { key: 'to', label: 'Travelling To', placeholder: 'Goa, India' },
             ].map((f) => (
               <label key={f.key} className="block">
-                <span className="text-[15px] text-ink-700">{f.label}</span>
+                <span className="text-[14px] text-ink-700">{f.label}</span>
                 <input
                   value={form[f.key]}
                   onChange={(e) => set(f.key, e.target.value)}
@@ -257,7 +257,7 @@ export default function PlanTripForm({ hero, doneImage }) {
               { key: 'end', label: 'To Date' },
             ].map((f) => (
               <label key={f.key} className="block">
-                <span className="text-[15px] text-ink-700">{f.label}</span>
+                <span className="text-[14px] text-ink-700">{f.label}</span>
                 <input
                   type="date"
                   value={form[f.key]}
@@ -276,7 +276,7 @@ export default function PlanTripForm({ hero, doneImage }) {
         <section className="border-t border-surface-line py-6">
           <Ask icon={Users} title="Tell us more about your trip" note="(Optional)" />
 
-          <h3 className="mt-5 text-[16px] font-semibold text-ink-900">
+          <h3 className="mt-5 text-[15px] font-semibold text-ink-900">
             Who do you usually travel with?
           </h3>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -291,7 +291,7 @@ export default function PlanTripForm({ hero, doneImage }) {
             ))}
           </div>
 
-          <h3 className="mt-6 text-[16px] font-semibold text-ink-900">
+          <h3 className="mt-6 text-[15px] font-semibold text-ink-900">
             What type of trip do you prefer?
           </h3>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -306,7 +306,7 @@ export default function PlanTripForm({ hero, doneImage }) {
             ))}
           </div>
 
-          <h3 className="mt-6 text-[16px] font-semibold text-ink-900">
+          <h3 className="mt-6 text-[15px] font-semibold text-ink-900">
             How many people usually travel?
           </h3>
           <select
@@ -337,10 +337,10 @@ export default function PlanTripForm({ hero, doneImage }) {
             ))}
           </div>
 
-          <h3 className="mt-6 text-[16px] font-bold text-ink-900">
+          <h3 className="mt-6 text-[15px] font-bold text-ink-900">
             Special Note <span className="font-normal text-ink-500">(Optional)</span>
           </h3>
-          <p className="text-[14px] text-ink-500">Any special requests or requirements</p>
+          <p className="text-[13px] text-ink-500">Any special requests or requirements</p>
 
           <div className="relative mt-3">
             <textarea
@@ -370,7 +370,7 @@ export default function PlanTripForm({ hero, doneImage }) {
                   type="button"
                   onClick={() => toggle(transport, setTransport, t.key)}
                   aria-pressed={on}
-                  className={`flex flex-col items-center gap-2 rounded-xl border px-2 py-4 text-[14px] font-medium transition ${
+                  className={`flex flex-col items-center gap-2 rounded-xl border px-2 py-4 text-[13px] font-medium transition ${
                     on
                       ? 'border-action-500 bg-brand-50 text-action-500'
                       : 'border-surface-line bg-white text-ink-700 hover:bg-surface-soft'
@@ -383,12 +383,12 @@ export default function PlanTripForm({ hero, doneImage }) {
             })}
           </div>
 
-          <h3 className="mt-6 text-[16px] font-bold text-ink-900">
+          <h3 className="mt-6 text-[15px] font-bold text-ink-900">
             Pick-up &amp; Drop <span className="font-normal text-ink-500">(Optional)</span>
           </h3>
           <div className="mt-3 grid grid-cols-2 gap-3">
             <label className="block">
-              <span className="text-[15px] text-ink-700">From</span>
+              <span className="text-[14px] text-ink-700">From</span>
               <select
                 value={form.pickupFrom}
                 onChange={(e) => set('pickupFrom', e.target.value)}
@@ -400,7 +400,7 @@ export default function PlanTripForm({ hero, doneImage }) {
               </select>
             </label>
             <label className="block">
-              <span className="text-[15px] text-ink-700">To</span>
+              <span className="text-[14px] text-ink-700">To</span>
               <select
                 value={form.pickupTo}
                 onChange={(e) => set('pickupTo', e.target.value)}
@@ -413,8 +413,8 @@ export default function PlanTripForm({ hero, doneImage }) {
             </label>
           </div>
 
-          <h3 className="mt-6 text-[16px] font-bold text-ink-900">Sightseeing</h3>
-          <p className="text-[14px] text-ink-500">Do you want sightseeing?</p>
+          <h3 className="mt-6 text-[15px] font-bold text-ink-900">Sightseeing</h3>
+          <p className="text-[13px] text-ink-500">Do you want sightseeing?</p>
           <div className="mt-3 grid grid-cols-2 gap-3">
             {['Yes', 'No'].map((v) => (
               <Pill key={v} on={form.sightseeing === v} onClick={() => set('sightseeing', v)}>
@@ -439,8 +439,8 @@ export default function PlanTripForm({ hero, doneImage }) {
             ))}
           </select>
 
-          <h3 className="mt-6 text-[16px] font-bold text-ink-900">Meal Details</h3>
-          <p className="text-[14px] text-ink-500">Select your meal preference type</p>
+          <h3 className="mt-6 text-[15px] font-bold text-ink-900">Meal Details</h3>
+          <p className="text-[13px] text-ink-500">Select your meal preference type</p>
 
           <div className="mt-3 flex flex-wrap gap-3">
             {opts.mealTypes.map((m) => {
@@ -451,7 +451,7 @@ export default function PlanTripForm({ hero, doneImage }) {
                   type="button"
                   onClick={() => set('mealType', m.key)}
                   aria-pressed={on}
-                  className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[15px] transition ${
+                  className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[14px] transition ${
                     on ? 'border-action-500 bg-brand-50' : 'border-surface-line bg-white hover:bg-surface-soft'
                   }`}
                 >
@@ -479,7 +479,7 @@ export default function PlanTripForm({ hero, doneImage }) {
 
         {/* -- Anything else --------------------------------------- */}
         <section className="border-t border-surface-line py-6">
-          <h3 className="text-[16px] font-bold text-ink-900">
+          <h3 className="text-[15px] font-bold text-ink-900">
             Additional Preferences <span className="font-normal text-ink-500">(Optional)</span>
           </h3>
 
@@ -501,13 +501,13 @@ export default function PlanTripForm({ hero, doneImage }) {
                   >
                     {on && <Check size={12} strokeWidth={3.5} />}
                   </span>
-                  <span className="text-[16px] text-ink-900">{x}</span>
+                  <span className="text-[15px] text-ink-900">{x}</span>
                 </label>
               );
             })}
           </div>
 
-          <h3 className="mt-7 flex items-center gap-2.5 text-[16px] font-bold text-ink-900">
+          <h3 className="mt-7 flex items-center gap-2.5 text-[15px] font-bold text-ink-900">
             <Icon name="FileText" size={20} className="text-ink-500" strokeWidth={1.8} />
             Any specific travel needs?
           </h3>
@@ -529,7 +529,7 @@ export default function PlanTripForm({ hero, doneImage }) {
 
         <button
           type="submit"
-          className="btn-primary mt-4 w-full gap-3 rounded-xl py-4 text-[17px] normal-case tracking-normal lg:col-span-2"
+          className="btn-primary mt-4 w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:col-span-2 lg:w-auto lg:justify-self-start lg:px-10 lg:py-3.5"
         >
           Save My Trip
           <ArrowRight size={19} />

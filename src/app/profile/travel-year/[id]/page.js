@@ -68,7 +68,7 @@ export default async function Page({ params }) {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-5">
             <h1 className="text-2xl font-bold text-ink-900">{trip.title}</h1>
             <span
-              className={`shrink-0 rounded-full px-4 py-1.5 text-[15px] font-semibold ${
+              className={`shrink-0 rounded-full px-4 py-1.5 text-[14px] font-semibold ${
                 upcoming ? 'bg-[#e8f6ec] text-green-700' : 'bg-surface-soft text-ink-600'
               }`}
             >
@@ -76,19 +76,19 @@ export default async function Page({ params }) {
             </span>
           </div>
 
-          <p className="mt-2 flex items-center gap-2 text-[16px] text-ink-600">
+          <p className="mt-2 flex items-center gap-2 text-[15px] text-ink-600">
             {trip.origin}
             <ArrowRight size={16} className="shrink-0 text-ink-500" />
             {trip.destination}
           </p>
 
-          <p className="mt-2 text-[16px] text-ink-700">
+          <p className="mt-2 text-[15px] text-ink-700">
             {day(trip.start)} - {day(trip.end)} {new Date(trip.end).getFullYear()}
             <span className="px-2 text-ink-400">&bull;</span>
             {nights + 1} Days/{nights} Night{nights === 1 ? '' : 's'}
           </p>
 
-          <p className="mt-2 text-[16px] text-ink-700">No of Guests: {trip.guests ?? 2}</p>
+          <p className="mt-2 text-[15px] text-ink-700">No of Guests: {trip.guests ?? 2}</p>
         </div>
 
         {/* -- What is worth knowing about it ------------------- */}
@@ -113,9 +113,9 @@ export default async function Page({ params }) {
                       />
                     </span>
                     <div className="min-w-0">
-                      <h3 className="text-[17px] font-bold text-ink-900">{d.label}</h3>
-                      <p className="text-[15px] text-ink-600">{d.date}</p>
-                      <p className="mt-1.5 text-[15px] leading-snug text-ink-700">{d.note}</p>
+                      <h3 className="text-[15px] font-bold text-ink-900">{d.label}</h3>
+                      <p className="text-[14px] text-ink-600">{d.date}</p>
+                      <p className="mt-1.5 text-[14px] leading-snug text-ink-700">{d.note}</p>
                     </div>
                   </article>
                 ))}
@@ -143,21 +143,21 @@ export default async function Page({ params }) {
                     </span>
 
                     <div className="p-3.5">
-                      <h3 className="text-[16px] font-bold leading-snug text-ink-900">
+                      <h3 className="text-[15px] font-bold leading-snug text-ink-900">
                         {a.title}
                       </h3>
-                      <p className="mt-1 text-[14px] leading-snug text-ink-500">{a.note}</p>
+                      <p className="mt-1 text-[13px] leading-snug text-ink-500">{a.note}</p>
 
                       <p className="mt-3 flex flex-wrap items-baseline gap-2">
-                        <span className="text-[14px] text-ink-700">From</span>
-                        <span className="text-[17px] font-extrabold text-ink-900">
+                        <span className="text-[13px] text-ink-700">From</span>
+                        <span className="text-[15px] font-extrabold text-ink-900">
                           {inr(a.price)}
                         </span>
-                        <span className="text-[14px] font-semibold text-red-500 line-through">
+                        <span className="text-[13px] font-semibold text-red-500 line-through">
                           {inr(a.was)}
                         </span>
                       </p>
-                      <p className="text-[14px] text-ink-500">{a.unit}</p>
+                      <p className="text-[13px] text-ink-500">{a.unit}</p>
                     </div>
                   </article>
                 ))}

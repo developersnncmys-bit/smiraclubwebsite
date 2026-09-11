@@ -107,7 +107,7 @@ export default function OffersScreen({ art = {} }) {
                   type="button"
                   onClick={() => goTo(c)}
                   aria-pressed={on}
-                  className={`shrink-0 rounded-lg px-4 py-2.5 text-[16px] font-medium transition ${
+                  className={`shrink-0 rounded-lg px-4 py-2.5 text-[15px] font-medium transition ${
                     on
                       ? 'bg-brand-50 text-action-500 ring-1 ring-action-500'
                       : 'text-ink-700 hover:bg-surface-soft'
@@ -122,23 +122,23 @@ export default function OffersScreen({ art = {} }) {
       </div>
 
       <div className="shell py-5">
-        <h1 className="text-[19px] font-bold text-ink-900 lg:text-2xl">
+        <h1 className="text-[17px] font-bold text-ink-900 lg:text-2xl">
           Active Offers ({count})
         </h1>
 
         {count === 0 ? (
-          <p className="card mt-5 p-10 text-center text-[15px] text-ink-500">
+          <p className="card mt-5 p-10 text-center text-[14px] text-ink-500">
             No offers in this category right now.
           </p>
         ) : (
           <div className="mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0 2xl:grid-cols-3">
             {packages.map((offer) => (
               <PanelCard key={offer.id} offer={{ ...offer, image: art[offer.id] || offer.image }}>
-                <p className="mt-4 text-[15px] text-white/90">Starting from</p>
+                <p className="mt-4 text-[14px] text-white/90">Starting from</p>
                 <p className="flex flex-wrap items-baseline gap-2">
                   <span className="text-2xl font-extrabold text-white">{offer.from}</span>
                   {offer.duration && (
-                    <span className="text-[14px] font-semibold text-white/90">
+                    <span className="text-[13px] font-semibold text-white/90">
                       {offer.duration}
                     </span>
                   )}
@@ -156,7 +156,7 @@ export default function OffersScreen({ art = {} }) {
                 <p className="mt-4 max-w-[9rem] text-xl font-bold leading-tight text-white">
                   {offer.title}
                 </p>
-                <span className="mt-3 inline-flex items-center gap-2 text-[15px] font-semibold text-white underline">
+                <span className="mt-3 inline-flex items-center gap-2 text-[14px] font-semibold text-white underline">
                   Explore Offers
                   <ArrowRight size={16} />
                 </span>
@@ -169,14 +169,14 @@ export default function OffersScreen({ art = {} }) {
                   className={`flex items-center justify-between gap-4 bg-gradient-to-r ${c.tone} p-5`}
                 >
                   <h2
-                    className="text-[17px] font-bold uppercase leading-snug"
+                    className="text-[15px] font-bold uppercase leading-snug"
                     style={{ color: c.ink }}
                   >
                     {c.brand}
                   </h2>
                   <p className="shrink-0 whitespace-nowrap" style={{ color: c.ink }}>
                     <span className="text-3xl font-extrabold">{c.deal}</span>
-                    <span className="ml-1 text-[15px] font-bold uppercase">Off</span>
+                    <span className="ml-1 text-[14px] font-bold uppercase">Off</span>
                   </p>
                 </div>
 

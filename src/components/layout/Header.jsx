@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, Heart, Search } from 'lucide-react';
+import { Bell, Heart } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { memberBadge } from '@/lib/content';
 
@@ -28,10 +28,6 @@ export default function Header() {
               className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-3.5 py-1.5 text-[13px] font-bold text-white transition hover:brightness-105"
             >
               {memberBadge.label}
-            </Link>
-
-            <Link href="/wishlist" className="p-2" aria-label="Wishlist">
-              <Heart size={21} className="text-ink-700" />
             </Link>
 
             <Link href="/notifications" className="relative -mr-1 p-2" aria-label="Notifications">
@@ -65,14 +61,6 @@ export default function Header() {
               className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition hover:bg-surface-soft hover:text-ink-900"
             >
               More
-            </Link>
-
-            <Link
-              href="/search"
-              className="grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"
-              aria-label="Search"
-            >
-              <Search size={18} />
             </Link>
 
             <Link

@@ -22,10 +22,10 @@ export default function PackageCard({ item }) {
             Package
           </span>
 
-          <h3 className="mt-2 text-[17px] font-bold leading-tight text-ink-900">{item.name}</h3>
-          <p className="mt-1 text-[15px] text-ink-600">{item.duration}</p>
+          <h3 className="mt-2 text-[15px] font-bold leading-tight text-ink-900">{item.name}</h3>
+          <p className="mt-1 text-[14px] text-ink-600">{item.duration}</p>
 
-          <p className="mt-1.5 flex items-center gap-1.5 text-[14px]">
+          <p className="mt-1.5 flex items-center gap-1.5 text-[13px]">
             <Star size={15} className="text-gold" fill="currentColor" strokeWidth={0} />
             <span className="font-bold text-ink-900">{item.rating}</span>
             <span className="text-ink-500">({item.reviews} reviews)</span>
@@ -49,10 +49,10 @@ export default function PackageCard({ item }) {
 
       <div className="flex flex-wrap items-center justify-between gap-3 bg-[#fdf7f3] p-3.5 sm:p-4">
         <div className="min-w-0">
-          <p className="text-[15px] text-ink-700">Starting From</p>
+          <p className="text-[14px] text-ink-700">Starting From</p>
           <p className="flex items-baseline gap-2">
             <span className="text-xl font-extrabold text-[#d1541b]">{inr(item.price)}</span>
-            <span className="text-[14px] text-ink-600">{item.unit}</span>
+            <span className="text-[13px] text-ink-600">{item.unit}</span>
           </p>
         </div>
 

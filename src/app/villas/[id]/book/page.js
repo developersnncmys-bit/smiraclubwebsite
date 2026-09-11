@@ -74,12 +74,12 @@ export default async function Page({ params, searchParams }) {
               <div className="mt-4 flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <h1 className="text-xl font-bold leading-tight text-ink-900">{villa.name}</h1>
-                  <p className="mt-2 flex items-center gap-1.5 text-[15px] text-ink-700">
+                  <p className="mt-2 flex items-center gap-1.5 text-[14px] text-ink-700">
                     <Star size={16} className="text-gold" fill="currentColor" strokeWidth={0} />
                     <span className="font-bold text-ink-900">{villa.rating}</span>
                     <span className="text-ink-500">({villa.reviews} reviews)</span>
                   </p>
-                  <p className="mt-2 text-[15px] text-ink-600">{villa.place}</p>
+                  <p className="mt-2 text-[14px] text-ink-600">{villa.place}</p>
                 </div>
 
                 <span className="relative h-[92px] w-[120px] shrink-0 overflow-hidden rounded-xl">
@@ -100,8 +100,8 @@ export default async function Page({ params, searchParams }) {
                 <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-ink-400">
                   Check in
                 </p>
-                <p className="mt-1 text-[16px] font-bold text-ink-900">{fullDate(from)}</p>
-                <p className="text-[14px] text-ink-500">
+                <p className="mt-1 text-[15px] font-bold text-ink-900">{fullDate(from)}</p>
+                <p className="text-[13px] text-ink-500">
                   {weekday(from)}, {villaStay.checkIn}
                 </p>
               </div>
@@ -114,23 +114,23 @@ export default async function Page({ params, searchParams }) {
                 <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-ink-400">
                   Check out
                 </p>
-                <p className="mt-1 text-[16px] font-bold text-ink-900">{fullDate(to)}</p>
-                <p className="text-[14px] text-ink-500">
+                <p className="mt-1 text-[15px] font-bold text-ink-900">{fullDate(to)}</p>
+                <p className="text-[13px] text-ink-500">
                   {weekday(to)}, {villaStay.checkOut}
                 </p>
               </div>
             </div>
 
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[15px] text-ink-500">Guests</p>
-              <p className="text-[16px] font-bold text-ink-900">
+              <p className="text-[14px] text-ink-500">Guests</p>
+              <p className="text-[15px] font-bold text-ink-900">
                 {adults} Adult{adults === 1 ? '' : 's'}
               </p>
             </div>
 
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[16px] font-bold text-ink-900">{villa.layout}</p>
-              <p className="mt-1 text-[15px] text-ink-600">
+              <p className="text-[15px] font-bold text-ink-900">{villa.layout}</p>
+              <p className="mt-1 text-[14px] text-ink-600">
                 {detail.bedrooms} Bedrooms, {detail.baths} Bathrooms, {detail.beds}
               </p>
             </div>
@@ -144,22 +144,22 @@ export default async function Page({ params, searchParams }) {
 
             <ul className="space-y-3 border-t border-surface-line p-4 sm:p-5">
               {villaBooking.meals.map((line) => (
-                <li key={line} className="flex gap-2.5 text-[15px] text-ink-700">
+                <li key={line} className="flex gap-2.5 text-[14px] text-ink-700">
                   <span aria-hidden="true" className="text-ink-400">&bull;</span>
                   {line}
                 </li>
               ))}
               <li>
-                <button type="button" className="text-[15px] font-semibold text-ink-900 underline">
+                <button type="button" className="text-[14px] font-semibold text-ink-900 underline">
                   Meal Details
                 </button>
               </li>
             </ul>
 
             <div className="border-t border-surface-line p-4 sm:p-5">
-              <p className="text-[16px] font-semibold text-ink-900">{villaBooking.refund.title}</p>
-              <p className="mt-1 text-[15px] text-ink-600">{villaBooking.refund.body}</p>
-              <button type="button" className="mt-4 text-[15px] font-bold text-ink-900 underline">
+              <p className="text-[15px] font-semibold text-ink-900">{villaBooking.refund.title}</p>
+              <p className="mt-1 text-[14px] text-ink-600">{villaBooking.refund.body}</p>
+              <button type="button" className="mt-4 text-[14px] font-bold text-ink-900 underline">
                 Inclusions &amp; Cancellation Policy
               </button>
             </div>
@@ -176,12 +176,12 @@ export default async function Page({ params, searchParams }) {
                     {rule.title && (
                       <span className="block font-semibold text-ink-900 underline">{rule.title}</span>
                     )}
-                    <span className="block text-[15px] leading-relaxed text-ink-700">{rule.body}</span>
+                    <span className="block text-[14px] leading-relaxed text-ink-700">{rule.body}</span>
                   </span>
                 </li>
               ))}
             </ul>
-            <button type="button" className="mt-3 text-[15px] font-bold text-ink-900 underline">
+            <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">
               View more
             </button>
           </section>

@@ -31,7 +31,7 @@ export default function LogoutButton() {
       <button
         type="button"
         onClick={() => setAsking(true)}
-        className="w-full rounded-xl border-2 border-red-500 bg-white px-5 py-3.5 text-[15px] font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50 active:scale-[0.99]"
+        className="w-full rounded-xl border-2 border-red-500 bg-white px-5 py-3.5 text-[14px] font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50 active:scale-[0.99]"
       >
         Logout
       </button>
@@ -60,7 +60,7 @@ export default function LogoutButton() {
           <div className="relative w-full overflow-hidden rounded-t-2xl bg-white sm:mx-auto sm:max-w-md sm:rounded-2xl">
             <h2
               id="logout-title"
-              className="px-6 py-7 text-[20px] font-bold leading-snug text-ink-900"
+              className="px-6 py-7 text-[17px] font-bold leading-snug text-ink-900"
             >
               Are You Sure You Want To Log Out?
             </h2>
@@ -72,7 +72,7 @@ export default function LogoutButton() {
               <button
                 type="button"
                 onClick={close}
-                className="flex-1 rounded-xl bg-brand-700 py-4 text-[17px] font-bold text-white transition hover:bg-brand-800"
+                className="flex-1 rounded-xl bg-brand-700 py-4 text-[15px] font-bold text-white transition hover:bg-brand-800"
               >
                 Cancel
               </button>
@@ -80,7 +80,7 @@ export default function LogoutButton() {
               <button
                 type="button"
                 onClick={confirmLogout}
-                className="flex-1 rounded-xl border-2 border-action-500 bg-white py-4 text-[17px] font-bold text-action-500 transition hover:bg-brand-50"
+                className="flex-1 rounded-xl border-2 border-action-500 bg-white py-4 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
               >
                 Yes, Log Out
               </button>

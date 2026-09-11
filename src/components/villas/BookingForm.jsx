@@ -96,7 +96,7 @@ export default function BookingForm({
     router.push(`/booking/confirmed?${query.toString()}`);
   };
 
-  const field = 'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+  const field = 'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
   /**
    * The price breakdown. Declared once and mounted twice — in the flow on a
@@ -108,11 +108,11 @@ export default function BookingForm({
     <section className="card p-4 sm:p-5">
       <h2 className="text-lg font-bold text-ink-900">Price Summary</h2>
 
-      <dl className="mt-4 text-[15px]">
+      <dl className="mt-4 text-[14px]">
         <div className="flex items-start justify-between gap-4 border-b border-dashed border-surface-line pb-3">
           <dt>
             <span className="block font-semibold text-ink-900">Base price</span>
-            {baseNote && <span className="block text-[14px] text-ink-500">{baseNote}</span>}
+            {baseNote && <span className="block text-[13px] text-ink-500">{baseNote}</span>}
           </dt>
           <dd className="shrink-0 font-semibold text-ink-900">{inr(price)}</dd>
         </div>
@@ -144,8 +144,8 @@ export default function BookingForm({
         </div>
 
         <div className="flex items-center justify-between gap-4 pt-3">
-          <dt className="text-[16px] font-bold text-ink-900">Total Amount to be paid</dt>
-          <dd className="shrink-0 text-[16px] font-bold text-ink-900">{inr(total)}</dd>
+          <dt className="text-[15px] font-bold text-ink-900">Total Amount to be paid</dt>
+          <dd className="shrink-0 text-[15px] font-bold text-ink-900">{inr(total)}</dd>
         </div>
       </dl>
     </section>
@@ -182,15 +182,15 @@ export default function BookingForm({
           <button
             type="button"
             onClick={applyCoupon}
-            className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[15px] font-bold text-white transition hover:bg-[#d3641f]"
+            className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f]"
           >
             Apply
           </button>
         </div>
 
-        {couponNote && <p className="mt-2 text-[14px] text-ink-500">{couponNote}</p>}
+        {couponNote && <p className="mt-2 text-[13px] text-ink-500">{couponNote}</p>}
 
-        <button type="button" className="mt-3 text-[15px] font-semibold text-action-500 underline">
+        <button type="button" className="mt-3 text-[14px] font-semibold text-action-500 underline">
           View Coupons
         </button>
       </section>
@@ -204,7 +204,7 @@ export default function BookingForm({
             { key: 'myself', label: 'Myself' },
             { key: 'other', label: 'Someone Else' },
           ].map((o) => (
-            <label key={o.key} className="flex cursor-pointer items-center gap-2.5 text-[15px] font-medium text-ink-900">
+            <label key={o.key} className="flex cursor-pointer items-center gap-2.5 text-[14px] font-medium text-ink-900">
               <input
                 type="radio"
                 name="bookingFor"
@@ -221,13 +221,13 @@ export default function BookingForm({
         {guests.map((guest, i) => (
           <div key={i} className={i > 0 ? 'mt-6 border-t border-surface-line pt-5' : 'mt-5'}>
             {i > 0 && (
-              <p className="mb-3 text-[14px] font-bold uppercase tracking-[0.08em] text-ink-400">
+              <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
                 Guest {i + 1}
               </p>
             )}
 
             <label className="block">
-              <span className="text-[15px] font-semibold text-ink-900">
+              <span className="text-[14px] font-semibold text-ink-900">
                 Full Name <span className="text-red-500">*</span>
               </span>
               <span className="relative mt-2 block">
@@ -243,7 +243,7 @@ export default function BookingForm({
             {i === 0 && errors.name && <p className="mt-1.5 text-[13px] text-red-600">{errors.name}</p>}
 
             <label className="mt-4 block">
-              <span className="text-[15px] font-semibold text-ink-900">
+              <span className="text-[14px] font-semibold text-ink-900">
                 Email ID <span className="text-red-500">*</span>
               </span>
               <span className="relative mt-2 block">
@@ -260,13 +260,13 @@ export default function BookingForm({
             {i === 0 && errors.email && <p className="mt-1.5 text-[13px] text-red-600">{errors.email}</p>}
 
             <div className="mt-4">
-              <span className="text-[15px] font-semibold text-ink-900">
+              <span className="text-[14px] font-semibold text-ink-900">
                 Contact Number <span className="text-red-500">*</span>
               </span>
               <div className="mt-2 flex items-stretch overflow-hidden rounded-xl border border-surface-line bg-white">
                 <select
                   aria-label="Country code"
-                  className="shrink-0 cursor-pointer border-0 bg-transparent px-3 text-[15px] font-medium text-ink-900 outline-none"
+                  className="shrink-0 cursor-pointer border-0 bg-transparent px-3 text-[14px] font-medium text-ink-900 outline-none"
                   defaultValue="+91"
                 >
                   <option>+91</option>
@@ -280,7 +280,7 @@ export default function BookingForm({
                   onChange={(e) => setGuest(i, 'phone', e.target.value)}
                   placeholder="Enter your  Mobile Number"
                   aria-label="Mobile number"
-                  className="w-full min-w-0 border-0 px-2 py-3.5 text-[15px] text-ink-900 outline-none placeholder:text-ink-400"
+                  className="w-full min-w-0 border-0 px-2 py-3.5 text-[14px] text-ink-900 outline-none placeholder:text-ink-400"
                 />
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function BookingForm({
         <button
           type="button"
           onClick={() => setGuests((g) => [...g, { ...BLANK }])}
-          className="mt-5 text-[15px] font-semibold text-action-500"
+          className="mt-5 text-[14px] font-semibold text-action-500"
         >
           + Add Another Guest
         </button>
@@ -307,8 +307,8 @@ export default function BookingForm({
             className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
           />
           <span>
-            <span className="block text-[16px] font-bold text-ink-900">Add GST number</span>
-            <span className="block text-[14px] text-action-500">
+            <span className="block text-[15px] font-bold text-ink-900">Add GST number</span>
+            <span className="block text-[13px] text-action-500">
               Claim 18% credit using GST invoice
             </span>
           </span>
@@ -337,7 +337,7 @@ export default function BookingForm({
             onChange={(e) => setAgreed(e.target.checked)}
             className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
           />
-          <span className="text-[15px] leading-relaxed text-ink-900">
+          <span className="text-[14px] leading-relaxed text-ink-900">
             By Proceeding, I agree to Smira Club&rsquo;s{' '}
             <a href="/more/terms" className="text-action-500 underline">User Agreement</a>,{' '}
             <a href="/more/terms" className="text-action-500 underline">Terms of Service</a> and{' '}
@@ -367,7 +367,7 @@ export default function BookingForm({
                   {inr(bar.mode === 'total' ? total : price)}
                 </span>
                 {bar.mode !== 'total' && was && (
-                  <span className="text-[15px] font-semibold text-red-500 line-through">
+                  <span className="text-[14px] font-semibold text-red-500 line-through">
                     {inr(was)}
                   </span>
                 )}
@@ -387,7 +387,7 @@ export default function BookingForm({
             */}
             <button
               type="submit"
-              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide"
+              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide"
             >
               Continue
             </button>
@@ -402,7 +402,7 @@ export default function BookingForm({
 
         <div className="card p-5">
           <p className="flex flex-wrap items-baseline justify-between gap-2">
-            <span className="text-[16px] font-bold text-ink-900">
+            <span className="text-[15px] font-bold text-ink-900">
               {bar.mode === 'total' ? 'Total' : 'Per night'}
             </span>
             <span className="text-2xl font-extrabold text-ink-900">
@@ -418,7 +418,7 @@ export default function BookingForm({
 
           <button
             type="submit"
-            className="btn-primary mt-4 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+            className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
           >
             Continue
           </button>

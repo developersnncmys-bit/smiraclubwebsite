@@ -94,11 +94,11 @@ export default function Page() {
                 Partner with us
               </span>
 
-              <h1 className="mt-5 max-w-2xl text-[28px] font-extrabold leading-[1.28] tracking-tight text-ink-900 sm:text-4xl lg:text-[42px] lg:leading-[1.22]">
+              <h1 className="mt-5 max-w-2xl text-[25px] font-extrabold leading-[1.28] tracking-tight text-ink-900 sm:text-4xl lg:text-[39px] lg:leading-[1.22]">
                 List your property and earn from members who travel all year.
               </h1>
 
-              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink-500 lg:text-lg">
+              <p className="mt-5 max-w-xl text-[14px] leading-relaxed text-ink-500 lg:text-lg">
                 Hotels, villas, homestays, transport and experiences. Tell us about yours and our
                 partnerships desk will call you within two working days.
               </p>
@@ -144,8 +144,8 @@ export default function Page() {
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-brand-700">
                   <Icon size={20} />
                 </span>
-                <h3 className="mt-4 text-[16px] font-bold text-ink-900">{title}</h3>
-                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-500">{body}</p>
+                <h3 className="mt-4 text-[15px] font-bold text-ink-900">{title}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-ink-500">{body}</p>
               </article>
             ))}
           </div>
@@ -154,7 +154,7 @@ export default function Page() {
         {/* -- How it works -------------------------------------------------- */}
         <section className="py-8 lg:py-12">
           <h2 className="section-title">From this form to your first booking</h2>
-          <p className="mt-2 max-w-2xl text-[15px] text-ink-500">
+          <p className="mt-2 max-w-2xl text-[14px] text-ink-500">
             Six steps, and you can ask our desk where you are at any point using the reference we
             give you.
           </p>
@@ -165,8 +165,8 @@ export default function Page() {
                 <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-brand-500">
                   Step {i + 1}
                 </span>
-                <h3 className="mt-1 text-[16px] font-bold text-ink-900">{s.title}</h3>
-                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-500">{s.body}</p>
+                <h3 className="mt-1 text-[15px] font-bold text-ink-900">{s.title}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-ink-500">{s.body}</p>
               </li>
             ))}
           </ol>
@@ -177,7 +177,7 @@ export default function Page() {
           <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-10">
             <div className="lg:col-span-4 lg:sticky lg:top-24">
               <h2 className="section-title">Apply to partner</h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
+              <p className="mt-2 text-[14px] leading-relaxed text-ink-500">
                 It takes about three minutes. Only the property name, city and a phone number are
                 required — our desk collects the rest when they call.
               </p>
@@ -188,7 +188,7 @@ export default function Page() {
                 </h3>
                 <ul className="mt-3 space-y-3">
                   {PAPERS.map(({ icon: Icon, label }) => (
-                    <li key={label} className="flex items-start gap-3 text-[14px] text-ink-700">
+                    <li key={label} className="flex items-start gap-3 text-[13px] text-ink-700">
                       <Icon size={18} className="mt-0.5 shrink-0 text-brand-600" />
                       {label}
                     </li>
@@ -212,13 +212,13 @@ export default function Page() {
           <div className="mt-5 grid gap-4 lg:grid-cols-2 lg:gap-5">
             {FAQ.map(({ q, a }) => (
               <article key={q} className="card p-5">
-                <h3 className="text-[16px] font-bold text-ink-900">{q}</h3>
-                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-500">{a}</p>
+                <h3 className="text-[15px] font-bold text-ink-900">{q}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-ink-500">{a}</p>
               </article>
             ))}
           </div>
 
-          <p className="mt-6 text-[15px] text-ink-500">
+          <p className="mt-6 text-[14px] text-ink-500">
             Still unsure?{' '}
             <a href="tel:+919820011223" className="font-semibold text-brand-700 hover:text-brand-800">
               Call our partnerships desk on +91 98200 11223

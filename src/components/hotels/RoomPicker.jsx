@@ -32,7 +32,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
         <div className="mt-4 space-y-4 lg:col-span-8 lg:mt-6 lg:space-y-6">
           {groups.map((group) => (
             <article key={group.id} className="card overflow-hidden">
-              <p className="px-4 pt-4 text-[15px] font-semibold text-ink-500 sm:px-5">
+              <p className="px-4 pt-4 text-[14px] font-semibold text-ink-500 sm:px-5">
                 {group.label}
               </p>
 
@@ -53,10 +53,10 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                 </span>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-[17px] font-bold leading-tight text-ink-900">
+                  <h3 className="text-[15px] font-bold leading-tight text-ink-900">
                     {group.room.name}
                   </h3>
-                  <ul className="mt-2 space-y-1.5 text-[14px] text-ink-600">
+                  <ul className="mt-2 space-y-1.5 text-[13px] text-ink-600">
                     <li className="flex items-center gap-2">
                       <User size={15} className="shrink-0 text-ink-500" />
                       {group.room.guests}
@@ -82,11 +82,11 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                 const on = plan.id === picked;
                 return (
                   <div key={plan.id} className="border-t border-surface-line p-4 sm:p-5">
-                    <h4 className="text-[16px] font-bold text-ink-900">{plan.name}</h4>
+                    <h4 className="text-[15px] font-bold text-ink-900">{plan.name}</h4>
 
                     <ul className="mt-2 space-y-1.5">
                       {plan.lines.map((line) => (
-                        <li key={line} className="flex gap-2 text-[14px] text-ink-600">
+                        <li key={line} className="flex gap-2 text-[13px] text-ink-600">
                           <span aria-hidden="true" className="text-ink-400">
                             &bull;
                           </span>
@@ -95,7 +95,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                       ))}
                     </ul>
 
-                    <button type="button" className="mt-3 text-[15px] font-semibold text-action-500">
+                    <button type="button" className="mt-3 text-[14px] font-semibold text-action-500">
                       View Details
                     </button>
 
@@ -105,7 +105,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                           <span className="text-xl font-extrabold text-ink-900">
                             {inr(plan.price)}
                           </span>
-                          <span className="text-[15px] font-semibold text-red-500 line-through">
+                          <span className="text-[14px] font-semibold text-red-500 line-through">
                             {inr(plan.was)}
                           </span>
                         </span>
@@ -117,7 +117,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                         type="button"
                         onClick={() => setPicked(plan.id)}
                         aria-pressed={on}
-                        className={`inline-flex shrink-0 items-center gap-2 rounded-lg border-2 px-6 py-2.5 text-[15px] font-bold uppercase tracking-wide transition ${
+                        className={`inline-flex shrink-0 items-center gap-2 rounded-lg border-2 px-6 py-2.5 text-[14px] font-bold uppercase tracking-wide transition ${
                           on
                             ? 'border-action-500 bg-brand-50 text-action-500'
                             : 'border-action-500 bg-white text-action-500 hover:bg-brand-50'
@@ -141,14 +141,14 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
               Your selection
             </p>
 
-            <p className="mt-2 text-[17px] font-bold leading-snug text-ink-900">
+            <p className="mt-2 text-[15px] font-bold leading-snug text-ink-900">
               {chosen?.room.name}
             </p>
-            <p className="text-[15px] text-ink-500">{chosen?.plan.name}</p>
+            <p className="text-[14px] text-ink-500">{chosen?.plan.name}</p>
 
             <ul className="mt-4 space-y-1.5 border-t border-surface-line pt-4">
               {chosen?.plan.lines.map((line) => (
-                <li key={line} className="flex gap-2 text-[14px] text-ink-600">
+                <li key={line} className="flex gap-2 text-[13px] text-ink-600">
                   <span aria-hidden="true" className="text-ink-400">&bull;</span>
                   {line}
                 </li>
@@ -156,13 +156,13 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
             </ul>
 
             <p className="mt-4 flex flex-wrap items-baseline justify-between gap-2 border-t border-surface-line pt-4">
-              <span className="text-[15px] text-ink-700">Per night</span>
+              <span className="text-[14px] text-ink-700">Per night</span>
               <span className="flex items-baseline gap-2">
                 <span className="text-2xl font-extrabold text-ink-900">
                   {inr(chosen?.plan.price ?? 0)}
                 </span>
                 {chosen?.plan.was && (
-                  <span className="text-[15px] font-semibold text-red-500 line-through">
+                  <span className="text-[14px] font-semibold text-red-500 line-through">
                     {inr(chosen.plan.was)}
                   </span>
                 )}
@@ -172,7 +172,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
 
             <Link
               href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
-              className="btn-primary mt-4 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+              className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
             >
               Book room
             </Link>
@@ -200,8 +200,8 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
             what it looks like otherwise. So the space says what you picked.
           */}
           <div className="hidden min-w-0 flex-1 lg:block">
-            <p className="truncate text-[15px] font-bold text-ink-900">{chosen?.room.name}</p>
-            <p className="truncate text-[14px] text-ink-500">{chosen?.plan.name}</p>
+            <p className="truncate text-[14px] font-bold text-ink-900">{chosen?.room.name}</p>
+            <p className="truncate text-[13px] text-ink-500">{chosen?.plan.name}</p>
           </div>
 
           <div className="min-w-0 flex-1 lg:flex-none lg:text-right">
@@ -210,7 +210,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
                 {inr(chosen?.plan.price ?? 0)}
               </span>
               {chosen?.plan.was && (
-                <span className="text-[15px] font-semibold text-red-500 line-through">
+                <span className="text-[14px] font-semibold text-red-500 line-through">
                   {inr(chosen.plan.was)}
                 </span>
               )}
@@ -225,7 +225,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
 
           <Link
             href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
-            className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide lg:min-w-[13rem]"
+            className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide lg:min-w-[13rem]"
           >
             Book room
           </Link>

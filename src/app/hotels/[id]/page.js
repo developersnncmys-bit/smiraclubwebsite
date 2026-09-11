@@ -104,22 +104,22 @@ export default async function Page({ params, searchParams }) {
             )}
           </h1>
 
-          <p className="mt-2 flex items-center gap-1.5 text-[15px] text-ink-600">
+          <p className="mt-2 flex items-center gap-1.5 text-[14px] text-ink-600">
             <MapPin size={16} className="shrink-0 text-ink-500" />
             {hotel.place}
           </p>
 
           <p className="mt-3 flex flex-wrap items-baseline gap-2">
-            <span className="text-[15px] text-ink-700">From</span>
+            <span className="text-[14px] text-ink-700">From</span>
             <span className="text-xl font-extrabold text-ink-900">
               &#8377;{hotel.from.toLocaleString('en-IN')}
             </span>
-            <span className="text-[15px] font-semibold text-red-500 line-through">
+            <span className="text-[14px] font-semibold text-red-500 line-through">
               &#8377;{hotel.was.toLocaleString('en-IN')}
             </span>
-            <span className="text-[15px] text-ink-700">Per night</span>
+            <span className="text-[14px] text-ink-700">Per night</span>
           </p>
-          <p className="mt-0.5 text-[15px] text-ink-500">(Taxes Included)</p>
+          <p className="mt-0.5 text-[14px] text-ink-500">(Taxes Included)</p>
         </section>
 
         {/* -- What membership is worth here -------------------------- */}
@@ -132,13 +132,13 @@ export default async function Page({ params, searchParams }) {
               <p className="text-lg font-bold leading-tight text-ink-900">
                 {hotelMemberBenefits.title}
               </p>
-              <p className="text-[14px] text-ink-600">{hotelMemberBenefits.note}</p>
+              <p className="text-[13px] text-ink-600">{hotelMemberBenefits.note}</p>
             </div>
           </div>
 
           <ul className="mt-4 grid grid-cols-1 gap-x-4 gap-y-2.5 sm:grid-cols-2">
             {hotelMemberBenefits.points.map((point) => (
-              <li key={point} className="flex items-center gap-2 text-[15px] text-ink-800">
+              <li key={point} className="flex items-center gap-2 text-[14px] text-ink-800">
                 <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-green-600 text-white">
                   <Check size={13} strokeWidth={3} />
                 </span>
@@ -150,15 +150,15 @@ export default async function Page({ params, searchParams }) {
 
         {/* -- The stay ----------------------------------------------- */}
         <Card>
-          <p className="text-center text-[16px] font-bold text-ink-900">
+          <p className="text-center text-[15px] font-bold text-ink-900">
             Check in: {stayTimes.checkIn} / Check out: {stayTimes.checkOut}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3">
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[14px] font-semibold text-action-500">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
               <Calendar size={17} className="shrink-0" />
               {when}
             </p>
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[14px] font-semibold text-action-500">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
               <User size={17} className="shrink-0" />
               {adults} Adults/ {rooms} Room
             </p>
@@ -178,8 +178,8 @@ export default async function Page({ params, searchParams }) {
         {/* -- Overview ----------------------------------------------- */}
         <section id="overview" className="scroll-mt-24">
           <h2 className="text-lg font-bold text-ink-900">About the Property</h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-600">{hotel.about}</p>
-          <button type="button" className="mt-2 text-[15px] font-semibold text-action-500">
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-600">{hotel.about}</p>
+          <button type="button" className="mt-2 text-[14px] font-semibold text-action-500">
             Read More
           </button>
         </section>
@@ -196,7 +196,7 @@ export default async function Page({ params, searchParams }) {
 
           <Link
             href="/packages"
-            className="mt-4 flex w-full items-center justify-center rounded-xl border-2 border-action-500 px-5 py-3.5 text-[16px] font-bold text-action-500 transition hover:bg-brand-50"
+            className="mt-4 flex w-full items-center justify-center rounded-xl border-2 border-action-500 px-5 py-3.5 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
           >
             View More Packages
           </Link>
@@ -214,7 +214,7 @@ export default async function Page({ params, searchParams }) {
               </div>
             ))}
           </div>
-          <button type="button" className="mt-6 text-[15px] font-bold text-ink-900 underline">
+          <button type="button" className="mt-6 text-[14px] font-bold text-ink-900 underline">
             See all Amenities
           </button>
         </Card>
@@ -223,12 +223,12 @@ export default async function Page({ params, searchParams }) {
         <Card id="reviews" title="Review &amp; Ratings">
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <p className="flex items-center gap-2">
-              <span className="rounded-md bg-action-500 px-2.5 py-1 text-[15px] font-bold text-white">
+              <span className="rounded-md bg-action-500 px-2.5 py-1 text-[14px] font-bold text-white">
                 {hotel.rating}
               </span>
-              <span className="text-[15px] text-ink-600">({hotel.reviews} reviews)</span>
+              <span className="text-[14px] text-ink-600">({hotel.reviews} reviews)</span>
             </p>
-            <p className="flex items-center gap-1.5 text-[14px] font-semibold text-ink-700">
+            <p className="flex items-center gap-1.5 text-[13px] font-semibold text-ink-700">
               <ShieldCheck size={17} className="text-action-500" />
               Verified Reviews
             </p>
@@ -241,17 +241,17 @@ export default async function Page({ params, searchParams }) {
                 className="flex w-[85%] flex-col rounded-xl border border-action-500/40 p-4 sm:w-[20rem] lg:w-auto"
               >
                 <div className="flex items-center gap-3">
-                  <span className="rounded-md border border-action-500 px-2.5 py-1 text-[14px] font-bold text-action-500">
+                  <span className="rounded-md border border-action-500 px-2.5 py-1 text-[13px] font-bold text-action-500">
                     {r.score.toFixed(1)}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-[15px] font-bold text-ink-900">
+                    <span className="block truncate text-[14px] font-bold text-ink-900">
                       {r.name}
                     </span>
                     <span className="block text-[13px] text-ink-500">{r.kind}</span>
                   </span>
                 </div>
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-ink-700">{r.body}</p>
+                <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink-700">{r.body}</p>
                 <p className="mt-4 text-[13px] text-ink-500">{r.date}</p>
               </article>
             ))}
@@ -259,7 +259,7 @@ export default async function Page({ params, searchParams }) {
 
           <Link
             href={`/hotels/${hotel.id}/reviews`}
-            className="mt-4 inline-block text-[15px] font-bold text-ink-900 underline"
+            className="mt-4 inline-block text-[14px] font-bold text-ink-900 underline"
           >
             See all reviews
           </Link>
@@ -267,7 +267,7 @@ export default async function Page({ params, searchParams }) {
 
         {/* -- Location ----------------------------------------------- */}
         <Card id="location" title="Location">
-          <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
+          <p className="mt-3 text-[14px] leading-relaxed text-ink-700">
             <span className="font-semibold text-ink-900">Address:</span> {hotel.address}
           </p>
 
@@ -276,7 +276,7 @@ export default async function Page({ params, searchParams }) {
               href={mapHref}
               target="_blank"
               rel="noreferrer"
-              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[14px] font-semibold text-ink-800 transition hover:brightness-95"
+              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
             >
               <Expand size={17} />
               Expand Map
@@ -285,19 +285,19 @@ export default async function Page({ params, searchParams }) {
               href={mapHref}
               target="_blank"
               rel="noreferrer"
-              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[14px] font-semibold text-ink-800 transition hover:brightness-95"
+              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
             >
               <Navigation size={17} />
               Street View
             </a>
           </div>
 
-          <h3 className="mt-5 text-[16px] font-bold text-ink-900">What&rsquo;s Nearby</h3>
+          <h3 className="mt-5 text-[15px] font-bold text-ink-900">What&rsquo;s Nearby</h3>
           <ul className="mt-2 divide-y divide-surface-line">
             {hotel.nearby.map((n) => (
               <li key={n.place} className="flex items-center justify-between gap-4 py-2.5">
-                <span className="text-[15px] text-ink-700">{n.place}</span>
-                <span className="shrink-0 text-[15px] text-ink-500">{n.km}</span>
+                <span className="text-[14px] text-ink-700">{n.place}</span>
+                <span className="shrink-0 text-[14px] text-ink-500">{n.km}</span>
               </li>
             ))}
           </ul>
@@ -311,14 +311,14 @@ export default async function Page({ params, searchParams }) {
               <div key={g.title}>
                 <h3 className="font-bold text-ink-900 underline">{g.title}</h3>
                 {g.lines.map((line) => (
-                  <p key={line} className="mt-2 text-[15px] leading-relaxed text-ink-700">
+                  <p key={line} className="mt-2 text-[14px] leading-relaxed text-ink-700">
                     {line}
                   </p>
                 ))}
               </div>
             ))}
 
-            <p className="flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[14px] leading-snug text-brand-700">
+            <p className="flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[13px] leading-snug text-brand-700">
               <Info size={18} className="mt-0.5 shrink-0 text-action-500" />
               {stayGuidelinesNote}
             </p>

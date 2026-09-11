@@ -56,7 +56,7 @@ export default function TestimonialsScreen({ art = {} }) {
           <h1 className="text-2xl font-bold text-ink-900">What our members say</h1>
 
           <div className="mt-4 flex flex-wrap gap-3">
-            <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[15px] font-medium text-ink-900">
+            <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[14px] font-medium text-ink-900">
               <span className="sr-only">Sort reviews by</span>
               Sort By:
               <select
@@ -77,7 +77,7 @@ export default function TestimonialsScreen({ art = {} }) {
               type="button"
               onClick={() => setWithImages((v) => !v)}
               aria-pressed={withImages}
-              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[15px] font-medium transition ${
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[14px] font-medium transition ${
                 withImages
                   ? 'border-action-500 bg-action-500 text-white'
                   : 'border-surface-line text-ink-900 hover:bg-surface-soft'
@@ -107,10 +107,10 @@ export default function TestimonialsScreen({ art = {} }) {
 
             <div className="p-5 text-center">
               <Stars score={t.score} />
-              <p className="mt-4 text-[16px] font-semibold leading-relaxed text-ink-900">
+              <p className="mt-4 text-[15px] font-semibold leading-relaxed text-ink-900">
                 &ldquo;{t.body}&rdquo;
               </p>
-              <p className="mt-5 text-[16px] text-ink-700">-{t.name}</p>
+              <p className="mt-5 text-[15px] text-ink-700">-{t.name}</p>
             </div>
           </article>
         ))}

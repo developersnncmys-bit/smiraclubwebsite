@@ -68,7 +68,7 @@ export default function Hero({ slides }) {
               <p className="mt-4 flex items-end gap-3 text-white">
                 <span className="text-xl font-semibold uppercase tracking-wide sm:text-2xl">{slide.headline}</span>
                 <span className="flex items-end border-l border-white/40 pl-3 leading-none">
-                  <span className="text-[52px] font-extrabold leading-[0.85] sm:text-6xl lg:text-7xl">
+                  <span className="text-[49px] font-extrabold leading-[0.85] sm:text-6xl lg:text-7xl">
                     {slide.figure}
                   </span>
                   <span className="ml-1 flex flex-col text-left leading-none">
@@ -78,13 +78,13 @@ export default function Hero({ slides }) {
                 </span>
               </p>
 
-              <p className="mt-3 max-w-[19rem] text-[15px] leading-snug text-white/90 sm:text-base lg:max-w-md lg:text-lg">
+              <p className="mt-3 max-w-[19rem] text-[14px] leading-snug text-white/90 sm:text-base lg:max-w-md lg:text-lg">
                 {slide.copy}
               </p>
 
-                <Link href={slide.cta.href} className="btn-pill mt-5 uppercase tracking-wide">
+                <Link href={slide.cta.href} className="btn-pill mt-4 gap-1.5 px-3.5 py-1.5 text-[11px] uppercase tracking-wide sm:px-4 sm:py-2 sm:text-[12px]">
                   {slide.cta.label}
-                  <ArrowRight size={16} />
+                  <ArrowRight size={15} />
                 </Link>
               </div>
             </div>

@@ -57,26 +57,26 @@ export default async function Page({ params }) {
               )}
             </h1>
 
-            <p className="mt-1 flex items-center gap-1.5 text-[16px] text-ink-600">
+            <p className="mt-1 flex items-center gap-1.5 text-[15px] text-ink-600">
               {pkg.place}
               <ChevronRight size={16} className="text-ink-400" />
             </p>
 
-            <p className="mt-3 flex items-center gap-2 text-[15px] text-ink-700">
+            <p className="mt-3 flex items-center gap-2 text-[14px] text-ink-700">
               <Calendar size={16} className="shrink-0 text-ink-500" />
               {pkg.nights + 1} days/{pkg.nights} Nights
             </p>
 
             <p className="mt-3 flex flex-wrap items-baseline gap-2">
-              <span className="text-[15px] text-ink-700">From</span>
+              <span className="text-[14px] text-ink-700">From</span>
               <span className="text-2xl font-extrabold text-ink-900">{inr(pkg.price)}</span>
               {pkg.was && (
-                <span className="text-[15px] font-semibold text-red-500 line-through">
+                <span className="text-[14px] font-semibold text-red-500 line-through">
                   {inr(pkg.was)}
                 </span>
               )}
             </p>
-            <p className="text-[14px] text-ink-500">Per Person before taxes &amp; fees</p>
+            <p className="text-[13px] text-ink-500">Per Person before taxes &amp; fees</p>
           </section>
 
           {/* -- What membership is worth here ------------------ */}
@@ -86,17 +86,17 @@ export default async function Page({ params }) {
                 <Crown size={19} className="text-gold" fill="currentColor" strokeWidth={1.5} />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-[17px] font-bold leading-tight text-ink-900">
+                <p className="text-[15px] font-bold leading-tight text-ink-900">
                   {packageMemberBenefit.title}
                 </p>
-                <p className="mt-0.5 text-[15px] text-ink-700">{packageMemberBenefit.body}</p>
-                <p className="text-[14px] text-ink-600">{packageMemberBenefit.note}</p>
+                <p className="mt-0.5 text-[14px] text-ink-700">{packageMemberBenefit.body}</p>
+                <p className="text-[13px] text-ink-600">{packageMemberBenefit.note}</p>
               </div>
             </div>
 
             <Link
               href="/membership"
-              className="mt-4 flex items-center justify-end gap-2 text-[15px] font-bold text-green-700"
+              className="mt-4 flex items-center justify-end gap-2 text-[14px] font-bold text-green-700"
             >
               {packageMemberBenefit.cta}
               <span className="grid h-6 w-6 place-items-center rounded-full bg-green-600 text-white">
@@ -112,7 +112,7 @@ export default async function Page({ params }) {
             <p className="flex flex-wrap items-baseline gap-2">
               <span className="text-2xl font-extrabold text-ink-900">{inr(pkg.price)}</span>
               {pkg.was && (
-                <span className="text-[15px] font-semibold text-red-500 line-through">
+                <span className="text-[14px] font-semibold text-red-500 line-through">
                   {inr(pkg.was)}
                 </span>
               )}
@@ -121,7 +121,7 @@ export default async function Page({ params }) {
 
             <Link
               href={`/packages/${pkg.id}/book`}
-              className="btn-primary mt-4 w-full rounded-lg py-4 text-[15px] uppercase tracking-wide"
+              className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
             >
               Book now
             </Link>
@@ -136,15 +136,15 @@ export default async function Page({ params }) {
           {/* -- Overview -------------------------------------- */}
           <section id="overview" className="scroll-mt-24">
             <h2 className="text-lg font-bold text-ink-900">About This Package</h2>
-            <p className="mt-2 text-[15px] leading-relaxed text-ink-600">{pkg.about}</p>
-            <button type="button" className="mt-2 text-[15px] font-semibold text-action-500">
+            <p className="mt-2 text-[14px] leading-relaxed text-ink-600">{pkg.about}</p>
+            <button type="button" className="mt-2 text-[14px] font-semibold text-action-500">
               Read more
             </button>
 
             <h3 className="mt-6 text-lg font-bold text-ink-900">Highlights</h3>
             <ul className="mt-3 space-y-2.5">
               {pkg.highlights.map((h) => (
-                <li key={h} className="flex items-center gap-2.5 text-[16px] text-ink-800">
+                <li key={h} className="flex items-center gap-2.5 text-[15px] text-ink-800">
                   <CircleCheck size={18} className="shrink-0 text-ink-700" />
                   {h}
                 </li>
@@ -161,11 +161,11 @@ export default async function Page({ params }) {
                 { icon: Users, label: 'Group Size', value: pkg.info.groupSize },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between gap-4">
-                  <dt className="flex items-center gap-2.5 text-[15px] text-ink-600">
+                  <dt className="flex items-center gap-2.5 text-[14px] text-ink-600">
                     <row.icon size={17} className="shrink-0 text-ink-500" />
                     {row.label}
                   </dt>
-                  <dd className="shrink-0 text-[15px] font-semibold text-ink-900">{row.value}</dd>
+                  <dd className="shrink-0 text-[14px] font-semibold text-ink-900">{row.value}</dd>
                 </div>
               ))}
             </dl>
@@ -175,7 +175,7 @@ export default async function Page({ params }) {
           <section id="itinerary" className="scroll-mt-24 pt-6">
             <h2 className="text-lg font-bold text-ink-900">Itinerary</h2>
 
-            <p className="mt-3 rounded-xl border border-surface-line bg-white px-4 py-3 text-[15px] text-ink-600">
+            <p className="mt-3 rounded-xl border border-surface-line bg-white px-4 py-3 text-[14px] text-ink-600">
               All time are local time
             </p>
 
@@ -193,11 +193,11 @@ export default async function Page({ params }) {
                   />
 
                   <article className="card p-4">
-                    <p className="text-[16px] font-bold text-action-500">Day {d.day}</p>
-                    <h3 className="text-[17px] font-bold text-ink-900">{d.title}</h3>
-                    <p className="mt-1 text-[15px] leading-relaxed text-ink-600">{d.body}</p>
+                    <p className="text-[15px] font-bold text-action-500">Day {d.day}</p>
+                    <h3 className="text-[15px] font-bold text-ink-900">{d.title}</h3>
+                    <p className="mt-1 text-[14px] leading-relaxed text-ink-600">{d.body}</p>
                     {d.meals && (
-                      <p className="mt-3 flex items-center gap-2 text-[14px] text-ink-600">
+                      <p className="mt-3 flex items-center gap-2 text-[13px] text-ink-600">
                         <Calendar size={15} className="shrink-0 text-ink-400" />
                         {d.meals}
                       </p>
@@ -215,7 +215,7 @@ export default async function Page({ params }) {
             <h2 className="text-lg font-bold text-ink-900">Inclusions</h2>
             <ul className="mt-3 space-y-2.5">
               {pkg.inclusions.map((i) => (
-                <li key={i} className="flex items-start gap-2.5 text-[16px] text-ink-800">
+                <li key={i} className="flex items-start gap-2.5 text-[15px] text-ink-800">
                   <CircleCheck size={18} className="mt-0.5 shrink-0 text-action-500" />
                   {i}
                 </li>
@@ -230,9 +230,9 @@ export default async function Page({ params }) {
             <div className="mt-3 space-y-5">
               {packagePolicies.map((p) => (
                 <div key={p.title}>
-                  <h3 className="text-[16px] font-bold text-ink-900 underline">{p.title}</h3>
+                  <h3 className="text-[15px] font-bold text-ink-900 underline">{p.title}</h3>
                   {p.lines.map((line) => (
-                    <p key={line} className="mt-1.5 text-[15px] leading-relaxed text-ink-600">
+                    <p key={line} className="mt-1.5 text-[14px] leading-relaxed text-ink-600">
                       {line}
                     </p>
                   ))}
@@ -240,10 +240,10 @@ export default async function Page({ params }) {
               ))}
 
               <div>
-                <h3 className="text-[16px] font-bold text-ink-900">Terms &amp; Conditions</h3>
+                <h3 className="text-[15px] font-bold text-ink-900">Terms &amp; Conditions</h3>
                 <Link
                   href="/more/terms"
-                  className="mt-1.5 inline-block text-[15px] font-semibold text-action-500 underline"
+                  className="mt-1.5 inline-block text-[14px] font-semibold text-action-500 underline"
                 >
                   Read Terms &amp; Conditions
                 </Link>
@@ -264,7 +264,7 @@ export default async function Page({ params }) {
               <p className="flex flex-wrap items-baseline gap-2">
                 <span className="text-xl font-extrabold text-ink-900">{inr(pkg.price)}</span>
                 {pkg.was && (
-                  <span className="text-[15px] font-semibold text-red-500 line-through">
+                  <span className="text-[14px] font-semibold text-red-500 line-through">
                     {inr(pkg.was)}
                   </span>
                 )}
@@ -276,7 +276,7 @@ export default async function Page({ params }) {
 
             <Link
               href={`/packages/${pkg.id}/book`}
-              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide"
+              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide"
             >
               Book now
             </Link>

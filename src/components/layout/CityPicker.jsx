@@ -27,7 +27,7 @@ export default function CityPicker({ city, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 text-[15px] font-semibold text-ink-900"
+        className="flex items-center gap-1.5 text-[14px] font-semibold text-ink-900"
         aria-expanded={open}
         aria-haspopup="listbox"
       >

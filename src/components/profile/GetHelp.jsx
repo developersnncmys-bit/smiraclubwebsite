@@ -32,7 +32,7 @@ export default function GetHelp({ art }) {
         <div className="shell flex items-start gap-4 py-6">
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl font-bold text-ink-900">{helpDesk.greeting}</h1>
-            <p className="mt-2 text-[16px] font-semibold leading-relaxed text-ink-900">
+            <p className="mt-2 text-[15px] font-semibold leading-relaxed text-ink-900">
               {helpDesk.body}
             </p>
           </div>
@@ -50,10 +50,10 @@ export default function GetHelp({ art }) {
       {/* -- What they want ---------------------------------------- */}
       <form onSubmit={submit} className="shell py-6">
         <h2 className="text-xl font-bold text-ink-900">{helpDesk.trip.title}</h2>
-        <p className="mt-3 text-[16px] leading-relaxed text-ink-600">{helpDesk.trip.body}</p>
+        <p className="mt-3 text-[15px] leading-relaxed text-ink-600">{helpDesk.trip.body}</p>
 
         <label className="mt-7 block">
-          <span className="flex items-center gap-1.5 text-[17px] font-bold text-ink-900">
+          <span className="flex items-center gap-1.5 text-[15px] font-bold text-ink-900">
             Booking ID
             <span title={helpDesk.trip.hint}>
               <Info size={16} className="text-red-500" />
@@ -68,13 +68,13 @@ export default function GetHelp({ art }) {
             }}
             placeholder="Enter booking ID"
             aria-label="Booking ID"
-            className="mt-3 w-full rounded-xl border border-surface-line bg-white px-4 py-4 text-[16px] text-ink-900 outline-none transition placeholder:text-ink-500 focus:border-action-500"
+            className="mt-3 w-full rounded-xl border border-surface-line bg-white px-4 py-4 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-500 focus:border-action-500"
           />
         </label>
 
         {sent && (
           <p
-            className={`mt-4 rounded-xl px-4 py-3.5 text-[15px] leading-relaxed ${
+            className={`mt-4 rounded-xl px-4 py-3.5 text-[14px] leading-relaxed ${
               sent.known
                 ? 'bg-[#e8f6ec] font-semibold text-green-700'
                 : 'bg-[#fdf3dd] text-[#8a6410]'
@@ -89,7 +89,7 @@ export default function GetHelp({ art }) {
         <button
           type="submit"
           disabled={!id.trim()}
-          className={`mt-7 w-full rounded-xl py-4 text-[17px] font-bold transition ${
+          className={`mt-7 w-full rounded-xl py-4 text-[15px] font-bold transition ${
             id.trim()
               ? 'bg-brand-600 text-white hover:bg-brand-700'
               : 'cursor-not-allowed bg-[#d6d6d6] text-white'

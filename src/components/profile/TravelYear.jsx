@@ -68,7 +68,7 @@ export default function TravelYear({ art = {} }) {
 
       <div className="shell py-6">
         {trips.length === 0 ? (
-          <p className="card p-10 text-center text-[15px] text-ink-500">
+          <p className="card p-10 text-center text-[14px] text-ink-500">
             Nothing booked in {year} yet.
           </p>
         ) : (
@@ -104,13 +104,13 @@ export default function TravelYear({ art = {} }) {
                             {trip.title}
                           </h3>
 
-                          <p className="mt-2 flex flex-wrap items-center gap-2 text-[15px] text-ink-600">
+                          <p className="mt-2 flex flex-wrap items-center gap-2 text-[14px] text-ink-600">
                             {trip.origin}
                             <ArrowRight size={15} className="shrink-0 text-ink-400" />
                             {trip.destination}
                           </p>
 
-                          <p className="mt-1 flex flex-wrap items-center gap-2 text-[15px] text-ink-600">
+                          <p className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-ink-600">
                             {dayOf(trip.start)}
                             <ArrowRight size={15} className="shrink-0 text-ink-400" />
                             {new Date(trip.end).toLocaleDateString('en-IN', {
@@ -120,7 +120,7 @@ export default function TravelYear({ art = {} }) {
                             })}
                           </p>
 
-                          <p className="mt-1 text-[15px] text-ink-600">
+                          <p className="mt-1 text-[14px] text-ink-600">
                             {nights + 1} Days/{nights} Nights
                           </p>
                         </div>

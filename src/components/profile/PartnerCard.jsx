@@ -15,8 +15,8 @@ export default function PartnerCard() {
       </span>
 
       <span className="min-w-0 flex-1">
-        <span className="block text-[17px] font-bold text-ink-900">Become a Partner</span>
-        <span className="mt-0.5 block text-[14px] leading-snug text-ink-500">
+        <span className="block text-[15px] font-bold text-ink-900">Become a Partner</span>
+        <span className="mt-0.5 block text-[13px] leading-snug text-ink-500">
           List your property &amp; earn extra income
         </span>
       </span>

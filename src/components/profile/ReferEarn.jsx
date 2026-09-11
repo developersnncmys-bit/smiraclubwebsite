@@ -17,8 +17,8 @@ function Reward({ image, who, amount, art }) {
       <span className="relative h-14 w-14 overflow-hidden rounded-full">
         <Image src={toSrc(art || image)} alt="" fill sizes="56px" className="object-cover" />
       </span>
-      <p className="mt-2 text-[15px] text-ink-700">{who}</p>
-      <p className="text-[16px] font-bold text-ink-900">{inr(amount)} SmiraCash</p>
+      <p className="mt-2 text-[14px] text-ink-700">{who}</p>
+      <p className="text-[15px] font-bold text-ink-900">{inr(amount)} SmiraCash</p>
     </div>
   );
 }
@@ -67,14 +67,14 @@ export default function ReferEarn({ art = {} }) {
     <div className="shell py-6">
       <header className="text-center">
         <h1 className="text-3xl font-bold text-action-500">{referral.title}</h1>
-        <p className="mt-2 text-[17px] text-ink-700">
+        <p className="mt-2 text-[15px] text-ink-700">
           Get up to {inr(referral.cap)} in {referral.steps.length} easy steps
         </p>
       </header>
 
       {referral.steps.map((step) => (
         <section key={step.key} className="mt-10">
-          <p className="text-center text-[15px] font-bold uppercase tracking-[0.08em] text-ink-500">
+          <p className="text-center text-[14px] font-bold uppercase tracking-[0.08em] text-ink-500">
             {step.label}
           </p>
           <h2 className="mt-2 text-center text-xl font-bold leading-snug text-ink-900">
@@ -100,7 +100,7 @@ export default function ReferEarn({ art = {} }) {
                   className="object-cover"
                 />
               </span>
-              <p className="min-w-0 text-[16px] leading-snug text-ink-900">
+              <p className="min-w-0 text-[15px] leading-snug text-ink-900">
                 {step.single.who}
                 <br />
                 <span className="font-bold">{inr(step.single.amount)} SmiraCash</span>
@@ -113,10 +113,10 @@ export default function ReferEarn({ art = {} }) {
         </section>
       ))}
 
-      <p className="mt-8 text-center text-[16px] leading-snug text-ink-900">
+      <p className="mt-8 text-center text-[15px] leading-snug text-ink-900">
         <span className="font-bold">NOTE</span> {referral.note}
       </p>
-      <p className="mt-1 text-center text-[14px] text-ink-500">
+      <p className="mt-1 text-center text-[13px] text-ink-500">
         That is {inr(perReferral)} a referral, up to {inr(referral.cap)}.
       </p>
 
@@ -124,7 +124,7 @@ export default function ReferEarn({ art = {} }) {
         href={`${membershipHelp.whatsapp}?text=${encodeURIComponent(share)}`}
         target="_blank"
         rel="noreferrer"
-        className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl border-2 border-action-500 px-5 py-4 text-[17px] font-bold uppercase tracking-wide text-ink-900 transition hover:bg-brand-50"
+        className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl border-2 border-action-500 px-5 py-4 text-[15px] font-bold uppercase tracking-wide text-ink-900 transition hover:bg-brand-50"
       >
         <MessageCircle size={22} className="text-[#25d366]" fill="currentColor" strokeWidth={0} />
         Refer via WhatsApp
@@ -132,7 +132,7 @@ export default function ReferEarn({ art = {} }) {
 
       <div className="card mt-4 flex items-center gap-3 p-4 sm:p-5">
         <div className="min-w-0 flex-1">
-          <p className="text-[14px] font-semibold uppercase tracking-[0.06em] text-ink-600">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-ink-600">
             Referral code
           </p>
           <p className="mt-1 text-xl font-bold text-ink-900">{referral.code}</p>
@@ -158,7 +158,7 @@ export default function ReferEarn({ art = {} }) {
       </div>
 
       {copied && (
-        <p className="mt-3 text-center text-[15px] font-semibold text-green-700">
+        <p className="mt-3 text-center text-[14px] font-semibold text-green-700">
           Code copied.
         </p>
       )}

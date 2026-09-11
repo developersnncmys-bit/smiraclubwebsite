@@ -48,7 +48,7 @@ export default function DetailTabs({ tabs = villaDetailTabs }) {
                 key={t.key}
                 href={`#${t.key}`}
                 aria-current={on ? 'true' : undefined}
-                className={`shrink-0 border-b-2 py-3.5 text-[15px] font-semibold transition ${
+                className={`shrink-0 border-b-2 py-3.5 text-[14px] font-semibold transition ${
                   on
                     ? 'border-action-500 text-action-500'
                     : 'border-transparent text-ink-500 hover:text-ink-700'

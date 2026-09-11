@@ -29,7 +29,7 @@ export default function MyReviews() {
         <h1 className="text-lg font-bold text-ink-900">All Reviews</h1>
 
         <div className="mt-4 flex flex-wrap gap-3">
-          <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[15px] font-medium text-ink-900">
+          <label className="inline-flex items-center gap-1.5 rounded-xl border border-surface-line px-4 py-3 text-[14px] font-medium text-ink-900">
             <span className="sr-only">Sort reviews by</span>
             Sort By:
             <select
@@ -50,7 +50,7 @@ export default function MyReviews() {
             type="button"
             onClick={() => setWithImages((v) => !v)}
             aria-pressed={withImages}
-            className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[15px] font-medium transition ${
+            className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[14px] font-medium transition ${
               withImages
                 ? 'border-action-500 bg-action-500 text-white'
                 : 'border-surface-line text-ink-900 hover:bg-surface-soft'
@@ -62,7 +62,7 @@ export default function MyReviews() {
         </div>
 
         {shown.length === 0 ? (
-          <p className="mt-8 text-center text-[15px] text-ink-500">
+          <p className="mt-8 text-center text-[14px] text-ink-500">
             {withImages
               ? 'None of your reviews have photos yet.'
               : 'You have not written a review yet.'}

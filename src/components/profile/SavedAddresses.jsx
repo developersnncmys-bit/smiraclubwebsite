@@ -8,7 +8,7 @@ import { addressActions, membershipHelp, savedAddresses } from '@/lib/content';
 const BLANK = { label: '', lines: '', phone: '' };
 
 const FIELD =
-  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
 /**
  * Saved Address.
@@ -78,7 +78,7 @@ export default function SavedAddresses() {
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand-50 text-action-500">
             <Plus size={17} strokeWidth={2.5} />
           </span>
-          <span className="text-[16px] font-bold leading-snug text-ink-900">
+          <span className="text-[15px] font-bold leading-snug text-ink-900">
             {addressActions.add}
           </span>
         </button>
@@ -95,7 +95,7 @@ export default function SavedAddresses() {
             fill="currentColor"
             strokeWidth={0}
           />
-          <span className="text-[16px] font-bold leading-snug text-ink-900">
+          <span className="text-[15px] font-bold leading-snug text-ink-900">
             {addressActions.request}
           </span>
         </a>
@@ -119,7 +119,7 @@ export default function SavedAddresses() {
           </div>
 
           <label className="block">
-            <span className="text-[15px] font-semibold text-ink-900">Name this address</span>
+            <span className="text-[14px] font-semibold text-ink-900">Name this address</span>
             <input
               value={draft.label}
               onChange={(e) => setDraft((d) => ({ ...d, label: e.target.value }))}
@@ -129,7 +129,7 @@ export default function SavedAddresses() {
           </label>
 
           <label className="block">
-            <span className="text-[15px] font-semibold text-ink-900">Address</span>
+            <span className="text-[14px] font-semibold text-ink-900">Address</span>
             <textarea
               rows={3}
               value={draft.lines}
@@ -140,7 +140,7 @@ export default function SavedAddresses() {
           </label>
 
           <label className="block">
-            <span className="text-[15px] font-semibold text-ink-900">Phone Number</span>
+            <span className="text-[14px] font-semibold text-ink-900">Phone Number</span>
             <input
               inputMode="numeric"
               value={draft.phone}
@@ -152,7 +152,7 @@ export default function SavedAddresses() {
 
           {error && <p className="text-[13px] text-red-600">{error}</p>}
 
-          <button type="submit" className="btn-primary w-full rounded-xl py-3.5 text-[16px]">
+          <button type="submit" className="btn-primary w-full rounded-xl py-3.5 text-[15px] lg:w-auto lg:px-10 lg:py-3.5">
             {editing === 'new' ? 'Save address' : 'Save changes'}
           </button>
         </form>
@@ -160,7 +160,7 @@ export default function SavedAddresses() {
 
       {/* -- What is saved ----------------------------------------- */}
       {list.length === 0 ? (
-        <p className="card p-8 text-center text-[15px] text-ink-500">
+        <p className="card p-8 text-center text-[14px] text-ink-500">
           No addresses saved yet.
         </p>
       ) : (
@@ -191,7 +191,7 @@ export default function SavedAddresses() {
                         <button
                           type="button"
                           onClick={() => openEdit(address)}
-                          className="block w-full px-4 py-2.5 text-left text-[15px] text-ink-900 transition hover:bg-surface-soft"
+                          className="block w-full px-4 py-2.5 text-left text-[14px] text-ink-900 transition hover:bg-surface-soft"
                         >
                           Edit
                         </button>
@@ -201,7 +201,7 @@ export default function SavedAddresses() {
                             setList((all) => all.filter((a) => a.id !== address.id));
                             setMenuFor(null);
                           }}
-                          className="block w-full px-4 py-2.5 text-left text-[15px] text-red-600 transition hover:bg-red-50"
+                          className="block w-full px-4 py-2.5 text-left text-[14px] text-red-600 transition hover:bg-red-50"
                         >
                           Delete
                         </button>
@@ -210,7 +210,7 @@ export default function SavedAddresses() {
                   </div>
                 </div>
 
-                <address className="mt-2 not-italic text-[16px] leading-relaxed text-ink-700">
+                <address className="mt-2 not-italic text-[15px] leading-relaxed text-ink-700">
                   {address.lines.map((line) => (
                     <span key={line} className="block">
                       {line}
@@ -219,7 +219,7 @@ export default function SavedAddresses() {
                 </address>
 
                 {address.phone && (
-                  <p className="mt-3 text-[16px] text-ink-900">
+                  <p className="mt-3 text-[15px] text-ink-900">
                     <span className="font-semibold">Phone Number:</span> {address.phone}
                   </p>
                 )}

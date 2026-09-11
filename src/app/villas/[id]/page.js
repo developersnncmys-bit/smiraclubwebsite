@@ -94,8 +94,8 @@ export default async function Page({ params, searchParams }) {
             <Crown size={20} className="text-gold" fill="currentColor" strokeWidth={1.5} />
           </span>
           <div className="min-w-0">
-            <p className="text-[14px] text-ink-700">{villaMemberOffer.kicker}</p>
-            <p className="text-[15px] font-bold text-ink-900">{villaMemberOffer.headline}</p>
+            <p className="text-[13px] text-ink-700">{villaMemberOffer.kicker}</p>
+            <p className="text-[14px] font-bold text-ink-900">{villaMemberOffer.headline}</p>
             <p className="mt-0.5 text-[13px] text-ink-500">{villaMemberOffer.note}</p>
           </div>
         </div>
@@ -109,17 +109,17 @@ export default async function Page({ params, searchParams }) {
             )}
           </h1>
 
-          <p className="mt-1 flex items-center gap-1.5 text-[15px] text-ink-600">
+          <p className="mt-1 flex items-center gap-1.5 text-[14px] text-ink-600">
             <MapPin size={16} className="shrink-0 text-ink-500" />
             {villa.place}
           </p>
 
-          <p className="mt-4 flex items-center gap-2 border-l-[3px] border-action-500 pl-3 text-[16px] font-semibold text-ink-900">
+          <p className="mt-4 flex items-center gap-2 border-l-[3px] border-action-500 pl-3 text-[15px] font-semibold text-ink-900">
             {villa.layout}
             <Info size={15} className="text-ink-400" />
           </p>
 
-          <ul className="mt-3 space-y-2 text-[15px] text-ink-700">
+          <ul className="mt-3 space-y-2 text-[14px] text-ink-700">
             <li className="flex gap-2.5">
               <Bed size={19} className="mt-0.5 shrink-0 text-ink-600" />
               {detail.bedrooms} Bedrooms, {detail.beds}, {detail.baths} Bathrooms
@@ -137,27 +137,27 @@ export default async function Page({ params, searchParams }) {
 
         {/* -- The host ----------------------------------------------- */}
         <Card title={villaHost.title}>
-          <p className="mt-3 flex gap-2 border-t border-surface-line pt-3 text-[15px] text-ink-700">
+          <p className="mt-3 flex gap-2 border-t border-surface-line pt-3 text-[14px] text-ink-700">
             <span aria-hidden="true" className="text-ink-400">&bull;</span>
             {villaHost.speaks}
           </p>
-          <p className="mt-3 text-[15px] leading-relaxed text-ink-700">{villaHost.blurb}</p>
-          <button type="button" className="mt-3 text-[15px] font-bold text-ink-900 underline">
+          <p className="mt-3 text-[14px] leading-relaxed text-ink-700">{villaHost.blurb}</p>
+          <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">
             View Details
           </button>
         </Card>
 
         {/* -- The stay ----------------------------------------------- */}
         <Card>
-          <p className="text-center text-[16px] font-bold text-ink-900">
+          <p className="text-center text-[15px] font-bold text-ink-900">
             Check in: {villaStay.checkIn} / Check out: {villaStay.checkOut}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3">
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[14px] font-semibold text-action-500">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
               <Calendar size={17} className="shrink-0" />
               {when}
             </p>
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[14px] font-semibold text-action-500">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
               <User size={17} className="shrink-0" />
               {adults} Adults/ {rooms} Room
             </p>
@@ -171,8 +171,8 @@ export default async function Page({ params, searchParams }) {
         {/* -- Overview ----------------------------------------------- */}
         <section id="overview" className="scroll-mt-24">
           <h2 className="text-lg font-bold text-ink-900">About the Property</h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-600">{detail.about}</p>
-          <button type="button" className="mt-2 text-[15px] font-semibold text-action-500">
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-600">{detail.about}</p>
+          <button type="button" className="mt-2 text-[14px] font-semibold text-action-500">
             Read More
           </button>
         </section>
@@ -189,7 +189,7 @@ export default async function Page({ params, searchParams }) {
               </div>
             ))}
           </div>
-          <button type="button" className="mt-5 text-[15px] font-bold text-ink-900 underline">
+          <button type="button" className="mt-5 text-[14px] font-bold text-ink-900 underline">
             See all Amenities
           </button>
         </Card>
@@ -200,7 +200,7 @@ export default async function Page({ params, searchParams }) {
             Property Layout
             <Info size={15} className="text-ink-400" />
           </h2>
-          <p className="mt-1 text-[15px] text-ink-600">Your villa unit contains the following:</p>
+          <p className="mt-1 text-[14px] text-ink-600">Your villa unit contains the following:</p>
 
           <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
             {detail.rooms.map((room) => (
@@ -223,7 +223,7 @@ export default async function Page({ params, searchParams }) {
                   <span className="inline-block rounded-md border border-action-500 px-2.5 py-1 text-[12px] font-semibold text-action-500">
                     {room.tag}
                   </span>
-                  <p className="mt-2 text-[15px] font-bold text-ink-900">{room.name}</p>
+                  <p className="mt-2 text-[14px] font-bold text-ink-900">{room.name}</p>
                   <p className="text-[13px] text-ink-500">{room.floor}</p>
                   <ul className="mt-2 space-y-1.5">
                     {room.lines.map((line) => (
@@ -243,13 +243,13 @@ export default async function Page({ params, searchParams }) {
         <Card title="What&rsquo;s Included?">
           <ul className="mt-3 space-y-1.5">
             {villaWhatsIncluded.map((line) => (
-              <li key={line} className="flex gap-2 text-[15px] text-ink-700">
+              <li key={line} className="flex gap-2 text-[14px] text-ink-700">
                 <span aria-hidden="true" className="text-ink-400">&#9702;</span>
                 {line}
               </li>
             ))}
           </ul>
-          <button type="button" className="mt-3 text-[15px] font-bold text-ink-900 underline">
+          <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">
             View Details
           </button>
         </Card>
@@ -258,12 +258,12 @@ export default async function Page({ params, searchParams }) {
         <Card id="reviews" title="Review &amp; Ratings">
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <p className="flex items-center gap-2">
-              <span className="rounded-md bg-action-500 px-2.5 py-1 text-[15px] font-bold text-white">
+              <span className="rounded-md bg-action-500 px-2.5 py-1 text-[14px] font-bold text-white">
                 {villa.rating}
               </span>
-              <span className="text-[15px] text-ink-600">({villa.reviews} reviews)</span>
+              <span className="text-[14px] text-ink-600">({villa.reviews} reviews)</span>
             </p>
-            <p className="flex items-center gap-1.5 text-[14px] font-semibold text-ink-700">
+            <p className="flex items-center gap-1.5 text-[13px] font-semibold text-ink-700">
               <ShieldCheck size={17} className="text-action-500" />
               Verified Reviews
             </p>
@@ -276,30 +276,30 @@ export default async function Page({ params, searchParams }) {
                 className="flex w-[85%] flex-col rounded-xl border border-action-500/40 p-4 sm:w-[20rem] lg:w-auto"
               >
                 <div className="flex items-center gap-3">
-                  <span className="rounded-md border border-action-500 px-2.5 py-1 text-[14px] font-bold text-action-500">
+                  <span className="rounded-md border border-action-500 px-2.5 py-1 text-[13px] font-bold text-action-500">
                     {r.score.toFixed(1)}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-[15px] font-bold text-ink-900">
+                    <span className="block truncate text-[14px] font-bold text-ink-900">
                       {r.name}
                     </span>
                     <span className="block text-[13px] text-ink-500">{r.kind}</span>
                   </span>
                 </div>
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-ink-700">{r.body}</p>
+                <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink-700">{r.body}</p>
                 <p className="mt-4 text-[13px] text-ink-500">{r.date}</p>
               </article>
             ))}
           </div>
 
-          <button type="button" className="mt-4 text-[15px] font-bold text-action-500 underline">
+          <button type="button" className="mt-4 text-[14px] font-bold text-action-500 underline">
             See all reviews
           </button>
         </Card>
 
         {/* -- Location ----------------------------------------------- */}
         <Card id="location" title="Location">
-          <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
+          <p className="mt-3 text-[14px] leading-relaxed text-ink-700">
             <span className="font-semibold text-ink-900">Address:</span> {detail.address}
           </p>
 
@@ -308,7 +308,7 @@ export default async function Page({ params, searchParams }) {
               href={mapHref}
               target="_blank"
               rel="noreferrer"
-              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[14px] font-semibold text-ink-800 transition hover:brightness-95"
+              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
             >
               <Expand size={17} />
               Expand Map
@@ -317,19 +317,19 @@ export default async function Page({ params, searchParams }) {
               href={mapHref}
               target="_blank"
               rel="noreferrer"
-              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[14px] font-semibold text-ink-800 transition hover:brightness-95"
+              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
             >
               <Navigation size={17} />
               Street View
             </a>
           </div>
 
-          <h3 className="mt-5 text-[16px] font-bold text-ink-900">What&rsquo;s Nearby</h3>
+          <h3 className="mt-5 text-[15px] font-bold text-ink-900">What&rsquo;s Nearby</h3>
           <ul className="mt-2 divide-y divide-surface-line">
             {detail.nearby.map((n) => (
               <li key={n.place} className="flex items-center justify-between gap-4 py-2.5">
-                <span className="text-[15px] text-ink-700">{n.place}</span>
-                <span className="shrink-0 text-[15px] text-ink-500">{n.km}</span>
+                <span className="text-[14px] text-ink-700">{n.place}</span>
+                <span className="shrink-0 text-[14px] text-ink-500">{n.km}</span>
               </li>
             ))}
           </ul>
@@ -345,12 +345,12 @@ export default async function Page({ params, searchParams }) {
                   {rule.title && (
                     <span className="block font-semibold text-ink-900 underline">{rule.title}</span>
                   )}
-                  <span className="block text-[15px] leading-relaxed text-ink-700">{rule.body}</span>
+                  <span className="block text-[14px] leading-relaxed text-ink-700">{rule.body}</span>
                 </span>
               </li>
             ))}
           </ul>
-          <button type="button" className="mt-3 text-[15px] font-bold text-ink-900 underline">
+          <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">
             View more
           </button>
         </Card>
@@ -362,7 +362,7 @@ export default async function Page({ params, searchParams }) {
               <div key={g.title}>
                 <h3 className="font-bold text-ink-900 underline">{g.title}</h3>
                 {g.lines.map((line) => (
-                  <p key={line} className="mt-2 text-[15px] leading-relaxed text-ink-700">
+                  <p key={line} className="mt-2 text-[14px] leading-relaxed text-ink-700">
                     {line}
                   </p>
                 ))}
@@ -370,7 +370,7 @@ export default async function Page({ params, searchParams }) {
             ))}
           </div>
 
-          <p className="mt-5 flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[14px] leading-snug text-brand-700">
+          <p className="mt-5 flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[13px] leading-snug text-brand-700">
             <Info size={18} className="mt-0.5 shrink-0 text-action-500" />
             {villaGuidelinesNote}
           </p>

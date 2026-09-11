@@ -76,7 +76,7 @@ export default function MyBookings({ art = {} }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search your bookings"
             aria-label="Search your bookings"
-            className="w-full min-w-0 border-0 p-0 text-[16px] text-ink-900 outline-none placeholder:text-ink-500"
+            className="w-full min-w-0 border-0 p-0 text-[15px] text-ink-900 outline-none placeholder:text-ink-500"
           />
           <button
             type="button"
@@ -101,7 +101,7 @@ export default function MyBookings({ art = {} }) {
                 type="button"
                 onClick={() => setTab(t)}
                 aria-pressed={on}
-                className={`shrink-0 rounded-lg px-4 py-2.5 text-[15px] font-semibold transition ${
+                className={`shrink-0 rounded-lg px-4 py-2.5 text-[14px] font-semibold transition ${
                   on
                     ? 'bg-brand-50 text-action-500 ring-1 ring-action-500'
                     : 'text-ink-600 hover:bg-surface-soft'
@@ -117,7 +117,7 @@ export default function MyBookings({ art = {} }) {
       {/* -- What is booked --------------------------------------- */}
       <div className="shell mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
         {shown.length === 0 ? (
-          <p className="card p-10 text-center text-[15px] text-ink-500">
+          <p className="card p-10 text-center text-[14px] text-ink-500">
             {query ? 'Nothing matches that search.' : `No ${tab.toLowerCase()} yet.`}
           </p>
         ) : (
@@ -132,8 +132,8 @@ export default function MyBookings({ art = {} }) {
             return (
               <article key={booking.id} className="card overflow-hidden">
                 <div className="flex items-center justify-between gap-3 p-4 sm:p-5">
-                  <h2 className="text-[17px] font-semibold text-ink-900">{booking.kind}</h2>
-                  <p className={`flex shrink-0 items-center gap-1.5 text-[16px] font-bold ${status.tone}`}>
+                  <h2 className="text-[15px] font-semibold text-ink-900">{booking.kind}</h2>
+                  <p className={`flex shrink-0 items-center gap-1.5 text-[15px] font-bold ${status.tone}`}>
                     <Glyph size={18} />
                     {status.label}
                   </p>
@@ -154,15 +154,15 @@ export default function MyBookings({ art = {} }) {
                     />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[17px] font-bold leading-snug text-ink-900">
+                    <span className="block text-[15px] font-bold leading-snug text-ink-900">
                       {booking.name}
                     </span>
-                    <span className="mt-1 flex items-center gap-1.5 text-[15px] text-ink-700">
+                    <span className="mt-1 flex items-center gap-1.5 text-[14px] text-ink-700">
                       <MapPin size={15} className="shrink-0 text-ink-500" />
                       {booking.place}
                       <Send size={14} className="shrink-0 text-action-500" fill="currentColor" strokeWidth={0} />
                     </span>
-                    <span className="mt-1 block text-[15px] text-ink-500">
+                    <span className="mt-1 block text-[14px] text-ink-500">
                       Booking ID: {booking.id}
                     </span>
                   </span>
@@ -170,15 +170,15 @@ export default function MyBookings({ art = {} }) {
 
                 {/* When */}
                 <ul className="space-y-2.5 p-4 sm:p-5">
-                  <li className="flex items-center gap-2.5 text-[16px] text-ink-900">
+                  <li className="flex items-center gap-2.5 text-[15px] text-ink-900">
                     <Clock size={18} className="shrink-0 text-ink-600" />
                     {nights} Night{nights === 1 ? '' : 's'} / {nights + 1} days
                   </li>
-                  <li className="flex items-center gap-2.5 text-[16px] text-ink-900">
+                  <li className="flex items-center gap-2.5 text-[15px] text-ink-900">
                     <Calendar size={18} className="shrink-0 text-ink-600" />
                     Check-In - {when(booking.from)}
                   </li>
-                  <li className="flex items-center gap-2.5 text-[16px] text-ink-900">
+                  <li className="flex items-center gap-2.5 text-[15px] text-ink-900">
                     <Calendar size={18} className="shrink-0 text-ink-600" />
                     Check-Out - {when(booking.to)}
                   </li>
@@ -212,7 +212,7 @@ export default function MyBookings({ art = {} }) {
                 {/* What is left to do about it */}
                 {booking.status === 'pending' ? (
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-surface-line p-4 sm:p-5">
-                    <p className="text-[16px] leading-snug text-ink-900">
+                    <p className="text-[15px] leading-snug text-ink-900">
                       Complete your payment
                       <br className="hidden sm:block" /> to confirm your booking
                     </p>
@@ -222,13 +222,13 @@ export default function MyBookings({ art = {} }) {
                   </div>
                 ) : booking.status === 'confirmed' && booking.stage >= bookingStages.length ? (
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-surface-line p-4 sm:p-5">
-                    <p className="text-[17px] font-bold text-ink-900">Booking Is Completed</p>
+                    <p className="text-[15px] font-bold text-ink-900">Booking Is Completed</p>
                     <Link href="/profile/reviews" className="btn-primary shrink-0 rounded-lg px-7 py-3.5 uppercase tracking-wide">
                       Write review
                     </Link>
                   </div>
                 ) : booking.status === 'cancelled' ? (
-                  <p className="border-t border-surface-line p-4 text-[15px] text-ink-500 sm:p-5">
+                  <p className="border-t border-surface-line p-4 text-[14px] text-ink-500 sm:p-5">
                     This booking was cancelled. Any refund follows the property&rsquo;s policy.
                   </p>
                 ) : null}

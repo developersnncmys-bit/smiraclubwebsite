@@ -1,11 +1,11 @@
-import { Poppins } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
 import { site } from '@/lib/content';
 import './globals.css';
 
-const poppins = Poppins({
+const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   variable: '--font-sans',
@@ -36,7 +36,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    <html lang="en" className={montserrat.variable}>
       {/* Extensions (ColorZilla, Grammarly and friends) add attributes to the
           body before React hydrates; that mismatch is theirs, not ours. */}
       <body suppressHydrationWarning>

@@ -19,13 +19,13 @@ function BlogCard({ blog }) {
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <h3 className="text-[17px] font-bold leading-snug text-ink-900">{blog.title}</h3>
-        <p className="mt-2 line-clamp-2 text-[15px] leading-snug text-ink-500">{blog.excerpt}</p>
-        <p className="mt-auto pt-3 text-[15px] text-ink-600">{blog.date}</p>
+        <h3 className="text-[15px] font-bold leading-snug text-ink-900">{blog.title}</h3>
+        <p className="mt-2 line-clamp-2 text-[14px] leading-snug text-ink-500">{blog.excerpt}</p>
+        <p className="mt-auto pt-3 text-[14px] text-ink-600">{blog.date}</p>
 
         <button
           type="button"
-          className="mt-1.5 inline-flex items-center gap-1.5 self-start text-[15px] font-semibold text-action-500 underline"
+          className="mt-1.5 inline-flex items-center gap-1.5 self-start text-[14px] font-semibold text-action-500 underline"
         >
           Read More
           <ArrowRight size={16} />
@@ -45,7 +45,7 @@ function Rail({ title, items }) {
         <h2 className="text-xl font-bold text-ink-900 lg:text-2xl">{title}</h2>
         <button
           type="button"
-          className="inline-flex shrink-0 items-center gap-2 text-[16px] font-semibold text-ink-900"
+          className="inline-flex shrink-0 items-center gap-2 text-[15px] font-semibold text-ink-900"
         >
           View All
           <span className="grid h-6 w-6 place-items-center rounded-full bg-action-500 text-white">
@@ -97,10 +97,10 @@ export default function BlogsScreen({ hero, art = {} }) {
         </div>
         <div className="relative shell py-9 lg:py-16">
           <div className="max-w-[13rem] sm:max-w-sm lg:max-w-md">
-            <h1 className="text-[26px] font-extrabold leading-tight text-white lg:text-4xl">
+            <h1 className="text-[23px] font-extrabold leading-tight text-white lg:text-4xl">
               {blogHero.title}
             </h1>
-            <p className="mt-3 text-[15px] leading-snug text-white/95 lg:text-lg">
+            <p className="mt-3 text-[14px] leading-snug text-white/95 lg:text-lg">
               {blogHero.body}
             </p>
           </div>
@@ -121,7 +121,7 @@ export default function BlogsScreen({ hero, art = {} }) {
                   type="button"
                   onClick={() => setCategory(c.key)}
                   aria-pressed={on}
-                  className={`inline-flex shrink-0 items-center gap-2.5 rounded-xl border px-4 py-3 text-[16px] font-semibold transition ${
+                  className={`inline-flex shrink-0 items-center gap-2.5 rounded-xl border px-4 py-3 text-[15px] font-semibold transition ${
                     on
                       ? 'border-action-500 bg-brand-50 text-action-500'
                       : 'border-surface-line bg-white text-ink-700 hover:bg-surface-soft'
@@ -136,7 +136,7 @@ export default function BlogsScreen({ hero, art = {} }) {
         </section>
 
         {shown.length === 0 ? (
-          <p className="card mt-8 p-10 text-center text-[15px] text-ink-500">
+          <p className="card mt-8 p-10 text-center text-[14px] text-ink-500">
             Nothing in that category yet.
           </p>
         ) : (

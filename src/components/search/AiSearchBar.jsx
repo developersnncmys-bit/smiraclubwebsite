@@ -44,7 +44,7 @@ export default function AiSearchBar({ placeholder, prompts }) {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`“${placeholder}”`}
           aria-label="Describe the trip you want"
-          className="min-w-0 flex-1 border-0 bg-transparent p-0 text-[16px] font-medium text-ink-900 outline-none placeholder:text-ink-500"
+          className="min-w-0 flex-1 border-0 bg-transparent p-0 text-[15px] font-medium text-ink-900 outline-none placeholder:text-ink-500"
         />
 
         <button
@@ -57,7 +57,7 @@ export default function AiSearchBar({ placeholder, prompts }) {
       </form>
 
       <section className="card mt-5 p-5 sm:p-6">
-        <h2 className="text-[18px] font-bold text-ink-900">Try These Prompts</h2>
+        <h2 className="text-[16px] font-bold text-ink-900">Try These Prompts</h2>
 
         <ul className="mt-4 space-y-4">
           {prompts.map((p) => (
@@ -70,7 +70,7 @@ export default function AiSearchBar({ placeholder, prompts }) {
                 <span className="relative h-[62px] w-[78px] shrink-0 overflow-hidden rounded-xl">
                   <Image src={p.src} alt="" fill sizes="78px" className="object-cover" />
                 </span>
-                <span className="min-w-0 flex-1 text-[16px] font-bold leading-snug text-ink-900">
+                <span className="min-w-0 flex-1 text-[15px] font-bold leading-snug text-ink-900">
                   {p.text}
                 </span>
               </button>

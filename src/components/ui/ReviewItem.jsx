@@ -15,32 +15,32 @@ export default function ReviewItem({ review }) {
     <li className="py-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-[17px] font-bold text-ink-900">{review.name}</p>
-          <p className="text-[15px] text-ink-500">{review.kind}</p>
+          <p className="text-[15px] font-bold text-ink-900">{review.name}</p>
+          <p className="text-[14px] text-ink-500">{review.kind}</p>
         </div>
-        <span className="shrink-0 rounded-md border border-action-500 px-3 py-1 text-[15px] font-bold text-action-500">
+        <span className="shrink-0 rounded-md border border-action-500 px-3 py-1 text-[14px] font-bold text-action-500">
           {review.score.toFixed(1)}
         </span>
       </div>
 
-      <p className="mt-3 text-[15px] leading-relaxed text-ink-700">{review.body}</p>
+      <p className="mt-3 text-[14px] leading-relaxed text-ink-700">{review.body}</p>
 
-      <p className="mt-4 text-[15px] text-ink-600">
+      <p className="mt-4 text-[14px] text-ink-600">
         <span className="font-semibold text-ink-900">Travel Month:</span> {review.date}
       </p>
-      <p className="text-[15px] text-ink-600">
+      <p className="text-[14px] text-ink-600">
         <span className="font-semibold text-ink-900">Room:</span> {review.room}
       </p>
 
       {counted ? (
-        <p className="mt-3 flex items-center gap-2 text-[15px] font-semibold text-ink-900">
+        <p className="mt-3 flex items-center gap-2 text-[14px] font-semibold text-ink-900">
           <ThumbsUp size={17} className="text-ink-700" />
           {review.helpful}
         </p>
       ) : (
         <button
           type="button"
-          className="mt-3 inline-flex items-center gap-2 text-[15px] font-semibold text-ink-900 underline"
+          className="mt-3 inline-flex items-center gap-2 text-[14px] font-semibold text-ink-900 underline"
         >
           Helpful?
           <ThumbsUp size={17} className="text-ink-700" />

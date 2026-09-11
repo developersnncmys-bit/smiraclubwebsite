@@ -23,15 +23,15 @@ export default function BookingBar({ name, layout, price, was, taxes, bookHref }
           what it looks like otherwise. So the space names the villa.
         */}
         <div className="hidden min-w-0 flex-1 lg:block">
-          <p className="truncate text-[15px] font-bold text-ink-900">{name}</p>
-          <p className="truncate text-[14px] text-ink-500">{layout}</p>
+          <p className="truncate text-[14px] font-bold text-ink-900">{name}</p>
+          <p className="truncate text-[13px] text-ink-500">{layout}</p>
         </div>
 
         <div className="min-w-0 flex-1 lg:flex-none lg:text-right">
           <p className="flex flex-wrap items-baseline gap-2 lg:justify-end">
             <span className="text-xl font-extrabold text-ink-900">{inr(price)}</span>
             {was && (
-              <span className="text-[15px] font-semibold text-red-500 line-through">{inr(was)}</span>
+              <span className="text-[14px] font-semibold text-red-500 line-through">{inr(was)}</span>
             )}
           </p>
           <p className="text-[13px] leading-tight text-ink-500">
@@ -53,7 +53,7 @@ export default function BookingBar({ name, layout, price, was, taxes, bookHref }
           />
         </button>
 
-        <Link href={bookHref} className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[15px] uppercase tracking-wide lg:min-w-[13rem]">
+        <Link href={bookHref} className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide lg:min-w-[13rem]">
           Book now
         </Link>
         </div>

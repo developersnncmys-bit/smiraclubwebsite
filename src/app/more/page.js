@@ -26,8 +26,8 @@ function Topic({ topic }) {
     <>
       <Disc icon={topic.icon} />
       <span className="min-w-0 flex-1">
-        <span className="block text-[17px] font-bold leading-snug text-ink-900">{topic.label}</span>
-        <span className="mt-0.5 block text-[15px] leading-snug text-ink-600">{topic.body}</span>
+        <span className="block text-[15px] font-bold leading-snug text-ink-900">{topic.label}</span>
+        <span className="mt-0.5 block text-[14px] leading-snug text-ink-600">{topic.body}</span>
       </span>
       {topic.href ? (
         <ChevronRight size={20} className="shrink-0 text-ink-500" />
@@ -76,7 +76,7 @@ export default function Page() {
             <h1 className="text-3xl font-extrabold uppercase tracking-tight text-white lg:text-5xl">
               {moreIntro.title}
             </h1>
-            <p className="mt-3 text-[15px] font-semibold leading-snug text-white lg:text-lg">
+            <p className="mt-3 text-[14px] font-semibold leading-snug text-white lg:text-lg">
               {moreIntro.tagline}
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function Page() {
       <div className="shell">
         <section className="border-b border-surface-line py-6">
           <h2 className="text-xl font-bold text-ink-900">{moreIntro.heading}</h2>
-          <p className="mt-3 text-[16px] leading-relaxed text-ink-600">{moreIntro.body}</p>
+          <p className="mt-3 text-[15px] leading-relaxed text-ink-600">{moreIntro.body}</p>
         </section>
 
         {/* -- Everything else ------------------------------------- */}
@@ -113,8 +113,8 @@ export default function Page() {
             >
               <MessagesSquare size={26} className="shrink-0 text-brand-700" />
               <span className="min-w-0">
-                <span className="block text-[17px] font-bold text-ink-900">Chat with Us</span>
-                <span className="mt-0.5 block text-[15px] text-ink-600">
+                <span className="block text-[15px] font-bold text-ink-900">Chat with Us</span>
+                <span className="mt-0.5 block text-[14px] text-ink-600">
                   Get instant query assistance.
                 </span>
               </span>
@@ -125,7 +125,7 @@ export default function Page() {
               className="card flex items-center gap-4 p-4 transition hover:shadow-lift sm:p-5"
             >
               <Phone size={26} className="shrink-0 text-brand-700" />
-              <span className="text-[17px] font-bold text-ink-900">Contact Support</span>
+              <span className="text-[15px] font-bold text-ink-900">Contact Support</span>
             </a>
           </div>
         </section>

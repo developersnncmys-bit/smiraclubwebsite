@@ -27,7 +27,7 @@ export default function DeactivateAccount() {
   return (
     <div className="shell py-6">
       <h1 className="text-2xl font-bold text-brand-700">{copy.title}</h1>
-      <p className="mt-3 text-[16px] leading-relaxed text-ink-700">{copy.lead}</p>
+      <p className="mt-3 text-[15px] leading-relaxed text-ink-700">{copy.lead}</p>
 
       {/* -- What stops working ------------------------------------- */}
       <ul className="mt-7 space-y-5">
@@ -39,13 +39,13 @@ export default function DeactivateAccount() {
                 <X size={11} strokeWidth={3.5} />
               </span>
             </span>
-            <span className="text-[16px] font-bold leading-snug text-ink-900">{item.label}</span>
+            <span className="text-[15px] font-bold leading-snug text-ink-900">{item.label}</span>
           </li>
         ))}
       </ul>
 
       {/* -- What happens, and for how long ------------------------- */}
-      <p className="mt-8 flex gap-3 rounded-xl bg-[#eaf1fe] p-4 text-[16px] leading-relaxed text-brand-700">
+      <p className="mt-8 flex gap-3 rounded-xl bg-[#eaf1fe] p-4 text-[15px] leading-relaxed text-brand-700">
         <Info size={20} className="mt-0.5 shrink-0 text-action-500" />
         {withDays(copy.note)}
       </p>
@@ -53,8 +53,8 @@ export default function DeactivateAccount() {
       <div className="mt-4 flex gap-3 rounded-xl bg-[#fdf1e7] p-4">
         <TriangleAlert size={20} className="mt-0.5 shrink-0 text-[#d1541b]" />
         <div>
-          <p className="text-[16px] font-bold text-[#d1541b]">{withDays(copy.warning.title)}</p>
-          <p className="mt-1 text-[15px] leading-relaxed text-ink-700">
+          <p className="text-[15px] font-bold text-[#d1541b]">{withDays(copy.warning.title)}</p>
+          <p className="mt-1 text-[14px] leading-relaxed text-ink-700">
             {withDays(copy.warning.body)}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function DeactivateAccount() {
 
       {/* -- The decision ------------------------------------------- */}
       {done ? (
-        <p className="mt-10 rounded-xl bg-[#e8f6ec] p-5 text-[15px] leading-relaxed text-green-700">
+        <p className="mt-10 rounded-xl bg-[#e8f6ec] p-5 text-[14px] leading-relaxed text-green-700">
           Accounts are not connected to a backend yet, so nothing has changed. To deactivate for
           real, contact the desk on{' '}
           <a href={`tel:${membershipHelp.phone.replace(/\s/g, '')}`} className="font-bold underline">
@@ -75,7 +75,7 @@ export default function DeactivateAccount() {
           <button
             type="button"
             onClick={() => setAsking(true)}
-            className="btn-primary mt-10 w-full rounded-xl py-4 text-[17px]"
+            className="btn-primary mt-10 w-full rounded-xl py-4 text-[15px] lg:w-auto lg:px-10 lg:py-3.5"
           >
             {copy.confirm}
           </button>
@@ -83,7 +83,7 @@ export default function DeactivateAccount() {
           <button
             type="button"
             onClick={() => router.push('/profile')}
-            className="mt-5 block w-full text-center text-[16px] font-bold text-action-500"
+            className="mt-5 block w-full text-center text-[15px] font-bold text-action-500"
           >
             {copy.cancel}
           </button>
@@ -103,7 +103,7 @@ export default function DeactivateAccount() {
             <h2 id="deactivate-title" className="text-lg font-bold text-ink-900">
               Deactivate your account?
             </h2>
-            <p className="mt-2 text-[15px] leading-relaxed text-ink-600">
+            <p className="mt-2 text-[14px] leading-relaxed text-ink-600">
               You have {copy.recoveryDays} days to change your mind — just log in again. After that
               your account and data are deleted for good.
             </p>

@@ -94,7 +94,7 @@ function Group({ step, title, note, children }) {
           {step}
         </span>
         <div>
-          <h2 className="text-[17px] font-bold text-ink-900">{title}</h2>
+          <h2 className="text-[15px] font-bold text-ink-900">{title}</h2>
           {note && <p className="mt-0.5 text-[13px] leading-snug text-ink-500">{note}</p>}
         </div>
       </div>
@@ -163,13 +163,13 @@ export default function ApplyForm() {
         <h2 className="mt-4 text-xl font-extrabold text-ink-900 sm:text-2xl">
           Thank you — we have your application
         </h2>
-        <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-ink-500">
+        <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-ink-500">
           {sent.name} is now with our partnerships desk. Someone will call you within two working
           days to collect your documents and walk you through the rate plan.
         </p>
 
         {sent.reference && (
-          <p className="mt-5 inline-flex items-center gap-2 rounded-xl bg-surface-soft px-4 py-2.5 text-[14px] font-semibold text-ink-700">
+          <p className="mt-5 inline-flex items-center gap-2 rounded-xl bg-surface-soft px-4 py-2.5 text-[13px] font-semibold text-ink-700">
             Your reference
             <span className="font-extrabold tracking-wider text-brand-700">{sent.reference}</span>
           </p>
@@ -299,7 +299,7 @@ export default function ApplyForm() {
       </Group>
 
       {failed && (
-        <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-[14px] font-semibold text-rose-700">
+        <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-[13px] font-semibold text-rose-700">
           {failed}
         </p>
       )}

@@ -7,7 +7,7 @@ export default function ClosingLine() {
   return (
     <section className="relative overflow-hidden py-12 lg:py-20">
       <div className="shell relative">
-        <p className="text-[15px] text-ink-500 lg:text-lg">Your next adventure starts with</p>
+        <p className="text-[14px] text-ink-500 lg:text-lg">Your next adventure starts with</p>
         <p className="mt-1 text-3xl font-extrabold tracking-tight text-ink-900 lg:text-5xl">
           {site.name}
         </p>

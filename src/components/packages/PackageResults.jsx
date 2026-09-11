@@ -46,9 +46,9 @@ export default function PackageResults({ hero, from, to, when, guests, items }) 
 
         <div className="absolute inset-x-0 bottom-0">
           <div className="shell pb-5">
-            <p className="text-[15px] text-white/85">{from} to</p>
+            <p className="text-[14px] text-white/85">{from} to</p>
             <h1 className="text-2xl font-bold text-white lg:text-3xl">{to}</h1>
-            <p className="mt-1 flex items-center gap-2 text-[15px] text-white/90">
+            <p className="mt-1 flex items-center gap-2 text-[14px] text-white/90">
               {when}, {guests}
               <Link
                 href="/packages/international"
@@ -69,7 +69,7 @@ export default function PackageResults({ hero, from, to, when, guests, items }) 
             {['All Filters', 'Duration', 'Budget (Per Person)', 'Flight'].map((f) => (
               <span
                 key={f}
-                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line px-3.5 py-2.5 text-[14px] font-medium text-ink-700"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line px-3.5 py-2.5 text-[13px] font-medium text-ink-700"
               >
                 {f}
                 {f === 'All Filters' ? <SlidersHorizontal size={15} /> : <ChevronDown size={15} />}
@@ -96,13 +96,13 @@ export default function PackageResults({ hero, from, to, when, guests, items }) 
                 }`}
               >
                 <span
-                  className={`block text-[16px] font-bold ${
+                  className={`block text-[15px] font-bold ${
                     on ? 'text-action-500' : 'text-ink-900'
                   }`}
                 >
                   {f.label}
                 </span>
-                <span className="block text-[14px] text-ink-500">
+                <span className="block text-[13px] text-ink-500">
                   {counts[f.key]} Package{counts[f.key] === 1 ? '' : 's'}
                 </span>
               </button>
@@ -110,12 +110,12 @@ export default function PackageResults({ hero, from, to, when, guests, items }) 
           })}
         </div>
 
-        <h2 className="pt-6 text-[19px] font-bold text-ink-900 lg:text-2xl">
+        <h2 className="pt-6 text-[17px] font-bold text-ink-900 lg:text-2xl">
           Showing Top Results
         </h2>
 
         {shown.length === 0 ? (
-          <p className="card mt-4 p-10 text-center text-[15px] text-ink-500">
+          <p className="card mt-4 p-10 text-center text-[14px] text-ink-500">
             No packages of that kind on this route yet.
           </p>
         ) : (

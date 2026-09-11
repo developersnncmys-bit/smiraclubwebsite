@@ -36,10 +36,10 @@ export default function Page() {
       {/* -- What we would suggest anyway ----------------------------------- */}
       <section className="shell py-7 lg:py-12">
         <div className="mx-auto w-full max-w-2xl lg:max-w-none">
-          <h2 className="text-[21px] font-bold text-ink-900 lg:text-2xl">
+          <h2 className="text-[18px] font-bold text-ink-900 lg:text-2xl">
             AI Recommendations For You
           </h2>
-          <p className="mt-1 text-[15px] text-ink-500">Based on your Interest</p>
+          <p className="mt-1 text-[14px] text-ink-500">Based on your Interest</p>
 
           <ul className="mt-5 grid grid-cols-2 gap-4 lg:mt-7 lg:grid-cols-4 lg:gap-6">
             {aiRecommendations.map((r) => (
@@ -55,12 +55,12 @@ export default function Page() {
                 </span>
 
                 <div className="flex flex-1 flex-col p-4">
-                  <h3 className="text-[16px] font-bold leading-tight text-ink-900">{r.title}</h3>
-                  <p className="mt-1.5 text-[14px] leading-snug text-ink-500">{r.blurb}</p>
+                  <h3 className="text-[15px] font-bold leading-tight text-ink-900">{r.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-snug text-ink-500">{r.blurb}</p>
 
-                  <p className="mt-4 text-[14px] text-ink-700">
+                  <p className="mt-4 text-[13px] text-ink-700">
                     From{' '}
-                    <span className="text-[17px] font-extrabold text-ink-900">{inr(r.price)}</span>{' '}
+                    <span className="text-[15px] font-extrabold text-ink-900">{inr(r.price)}</span>{' '}
                     {r.was > r.price && (
                       <span className="font-semibold text-rose-500 line-through">{inr(r.was)}</span>
                     )}

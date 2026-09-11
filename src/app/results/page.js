@@ -1,4 +1,3 @@
-import ScreenBar from '@/components/ui/ScreenBar';
 import ResultsScreen from '@/components/results/ResultsScreen';
 import { searchResults } from '@/lib/content';
 import { image } from '@/lib/images';
@@ -43,10 +42,5 @@ export default async function Page({ searchParams }) {
 
   const results = searchResults.map((r) => ({ ...r, image: image(r.image) }));
 
-  return (
-    <>
-      <ScreenBar title="Search results" backHref="/" />
-      <ResultsScreen where={where} when={when} guests={guests} results={results} />
-    </>
-  );
+  return <ResultsScreen where={where} when={when} guests={guests} results={results} />;
 }

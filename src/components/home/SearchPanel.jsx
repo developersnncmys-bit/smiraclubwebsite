@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
+import DatesPicker from '@/components/home/DatesPicker';
 import GuestsPicker from '@/components/home/GuestsPicker';
 import { searchTabs } from '@/lib/content';
 import { defaultStay, shortDate } from '@/lib/format';
@@ -32,6 +33,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
   /** One entry per child, holding that child's age — the design asks for both. */
   const [childAges, setChildAges] = useState([]);
   const [guestsOpen, setGuestsOpen] = useState(false);
+  const [datesOpen, setDatesOpen] = useState(false);
 
   /** 'Adults/ Room' when nobody brings a child, and says so when they do. */
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -75,10 +77,10 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 key={t.key}
                 href={t.href}
                 aria-current={on ? 'page' : undefined}
-                className={`flex flex-col items-center gap-1.5 px-2 py-3 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
+                className={`flex flex-col items-center gap-1 px-2 py-2.5 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
                   on
                     ? 'bg-white text-ink-900 shadow-card lg:bg-brand-50 lg:text-brand-700 lg:shadow-none'
-                    : 'text-ink-500 hover:text-ink-700'
+                    : 'text-ink-700 hover:text-ink-900'
                 }`}
               >
                 {art[t.key] ? (
@@ -104,60 +106,59 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
         </nav>
 
         {/* -- The form -------------------------------------------------- */}
-        <form onSubmit={submit} className="mt-4 space-y-3 lg:mt-5 lg:flex lg:items-end lg:gap-3 lg:space-y-0">
-          <label className="block rounded-xl border border-surface-line bg-white p-3.5 lg:flex-1 lg:p-0 lg:border-0">
-            <span className="flex items-center gap-3 lg:rounded-xl lg:border lg:border-surface-line lg:p-3.5">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-surface-soft">
-                <MapPin size={18} className="text-brand-600" />
+        <form
+          onSubmit={submit}
+          className="mt-4 space-y-3 lg:mt-5 lg:flex lg:items-stretch lg:gap-3 lg:space-y-0"
+        >
+          {/*
+            Destination carries its caption because the field is empty until
+            someone types; dates and guests always hold a value, and the frame
+            shows that value on its own line with no label over it.
+          */}
+          <label className="flex items-center gap-3 rounded-xl border border-surface-line bg-white p-3 lg:min-w-0 lg:flex-1">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-50">
+              <MapPin size={18} className="text-action-500" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[11px] font-bold uppercase tracking-[0.06em] text-ink-400">
+                Destination
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[10px] font-bold uppercase tracking-[0.08em] text-ink-400">
-                  Destination
-                </span>
-                <input
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  placeholder="Where are you going?"
-                  className="w-full border-0 p-0 text-[15px] font-medium text-ink-900 outline-none placeholder:text-ink-400"
-                />
-              </span>
+              <input
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                placeholder="Where are you going?"
+                className="w-full border-0 p-0 text-[15px] font-bold text-ink-900 outline-none placeholder:text-ink-500"
+              />
             </span>
           </label>
 
-          <div className="grid grid-cols-2 gap-3 lg:flex lg:gap-3">
-            <label className="flex items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 lg:w-[15rem]">
-              <Calendar size={18} className="shrink-0 text-brand-600" />
-              <span className="min-w-0 flex-1">
-                <span className="block text-[10px] font-bold uppercase tracking-[0.08em] text-ink-400">
-                  Dates
-                </span>
-                <span className="flex items-center gap-1 text-[13px] font-semibold text-ink-900 lg:text-sm">
-                  <input
-                    type="date"
-                    value={from}
-                    onChange={(e) => setFrom(e.target.value)}
-                    className="w-full border-0 bg-transparent p-0 text-[13px] font-semibold outline-none lg:text-sm"
-                    aria-label="Check in"
-                  />
-                </span>
+          <div className="grid grid-cols-2 gap-3 lg:flex lg:shrink-0 lg:gap-3">
+            <button
+              type="button"
+              onClick={() => setDatesOpen(true)}
+              aria-expanded={datesOpen}
+              className="flex items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3 text-left lg:w-[14rem]"
+            >
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50">
+                <Calendar size={17} className="text-action-500" />
               </span>
-            </label>
+              <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
+                {shortDate(from)} - {shortDate(to)}
+              </span>
+            </button>
 
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setGuestsOpen((o) => !o)}
-                className="flex w-full items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 text-left lg:w-[13rem]"
+                onClick={() => setGuestsOpen(true)}
                 aria-expanded={guestsOpen}
+                className="flex h-full w-full items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3 text-left lg:w-[14rem]"
               >
-                <User size={18} className="shrink-0 text-brand-600" />
-                <span className="min-w-0">
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.08em] text-ink-400">
-                    Guests
-                  </span>
-                  <span className="block truncate text-[13px] font-semibold text-ink-900 lg:text-sm">
-                    {summary}
-                  </span>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50">
+                  <User size={17} className="text-action-500" />
+                </span>
+                <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
+                  {summary}
                 </span>
               </button>
 
@@ -172,9 +173,18 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 setChildAges={setChildAges}
               />
             </div>
+
+            <DatesPicker
+              open={datesOpen}
+              onClose={() => setDatesOpen(false)}
+              from={from}
+              setFrom={setFrom}
+              to={to}
+              setTo={setTo}
+            />
           </div>
 
-          <button type="submit" className="btn-primary w-full gap-2.5 py-4 text-base lg:w-auto lg:px-8 lg:py-[1.15rem]">
+          <button type="submit" className="btn-primary w-full gap-2.5 py-4 text-[17px] font-bold lg:w-auto lg:shrink-0 lg:px-9">
             <Search size={18} />
             Search
           </button>

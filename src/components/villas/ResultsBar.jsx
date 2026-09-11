@@ -29,8 +29,8 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
           </button>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[17px] font-bold leading-tight text-ink-900">{where}</p>
-            <p className="truncate text-[14px] text-ink-500">
+            <p className="truncate text-[15px] font-bold leading-tight text-ink-900">{where}</p>
+            <p className="truncate text-[13px] text-ink-500">
               {when}, {guests}
             </p>
           </div>
@@ -47,13 +47,13 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
 
         {/* -- Sort, filters, flexible dates ---------------------------- */}
         <div className="rail mt-3 lg:mt-4">
-          <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[14px] font-semibold text-ink-900">
+          <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
             <ArrowUpDown size={16} className="shrink-0 text-ink-600" />
             <span className="sr-only">Sort by</span>
             <select
               value={sort}
               onChange={(e) => onSort(e.target.value)}
-              className="cursor-pointer border-0 bg-transparent pr-1 text-[14px] font-semibold text-ink-900 outline-none"
+              className="cursor-pointer border-0 bg-transparent pr-1 text-[13px] font-semibold text-ink-900 outline-none"
             >
               {villaSortOptions.map((o) => (
                 <option key={o.key} value={o.key}>
@@ -67,7 +67,7 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
             type="button"
             disabled
             title="Filters arrive with the live inventory"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[14px] font-semibold text-ink-400"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-400"
           >
             All Filters
             <SlidersHorizontal size={16} />
@@ -77,7 +77,7 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
             type="button"
             disabled
             title="Flexible dates arrive with the live inventory"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[14px] font-semibold text-ink-400"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-400"
           >
             Flexible Check-in/out
             <ChevronDown size={16} />

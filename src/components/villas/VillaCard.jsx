@@ -28,7 +28,7 @@ export default function VillaCard({ villa, query }) {
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="flex items-center gap-1.5 text-[14px] text-ink-500">
+        <p className="flex items-center gap-1.5 text-[13px] text-ink-500">
           <Star size={16} className="text-gold" fill="currentColor" strokeWidth={0} />
           <span className="font-bold text-ink-900">{villa.rating}</span>
           <span>({villa.reviews} reviews)</span>
@@ -45,15 +45,15 @@ export default function VillaCard({ villa, query }) {
           )}
         </h3>
 
-        <p className="text-[15px] text-ink-500">{villa.place}</p>
+        <p className="text-[14px] text-ink-500">{villa.place}</p>
 
-        <p className="mt-3 border-l-[3px] border-action-500 pl-3 text-[15px] font-semibold text-ink-900">
+        <p className="mt-3 border-l-[3px] border-action-500 pl-3 text-[14px] font-semibold text-ink-900">
           {villa.layout}
         </p>
 
         <ul className="mt-3 space-y-1.5">
           {villa.notes.map((note) => (
-            <li key={note} className="flex gap-2 text-[14px] text-ink-600">
+            <li key={note} className="flex gap-2 text-[13px] text-ink-600">
               <span aria-hidden="true" className="text-ink-400">
                 &bull;
               </span>
@@ -61,7 +61,7 @@ export default function VillaCard({ villa, query }) {
             </li>
           ))}
           {villa.freeCancellation && (
-            <li className="flex items-center gap-2 text-[14px] font-medium text-green-600">
+            <li className="flex items-center gap-2 text-[13px] font-medium text-green-600">
               <Check size={16} strokeWidth={2.6} />
               Free Cancellation Available
             </li>
@@ -71,9 +71,9 @@ export default function VillaCard({ villa, query }) {
         <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-5">
           <div className="min-w-0">
             <p className="flex flex-wrap items-baseline gap-2">
-              <span className="text-[15px] text-ink-700">From</span>
+              <span className="text-[14px] text-ink-700">From</span>
               <span className="text-xl font-extrabold text-ink-900">{inr(villa.price)}</span>
-              <span className="text-[15px] font-semibold text-red-500 line-through">
+              <span className="text-[14px] font-semibold text-red-500 line-through">
                 {inr(villa.was)}
               </span>
             </p>
@@ -92,7 +92,7 @@ export default function VillaCard({ villa, query }) {
         </div>
 
         {villa.highlight && (
-          <p className="mt-4 flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[14px] font-medium leading-snug text-brand-700">
+          <p className="mt-4 flex gap-2.5 rounded-xl bg-[#e8f2fe] p-3.5 text-[13px] font-medium leading-snug text-brand-700">
             <Sparkles size={18} className="mt-0.5 shrink-0 text-action-500" />
             {villa.highlight}
           </p>

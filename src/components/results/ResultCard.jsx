@@ -35,7 +35,7 @@ export default function ResultCard({ item }) {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-[17px] font-bold leading-tight text-ink-900">
+            <h3 className="text-[15px] font-bold leading-tight text-ink-900">
               {item.name}
               {item.verified && (
                 <span
@@ -54,9 +54,9 @@ export default function ResultCard({ item }) {
             </button>
           </div>
 
-          <p className="mt-1 text-[15px] text-ink-600">{item.place}</p>
+          <p className="mt-1 text-[14px] text-ink-600">{item.place}</p>
 
-          <p className="mt-1.5 flex items-center gap-1.5 text-[14px]">
+          <p className="mt-1.5 flex items-center gap-1.5 text-[13px]">
             <Star size={15} className="text-gold" fill="currentColor" strokeWidth={0} />
             <span className="font-bold text-ink-900">{item.rating}</span>
             <span className="text-ink-500">({item.reviews} reviews)</span>
@@ -84,7 +84,7 @@ export default function ResultCard({ item }) {
             <Icon name={item.promo.icon} size={18} strokeWidth={1.9} />
           </span>
           <span className="min-w-0">
-            <span className="block text-[15px] font-bold leading-tight">{item.promo.title}</span>
+            <span className="block text-[14px] font-bold leading-tight">{item.promo.title}</span>
             <span className="block text-[13px] text-ink-600">{item.promo.note}</span>
           </span>
         </div>
@@ -93,10 +93,10 @@ export default function ResultCard({ item }) {
       <div className="flex flex-wrap items-end justify-between gap-3 p-3.5 sm:p-4">
         <div className="min-w-0">
           <p className="flex flex-wrap items-baseline gap-2">
-            <span className="text-[15px] text-ink-700">{item.priceLabel}</span>
+            <span className="text-[14px] text-ink-700">{item.priceLabel}</span>
             <span className="text-xl font-extrabold text-ink-900">{inr(item.price)}</span>
             {item.was && (
-              <span className="text-[15px] font-semibold text-red-500 line-through">
+              <span className="text-[14px] font-semibold text-red-500 line-through">
                 {inr(item.was)}
               </span>
             )}

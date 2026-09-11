@@ -5,10 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowRight, Calendar, ChevronDown, ChevronRight, MapPin, Search, SlidersHorizontal, User,
+  Calendar, ChevronDown, ChevronRight, MapPin, Search, SlidersHorizontal, User,
 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import PackageCard from '@/components/packages/PackageCard';
+import CustomisedTourForm from '@/components/packages/CustomisedTourForm';
 import {
   intlTabs, intlTrust, packages, popularDestinations,
 } from '@/lib/content';
@@ -16,7 +17,7 @@ import { toSrc } from '@/lib/imageSlot';
 import { defaultStay } from '@/lib/format';
 
 const FIELD =
-  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
 /** The three reassurances, under the tabs and again under Search. */
 function Trust() {
@@ -42,7 +43,7 @@ function Trust() {
  */
 export default function IntlTripsScreen({ art = {} }) {
   const router = useRouter();
-  const [tab, setTab] = useState(intlTabs[1]);
+  const [tab, setTab] = useState(intlTabs[0]);
 
   const stay = defaultStay();
   const [from, setFrom] = useState('New Delhi, India');
@@ -70,7 +71,7 @@ export default function IntlTripsScreen({ art = {} }) {
                 type="button"
                 onClick={() => setTab(t)}
                 aria-pressed={on}
-                className={`rounded-xl border px-4 py-3.5 text-[15px] font-semibold transition ${
+                className={`rounded-xl border px-4 py-3.5 text-[14px] font-semibold transition ${
                   on
                     ? 'border-action-500 bg-brand-50 text-action-500'
                     : 'border-surface-line bg-white text-ink-700 hover:bg-surface-soft'
@@ -88,33 +89,7 @@ export default function IntlTripsScreen({ art = {} }) {
       </div>
 
       {tab === intlTabs[0] ? (
-        /* -- Customised: tell us, and the desk builds it --------- */
-        <div className="shell">
-          <section className="card p-4 sm:p-5">
-            <h2 className="flex items-center gap-2.5 text-[17px] font-bold text-ink-900">
-              <MapPin size={20} className="text-action-500" />
-              Where would you like to go?
-            </h2>
-            <input placeholder="Enter City, destination, hotel name.." className={`${FIELD} mt-4`} />
-          </section>
-
-          <p className="card mt-4 p-5 text-[15px] leading-relaxed text-ink-600">
-            The rest of this form — hotel preference, dates, guests, occasion, transport, meals and
-            travel support — is the trip planner you already have. Rather than build a second copy
-            that can drift from it, <Link href="/profile/trips/new" className="font-semibold text-action-500 underline">Plan My Trip</Link> collects
-            the same answers and the desk works from those. Say the word and I will bring the
-            international-only extras — hotel star rating, visa and currency support, return
-            transfers — across into it.
-          </p>
-
-          <Link
-            href="/profile/trips/new"
-            className="btn-primary mt-4 w-full gap-3 rounded-xl py-4 text-[16px] normal-case tracking-normal"
-          >
-            Check Availability
-            <ArrowRight size={19} />
-          </Link>
-        </div>
+        <CustomisedTourForm />
       ) : (
         /* -- Fixed departure: what already exists --------------- */
         <>
@@ -130,7 +105,7 @@ export default function IntlTripsScreen({ art = {} }) {
                 <input
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
-                  className="w-full border-0 p-0 text-[16px] font-semibold text-ink-900 outline-none"
+                  className="w-full border-0 p-0 text-[15px] font-semibold text-ink-900 outline-none"
                 />
               </span>
             </label>
@@ -146,7 +121,7 @@ export default function IntlTripsScreen({ art = {} }) {
                 <input
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
-                  className="w-full border-0 p-0 text-[16px] font-semibold text-ink-900 outline-none"
+                  className="w-full border-0 p-0 text-[15px] font-semibold text-ink-900 outline-none"
                 />
               </span>
             </label>
@@ -162,7 +137,7 @@ export default function IntlTripsScreen({ art = {} }) {
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full min-w-0 border-0 bg-transparent p-0 text-[14px] font-semibold text-ink-900 outline-none"
+                    className="w-full min-w-0 border-0 bg-transparent p-0 text-[13px] font-semibold text-ink-900 outline-none"
                   />
                 </span>
               </label>
@@ -173,7 +148,7 @@ export default function IntlTripsScreen({ art = {} }) {
                   <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-ink-400">
                     Rooms &amp; Guests
                   </span>
-                  <span className="block text-[14px] font-semibold text-ink-900">
+                  <span className="block text-[13px] font-semibold text-ink-900">
                     2 Adults/ 1 Room
                   </span>
                 </span>
@@ -181,14 +156,14 @@ export default function IntlTripsScreen({ art = {} }) {
             </div>
 
             <div>
-              <p className="text-[15px] font-semibold text-ink-900">
+              <p className="text-[14px] font-semibold text-ink-900">
                 Choose Filter <span className="font-normal text-ink-500">(Optional)</span>
               </p>
               <div className="rail mt-2 gap-3">
                 {['All Filters', 'Duration', 'Budget (Per Person)', 'Flight'].map((f) => (
                   <span
                     key={f}
-                    className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[14px] font-medium text-ink-700"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-medium text-ink-700"
                   >
                     {f}
                     {f === 'All Filters' ? (
@@ -201,7 +176,7 @@ export default function IntlTripsScreen({ art = {} }) {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary w-full gap-2.5 py-4 text-base">
+            <button type="submit" className="btn-primary w-full gap-2.5 py-4 text-base lg:w-auto lg:px-10 lg:py-3.5">
               <Search size={19} />
               Search
             </button>
@@ -232,7 +207,7 @@ export default function IntlTripsScreen({ art = {} }) {
                         className="object-cover"
                       />
                     </span>
-                    <span className="mt-2 block text-[15px] font-semibold text-ink-900">
+                    <span className="mt-2 block text-[14px] font-semibold text-ink-900">
                       {d.label}
                     </span>
                   </Link>
@@ -247,7 +222,7 @@ export default function IntlTripsScreen({ art = {} }) {
               <h2 className="text-xl font-bold text-ink-900">Popular Packages</h2>
               <Link
                 href="/packages/international/results"
-                className="inline-flex shrink-0 items-center gap-2 text-[16px] font-semibold text-ink-900"
+                className="inline-flex shrink-0 items-center gap-2 text-[15px] font-semibold text-ink-900"
               >
                 View All
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-action-500 text-white">

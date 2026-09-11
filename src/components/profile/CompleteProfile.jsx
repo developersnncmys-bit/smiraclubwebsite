@@ -9,13 +9,13 @@ import {
 import { indianStates, profileSteps } from '@/lib/content';
 
 const FIELD =
-  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+  'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
 /** A labelled input with the icon the design puts inside it. */
 function Field({ label, required, icon: Glyph, hint, error, children, ...props }) {
   return (
     <label className="block">
-      <span className="text-[15px] font-semibold text-ink-900">
+      <span className="text-[14px] font-semibold text-ink-900">
         {label} {required && <span className="text-red-500">*</span>}
         {hint && <span className="font-normal text-ink-500"> {hint}</span>}
       </span>
@@ -41,7 +41,7 @@ function StepHead({ icon: Glyph, title, note }) {
       </span>
       <div className="min-w-0">
         <h2 className="text-lg font-bold leading-tight text-ink-900">{title}</h2>
-        {note && <p className="mt-0.5 text-[14px] leading-snug text-ink-500">{note}</p>}
+        {note && <p className="mt-0.5 text-[13px] leading-snug text-ink-500">{note}</p>}
       </div>
     </div>
   );
@@ -56,7 +56,7 @@ function ReviewCard({ icon, title, onEdit, children }) {
         <button
           type="button"
           onClick={onEdit}
-          className="shrink-0 text-[15px] font-semibold text-action-500"
+          className="shrink-0 text-[14px] font-semibold text-action-500"
         >
           Edit
         </button>
@@ -69,8 +69,8 @@ function ReviewCard({ icon, title, onEdit, children }) {
 function Line({ label, children }) {
   return (
     <div>
-      <dt className="text-[14px] text-ink-500">{label}</dt>
-      <dd className="text-[16px] font-bold text-ink-900">{children || <span className="font-normal text-ink-400">Not added</span>}</dd>
+      <dt className="text-[13px] text-ink-500">{label}</dt>
+      <dd className="text-[15px] font-bold text-ink-900">{children || <span className="font-normal text-ink-400">Not added</span>}</dd>
     </div>
   );
 }
@@ -152,21 +152,22 @@ export default function CompleteProfile() {
   return (
     <div className="pb-28 lg:pb-12">
       <div className="shell py-4">
-        <button
-          type="button"
-          onClick={back}
-          aria-label="Go back"
-          className="grid h-10 w-10 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
-        >
-          <ArrowLeft size={22} />
-        </button>
-
-        <div className="mt-2 text-center">
-          <h1 className="text-2xl font-extrabold text-ink-900 lg:text-3xl">Complete Your profile</h1>
-          <p className="mx-auto mt-2 max-w-sm text-[15px] leading-snug text-ink-600">
-            Help us know you better and enjoy personalized benefits
-          </p>
+        {/* The title rides the arrow's line rather than sitting under it. */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={back}
+            aria-label="Go back"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
+          >
+            <ArrowLeft size={22} />
+          </button>
+          <h1 className="text-[17px] font-bold text-ink-900 lg:text-xl">Complete Your profile</h1>
         </div>
+
+        <p className="mt-2 max-w-sm text-[13px] leading-snug text-ink-600">
+          Help us know you better and enjoy personalized benefits
+        </p>
 
         {/* -- Where you are in it --------------------------------- */}
         <ol className="mt-7 flex items-start justify-between">
@@ -179,7 +180,7 @@ export default function CompleteProfile() {
                   <span className={`h-[2px] flex-1 ${i === 0 ? 'bg-transparent' : done || now ? 'bg-action-500' : 'bg-surface-line'}`} />
                   <span
                     aria-current={now ? 'step' : undefined}
-                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 text-[14px] font-bold transition ${
+                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 text-[13px] font-bold transition ${
                       done || now
                         ? 'border-action-500 bg-action-500 text-white'
                         : 'border-surface-line bg-white text-ink-400'
@@ -243,7 +244,7 @@ export default function CompleteProfile() {
             <>
               <section className="card p-4 sm:p-5">
                 <h2 className="text-lg font-bold text-ink-900">Special Days</h2>
-                <p className="mt-1 text-[15px] leading-snug text-ink-600">
+                <p className="mt-1 text-[14px] leading-snug text-ink-600">
                   Let us remember your important days and make them special.
                 </p>
 
@@ -273,7 +274,7 @@ export default function CompleteProfile() {
                 <button
                   type="button"
                   onClick={() => setBirthdays((list) => [...list, { ...BLANK_BIRTHDAY }])}
-                  className="mt-5 w-full rounded-xl border border-action-500 px-5 py-3.5 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
+                  className="mt-5 w-full rounded-xl border border-action-500 px-5 py-3.5 text-[14px] font-bold text-action-500 transition hover:bg-brand-50"
                 >
                   +&nbsp; Add Birthday
                 </button>
@@ -288,7 +289,7 @@ export default function CompleteProfile() {
                     <h2 className="text-lg font-bold leading-tight text-ink-900">
                       Married? Add Your Anniversary Date
                     </h2>
-                    <p className="mt-1 text-[15px] leading-snug text-ink-600">
+                    <p className="mt-1 text-[14px] leading-snug text-ink-600">
                       We will help you celebrate your beautiful journey together
                     </p>
                   </div>
@@ -365,7 +366,7 @@ export default function CompleteProfile() {
                     onChange={(e) => setAddr('useForAll', e.target.checked)}
                     className="h-5 w-5 shrink-0 accent-action-500"
                   />
-                  <span className="text-[15px] text-ink-900">
+                  <span className="text-[14px] text-ink-900">
                     Use this address for all communications
                   </span>
                 </label>
@@ -410,19 +411,19 @@ export default function CompleteProfile() {
                   </button>
                 </div>
 
-                <p className="mt-4 text-[15px] leading-relaxed text-ink-700">
+                <p className="mt-4 text-[14px] leading-relaxed text-ink-700">
                   Receive important updates, confirmation, offers and reminers on Whatsapp.
                 </p>
               </section>
 
               <section className="card flex items-start gap-3 p-4 sm:p-5">
                 <ShieldCheck size={20} className="mt-0.5 shrink-0 text-action-500" />
-                <p className="text-[15px] leading-relaxed text-ink-900">
+                <p className="text-[14px] leading-relaxed text-ink-900">
                   We respect your, privacy your data is safe with us and will never be shared.
                 </p>
               </section>
 
-              <p className="flex items-start gap-2.5 rounded-xl bg-[#eef4fe] p-4 text-[15px] leading-snug text-action-500">
+              <p className="flex items-start gap-2.5 rounded-xl bg-[#eef4fe] p-4 text-[14px] leading-snug text-action-500">
                 <Info size={18} className="mt-0.5 shrink-0" />
                 You can change these preferences anytime from your profile.
               </p>
@@ -452,13 +453,13 @@ export default function CompleteProfile() {
               </ReviewCard>
 
               <ReviewCard icon={MapPin} title="Gift Address" onEdit={() => setAt(2)}>
-                <dd className="whitespace-pre-line text-[16px] font-medium leading-relaxed text-ink-900">
+                <dd className="whitespace-pre-line text-[15px] font-medium leading-relaxed text-ink-900">
                   {fullAddress || <span className="text-ink-400">Not added</span>}
                 </dd>
               </ReviewCard>
 
               <ReviewCard icon={BellRing} title="Preferences" onEdit={() => setAt(3)}>
-                <dd className="text-[16px] font-medium text-ink-900">
+                <dd className="text-[15px] font-medium text-ink-900">
                   Whatsapp Updates &middot; {whatsapp ? 'Yes' : 'No'}
                 </dd>
               </ReviewCard>
@@ -480,7 +481,7 @@ export default function CompleteProfile() {
           <button
             type="button"
             onClick={next}
-            className="btn-primary w-full gap-3 rounded-xl py-4 text-[16px] normal-case tracking-normal"
+            className="btn-primary w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
           >
             {at === profileSteps.length - 1 ? 'Submit' : 'Continue'}
             <ArrowRight size={19} />

@@ -36,7 +36,11 @@ export default function ResultsScreen({ where, when, guests, results }) {
     <>
       <div className="border-b border-surface-line bg-white">
         <div className="shell py-3 lg:py-5">
-          {/* -- What was asked for --------------------------------- */}
+          {/*
+            This bar is the screen's own title: it says what was searched for
+            and is the way back into the search, so there is no separate
+            heading above it repeating the word.
+          */}
           <div className="flex items-center gap-3 rounded-xl border-2 border-brand-700 px-3 py-2.5 lg:max-w-2xl lg:px-4 lg:py-3">
             <button
               type="button"
@@ -48,8 +52,8 @@ export default function ResultsScreen({ where, when, guests, results }) {
             </button>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[17px] font-bold leading-tight text-brand-700">{where}</p>
-              <p className="truncate text-[14px] text-ink-600">
+              <p className="truncate text-[15px] font-bold leading-tight text-brand-700">{where}</p>
+              <p className="truncate text-[13px] text-ink-600">
                 {when}, {guests}
               </p>
             </div>
@@ -66,7 +70,7 @@ export default function ResultsScreen({ where, when, guests, results }) {
 
           {/* -- Sort, then the four kinds -------------------------- */}
           <div className="rail mt-3 lg:mt-4">
-            <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[14px] font-semibold text-ink-900">
+            <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
               <span className="sr-only">Sort by</span>
               Sort By
               <ArrowUpDown size={15} className="shrink-0 text-ink-600" />
@@ -74,7 +78,7 @@ export default function ResultsScreen({ where, when, guests, results }) {
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 aria-label="Sort results"
-                className="cursor-pointer border-0 bg-transparent text-[14px] font-semibold text-ink-900 outline-none"
+                className="cursor-pointer border-0 bg-transparent text-[13px] font-semibold text-ink-900 outline-none"
               >
                 {resultSortOptions.map((o) => (
                   <option key={o.key} value={o.key}>
@@ -92,7 +96,7 @@ export default function ResultsScreen({ where, when, guests, results }) {
                   type="button"
                   onClick={() => setKind(on ? null : f.key)}
                   aria-pressed={on}
-                  className={`inline-flex shrink-0 items-center gap-2 rounded-lg border px-3.5 py-2.5 text-[14px] font-semibold transition ${
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-lg border px-3.5 py-2.5 text-[13px] font-semibold transition ${
                     on
                       ? 'border-action-500 bg-action-500 text-white'
                       : 'border-surface-line bg-white text-ink-900 hover:bg-surface-soft'
@@ -108,16 +112,16 @@ export default function ResultsScreen({ where, when, guests, results }) {
       </div>
 
       <div className="shell pb-10 lg:pb-16">
-        <h1 className="pt-5 text-[19px] font-bold text-ink-900 lg:pt-8 lg:text-2xl">
+        <h1 className="pt-5 text-[17px] font-bold text-ink-900 lg:pt-8 lg:text-2xl">
           {shown.length} Result{shown.length === 1 ? '' : 's'} for{' '}
           <span className="text-action-500">{where}</span>
         </h1>
-        <p className="mt-1 text-[15px] text-ink-600">
+        <p className="mt-1 text-[14px] text-ink-600">
           {kind ? `Filtered by ${resultFilters.find((f) => f.key === kind).label}` : 'Showing Top Results'}
         </p>
 
         {shown.length === 0 ? (
-          <p className="mt-8 rounded-2xl bg-white p-6 text-center text-[15px] text-ink-500">
+          <p className="mt-8 rounded-2xl bg-white p-6 text-center text-[14px] text-ink-500">
             Nothing in that category for this search yet.
           </p>
         ) : (

@@ -28,7 +28,7 @@ export default function ScreenBar({ title, backHref }) {
           <ArrowLeft size={22} />
         </button>
 
-        <h1 className="truncate px-12 text-[17px] font-bold text-ink-900">{title}</h1>
+        <h1 className="truncate px-12 text-[15px] font-bold text-ink-900">{title}</h1>
       </div>
     </div>
   );

@@ -44,10 +44,10 @@ export default function RewardsScreen({ hero, art = {} }) {
         </div>
         <div className="relative shell py-8 lg:py-12">
           <div className="max-w-[13rem] sm:max-w-xs lg:max-w-md">
-            <h1 className="text-[21px] font-extrabold uppercase leading-snug text-white lg:text-3xl">
+            <h1 className="text-[18px] font-extrabold uppercase leading-snug text-white lg:text-3xl">
               {rewardsHero.title}
             </h1>
-            <p className="mt-3 text-[14px] leading-snug text-white/90 lg:text-base">
+            <p className="mt-3 text-[13px] leading-snug text-white/90 lg:text-base">
               {rewardsHero.body}
             </p>
           </div>
@@ -62,14 +62,14 @@ export default function RewardsScreen({ hero, art = {} }) {
               <Crown size={21} className="text-gold" fill="currentColor" strokeWidth={1.5} />
             </span>
             <div className="min-w-0">
-              <p className="text-[17px] font-bold uppercase tracking-wide text-white">
+              <p className="text-[15px] font-bold uppercase tracking-wide text-white">
                 {member.tier}
               </p>
-              <p className="text-[14px] text-white/75">Member ID: {member.memberId}</p>
+              <p className="text-[13px] text-white/75">Member ID: {member.memberId}</p>
             </div>
           </div>
 
-          <span className="shrink-0 rounded-full bg-white/15 px-4 py-2 text-[14px] font-medium text-white">
+          <span className="shrink-0 rounded-full bg-white/15 px-4 py-2 text-[13px] font-medium text-white">
             Valid Till {member.validTill}
           </span>
         </div>
@@ -107,10 +107,10 @@ export default function RewardsScreen({ hero, art = {} }) {
 
                 <div className="min-w-0 flex-1">
                   <h2 className="text-xl font-bold leading-tight text-ink-900">{gift.label}</h2>
-                  <p className="mt-1 text-[15px] text-ink-600">{gift.requirement}</p>
+                  <p className="mt-1 text-[14px] text-ink-600">{gift.requirement}</p>
 
                   {gift.state === 'unlocked' && (
-                    <p className="mt-3 flex items-center gap-2 text-[15px] text-ink-900">
+                    <p className="mt-3 flex items-center gap-2 text-[14px] text-ink-900">
                       <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-green-600 text-white">
                         <Check size={13} strokeWidth={3} />
                       </span>
@@ -120,7 +120,7 @@ export default function RewardsScreen({ hero, art = {} }) {
 
                   {gift.state === 'progress' && (
                     <div className="mt-3">
-                      <p className="text-[16px] font-bold text-ink-900">
+                      <p className="text-[15px] font-bold text-ink-900">
                         {gift.progress.done}/{gift.progress.of} {gift.progress.noun} Completed
                       </p>
                       <p className="mt-2 flex items-center gap-3">
@@ -130,18 +130,18 @@ export default function RewardsScreen({ hero, art = {} }) {
                             style={{ width: `${pct}%` }}
                           />
                         </span>
-                        <span className="shrink-0 text-[15px] font-bold text-action-500">
+                        <span className="shrink-0 text-[14px] font-bold text-action-500">
                           {pct}%
                         </span>
                       </p>
-                      <p className="mt-2 text-[15px] text-ink-700">
+                      <p className="mt-2 text-[14px] text-ink-700">
                         {gift.progress.of - gift.progress.done} more left to claim
                       </p>
                     </div>
                   )}
 
                   {(gift.state === 'locked' || gift.state === 'new') && (
-                    <p className="mt-3 flex gap-2 text-[15px] leading-snug text-ink-600">
+                    <p className="mt-3 flex gap-2 text-[14px] leading-snug text-ink-600">
                       <Info size={17} className="mt-0.5 shrink-0 text-ink-400" />
                       Complete the Requirement to unlock this gift.
                     </p>
@@ -151,13 +151,13 @@ export default function RewardsScreen({ hero, art = {} }) {
 
               {/* The way on, whatever that is for this gift. */}
               {isClaimed ? (
-                <p className="mt-5 rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-center text-[15px] font-semibold text-green-700">
+                <p className="mt-5 rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-center text-[14px] font-semibold text-green-700">
                   Claimed — the desk will be in touch about delivery.
                 </p>
               ) : gift.cta.href ? (
                 <Link
                   href={gift.cta.href}
-                  className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[15px] uppercase tracking-wide"
+                  className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[14px] uppercase tracking-wide"
                 >
                   {gift.cta.label}
                 </Link>
@@ -165,7 +165,7 @@ export default function RewardsScreen({ hero, art = {} }) {
                 <button
                   type="button"
                   onClick={() => setClaimed((list) => [...list, gift.key])}
-                  className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[15px] uppercase tracking-wide"
+                  className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[14px] uppercase tracking-wide"
                 >
                   {gift.cta.label}
                 </button>
@@ -174,7 +174,7 @@ export default function RewardsScreen({ hero, art = {} }) {
           );
         })}
 
-        <p className="flex gap-2.5 pt-2 text-[15px] leading-snug text-ink-500">
+        <p className="flex gap-2.5 pt-2 text-[14px] leading-snug text-ink-500">
           <Info size={18} className="mt-0.5 shrink-0 text-ink-400" />
           {rewardsNote}
         </p>

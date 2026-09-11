@@ -32,7 +32,7 @@ export default function VillaResults({ where, when, guests, villas, collections,
       <ResultsBar where={where} when={when} guests={guests} sort={sort} onSort={setSort} />
 
       <div className="shell pb-10 lg:pb-16">
-        <h2 className="pt-5 text-[19px] font-bold text-ink-900 lg:pt-8 lg:text-2xl">
+        <h2 className="pt-5 text-[17px] font-bold text-ink-900 lg:pt-8 lg:text-2xl">
           Showing Results in {where}
         </h2>
 
@@ -46,7 +46,7 @@ export default function VillaResults({ where, when, guests, villas, collections,
           <h2 className="text-center text-lg font-extrabold uppercase tracking-[0.04em] text-ink-900 lg:text-2xl">
             Explore Villa Collections
           </h2>
-          <p className="mx-auto mt-2 max-w-xl text-center text-[15px] leading-snug text-ink-600 lg:text-base">
+          <p className="mx-auto mt-2 max-w-xl text-center text-[14px] leading-snug text-ink-600 lg:text-base">
             {villaCollectionsBlurb}
           </p>
 

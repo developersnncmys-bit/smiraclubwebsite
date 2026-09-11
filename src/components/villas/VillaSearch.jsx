@@ -59,8 +59,8 @@ export default function VillaSearch() {
               <Crown size={20} className="text-gold" fill="currentColor" strokeWidth={1.5} />
             </span>
             <div className="min-w-0">
-              <p className="text-[14px] text-ink-700 lg:text-[15px]">{villaMemberOffer.kicker}</p>
-              <p className="text-[15px] font-bold text-ink-900 lg:text-lg">
+              <p className="text-[13px] text-ink-700 lg:text-[14px]">{villaMemberOffer.kicker}</p>
+              <p className="text-[14px] font-bold text-ink-900 lg:text-lg">
                 {villaMemberOffer.headline}
               </p>
               <p className="mt-0.5 text-[13px] text-ink-500 lg:text-sm">{villaMemberOffer.note}</p>
@@ -79,7 +79,7 @@ export default function VillaSearch() {
                 onChange={(e) => setDestination(e.target.value)}
                 placeholder="Search Destination or Villas"
                 aria-label="Destination or villa"
-                className="w-full min-w-0 border-0 p-0 text-[15px] font-medium text-ink-900 outline-none placeholder:text-ink-500"
+                className="w-full min-w-0 border-0 p-0 text-[14px] font-medium text-ink-900 outline-none placeholder:text-ink-500"
               />
             </label>
 

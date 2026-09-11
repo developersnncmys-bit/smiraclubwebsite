@@ -4,9 +4,19 @@ export function inr(value) {
   return `₹${n.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
-/** "17 Aug" — short enough for the search bar on a phone. */
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * "17 Aug" — short enough for the search bar on a phone.
+ *
+ * The month is spelled out here rather than left to toLocaleDateString: newer
+ * CLDR writes September as 'Sept' in both en-IN and en-GB, which is a
+ * character wider than the design allows, and a server running a different
+ * ICU build from the browser would disagree and trip hydration.
+ */
 export function shortDate(date) {
-  return new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+  const d = new Date(date);
+  return `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]}`;
 }
 
 /**
