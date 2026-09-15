@@ -42,6 +42,11 @@ export default function BookingForm({
   discount,
   baseNote,
   showEmptyDiscount = false,
+  /** What the discount row is called, and what the button says. */
+  discountLabel = 'Discount By Property',
+  cta = 'Continue',
+  /** Shown in place of the price after discount, e.g. "2 X ₹1,299". */
+  afterNote,
   bar = { mode: 'per-night', notes: [] },
   confirm = {},
   /** The read-back cards above the form, so they share the left column. */
@@ -92,6 +97,7 @@ export default function BookingForm({
       nights: confirm.nights || '',
       total: String(total),
       kind: confirm.kind || 'stay',
+      ...(confirm.location ? { location: confirm.location } : {}),
     });
     router.push(`/booking/confirmed?${query.toString()}`);
   };
@@ -119,7 +125,7 @@ export default function BookingForm({
 
         {(discount > 0 || showEmptyDiscount) && (
           <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
-            <dt className="text-green-600">Discount By Property</dt>
+            <dt className="text-green-600">{discountLabel}</dt>
             <dd className="shrink-0 font-semibold text-green-600">
               {discount > 0 ? `-${discount}` : '-'}
             </dd>
@@ -129,7 +135,7 @@ export default function BookingForm({
         {discount > 0 && (
           <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-3">
             <dt className="font-semibold text-ink-900">Price after Discount</dt>
-            <dd className="shrink-0 font-semibold text-ink-900">{inr(afterDiscount)}</dd>
+            <dd className="shrink-0 font-semibold text-ink-900">{afterNote || inr(afterDiscount)}</dd>
           </div>
         )}
 
@@ -389,7 +395,7 @@ export default function BookingForm({
               type="submit"
               className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide"
             >
-              Continue
+              {cta}
             </button>
           </div>
         </div>
@@ -420,7 +426,7 @@ export default function BookingForm({
             type="submit"
             className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
           >
-            Continue
+            {cta}
           </button>
         </div>
       </aside>

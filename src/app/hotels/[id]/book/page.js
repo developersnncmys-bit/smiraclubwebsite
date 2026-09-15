@@ -5,7 +5,7 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import BookingForm from '@/components/villas/BookingForm';
 import { hotels, villaRules } from '@/lib/content';
 import { image } from '@/lib/images';
-import { defaultStay, nightsBetween } from '@/lib/format';
+import { defaultStay, nightsBetween, shortDate } from '@/lib/format';
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -19,8 +19,7 @@ export async function generateMetadata({ params }) {
 
 /** "29 Aug - 31 Aug 2026", the way the slot card writes a stay. */
 const slotLabel = (from, to) => {
-  const day = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
-  return `${day(from)} - ${day(to)} ${to.getFullYear()}`;
+  return `${shortDate(from)} - ${shortDate(to)} ${to.getFullYear()}`;
 };
 
 /**

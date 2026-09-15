@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { nightsBetween, shortDate } from '@/lib/format';
+import Portal from '@/components/ui/Portal';
 
 /**
  * Check-in and check-out, in the same sheet the guests panel uses.
@@ -49,6 +50,7 @@ export default function DatesPicker({ open, onClose, from, setFrom, to, setTo })
   const nights = nightsBetween(from, to);
 
   return (
+    <Portal>
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-ink-900/50 sm:items-center sm:p-6"
       onMouseDown={(e) => {
@@ -109,5 +111,6 @@ export default function DatesPicker({ open, onClose, from, setFrom, to, setTo })
         </div>
       </div>
     </div>
+    </Portal>
   );
 }

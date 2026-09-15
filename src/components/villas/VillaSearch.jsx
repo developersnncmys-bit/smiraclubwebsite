@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Crown, MapPin, Search, User } from 'lucide-react';
+import DatesPicker from '@/components/home/DatesPicker';
 import GuestsPicker from '@/components/home/GuestsPicker';
 import { villaMemberOffer } from '@/lib/content';
-import { defaultStay } from '@/lib/format';
+import { defaultStay, shortDate } from '@/lib/format';
 
 /**
  * The villa search card, with the member offer sitting inside it as drawn.
@@ -25,6 +26,7 @@ export default function VillaSearch() {
   const [rooms, setRooms] = useState(1);
   const [childAges, setChildAges] = useState([]);
   const [guestsOpen, setGuestsOpen] = useState(false);
+  const [datesOpen, setDatesOpen] = useState(false);
 
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
   const summary = [
@@ -84,16 +86,31 @@ export default function VillaSearch() {
             </label>
 
             <div className="grid grid-cols-2 gap-3 lg:flex lg:shrink-0 lg:gap-3">
-              <label className="flex items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 lg:w-[13.5rem]">
+              {/*
+                A single native date input only ever set check-in, so every
+                stay searched from here was the default length. The range
+                opens the same sheet the home search uses.
+              */}
+              <button
+                type="button"
+                onClick={() => setDatesOpen(true)}
+                aria-expanded={datesOpen}
+                className="flex items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3.5 text-left lg:w-[13.5rem]"
+              >
                 <Calendar size={19} className="shrink-0 text-action-500" />
-                <input
-                  type="date"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                  aria-label="Check in"
-                  className="w-full min-w-0 border-0 bg-transparent p-0 text-[13px] font-semibold text-ink-900 outline-none lg:text-sm"
-                />
-              </label>
+                <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900 lg:text-sm">
+                  {shortDate(from)} - {shortDate(to)}
+                </span>
+              </button>
+
+              <DatesPicker
+                open={datesOpen}
+                onClose={() => setDatesOpen(false)}
+                from={from}
+                setFrom={setFrom}
+                to={to}
+                setTo={setTo}
+              />
 
               <div className="relative">
                 <button

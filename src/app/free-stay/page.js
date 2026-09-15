@@ -1,13 +1,17 @@
-import PageHead from '@/components/ui/PageHead';
-import ComingSoon from '@/components/ui/ComingSoon';
+import ScreenBar from '@/components/ui/ScreenBar';
+import HotelsScreen from '@/components/hotels/HotelsScreen';
 
-export const metadata = { title: 'Free stays' };
+export const metadata = {
+  title: 'Free Stay',
+  description: 'Complimentary rooms for Smira Club members — you only pay for food.',
+};
 
+/** Where the Free Stay tab lands. */
 export default function Page() {
   return (
     <>
-      <PageHead title="Free stays" subtitle="Rooms on the house. Members only pay for food." />
-      <ComingSoon what="Free stays listings" />
+      <ScreenBar title="Free Stay" backHref="/" />
+      <HotelsScreen variant="free-stay" />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, X } from 'lucide-react';
 import { travelYears } from '@/lib/content';
 import { image } from '@/lib/images';
-import { inr, nightsBetween } from '@/lib/format';
+import { inr, nightsBetween, shortDate } from '@/lib/format';
 
 /** Every trip across every year, since the id alone identifies one. */
 const ALL = Object.values(travelYears).flat();
@@ -19,8 +19,7 @@ export async function generateMetadata({ params }) {
   return { title: trip ? trip.title : 'Trip' };
 }
 
-const day = (d) =>
-  new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+const day = shortDate;
 
 /**
  * One planned trip.

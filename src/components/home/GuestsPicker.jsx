@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { X, ChevronDown } from 'lucide-react';
+import Portal from '@/components/ui/Portal';
 
 /**
  * Select rooms & Guests, built to the prototype frame.
@@ -98,6 +99,7 @@ export default function GuestsPicker({
   const setAge = (index, age) => setChildAges(childAges.map((a, i) => (i === index ? age : a)));
 
   return (
+    <Portal>
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-ink-900/50 sm:items-center sm:p-6"
       onMouseDown={(e) => {
@@ -184,5 +186,6 @@ export default function GuestsPicker({
         </div>
       </div>
     </div>
+    </Portal>
   );
 }

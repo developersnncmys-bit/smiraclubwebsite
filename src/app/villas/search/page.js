@@ -1,4 +1,3 @@
-import ScreenBar from '@/components/ui/ScreenBar';
 import VillaResults from '@/components/villas/VillaResults';
 import { villaCollections, villaResults } from '@/lib/content';
 import { image } from '@/lib/images';
@@ -45,8 +44,6 @@ export default async function Page({ searchParams }) {
 
   return (
     <>
-      <ScreenBar title="Villas & Home Stays" backHref="/villas" />
-
       <VillaResults
         where={where}
         when={when}

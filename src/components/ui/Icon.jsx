@@ -8,6 +8,9 @@ import {
   BookOpen, CircleHelp, CalendarHeart, CalendarCheck, BadgePercent, UserRound,
   Cake, Bus, Car, Train, Luggage,
   Wifi, Martini, Percent, Tag, Coffee, Utensils, MoreVertical,
+  Scan, Trees,
+  Lock, Shirt, SquareParking, Baby, Armchair, Soup, Music, RefreshCw, ReceiptText, Ban,
+  ShoppingCart, CalendarDays, UsersRound, Flame, Fish, Dices, Volleyball,
 } from 'lucide-react';
 
 const ICONS = {
@@ -20,6 +23,9 @@ const ICONS = {
   BookOpen, CircleHelp, CalendarHeart, CalendarCheck, BadgePercent, UserRound,
   Cake, Bus, Car, Train, Luggage,
   Wifi, Martini, Percent, Tag, Coffee, Utensils, MoreVertical,
+  Scan, Trees,
+  Lock, Shirt, SquareParking, Baby, Armchair, Soup, Music, RefreshCw, ReceiptText, Ban,
+  ShoppingCart, CalendarDays, UsersRound, Flame, Fish, Dices, Volleyball,
 };
 
 /** One lookup, so content files can name an icon as a string. */

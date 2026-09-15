@@ -12,7 +12,13 @@ import { primaryNav } from '@/lib/content';
  * one action the screen is asking for.
  */
 const OWNS_THE_BOTTOM = [
-  /^\/(hotels|villas)\/[^/]+(\/book)?$/,
+  /^\/(hotels|villas)\/(?!hourly$)[^/]+(\/book)?$/,
+  // An hourly hotel and its Review Booking; the hourly list keeps the tabs.
+  /^\/hotels\/hourly\/[^/]+(\/book)?$/,
+  // A free stay hotel and its Review Booking; the free stay list keeps the tabs.
+  /^\/free-stay\/(?!results$)[^/]+(\/book)?$/,
+  // Detail pages that pin Book Ticket / Book a Table / Book Tickets.
+  /^\/(parks|restaurants|activities|spa|luxury)\/[^/]+(\/book)?$/,
   /^\/profile\/edit$/,
   /^\/membership$/,
 ];

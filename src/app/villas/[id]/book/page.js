@@ -7,7 +7,7 @@ import {
   villaBooking, villaDetails, villaHost, villaResults, villaRules, villaStay, villas,
 } from '@/lib/content';
 import { image } from '@/lib/images';
-import { defaultStay, nightsBetween } from '@/lib/format';
+import { defaultStay, fullDate, nightsBetween } from '@/lib/format';
 
 const ALL = [...villaResults, ...villas];
 
@@ -17,8 +17,6 @@ export async function generateMetadata({ params }) {
   return { title: villa ? `Review Booking — ${villa.name}` : 'Review Booking' };
 }
 
-const fullDate = (d) =>
-  new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 const weekday = (d) => new Date(d).toLocaleDateString('en-IN', { weekday: 'short' });
 
 /**

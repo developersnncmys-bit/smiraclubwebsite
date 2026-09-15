@@ -37,10 +37,26 @@ export default async function Page({ searchParams }) {
   const params = (await searchParams) || {};
 
   const where = (params.destination || '').trim() || 'Goa';
-  const when = stayLabel(params.from, params.to);
+  // An hourly stay is one day, so its line reads the time and length instead.
+  const when =
+    params.mode === 'hourly' && params.checkin
+      ? `${shortDate(params.from)}, ${params.checkin} · ${params.hours} Hrs`
+      : stayLabel(params.from, params.to);
   const guests = guestLabel(params.adults, params.children);
 
   const results = searchResults.map((r) => ({ ...r, image: image(r.image) }));
 
-  return <ResultsScreen where={where} when={when} guests={guests} results={results} />;
+  // Arriving from Hotels & Resorts brings that screen's chips and back arrow.
+  const fromHotels = params.kind === 'hotel';
+
+  return (
+    <ResultsScreen
+      where={where}
+      when={when}
+      guests={guests}
+      results={results}
+      variant={fromHotels ? 'hotel' : 'all'}
+      backHref={fromHotels ? '/hotels' : '/'}
+    />
+  );
 }

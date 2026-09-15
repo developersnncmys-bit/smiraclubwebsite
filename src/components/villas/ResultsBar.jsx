@@ -18,7 +18,7 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
     <div className="border-b border-surface-line bg-white">
       <div className="shell py-3 lg:py-5">
         {/* -- What was asked for --------------------------------------- */}
-        <div className="flex items-center gap-3 rounded-xl border border-surface-line px-3 py-2.5 lg:max-w-2xl lg:px-4 lg:py-3">
+        <div className="flex items-center gap-3 rounded-xl border-[1.5px] border-brand-700 px-3 py-2.5 lg:max-w-2xl lg:px-4 lg:py-3">
           <button
             type="button"
             onClick={() => router.push('/villas')}
@@ -47,13 +47,19 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
 
         {/* -- Sort, filters, flexible dates ---------------------------- */}
         <div className="rail mt-3 lg:mt-4">
-          <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
-            <ArrowUpDown size={16} className="shrink-0 text-ink-600" />
-            <span className="sr-only">Sort by</span>
+          {/*
+            The frame labels the chip "Sort By" and nothing else, so the
+            select sits invisibly over it: the phone's own picker still opens,
+            and the chip reads exactly as drawn.
+          */}
+          <label className="relative inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
+            Sort By
+            <ArrowUpDown size={15} className="shrink-0 text-ink-700" />
             <select
               value={sort}
               onChange={(e) => onSort(e.target.value)}
-              className="cursor-pointer border-0 bg-transparent pr-1 text-[13px] font-semibold text-ink-900 outline-none"
+              aria-label="Sort by"
+              className="absolute inset-0 cursor-pointer opacity-0"
             >
               {villaSortOptions.map((o) => (
                 <option key={o.key} value={o.key}>
@@ -67,7 +73,7 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
             type="button"
             disabled
             title="Filters arrive with the live inventory"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-400"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900 disabled:cursor-default"
           >
             All Filters
             <SlidersHorizontal size={16} />
@@ -77,7 +83,7 @@ export default function ResultsBar({ where, when, guests, sort, onSort }) {
             type="button"
             disabled
             title="Flexible dates arrive with the live inventory"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-400"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900 disabled:cursor-default"
           >
             Flexible Check-in/out
             <ChevronDown size={16} />

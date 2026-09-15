@@ -6,13 +6,10 @@ import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight, Plane } from 'lucide-react';
 import { travelYears } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
-import { nightsBetween } from '@/lib/format';
+import { fullDate, monthYear, nightsBetween, shortDate } from '@/lib/format';
 
-const monthOf = (iso) =>
-  new Date(iso).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-
-const dayOf = (iso) =>
-  new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+const monthOf = monthYear;
+const dayOf = shortDate;
 
 /** The years we have anything for, oldest first. */
 const YEARS = Object.keys(travelYears).map(Number).sort((a, b) => a - b);
@@ -113,11 +110,7 @@ export default function TravelYear({ art = {} }) {
                           <p className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-ink-600">
                             {dayOf(trip.start)}
                             <ArrowRight size={15} className="shrink-0 text-ink-400" />
-                            {new Date(trip.end).toLocaleDateString('en-IN', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })}
+                            {fullDate(trip.end)}
                           </p>
 
                           <p className="mt-1 text-[14px] text-ink-600">

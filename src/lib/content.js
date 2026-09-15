@@ -80,16 +80,16 @@ export const searchTabs = [
 export const services = [
   { key: 'international', label: 'International Trip', icon: 'Plane', href: '/packages/international' },
   { key: 'group', label: 'Group Departure', icon: 'Users', href: '/packages?kind=group' },
-  { key: 'support', label: 'Travel Support', icon: 'LifeBuoy', href: '/more/support' },
+  { key: 'support', label: 'Travel Support', icon: 'LifeBuoy', href: '/travel-support' },
   { key: 'homestay', label: 'Home Stay', icon: 'Home', href: '/villas?collection=homestay' },
-  { key: 'restaurant', label: 'Restuarant Offers', icon: 'UtensilsCrossed', href: '/offers?kind=dining' },
-  { key: 'waterpark', label: 'Waterpark & Themepark', icon: 'Waves', href: '/offers?kind=parks' },
+  { key: 'restaurant', label: 'Restuarant Offers', icon: 'UtensilsCrossed', href: '/restaurants' },
+  { key: 'waterpark', label: 'Waterpark & Themepark', icon: 'Waves', href: '/parks' },
   { key: 'games', label: 'Games Zone', icon: 'Gamepad2', href: '/offers?kind=games' },
-  { key: 'salon', label: 'Saloon & Spa', icon: 'Sparkles', href: '/offers?kind=salon' },
-  { key: 'luxury', label: 'Luxury Experiences', icon: 'Palmtree', href: '/offers?kind=luxury' },
-  { key: 'camping', label: 'Camping & Adventure', icon: 'Tent', href: '/packages?kind=camping' },
-  { key: 'flight', label: 'Flight Booking', icon: 'Plane', href: '/more/support' },
-  { key: 'train', label: 'Train & Bus', icon: 'Ticket', href: '/more/support' },
+  { key: 'salon', label: 'Saloon & Spa', icon: 'Sparkles', href: '/spa' },
+  { key: 'luxury', label: 'Luxury Experiences', icon: 'Palmtree', href: '/luxury' },
+  { key: 'camping', label: 'Camping & Adventure', icon: 'Tent', href: '/activities' },
+  { key: 'flight', label: 'Flight Booking', icon: 'Plane', href: '/flights' },
+  { key: 'train', label: 'Train & Bus', icon: 'Ticket', href: '/train-bus' },
 ];
 
 /** What the member looked at last. */
@@ -98,6 +98,819 @@ export const recentSearches = [
   { id: 'r2', kind: 'Hourly Stay', place: 'Goa', guests: '1 Room/2 Guests', dates: '21 - 22 Aug 2026' },
   { id: 'r3', kind: 'Villa', place: 'Alibaug', guests: '1 Room/4 Guests', dates: '16 - 17 Aug 2026' },
   { id: 'r4', kind: 'Hotel', place: 'Coorg', guests: '2 Rooms/4 Guests', dates: '30 - 31 Aug 2026' },
+];
+
+/** Hotels & Resorts: the two ways to book and what the hourly one offers. */
+export const hotelModes = [
+  { key: 'night', label: 'By Night' },
+  { key: 'hourly', label: 'Hourly Stays' },
+];
+
+export const hourlyIntro = {
+  title: 'Introducing Hourly Stays',
+  body: 'Book rooms on hourly basis at your preferred check-in time and get up to 40% OFF!',
+};
+
+/** Check-in times offered for an hourly stay, and the three lengths it is sold in. */
+export const hourlyCheckIns = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+export const hourlyDurations = [3, 6, 9];
+
+/**
+ * Hotels that sell rooms by the hour.
+ *
+ * `slots` is keyed by hours; `null` is a length the property does not sell,
+ * which the cards show as Not Available rather than hiding. `taxes` on each
+ * slot is the design's one worked figure (₹175 on ₹1,299) applied at the
+ * same 13.5% to the others — placeholder until the rates come from the API.
+ */
+export const hourlyHotels = [
+  {
+    id: 'indie-stay-goa',
+    name: 'Indie Stay Goa',
+    verified: true,
+    place: 'Candolim',
+    reach: '760m drive to Candolim Beach',
+    rating: 4.2,
+    reviews: 212,
+    tag: 'Couple Friendly',
+    night: 1999,
+    nightWas: 2499,
+    offer: 'Weekend Offer',
+    cancellation: 'Free Cancellation till 24 hrs before check In',
+    highlight: 'Enjoy beautiful greenery, close to Candolim Beach, and great breakfast options.',
+    images: ['villa-private', 'villa-room-1', 'villa-room-2'],
+    slots: {
+      3: { price: 949, was: 1199, taxes: 128 },
+      6: { price: 1299, was: 1499, taxes: 175 },
+      9: null,
+    },
+    room: {
+      category: 'Standard Room (Hourly)',
+      name: 'Garden View Room',
+      image: 'villa-room-1',
+      photos: 9,
+      facts: [
+        { icon: 'Users', text: '2 Adults' },
+        { icon: 'Scan', text: '180 sq.ft (17 sq.mt)' },
+        { icon: 'BedDouble', text: '1 Double Bed' },
+        { icon: 'Trees', text: 'Garden View' },
+      ],
+    },
+    restaurant: 'There is one on-site restaurant.',
+    address: '112, Fort Aguada Rd, Candolim, Goa 403515',
+    nearby: [
+      { place: 'Candolim Beach', km: '760 m' },
+      { place: 'Sinquerim Beach', km: '2 Km' },
+      { place: 'Fort Aguada', km: '3.5 Km' },
+      { place: 'Calangute Beach', km: '4 Km' },
+    ],
+  },
+  {
+    id: 'the-tubki-resort',
+    name: 'The Tubki Resort',
+    verified: true,
+    place: 'Palolem',
+    reach: '8 min walk to Palolem Beach',
+    rating: 4.4,
+    reviews: 319,
+    tag: 'Couple Friendly',
+    night: 2999,
+    nightWas: 3499,
+    offer: 'Weekend Offer',
+    cancellation: 'Free Cancellation till 24 hrs before check In',
+    highlight: 'Enjoy beautiful greenery, close to Palolem Beach, and great breakfast options.',
+    images: ['villa-coconut-groove', 'villa-room-2', 'villa-room-1'],
+    slots: {
+      3: { price: 1299, was: 1499, taxes: 175 },
+      6: { price: 1999, was: 2299, taxes: 270 },
+      9: null,
+    },
+    room: {
+      category: 'Standard Room (Hourly)',
+      name: 'Garden View Room',
+      image: 'villa-room-2',
+      photos: 9,
+      facts: [
+        { icon: 'Users', text: '2 Adults' },
+        { icon: 'Scan', text: '180 sq.ft (17 sq.mt)' },
+        { icon: 'BedDouble', text: '1 Double Bed' },
+        { icon: 'Trees', text: 'Garden View' },
+      ],
+    },
+    restaurant: 'There is one on-site restaurant.',
+    address: '619, Palolem, Goa 403516',
+    nearby: [
+      { place: 'Palolem Beach', km: '8 Min' },
+      { place: 'Calangute Beach', km: '1 Km' },
+      { place: 'Casino Palms', km: '230 m' },
+      { place: "Tito's Lane", km: '560 m' },
+      { place: 'Candolim Beach', km: '3 Km' },
+    ],
+  },
+];
+
+/** The hotel screen's own recent searches, as drawn. */
+export const hotelRecentSearches = [
+  { id: 'h1', kind: 'Hourly Stay', place: 'Lonavala', guests: '1 Room/2 Guests', dates: '29 Aug 2026' },
+  { id: 'h2', kind: 'Hourly Stay', place: 'Goa', guests: '1 Room/2 Guests', dates: '21 Aug 2026' },
+];
+
+/* -- Free Stay ------------------------------------------------------------ */
+
+export const freeStayIntro = {
+  title: 'Introducing Free Stays',
+  body: 'Free Stay is an exclusive membership benefit available to Smira Club members.',
+};
+
+export const freeStayRecentSearches = [
+  { id: 'f1', kind: 'Free Stay', place: 'Lonavala', guests: '1 Room/2 Guests', dates: '29 - 31 Aug 2026' },
+  { id: 'f2', kind: 'Free Stay', place: 'Goa', guests: '1 Room/2 Guests', dates: '21 - 23 Aug 2026' },
+];
+
+/**
+ * What a free stay costs: the room is on the house, breakfast and dinner are
+ * not. The design prices them per person without saying per what, so they
+ * are read as per person, per night — placeholder until the rates are real.
+ * `taxRate` is 5%, the GST on restaurant food; also a placeholder.
+ */
+export const freeStayFood = {
+  adult: { label: 'Adults', note: '(Above 12 Years)', price: 999, was: 1499 },
+  child: { label: 'Children', note: '(0-12 Years Old)', price: 599, was: 999 },
+  taxRate: 0.05,
+};
+
+export const mealPreferences = [
+  { key: 'veg', label: 'Veg', dots: ['veg'] },
+  { key: 'non-veg', label: 'Non-Veg', dots: ['non-veg'] },
+  { key: 'jain', label: 'Jain', dots: ['jain'] },
+  { key: 'both', label: 'Veg & Non-Veg', dots: ['veg', 'non-veg'] },
+];
+
+/** The extra guideline a free stay carries, after Guest Policy. */
+export const freeStayGuideline = {
+  title: 'Free Stay Benefit',
+  lines: [
+    'Room stay is complimentary as part of your Smira Club membership.',
+    'Food and beverages are payable separately as per applicable charges.',
+  ],
+};
+
+/* -- Travel Support ------------------------------------------------------- */
+
+export const travelSupportHero = {
+  title: 'Every Step of the Way',
+  body: 'From visa assistance, travel insurance to currency exchange and international SIMs, we’re here to make your journey easier.',
+};
+
+/**
+ * The four request forms, as data. Every form opens with the same three
+ * fields, so `common` is listed once and each tab adds its own.
+ */
+export const travelSupportCommon = [
+  { key: 'name', label: 'Full Name', type: 'text', icon: 'User', placeholder: 'As per passport', required: true },
+  { key: 'phone', label: 'Contact Number', type: 'tel', icon: 'Phone', placeholder: 'Enter your  Mobile Number', required: true },
+  { key: 'destination', label: 'Destination', type: 'text', icon: 'MapPin', placeholder: 'E.g. Sri Lanka', required: true },
+];
+
+export const travelSupportTabs = [
+  {
+    key: 'visa',
+    label: 'Visa Assistance',
+    title: 'Guidance for your visa application process',
+    fields: [
+      { key: 'travelDate', label: 'Travel Date', type: 'date', required: true },
+      { key: 'returnDate', label: 'Return Date', type: 'date', required: true, after: 'travelDate' },
+      { key: 'purpose', label: 'Purpose of Visit', type: 'select', required: true, options: ['Tourism', 'Business', 'Visiting Family', 'Study', 'Medical'] },
+    ],
+  },
+  {
+    key: 'insurance',
+    label: 'Travel Insurance',
+    title: 'Domestic & International Travel Insurance',
+    fields: [
+      { key: 'travelDate', label: 'Travel Date', type: 'date', required: true },
+      { key: 'returnDate', label: 'Return Date', type: 'date', required: true, after: 'travelDate' },
+      { key: 'travellers', label: 'No of Travellers', type: 'number', placeholder: 'e.g 1', required: true, min: 1 },
+      { key: 'cover', label: 'Cover Type', type: 'select', required: true, options: ['Basic', 'Standard', 'Comprehensive'] },
+    ],
+  },
+  {
+    key: 'currency',
+    label: 'Currency Exchange',
+    title: 'Best exchange rates for your destination',
+    fields: [
+      { key: 'fromCurrency', label: 'From Currency', type: 'select', required: true, options: ['INR', 'USD', 'EUR', 'GBP', 'AED', 'SGD', 'THB', 'LKR'], half: true },
+      { key: 'toCurrency', label: 'To Currency', type: 'select', required: true, options: ['USD', 'EUR', 'GBP', 'AED', 'SGD', 'THB', 'LKR', 'INR'], half: true },
+      { key: 'amount', label: 'Amount to exchange', type: 'number', placeholder: 'e.g 50,000', required: true, min: 1 },
+      { key: 'pickup', label: 'Preferred Pickup', type: 'select', required: true, options: ['Home Delivery', 'Pick up from branch', 'At the airport'] },
+      { key: 'address', label: 'Address (Optional)', type: 'textarea', placeholder: 'Enter Complete Address' },
+    ],
+  },
+  {
+    key: 'sim',
+    label: 'SIM Card',
+    title: 'International Sim Cards for Seamless Connectivity',
+    namePlaceholder: 'As per passport or ID',
+    fields: [
+      { key: 'arrivalDate', label: 'Arrival Date', type: 'date', required: true },
+      { key: 'duration', label: 'Duration', type: 'text', placeholder: 'e.g. 10 Days', required: true },
+      { key: 'plan', label: 'Data Plan', type: 'select', options: ['1 GB per day', '2 GB per day', '5 GB per day', 'Unlimited'] },
+    ],
+  },
+];
+
+/* -- Flights, trains and buses -------------------------------------------- */
+
+export const flightTrips = [
+  { key: 'one-way', label: 'One Way' },
+  { key: 'round', label: 'Round Trip' },
+  { key: 'multi', label: 'Multicity' },
+];
+
+export const cabinClasses = ['Economy/Premium', 'Economy', 'Premium Economy', 'Business', 'First'];
+
+export const flightOffers = [
+  { key: 'student', label: 'Student', note: 'Extra discounts/baggage' },
+  { key: 'senior', label: 'Senior Citizen', note: 'Up to ₹500 OFF' },
+  { key: 'armed', label: 'Armed Forces', note: 'Up to ₹500 OFF' },
+];
+
+export const groundModes = [
+  { key: 'train', label: 'Train', placeholder: 'Enter City, Station Name or Station Code' },
+  { key: 'bus', label: 'Bus', placeholder: 'Enter City Name' },
+];
+
+/* -- Water parks and theme parks ------------------------------------------ */
+
+export const parkKinds = [
+  { key: 'water', label: 'Water Park' },
+  { key: 'theme', label: 'Theme Park' },
+];
+
+/**
+ * The ticket types a park sells. Prices are Imagicaa's as drawn; every other
+ * park scales them so its cheapest ticket is its advertised "From" price —
+ * placeholder until each park's real rate card is loaded.
+ *
+ * The design's Express ticket shows the same ₹1,170 as the regular adult one;
+ * that is kept as drawn and flagged for the client.
+ */
+export const parkTicketBase = [
+  { id: 'regular-adult', name: 'Regular Entry Ticket | Adult', price: 1170, was: 1470, summary: 'Adult (Above 5 years)', note: 'This Ticket grants entry for adults above 5 years & 4\'6" feet in height.' },
+  { id: 'regular-child', name: 'Regular Entry Ticket | Child', price: 680, was: 850, summary: 'Child (3 - 5 years)', note: 'This Ticket grants entry for children between 3 - 5 years and 3\'3" feet to 4\'6" feet in height.' },
+  { id: 'senior', name: 'Regular Entry Ticket | Senior Citizen', price: 550, was: 690, summary: 'Senior Citizen (60+ years)', note: 'This Ticket grants entry for Senior Citizen above 60 years and 4\'6" feet in height.' },
+  { id: 'group', name: 'Regular Entry Ticket | Group', price: 1000, was: 1250, summary: 'Group (per person)', note: 'This Ticket grants entry for group of 10+ people above 5 years & 4\'6" feet in height.' },
+  { id: 'express', name: 'Express Entry Ticket', price: 1170, was: 1470, summary: 'Express (Above 5 years)', note: 'This Ticket grants entry for adults above 5 years & 4\'6" feet in height.', extra: 'Express Ticket — Skip the regular queue and enjoy faster access to the attractions.' },
+  { id: 'express-group', name: 'Express Entry Ticket | Group', price: 1470, was: 1840, summary: 'Express Group (per person)', note: 'This Ticket grants entry for group of 10 + people above 5 years & 4\'6" feet in height.', extra: 'This Ticket skips the queue' },
+];
+
+export const parks = [
+  {
+    id: 'wet-and-joy', kind: 'water', label: 'Water Park',
+    name: 'Wet & Joy | Water Park', place: 'Lonavala, India', rating: 4.1, reviews: 319,
+    schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 6:00 PM', offer: 20, from: 999,
+    images: ['park-wet-joy', 'ride-slides', 'ride-wave-pool'],
+    blurb: 'Slides, wave pools and a lazy river in the hills of Lonavala — a full day of splashing for every age.',
+    address: 'Old Mumbai-Pune Highway, Kunegaon, Lonavala, Maharashtra 410401',
+  },
+  {
+    id: 'imagicaa-water-park', kind: 'water', label: 'Water Park',
+    name: 'Imagicaa Water Park', place: 'Mumbai, India', rating: 4.4, reviews: 412,
+    schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 6:00 PM', offer: 20, from: 550,
+    images: ['park-imagicaa-water', 'park-imagicaa-water-2', 'park-imagicaa-water-3'],
+    blurb: 'Splash into a world of thrilling rides, refreshing waves, and unforgettable fun at Imagicaa Water Park',
+    address: '30/31 Sangdewadi, SH92, near Lonavala, Khalapur, Maharashtra 410203',
+  },
+  {
+    id: 'wonderla-bengaluru', kind: 'water', label: 'Amusement Park',
+    name: 'Wonderla Amusement Park', place: 'Bengaluru, India', rating: 4.4, reviews: 219,
+    schedule: 'Daily Multiple Slots', hours: '11:00 AM - 6:00 PM', offer: 20, from: 999,
+    images: ['park-wonderla', 'ride-slides', 'ride-kids-zone'],
+    blurb: 'Water rides and land rides in one park, with slots through the day.',
+    address: '28th km, Mysore Road, Bengaluru, Karnataka 562109',
+  },
+  {
+    id: 'imagicaa-theme-park', kind: 'theme', label: 'Theme Park',
+    name: 'Imagicaa Theme Park', place: 'Khopoli, India', rating: 4.5, reviews: 1840, schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 8:00 PM', offer: 20, from: 1299,
+    images: ['park-imagicaa-theme', 'park-theme-2', 'park-esselworld'],
+    blurb: 'Roller coasters, live shows and themed zones — India’s big day out.',
+    address: '30/31 Sangdewadi, SH92, near Lonavala, Khalapur, Maharashtra 410203',
+  },
+  {
+    id: 'esselworld', kind: 'theme', label: 'Theme Park',
+    name: 'EsselWorld', place: 'Mumbai, India', rating: 4.2, reviews: 960, schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 7:00 PM', offer: 20, from: 899,
+    images: ['park-esselworld', 'park-theme-2', 'park-imagicaa-theme'],
+    blurb: 'Classic rides and coasters by the sea at Gorai.',
+    address: 'Global Pagoda Road, Gorai, Borivali West, Mumbai, Maharashtra 400091',
+  },
+];
+
+/** A park's tickets, scaled from the base card so its cheapest is its From price. */
+export function parkTickets(park) {
+  const cheapest = Math.min(...parkTicketBase.map((t) => t.price));
+  const scale = park.from / cheapest;
+  const label = park.kind === 'theme' ? 'Theme Park' : 'Water Park';
+  return parkTicketBase.map((t) => ({
+    ...t,
+    name: `${t.name} | ${label}`,
+    price: Math.round((t.price * scale) / 10) * 10,
+    was: Math.round((t.was * scale) / 10) * 10,
+  }));
+}
+
+export const parkAbout = 'Dive into a world of fun and adventure at the park, where thrilling water rides, exciting slides, wave pools, and refreshing attractions create the perfect getaway for families and friends.';
+export const parkIdealFor = ['Family & Friends', 'School Trips', 'Adventure Lovers', 'Corporate Outing'];
+export const parkRides = [
+  { key: 'slides', label: 'Thrilling Water Slides', image: 'ride-slides' },
+  { key: 'wave', label: 'Wave Pool', image: 'ride-wave-pool' },
+  { key: 'river', label: 'Lazy River', image: 'ride-lazy-river' },
+  { key: 'kids', label: 'Kids Play Zone', image: 'ride-kids-zone' },
+];
+export const parkFacilities = [
+  { label: 'Locker & Shower', icon: 'Lock' },
+  { label: 'Changing Rooms', icon: 'Shirt' },
+  { label: 'Parking', icon: 'SquareParking' },
+  { label: 'Food Court', icon: 'UtensilsCrossed' },
+  { label: 'Baby Care Room', icon: 'Baby' },
+  { label: 'Seating Areas', icon: 'Armchair' },
+];
+export const parkNearby = [
+  { place: 'Imagica Snow Park', km: '1 min' },
+  { place: 'Imagicaa Water Park', km: '7 min' },
+  { place: 'Novotel Imagicaa Khopoli', km: 'Nearby' },
+  { place: 'Tattva Spa', km: '4 min' },
+  { place: 'Zenith Waterfall', km: '9.6 Km' },
+];
+export const parkSafety = [
+  { title: 'Follow Property & Partner Rules', lines: ['Follow all safety instructions and guidelines provided by hotels, resorts, and service partners.'] },
+  { title: 'Keep Your Documents Safe', lines: ['Carry valid identification and required travel documents during your journey.'] },
+  { title: 'Follow Activity Instructions', lines: ['Follow safety instructions and use required safety equipment during adventure and activity experiences.'] },
+  { title: 'Property Guidelines', lines: ['Outside food may be restricted in certain areas.', 'Pets are allowed only in designated areas.'] },
+  { title: 'Supervise Children', lines: ['Parents or guardians are responsible for supervising children during stays, activities, and experiences.'] },
+  { title: 'Emergency Assistance', lines: ['In case of an emergency, contact the venue staff or Smira Club support where assistance is required.'] },
+];
+
+/** The View Guidelines sheet, the same for every ticket. */
+export const parkGuidelines = {
+  offer: [
+    { icon: 'Tag', title: 'Offers', body: 'Up to 20% OFF on selected tickets' },
+    { icon: 'UsersRound', title: 'Applicable For', body: 'Smira Club only' },
+    { icon: 'RefreshCw', title: 'Voucher Usage', body: 'One usage per booking' },
+    { icon: 'ReceiptText', title: 'Refund Policy', body: 'Non-Refundable' },
+  ],
+  validity: [
+    // The frame says "31 Nov 2026"; November has 30 days.
+    { icon: 'Tag', title: 'Valid Until', body: '30 Nov 2026' },
+    { icon: 'CalendarDays', title: 'Redeemable Days', body: 'Monday - Sunday' },
+    { icon: 'Ban', title: 'Block-out Dates', body: 'Public Holidays and long weekends' },
+  ],
+  redeem: [
+    { icon: 'ShoppingCart', title: 'Purchase', body: 'Buy the voucher' },
+    { icon: 'Ticket', title: 'My Voucher', body: 'Find your voucher in my voucher' },
+    { icon: 'CalendarDays', title: 'Reservation', body: 'Make the reservation with the partner' },
+    { icon: 'MapPin', title: 'Visit', body: 'Visit the location on your booked date' },
+    { icon: 'RefreshCw', title: 'Redeem', body: 'Show the voucher & avail the offer' },
+  ],
+  remember: [
+    'Advance reservation is mandatory.',
+    'Subject to partner availability.',
+    'Not valid with other offers or promotions',
+    'Additional charges applicable on extras (e.g food,..)',
+    'Cannot be clubbed with other offers.',
+  ],
+};
+
+/* -- Camping & adventure -------------------------------------------------- */
+
+export const activityKinds = [
+  { key: 'camping', label: 'Camping' },
+  { key: 'adventure', label: 'Adventure' },
+];
+
+/**
+ * `kind` picks the tab; `tag` is the violet label on the card.
+ *
+ * `tickets` are what the Book Tickets sheet sells, and the card's "From" is
+ * the cheapest of them. `sessions` says when it runs: `day` is a weekday (6 is
+ * Saturday) for an event held weekly, or null for every day; `slots` are its
+ * start times. `activityTaxRate` is a placeholder until real rates load.
+ */
+const campFacilities = [
+  { label: 'Bon Fire', icon: 'Flame' },
+  { label: 'Buffet Available', icon: 'Soup' },
+  { label: 'Live Music', icon: 'Music' },
+  { label: 'Outdoor Seating', icon: 'Armchair' },
+  { label: 'Fishery', icon: 'Fish' },
+  { label: 'Movie Screening', icon: 'Clapperboard' },
+  { label: 'Group games', icon: 'Dices' },
+  { label: 'Beach Volleyball', icon: 'Volleyball' },
+];
+const campThings = [
+  'Event will be in English, Hindi, Marathi',
+  'Tickets needed for ages 5 and above',
+  'Entry allowed for all ages',
+  'Kid Friendly',
+  'Clean and hygienic facilities',
+  'Pet Friendly',
+];
+
+export const activityTaxRate = 0.11;
+
+export const activities = [
+  {
+    id: 'alibaug-beach-camping', kind: 'camping', tag: 'Camping',
+    name: 'Alibaug Beach Camping', cardName: 'Beach Camping', subtitle: 'Tent by the Bay - Alibaug',
+    place: 'Alibaug', rating: 4.8, reviews: 414, offer: 20, image: 'act-beach-camping',
+    gallery: ['gal-camp-1', 'gal-camp-3', 'gal-camp-4', 'gal-camp-5'], moreGallery: 6,
+    sessions: { day: 6, slots: ['16:00'] },
+    tickets: [
+      { id: 'adult', label: 'Adults', note: '(Above 17 Years Old)', price: 1299, was: 1499 },
+      { id: 'child', label: 'Children', note: '5 - 17 Years Old', price: 999, was: 1199 },
+    ],
+    about: 'Camping in Alibaug, tent by the Bay is a campsite located on the edge of the Revdanda Beach, Alibaug. We provide camping accommodations, barbecue, DJ Night, Live Music, a bonfire and breakfast on the beach as the sun comes up.',
+    things: campThings, facilities: campFacilities,
+    organizer: { name: 'Tent By Bay', rating: 4.8, reviews: 414, hosted: 10, years: 3.8 },
+  },
+  {
+    id: 'pawna-lake-camping', kind: 'camping', tag: 'Camping',
+    name: 'Pawna Lake Camping', cardName: 'Pawna Lake Camping', subtitle: 'Lakeside Tents - Lonavala',
+    place: 'Lonavala, Maharastra', rating: 4.5, reviews: 628, offer: 30, image: 'act-lake-camping',
+    gallery: ['gal-camp-2', 'gal-camp-5', 'gal-camp-3', 'gal-camp-1'], moreGallery: 4,
+    sessions: { day: 6, slots: ['16:00', '17:00'] },
+    tickets: [
+      { id: 'adult', label: 'Adults', note: '(Above 17 Years Old)', price: 1499, was: 1999 },
+      { id: 'child', label: 'Children', note: '5 - 17 Years Old', price: 1199, was: 1499 },
+    ],
+    about: 'Lakeside tents under the Sahyadri hills, with live music, a barbecue dinner, a bonfire and a morning walk by the water.',
+    things: campThings, facilities: campFacilities.slice(0, 7),
+    organizer: { name: 'Pawna Camps', rating: 4.5, reviews: 628, hosted: 24, years: 5 },
+  },
+  {
+    id: 'kolad-river-rafting', kind: 'adventure', tag: 'Water Sports',
+    name: 'Kolad River Rafting', cardName: 'Kolad River Rafting', subtitle: 'Kundalika River - Kolad',
+    place: 'Kolad, Maharastra', rating: 4.4, reviews: 219, offer: 40, image: 'act-rafting',
+    gallery: ['act-rafting', 'ride-lazy-river', 'gal-camp-4', 'act-lake-camping'], moreGallery: 3,
+    sessions: { day: null, slots: ['07:00', '09:00', '11:00'] },
+    tickets: [
+      { id: 'adult', label: 'Adults', note: '(Above 14 Years Old)', price: 1299, was: 1999 },
+    ],
+    about: 'Grade II–III rapids on the Kundalika river — about 10 km of rafting with a trained guide and all safety gear.',
+    things: ['Minimum age 14 years', 'Swimming not required', 'Life jacket and helmet provided', 'Carry a change of clothes'],
+    facilities: [
+      { label: 'Changing Rooms', icon: 'Shirt' },
+      { label: 'Locker', icon: 'Lock' },
+      { label: 'Parking', icon: 'SquareParking' },
+      { label: 'Food', icon: 'UtensilsCrossed' },
+    ],
+    organizer: { name: 'Kundalika Rafters', rating: 4.4, reviews: 219, hosted: 40, years: 8 },
+  },
+  {
+    id: 'della-adventure-park', kind: 'adventure', tag: 'Adventure',
+    name: 'Della Adventure Park', cardName: 'Della Adventure Park', subtitle: 'Kunegaon - Lonavala',
+    place: 'Lonavala, Maharastra', rating: 4.8, reviews: 414, offer: 40, image: 'act-zipline',
+    gallery: ['park-theme-2', 'gal-camp-2', 'act-rafting', 'gal-camp-5'], moreGallery: 8,
+    sessions: { day: null, slots: ['10:00', '13:00', '15:00'] },
+    tickets: [
+      { id: 'adult', label: 'Adults', note: '(Above 12 Years Old)', price: 2499, was: 2999 },
+      { id: 'child', label: 'Children', note: '5 - 12 Years Old', price: 1999, was: 2499 },
+    ],
+    about: 'Ziplines, a sky cycle, giant swings and more than 50 activities in the hills above Lonavala.',
+    things: ['Closed-toe shoes required', 'Height and weight limits apply on some rides', 'Kid Friendly', 'Lockers available'],
+    facilities: [
+      { label: 'Food Court', icon: 'UtensilsCrossed' },
+      { label: 'Parking', icon: 'SquareParking' },
+      { label: 'Locker', icon: 'Lock' },
+      { label: 'Group games', icon: 'Dices' },
+    ],
+    organizer: { name: 'Della Adventure', rating: 4.8, reviews: 414, hosted: 120, years: 12 },
+  },
+];
+
+/** The cheapest ticket, which the card quotes as "From". */
+export const activityFrom = (a) => a.tickets.reduce((m, t) => (t.price < m.price ? t : m));
+
+/** The next `count` dates an activity runs, from tomorrow, as YYYY-MM-DD. */
+export function activityDates(a, count = 7) {
+  const out = [];
+  const d = new Date();
+  for (let i = 1; out.length < count && i < 120; i += 1) {
+    d.setDate(d.getDate() + 1);
+    if (a.sessions.day === null || d.getDay() === a.sessions.day) {
+      out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+    }
+  }
+  return out;
+}
+
+/* -- Saloon & spa --------------------------------------------------------- */
+
+export const spaKinds = [
+  { key: 'saloon', label: 'Saloon' },
+  { key: 'spa', label: 'Spa' },
+];
+
+/**
+ * A saloon or spa. It has the same shape as a camp — `tickets` holds its
+ * services, so the shared list and "From" price work unchanged — plus the
+ * branches it can be booked at and the day's appointment slots.
+ *
+ * `taxRate` is 18%, the GST on salon and spa services; placeholder until the
+ * rates come from the API.
+ */
+const spaFacilities = [
+  'Relaxing treatment rooms',
+  'Professional spa therapists',
+  'Traditional Thai-inspired treatments',
+  'Comfortable waiting area',
+  'Clean and hygienic facilities',
+  'Peaceful and calming ambience',
+  'Shower & changing facilities',
+  'Wellness and relaxation services',
+];
+const salonFacilities = [
+  'Certified stylists and beauticians',
+  'Branded hair and skin products',
+  'Sanitised tools for every client',
+  'Air-conditioned studio',
+  'Comfortable waiting area',
+  'Bridal and party packages',
+];
+const spaSlots = ['10:00', '11:30', '12:45', '16:00', '17:45', '18:00'];
+
+export const spaTaxRate = 0.18;
+
+export const spas = [
+  {
+    id: 'serenity-spa-goa', kind: 'spa', tag: 'Spa & Wellness',
+    name: 'Serenity Spa Goa', cardName: 'Serenity Spa Goa', place: 'Baga, Goa',
+    rating: 4.1, reviews: 319, offer: 40, image: 'spa-serenity', photos: ['spa-serenity', 'spa-still', 'spa-room'],
+    hours: '10:00 AM - 8:00 PM',
+    about: 'Serenity Spa Goa is a calm retreat a short walk from Baga beach, with oil massages, body scrubs and facials by trained therapists.',
+    facilities: spaFacilities.slice(0, 7), slots: spaSlots,
+    locations: [{ id: 'baga', title: 'Baga - Goa', address: 'Serenity Spa Goa, Baga, Goa' }],
+    tickets: [
+      { id: 'swedish', label: 'Swedish Massage (60 Min)', group: 'Spa', price: 2999, was: 3999 },
+      { id: 'balinese', label: 'Balinese Massage (60 Min)', group: 'Spa', price: 3299, was: 4299 },
+      { id: 'scrub', label: 'Body Scrub (45 Min)', group: 'Spa', price: 2499, was: 3299 },
+    ],
+  },
+  {
+    id: 'tattva-wellness-spa', kind: 'spa', tag: 'Spa & Wellness',
+    name: 'Tattva Wellness Spa', cardName: 'Tattva Wellness Spa', place: 'Multiple Locations',
+    rating: 4.4, reviews: 219, offer: 20, image: 'spa-tattva', photos: ['spa-tattva', 'spa-facial', 'spa-still'],
+    hours: '10:00 AM - 7:00 PM',
+    about: 'Tattva Wellness Spa is a relaxing wellness destination offering a peaceful atmosphere, soothing spa treatments, and traditional Thai-inspired therapies. It’s a comfortable place to unwind, refresh, and enjoy a calming escape from the everyday.',
+    facilities: spaFacilities, slots: spaSlots,
+    locations: [
+      { id: 'lonavala', title: 'Lonavala - Maharastra', address: 'Tattva Wellness Spa, Lonavala, Maharashtra' },
+      { id: 'andheri', title: 'Mumbai - Andheri', address: 'Tattva Wellness Spa, Andheri, Mumbai, Maharashtra' },
+    ],
+    tickets: [
+      { id: 'swedish', label: 'Swedish Massage (60 Min)', group: 'Spa', price: 1499, was: 1999 },
+      { id: 'aroma', label: 'Aroma Relaxing Massage (60 Min)', group: 'Spa', price: 1999, was: 2499 },
+      { id: 'couple', label: 'Couple Massage (60 min)', group: 'Spa', price: 2999, was: 3499 },
+      { id: 'deep', label: 'Deep Tissue Massage (90 min)', group: 'Spa', price: 3999, was: 4499 },
+    ],
+  },
+  {
+    id: 'thai-spa-goa', kind: 'spa', tag: 'Hair, skin, Spa & grooming',
+    name: 'Thai Spa Goa', cardName: 'Thai Spa Goa', place: 'Goa',
+    rating: 4.8, reviews: 414, offer: 40, image: 'spa-thai', photos: ['spa-thai', 'spa-room', 'spa-facial'],
+    hours: '9:00 AM - 9:00 PM',
+    about: 'Thai Spa Goa brings traditional Thai massage together with hair, skin and grooming services under one roof.',
+    facilities: spaFacilities, slots: spaSlots,
+    locations: [{ id: 'calangute', title: 'Calangute - Goa', address: 'Thai Spa Goa, Calangute, Goa' }],
+    tickets: [
+      { id: 'thai', label: 'Traditional Thai Massage (60 Min)', group: 'Spa', price: 2999, was: 3999 },
+      { id: 'facial', label: 'Signature Facial (45 Min)', group: 'Skin', price: 1799, was: 2499 },
+      { id: 'haircut', label: 'Haircut & Styling', group: 'Hair', price: 999, was: 1299 },
+    ],
+  },
+  {
+    id: 'looks-salon-bandra', kind: 'saloon', tag: 'Hair & Beauty',
+    name: 'Looks Salon', cardName: 'Looks Salon', place: 'Bandra, Mumbai',
+    rating: 4.3, reviews: 508, offer: 30, image: 'salon-studio', photos: ['salon-studio', 'salon-chairs', 'salon-blowdry'],
+    hours: '10:00 AM - 9:00 PM',
+    about: 'A full-service salon for cuts, colour, blow-dries and grooming, with senior stylists and branded products.',
+    facilities: salonFacilities, slots: spaSlots,
+    locations: [
+      { id: 'bandra', title: 'Bandra - Mumbai', address: 'Looks Salon, Linking Road, Bandra West, Mumbai' },
+      { id: 'powai', title: 'Powai - Mumbai', address: 'Looks Salon, Hiranandani Gardens, Powai, Mumbai' },
+    ],
+    tickets: [
+      { id: 'haircut', label: 'Haircut & Blow-dry', group: 'Hair', price: 799, was: 1099 },
+      { id: 'colour', label: 'Global Hair Colour', group: 'Hair', price: 2999, was: 3999 },
+      { id: 'cleanup', label: 'Face Clean-up', group: 'Skin', price: 999, was: 1399 },
+    ],
+  },
+  {
+    id: 'glam-studio-goa', kind: 'saloon', tag: 'Makeup & Grooming',
+    name: 'Glam Studio', cardName: 'Glam Studio', place: 'Panjim, Goa',
+    rating: 4.6, reviews: 187, offer: 25, image: 'salon-makeup', photos: ['salon-makeup', 'salon-blowdry', 'salon-studio'],
+    hours: '11:00 AM - 8:00 PM',
+    about: 'Party and bridal makeup, hair styling and grooming in the heart of Panjim.',
+    facilities: salonFacilities, slots: spaSlots,
+    locations: [{ id: 'panjim', title: 'Panjim - Goa', address: 'Glam Studio, 18th June Road, Panjim, Goa' }],
+    tickets: [
+      { id: 'party', label: 'Party Makeup', group: 'Makeup', price: 2499, was: 3299 },
+      { id: 'styling', label: 'Hair Styling', group: 'Hair', price: 1199, was: 1599 },
+      { id: 'mani', label: 'Manicure & Pedicure', group: 'Grooming', price: 1299, was: 1699 },
+    ],
+  },
+];
+
+export function spaDates(count = 7) {
+  const out = [];
+  const d = new Date();
+  for (let i = 0; i < count; i += 1) {
+    out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
+}
+
+/* -- Luxury experiences --------------------------------------------------- */
+
+export const luxuryKinds = [
+  { key: 'helicopter', label: 'Helicopter Rides' },
+  { key: 'yacht', label: 'Yacht & Cruise' },
+  { key: 'balloon', label: 'Hot Air Balloon' },
+  { key: 'custom', label: 'Customised Experiences' },
+];
+
+const luxuryLocations = [
+  { id: 'mumbai', title: 'Mumbai - Maharastra', address: 'Juhu Aerodrome, Vile Parle West, Mumbai' },
+  { id: 'pune', title: 'Pune - Maharastra', address: 'Hadapsar Helipad, Pune' },
+  { id: 'lonavala', title: 'Lonavala - Maharastra', address: 'Aamby Valley Airstrip, Lonavala' },
+  { id: 'goa', title: 'Goa', address: 'Dabolim, Goa' },
+];
+
+const smiraOrganizer = { name: 'Smira Club', rating: 4.8, reviews: 414, hosted: 10, years: 3.8 };
+
+/**
+ * A luxury experience has the shape of a spa — `tickets` are its packages,
+ * grouped (Shared Ride / Private Charter) — plus the event page's things to
+ * know, gallery and organiser. `taxRate` is 18%, a placeholder.
+ */
+export const luxuryTaxRate = 0.18;
+
+export const luxuries = [
+  {
+    id: 'helicopter-joy-ride', kind: 'helicopter', tag: 'Helicopter Rides',
+    name: 'Helicopter Joy Ride', cardName: 'Helicopter Joy Ride', place: 'Multiple Locations',
+    rating: 4.8, reviews: 414, listRating: 4.1, listReviews: 319, offer: 30,
+    image: 'lux-helicopter', photos: ['lux-helicopter', 'lux-jet-2', 'lux-resort'],
+    gallery: ['lux-jet-2', 'lux-resort', 'lux-cruise', 'lux-jet'], moreGallery: 6,
+    slots: ['10:00', '11:30', '13:00', '16:00', '17:30'], startsAt: '10:00',
+    locations: luxuryLocations,
+    about: 'Experience a breathtaking aerial journey with stunning views from above. Choose from romantic helicopter rides, aerial city tours, VIP transfers, or customized experiences for special occasions such as proposals, birthdays, anniversaries and corporate events.',
+    things: [
+      'Multiple Locations: Helicopter rides are available in Mumbai, Pune, Lonavala, Goa and other cities.',
+      'Choose Your Experience: Options include romantic rides, aerial city tours and customized experiences.',
+      'Special Occasions: Customized arrangements are available for proposals, birthdays, weddings and surprise events.',
+      'VIP Services: VIP transfers and event/wedding services are available.',
+      'Smira Member Benefit: Book through Smira Club and save up to 30%.',
+      'Booking Support: Smira provides coordination and support for your experience.',
+    ],
+    organizer: smiraOrganizer,
+    tickets: [
+      { id: 'skyline', group: 'Shared Ride', label: 'Mumbai Skyline Ride (15 Mins)', price: 4499, was: 6999, desc: 'Fly over Gateway of India, Marine Drive and City Skyline' },
+      { id: 'romantic', group: 'Shared Ride', label: 'Romantic Special (30 Mins)', price: 9499, was: 12999, desc: 'Private Ride with special arrangements' },
+      { id: 'sunset', group: 'Shared Ride', label: 'Sunset Experience (30 Mins)', price: 6999, was: 9999, desc: 'Magical Views of city at sunset' },
+      { id: 'city-tour', group: 'Shared Ride', label: 'Extended City Tour (30 Mins)', price: 7999, was: 9999, desc: 'Cover major landmarks & coastline' },
+      { id: 'charter-30', group: 'Private Charter', label: 'Private Charter (30 Mins)', price: 49999, was: 64999, desc: 'The whole helicopter for up to 5 guests' },
+      { id: 'charter-60', group: 'Private Charter', label: 'Private Charter (60 Mins)', price: 89999, was: 114999, desc: 'Your own route, for up to 5 guests' },
+    ],
+  },
+  {
+    id: 'luxury-yacht-experience', kind: 'yacht', tag: 'Yacht & Cruise',
+    name: 'Luxury Yacht Experience', cardName: 'Luxury Yacht Experience', place: 'Multiple Locations',
+    rating: 4.4, reviews: 219, offer: 30,
+    image: 'lux-yacht', photos: ['lux-yacht', 'lux-yacht-2', 'lux-cruise'],
+    gallery: ['lux-yacht-2', 'lux-cruise', 'lux-resort', 'lux-yacht'], moreGallery: 4,
+    slots: ['10:00', '13:00', '16:30', '19:00'], startsAt: '10:00',
+    locations: [luxuryLocations[0], luxuryLocations[3]],
+    about: 'Sail the coast on a private yacht with a crew, music and refreshments — for sunsets, birthdays, proposals and parties at sea.',
+    things: [
+      'Multiple Locations: Yachts sail from Mumbai and Goa.',
+      'Choose Your Experience: Shared sunset sails or a private yacht for your group.',
+      'Special Occasions: Decorations and cakes can be arranged for celebrations.',
+      'Smira Member Benefit: Book through Smira Club and save up to 30%.',
+    ],
+    organizer: smiraOrganizer,
+    tickets: [
+      { id: 'sunset-sail', group: 'Shared Ride', label: 'Sunset Sail (1 Hour)', price: 2999, was: 4299, desc: 'Shared yacht with refreshments at sunset' },
+      { id: 'party', group: 'Shared Ride', label: 'Party Cruise (2 Hours)', price: 4999, was: 6999, desc: 'Music, snacks and a shared deck' },
+      { id: 'private-2h', group: 'Private Charter', label: 'Private Yacht (2 Hours)', price: 24999, was: 34999, desc: 'The whole yacht for up to 10 guests' },
+    ],
+  },
+  {
+    id: 'hot-air-balloon-ride', kind: 'balloon', tag: 'Hot Air Balloon',
+    name: 'Hot Air Balloon Ride', cardName: 'Hot Air Balloon Ride', place: 'Multiple Locations',
+    rating: 4.1, reviews: 319, offer: 30,
+    image: 'lux-balloon', photos: ['lux-balloon', 'lux-resort', 'lux-jet-2'],
+    gallery: ['lux-balloon', 'lux-resort', 'lux-cruise', 'lux-yacht-2'], moreGallery: 3,
+    slots: ['06:00', '06:30'], startsAt: '06:00',
+    locations: [luxuryLocations[2], { id: 'jaipur', title: 'Jaipur - Rajasthan', address: 'Amer Road, Jaipur' }],
+    about: 'Rise with the sun and drift over the countryside in a hot air balloon, with a certified pilot and a toast on landing.',
+    things: [
+      'Flights leave at sunrise and depend on the weather.',
+      'Minimum age 7 years.',
+      'Smira Member Benefit: Book through Smira Club and save up to 30%.',
+    ],
+    organizer: smiraOrganizer,
+    tickets: [
+      { id: 'shared', group: 'Shared Ride', label: 'Sunrise Flight (1 Hour)', price: 9999, was: 13999, desc: 'Shared basket, certified pilot' },
+      { id: 'private', group: 'Private Charter', label: 'Private Balloon (1 Hour)', price: 39999, was: 54999, desc: 'The whole basket for up to 4 guests' },
+    ],
+  },
+  {
+    id: 'private-jet-getaway', kind: 'custom', tag: 'Customised Experiences',
+    name: 'Private Jet Getaway', cardName: 'Private Jet Getaway', place: 'Multiple Locations',
+    rating: 4.7, reviews: 88, offer: 20,
+    image: 'lux-jet', photos: ['lux-jet', 'lux-jet-2', 'lux-resort'],
+    gallery: ['lux-jet-2', 'lux-resort', 'lux-yacht', 'lux-cruise'], moreGallery: 2,
+    slots: ['09:00', '14:00'], startsAt: '09:00',
+    locations: [luxuryLocations[0], luxuryLocations[3]],
+    about: 'A private jet to a resort weekend of your choosing, planned end to end by the Smira Club desk.',
+    things: [
+      'Customised: routes, stays and dates are planned around you.',
+      'Booking Support: Smira provides coordination and support for your experience.',
+    ],
+    organizer: smiraOrganizer,
+    tickets: [
+      { id: 'weekend', group: 'Private Charter', label: 'Resort Weekend by Private Jet', price: 249999, was: 299999, desc: 'Return flights and two nights for two' },
+    ],
+  },
+];
+
+/** "10 Nov, 10 AM" — the first bookable slot, tomorrow. */
+export function luxuryAvailableFrom(item) {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  const [h] = item.startsAt.split(':').map(Number);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${d.getDate()} ${months[d.getMonth()]}, ${((h + 11) % 12) + 1} ${h < 12 ? 'AM' : 'PM'}`;
+}
+
+/* -- Restaurant offers ---------------------------------------------------- */
+
+export const restaurantModes = [
+  { key: 'walk-in', label: 'Walk-In' },
+  { key: 'dining', label: 'Dining' },
+];
+
+export const restaurants = [
+  { id: 'the-courtyard-tree', name: 'The Courtyard Tree', place: 'Baga, Goa', rating: 4.1, reviews: 319, offer: 40, opensAt: '6 PM', modes: ['walk-in', 'dining'], image: 'rest-courtyard-tree', address: 'Tito’s Lane, Saunta Vaddo, Baga, Goa 403516' },
+  { id: 'le-olive-garden', name: 'Le olive Garden', place: 'Alibaug', rating: 4.4, reviews: 260, offer: 40, opensAt: '6:30 PM', modes: ['walk-in'], image: 'rest-olive-garden', address: 'Nagaon Road, Alibaug, Maharashtra 402201' },
+  { id: 'coconut-groove', name: 'Coconut Groove', place: 'Candolim, Goa', rating: 4.4, reviews: 119, offer: 40, opensAt: '6 PM', modes: ['walk-in'], image: 'rest-coconut-groove', address: 'Fort Aguada Road, Candolim, Goa 403515' },
+  { id: 'phoenix-park-inn', name: 'Phoenix Park Inn By Radisson', place: 'Candolim, Goa', rating: 4.4, reviews: 412, offer: 40, opensAt: '6:30 PM', modes: ['dining'], image: 'rest-phoenix', address: 'Candolim Beach Road, Candolim, Goa 403515' },
+  { id: 'coast-rooftop', name: 'Coast Rooftop', place: 'Goa', rating: 4.4, reviews: 119, offer: 40, opensAt: '6 PM', modes: ['dining'], image: 'rest-coast-rooftop', address: 'Calangute - Baga Road, Calangute, Goa 403516' },
+];
+
+export const restaurantHours = [
+  { day: 'Monday', hours: '10:00 AM - 11:00 PM' },
+  { day: 'Tuesday', hours: '10:00 AM - 11:00 PM' },
+  { day: 'Wednesday', hours: '10:00 AM - 11:00 PM' },
+  { day: 'Thursday', hours: '10:00 AM - 11:00 PM' },
+  { day: 'Friday', hours: '10:00 AM - 11:30 PM' },
+  { day: 'Saturday', hours: '10:00 AM - 11:30 PM' },
+  { day: 'Sunday', hours: '10:00 AM - 11:00 PM' },
+];
+
+export const restaurantPerks = [
+  'Up To 40% OFF on Total Bill',
+  'Advance Reservation Recommended',
+  'Valid for Dine-In only',
+];
+
+export const restaurantMenu = {
+  updated: 'Updated 2 Weeks ago',
+  cuisines: 'Serves North Indian, Indo-Chinese and Continental',
+  books: [
+    { key: 'food', label: 'Food', pages: 6, image: 'menu-food' },
+    { key: 'bar', label: 'Bar', pages: 6, image: 'menu-bar' },
+  ],
+};
+
+export const restaurantFacilities = [
+  { label: 'Fine Dining', icon: 'Martini' },
+  { label: 'Buffet Available', icon: 'Soup' },
+  { label: 'Live Music', icon: 'Music' },
+  { label: 'Outdoor Seating', icon: 'Armchair' },
+];
+
+/** Book a Table: when lunch and dinner are served, in 15-minute slots. */
+export const tableSittings = [
+  { key: 'lunch', label: 'Lunch', from: '13:30', to: '17:00' },
+  { key: 'dinner', label: 'Dinner', from: '18:00', to: '22:30' },
+];
+
+/** Star Rating on the hotel results — review score floors, not hotel class. */
+export const ratingFloors = [
+  { key: 'any', label: 'Star Rating', min: 0 },
+  { key: '4', label: '4.0 & above', min: 4 },
+  { key: '4.5', label: '4.5 & above', min: 4.5 },
 ];
 
 /** The four member benefit cards. */
@@ -332,7 +1145,7 @@ export const footerColumns = [
     title: 'Company',
     links: [
       { label: 'About Smira Club', href: '/more/about' },
-      { label: 'Travel support', href: '/more/support' },
+      { label: 'Travel support', href: '/travel-support' },
       { label: 'Contact us', href: '/more/contact' },
       { label: 'Partner with us', href: '/more/partners' },
     ],

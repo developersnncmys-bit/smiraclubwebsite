@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowUpDown, Search } from 'lucide-react';
+import { ArrowLeft, ArrowUpDown, ChevronDown, Search, SlidersHorizontal, TrendingUp } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import ResultCard from '@/components/results/ResultCard';
-import { resultFilters, resultSortOptions } from '@/lib/content';
+import { ratingFloors, resultFilters, resultSortOptions } from '@/lib/content';
 
 /**
  * Search results across every category.
@@ -13,24 +13,35 @@ import { resultFilters, resultSortOptions } from '@/lib/content';
  * A search from the home screen is not tied to one kind, so the chips are a
  * filter over one list rather than four separate screens. Picking a chip
  * narrows it; picking it again clears it.
+ *
+ * A search from Hotels & Resorts is drawn with different chips — All filters,
+ * Star Rating and Popularity — because the kind is already chosen. That is
+ * `variant="hotel"`, and its back arrow returns to the hotel screen.
  */
-export default function ResultsScreen({ where, when, guests, results }) {
+export default function ResultsScreen({ where, when, guests, results, variant = 'all', backHref = '/' }) {
   const router = useRouter();
   const [sort, setSort] = useState('recommended');
   const [kind, setKind] = useState(null);
+  const [floor, setFloor] = useState('any');
+  const [popular, setPopular] = useState(false);
+
+  const hotel = variant === 'hotel';
+  const minRating = ratingFloors.find((f) => f.key === floor).min;
 
   const shown = useMemo(() => {
     let list = results;
 
     if (kind === 'free-stay') list = list.filter((r) => r.freeStay);
     else if (kind) list = list.filter((r) => r.kind === kind);
+    if (minRating) list = list.filter((r) => r.rating >= minRating);
 
     list = [...list];
+    if (popular) return list.sort((a, b) => b.reviews - a.reviews);
     if (sort === 'price-low') return list.sort((a, b) => a.price - b.price);
     if (sort === 'price-high') return list.sort((a, b) => b.price - a.price);
     if (sort === 'rating') return list.sort((a, b) => b.rating - a.rating);
     return list;
-  }, [results, kind, sort]);
+  }, [results, kind, sort, minRating, popular]);
 
   return (
     <>
@@ -44,8 +55,8 @@ export default function ResultsScreen({ where, when, guests, results }) {
           <div className="flex items-center gap-3 rounded-xl border-2 border-brand-700 px-3 py-2.5 lg:max-w-2xl lg:px-4 lg:py-3">
             <button
               type="button"
-              onClick={() => router.push('/')}
-              aria-label="Back to home"
+              onClick={() => router.push(backHref)}
+              aria-label="Back"
               className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
             >
               <ArrowLeft size={20} />
@@ -60,7 +71,7 @@ export default function ResultsScreen({ where, when, guests, results }) {
 
             <button
               type="button"
-              onClick={() => router.push('/')}
+              onClick={() => router.push(backHref)}
               aria-label="Change search"
               className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-action-500 transition hover:bg-surface-soft"
             >
@@ -70,15 +81,15 @@ export default function ResultsScreen({ where, when, guests, results }) {
 
           {/* -- Sort, then the four kinds -------------------------- */}
           <div className="rail mt-3 lg:mt-4">
-            <label className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
-              <span className="sr-only">Sort by</span>
+            {/* Drawn as just "Sort By"; the select sits invisibly over the chip. */}
+            <label className="relative inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900">
               Sort By
-              <ArrowUpDown size={15} className="shrink-0 text-ink-600" />
+              <ArrowUpDown size={15} className="shrink-0 text-ink-700" />
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 aria-label="Sort results"
-                className="cursor-pointer border-0 bg-transparent text-[13px] font-semibold text-ink-900 outline-none"
+                className="absolute inset-0 cursor-pointer opacity-0"
               >
                 {resultSortOptions.map((o) => (
                   <option key={o.key} value={o.key}>
@@ -88,7 +99,58 @@ export default function ResultsScreen({ where, when, guests, results }) {
               </select>
             </label>
 
-            {resultFilters.map((f) => {
+            {hotel && (
+              <>
+                <button
+                  type="button"
+                  disabled
+                  title="Filters arrive with the live inventory"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-surface-line bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink-900 disabled:cursor-default"
+                >
+                  All filters
+                  <SlidersHorizontal size={15} />
+                </button>
+
+                <label
+                  className={`relative inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border px-3.5 py-2.5 text-[13px] font-semibold transition ${
+                    floor !== 'any'
+                      ? 'border-action-500 bg-action-500 text-white'
+                      : 'border-surface-line bg-white text-ink-900'
+                  }`}
+                >
+                  {ratingFloors.find((f) => f.key === floor).label}
+                  <ChevronDown size={15} />
+                  <select
+                    value={floor}
+                    onChange={(e) => setFloor(e.target.value)}
+                    aria-label="Star rating"
+                    className="absolute inset-0 cursor-pointer opacity-0"
+                  >
+                    {ratingFloors.map((f) => (
+                      <option key={f.key} value={f.key}>
+                        {f.key === 'any' ? 'Any rating' : f.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => setPopular((p) => !p)}
+                  aria-pressed={popular}
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-lg border px-3.5 py-2.5 text-[13px] font-semibold transition ${
+                    popular
+                      ? 'border-action-500 bg-action-500 text-white'
+                      : 'border-surface-line bg-white text-ink-900 hover:bg-surface-soft'
+                  }`}
+                >
+                  Popularity
+                  <TrendingUp size={15} />
+                </button>
+              </>
+            )}
+
+            {!hotel && resultFilters.map((f) => {
               const on = kind === f.key;
               return (
                 <button

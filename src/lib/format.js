@@ -19,6 +19,17 @@ export function shortDate(date) {
   return `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]}`;
 }
 
+/** "29 Aug 2026". */
+export function fullDate(date) {
+  return `${shortDate(date)} ${new Date(date).getFullYear()}`;
+}
+
+/** "Aug 2026". */
+export function monthYear(date) {
+  const d = new Date(date);
+  return `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 /**
  * A default stay: tomorrow, two nights — which is what the booking screens
  * are drawn against, and the length most weekend trips actually are.
@@ -34,6 +45,33 @@ export function defaultStay() {
 export function nightsBetween(from, to) {
   const ms = new Date(to).getTime() - new Date(from).getTime();
   return Math.max(1, Math.round(ms / 86400000));
+}
+
+/** '14:00' -> '2 PM'; minutes are kept only when there are any. */
+export function clock(hhmm) {
+  const [h, m] = String(hhmm).split(':').map(Number);
+  const hour = ((h + 11) % 12) + 1;
+  const mins = m ? `:${String(m).padStart(2, '0')}` : '';
+  return `${hour}${mins} ${h < 12 ? 'AM' : 'PM'}`;
+}
+
+/** '14:00' -> '02:00 PM', as the hourly search field writes it. */
+export function clockLong(hhmm) {
+  const [h, m] = String(hhmm).split(':').map(Number);
+  const hour = ((h + 11) % 12) + 1;
+  return `${String(hour).padStart(2, '0')}:${String(m || 0).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+}
+
+/** '14:00' + 3 -> '2 PM - 5 PM'. A slot running past midnight wraps. */
+export function slotRange(hhmm, hours) {
+  const [h, m] = String(hhmm).split(':').map(Number);
+  const end = `${String((h + Number(hours)) % 24).padStart(2, '0')}:${String(m || 0).padStart(2, '0')}`;
+  return `${clock(hhmm)} - ${clock(end)}`;
+}
+
+/** 'Sat'. */
+export function weekday(date) {
+  return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(date).getDay()];
 }
 
 /** Joins class names, skipping anything falsy. */

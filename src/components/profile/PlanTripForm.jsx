@@ -8,7 +8,7 @@ import { ArrowRight, Calendar, Cake, Check, Luggage, MapPin, Users, Utensils } f
 import Icon from '@/components/ui/Icon';
 import { planTrip as opts, planTripDone, planTripHero } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
-import { nightsBetween } from '@/lib/format';
+import { nightsBetween, shortDate } from '@/lib/format';
 
 const FIELD =
   'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
@@ -126,8 +126,7 @@ export default function PlanTripForm({ hero, doneImage }) {
   /* -- Saved ------------------------------------------------------ */
   if (saved) {
     const nights = nightsBetween(saved.start, saved.end);
-    const day = (d) =>
-      new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+    const day = shortDate;
     const year = new Date(saved.end).getFullYear();
 
     return (
