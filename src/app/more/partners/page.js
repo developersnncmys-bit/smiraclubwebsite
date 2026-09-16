@@ -43,100 +43,17 @@ const REASONS = [
 ];
 
 /**
- * The five steps of the listing form, then what happens to it.
- *
- * These are the client's own five — the same five the admin panel reviews and
- * the same order the form asks in — so an owner reading this page and a desk
- * reading the application are looking at one process, not two descriptions of
- * it. What each step actually asks for is summarised rather than listed: the
- * full field list belongs in the form, not in the pitch for it.
+ * The onboarding stages, in the desk's own words. These are the same six the
+ * admin panel moves an application through, so what an owner is told here and
+ * what our team sees on their screen are one thing, not two.
  */
-const STEPS = [
-  {
-    title: 'Account and property',
-    body: 'Your name, mobile and a password, then the property itself — type, star rating, description and the full address. We verify the address, so put it in carefully.',
-  },
-  {
-    title: 'Rooms',
-    body: 'A category per room type: name, size, bed, how many adults and children it sleeps, and the photographs — exterior, lobby, restaurant, pool, and each room with its bathroom and view.',
-  },
-  {
-    title: 'Amenities and rules',
-    body: 'What you offer — Wi-Fi, pool, parking, restaurant, spa, kids play area — and the house rules: ID, couples, pets, smoking, visitors, children and extra beds.',
-  },
-  {
-    title: 'Pricing and inventory',
-    body: 'Your standard tariff and the Smira partner rate, weekday and weekend, extra adult and child, meal plan, and how many rooms you are releasing. Closed and blackout dates go here too.',
-  },
-  {
-    title: 'Ownership and legal',
-    body: 'Who owns it and the proof — registration or lease, PAN, GST — plus the bank account we settle into and the partner agreement to sign.',
-  },
-];
-
-/** What happens after you press submit. */
-const AFTER = [
-  { title: 'Submitted', body: 'You get a reference number straight away.' },
-  { title: 'Admin review', body: 'Our team reads the property, the rates and the papers. If something needs changing we tell you what, and you edit rather than start again.' },
-  { title: 'Contract', body: 'The agreement is signed by both sides.' },
-  { title: 'Live', body: 'You appear to members, and your dashboard opens.' },
-];
-
-/** The dashboard an approved partner signs into. */
-const DASHBOARD = {
-  today: [
-    'Total bookings',
-    'Upcoming check-ins',
-    "Today's check-ins",
-    'Available rooms',
-    'Revenue',
-    'Pending payments',
-    'Cancellations',
-  ],
-  sections: [
-    'My property',
-    'Rooms and inventory',
-    'Rates and offers',
-    'Availability calendar',
-    'Bookings',
-    'Customers',
-    'Payments',
-    'Reports',
-    'Reviews',
-    'Documents',
-    'Support',
-    'Profile',
-  ],
-};
-
-/** One request, as the partner sees it. */
-const BOOKING_CARD = [
-  ['Property', 'Forest Resort'],
-  ['Guest', 'Rahul Sharma'],
-  ['Check-in', '20 Sept 2026'],
-  ['Check-out', '22 Sept 2026'],
-  ['Room', 'Deluxe'],
-  ['Guests', '2 adults'],
-  ['Meal plan', 'Breakfast + dinner'],
-  ['Amount', '₹7,000'],
-];
-
-const BOOKING_ACTIONS = ['Accept', 'Reject', 'Edit', 'Contact support'];
-
-/** The three ways a booking reaches a partner. */
-const BOOKING_WAYS = [
-  {
-    title: 'A member asks if you are free',
-    body: 'They pick your property and their dates, and our desk sends you an availability request. You answer available or not; we confirm back to the member, they pay, and the booking is made.',
-  },
-  {
-    title: 'A member books you directly',
-    body: 'They choose the room and dates and press book. The request lands with you to confirm, payment follows, and the voucher goes out.',
-  },
-  {
-    title: 'Live availability',
-    body: 'If your channel manager is connected, members see your live rates and rooms and book without waiting on anyone. Confirmation, voucher and settlement all follow automatically.',
-  },
+const STAGES = [
+  { title: 'Registration', body: 'You send this form. We give you a reference straight away.' },
+  { title: 'Documents', body: 'Our desk calls to collect your GST, PAN and registration papers.' },
+  { title: 'Review', body: 'We read the property, the rate plan and the photographs.' },
+  { title: 'Verification', body: 'Papers and bank details are checked against the register.' },
+  { title: 'Approved', body: 'The rate plan is signed by both sides.' },
+  { title: 'Live', body: 'You appear to members and your first bookings start arriving.' },
 ];
 
 /** What to have to hand. Kept honest — none of it blocks the form. */
@@ -236,14 +153,14 @@ export default function Page() {
 
         {/* -- How it works -------------------------------------------------- */}
         <section className="py-8 lg:py-12">
-          <h2 className="section-title">What listing actually involves</h2>
+          <h2 className="section-title">From this form to your first booking</h2>
           <p className="mt-2 max-w-2xl text-[14px] text-ink-500">
-            Five steps to describe the property, then it comes to us. You can stop and come back —
-            nothing is lost between steps.
+            Six steps, and you can ask our desk where you are at any point using the reference we
+            give you.
           </p>
 
           <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-            {STEPS.map((s, i) => (
+            {STAGES.map((s, i) => (
               <li key={s.title} className="card relative p-5">
                 <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-brand-500">
                   Step {i + 1}
@@ -253,123 +170,6 @@ export default function Page() {
               </li>
             ))}
           </ol>
-
-          <h3 className="mt-9 text-[16px] font-bold text-ink-900 lg:text-[18px]">
-            Then it comes to us
-          </h3>
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-            {AFTER.map((a, i) => (
-              <li key={a.title} className="rounded-2xl border border-surface-line bg-white p-4">
-                <span className="inline-flex items-center gap-2 text-[13px] font-bold text-ink-900">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-[12px] text-brand-700">
-                    {i + 1}
-                  </span>
-                  {a.title}
-                </span>
-                <p className="mt-2 text-[13px] leading-relaxed text-ink-500">{a.body}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* -- The dashboard they get ---------------------------------------- */}
-        <section className="py-8 lg:py-12">
-          <h2 className="section-title">Your dashboard, once you are live</h2>
-          <p className="mt-2 max-w-2xl text-[14px] text-ink-500">
-            You run the property yourself. Our desk is there when you want a person, not because you
-            need one to change a rate.
-          </p>
-
-          <div className="mt-5 lg:grid lg:grid-cols-12 lg:gap-6">
-            <div className="card p-5 sm:p-6 lg:col-span-5">
-              <h3 className="text-[15px] font-bold text-ink-900">Today&rsquo;s overview</h3>
-              <p className="mt-1 text-[13px] text-ink-500">The first thing you see each morning.</p>
-              <ul className="mt-4 grid grid-cols-2 gap-2.5">
-                {DASHBOARD.today.map((t) => (
-                  <li
-                    key={t}
-                    className="rounded-xl bg-surface-soft px-3 py-2.5 text-[13px] font-semibold text-ink-700"
-                  >
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="card mt-4 p-5 sm:p-6 lg:col-span-7 lg:mt-0">
-              <h3 className="text-[15px] font-bold text-ink-900">Everything you can manage</h3>
-              <p className="mt-1 text-[13px] text-ink-500">
-                Rates, rooms and closed dates are yours to change whenever you like.
-              </p>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {DASHBOARD.sections.map((s) => (
-                  <li
-                    key={s}
-                    className="rounded-full border border-surface-line px-3.5 py-2 text-[13px] font-semibold text-ink-700"
-                  >
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* -- How a booking reaches them ------------------------------------ */}
-        <section className="py-8 lg:py-12">
-          <h2 className="section-title">How a booking reaches you</h2>
-          <p className="mt-2 max-w-2xl text-[14px] text-ink-500">
-            Three ways, depending on how you would rather work. Every one of them ends the same way:
-            a confirmed booking, a voucher to the guest, and a settlement to you.
-          </p>
-
-          <div className="mt-5 grid gap-4 lg:grid-cols-3 lg:gap-5">
-            {BOOKING_WAYS.map((w, i) => (
-              <article key={w.title} className="card p-5">
-                <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-brand-500">
-                  Way {i + 1}
-                </span>
-                <h3 className="mt-1 text-[15px] font-bold text-ink-900">{w.title}</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-ink-500">{w.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="card mt-5 p-5 sm:p-6">
-            <h3 className="text-[15px] font-bold text-ink-900">What a request looks like</h3>
-            <div className="mt-4 rounded-2xl border border-surface-line p-4 sm:p-5">
-              <p className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-[15px] font-extrabold text-ink-900">Booking #SC12345</span>
-                <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-bold text-emerald-700">
-                  Confirmed
-                </span>
-              </p>
-
-              <dl className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                {BOOKING_CARD.map(([k, v]) => (
-                  <div key={k} className="flex items-baseline justify-between gap-3 text-[13px]">
-                    <dt className="text-ink-500">{k}</dt>
-                    <dd className="font-semibold text-ink-900">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-surface-line pt-4">
-                {BOOKING_ACTIONS.map((b, i) => (
-                  <span
-                    key={b}
-                    className={
-                      i === 0
-                        ? 'rounded-xl bg-action-500 px-4 py-2 text-[13px] font-bold text-white'
-                        : 'rounded-xl border border-surface-line px-4 py-2 text-[13px] font-bold text-ink-700'
-                    }
-                  >
-                    {b}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* -- The form ------------------------------------------------------ */}
