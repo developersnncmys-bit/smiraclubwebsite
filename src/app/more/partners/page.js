@@ -108,7 +108,7 @@ export default function Page() {
                   Apply to partner
                   <ArrowRight size={18} />
                 </a>
-                <a href="tel:+919820011223" className="btn-quiet px-6 py-3.5">
+                <a href="tel:+919833733477" className="btn-quiet px-6 py-3.5">
                   Talk to us first
                 </a>
               </div>
@@ -220,8 +220,8 @@ export default function Page() {
 
           <p className="mt-6 text-[14px] text-ink-500">
             Still unsure?{' '}
-            <a href="tel:+919820011223" className="font-semibold text-brand-700 hover:text-brand-800">
-              Call our partnerships desk on +91 98200 11223
+            <a href="tel:+919833733477" className="font-semibold text-brand-700 hover:text-brand-800">
+              Call our partnerships desk on +91 98337 33477
             </a>
             .
           </p>

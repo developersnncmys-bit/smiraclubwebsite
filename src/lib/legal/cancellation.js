@@ -159,7 +159,7 @@ export const cancellationPolicy = {
     title: 'Contact Us',
     lead: 'To cancel a booking, change one, or ask what your rate plan allows, contact Smira Club with your booking ID.',
     email: 'support@smira.club',
-    phone: '+91 98200 11223',
+    phone: '+91 98337 33477',
     note: 'Our published membership information lists these support contact details and Mumbai-area office locations.',
   },
 

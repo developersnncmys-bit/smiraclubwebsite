@@ -146,7 +146,7 @@ export default function ApplyForm() {
     } catch (err) {
       setFailed(
         err.status === 0
-          ? 'We could not reach our desk just now. Call +91 98200 11223 and we will take it down for you.'
+          ? 'We could not reach our desk just now. Call +91 98337 33477 and we will take it down for you.'
           : err.message || 'That did not go through. Try again in a moment.'
       );
     } finally {
@@ -176,7 +176,7 @@ export default function ApplyForm() {
         )}
 
         <p className="mt-5 text-[13px] text-ink-400">
-          Quote that reference if you call us on +91 98200 11223.
+          Quote that reference if you call us on +91 98337 33477.
         </p>
       </div>
     );

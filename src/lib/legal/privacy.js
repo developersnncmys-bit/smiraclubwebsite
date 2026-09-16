@@ -348,7 +348,7 @@ export const privacyPolicy = {
     lead: 'If you have any questions, concerns or requests regarding this Privacy Policy or your personal information, please contact Smira Club.',
     email: 'support@smira.club',
     /** The Figma leaves this as a placeholder; it needs the real desk line. */
-    phone: '+91 98200 11223',
+    phone: '+91 98337 33477',
     note: 'Smira Club’s published membership information lists these support contact details and Mumbai-area office locations.',
   },
 

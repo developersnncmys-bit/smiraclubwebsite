@@ -8,8 +8,8 @@ import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
 import ClosingLine from '@/components/home/ClosingLine';
-import AiSearchFab from '@/components/home/AiSearchFab';
-import { heroSlides, offers, searchTabs, services } from '@/lib/content';
+import PlanTripReminder from '@/components/home/PlanTripReminder';
+import { heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
 import { image } from '@/lib/images';
 import { serviceArt } from '@/lib/serviceArt';
 
@@ -19,12 +19,16 @@ export default function HomePage() {
   // cannot read the filesystem themselves.
   const slides = heroSlides.map((slide) => ({ ...slide, image: image(slide.image) }));
   const offerCards = offers.map((offer) => ({ ...offer, image: image(offer.image) }));
+  const trips = Object.values(travelYears).flat().map((t) => ({
+    id: t.id, title: t.title, start: t.start, end: t.end, guests: t.guests, image: image(t.image),
+  }));
 
   return (
     <>
       <Hero slides={slides} />
       <SearchPanel art={serviceArt(searchTabs.map((t) => t.key))} />
       <Services art={serviceArt(services.map((s) => s.key))} />
+      <PlanTripReminder trips={trips} />
       <RecentSearches />
       <MemberBenefits />
       <FlashOffers />
@@ -32,7 +36,6 @@ export default function HomePage() {
       <GrabOffers offers={offerCards} />
       <WatchExplore />
       <ClosingLine />
-      <AiSearchFab />
     </>
   );
 }

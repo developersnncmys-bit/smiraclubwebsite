@@ -29,6 +29,12 @@ export default function BottomNav() {
 
   if (OWNS_THE_BOTTOM.some((route) => route.test(pathname))) return null;
 
+  // The longest matching href wins, so My Booking (/profile/bookings) lights
+  // on its own rather than alongside Profile (/profile).
+  const activeKey = primaryNav
+    .filter((item) => (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.key;
+
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-line bg-white shadow-nav lg:hidden"
@@ -37,7 +43,7 @@ export default function BottomNav() {
     >
       <ul className="mx-auto flex max-w-phone items-stretch">
         {primaryNav.map((item) => {
-          const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+          const active = item.key === activeKey;
           return (
             <li key={item.key} className="flex-1">
               <Link

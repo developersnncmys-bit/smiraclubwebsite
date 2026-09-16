@@ -144,7 +144,7 @@ export const refundPolicy = {
     title: 'Contact Us',
     lead: 'For any question about a refund, or to check where one has got to, please contact Smira Club with your booking ID or Member ID.',
     email: 'support@smira.club',
-    phone: '+91 98200 11223',
+    phone: '+91 98337 33477',
     note: 'Our published membership information lists these support contact details and Mumbai-area office locations.',
   },
 

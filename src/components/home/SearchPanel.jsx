@@ -68,7 +68,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
         {/* -- The four tabs -------------------------------------------- */}
         <nav
           aria-label="What are you looking for"
-          className="grid grid-cols-4 overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
+          className="grid grid-cols-[repeat(4,minmax(0,1fr))_auto] overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
         >
           {searchTabs.map((t) => {
             const on = t.key === active;
@@ -103,6 +103,18 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
               </Link>
             );
           })}
+
+          {/* AI Search lives behind a search icon straight after the slider. */}
+          <Link
+            href="/search"
+            aria-label="AI Search"
+            className="flex flex-col items-center justify-center gap-1 px-3 py-2.5 text-[12px] font-semibold text-action-500 transition hover:text-action-600 lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:text-sm"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-card lg:h-9 lg:w-9">
+              <Search size={20} />
+            </span>
+            AI Search
+          </Link>
         </nav>
 
         {/* -- The form -------------------------------------------------- */}
@@ -137,10 +149,10 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
               type="button"
               onClick={() => setDatesOpen(true)}
               aria-expanded={datesOpen}
-              className="flex items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3 text-left lg:w-[14rem]"
+              className="flex items-center gap-2 rounded-xl border border-surface-line bg-white p-2.5 text-left lg:w-[14rem]"
             >
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50">
-                <Calendar size={17} className="text-action-500" />
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
+                <Calendar size={16} className="text-action-500" />
               </span>
               <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
                 {shortDate(from)} - {shortDate(to)}
@@ -152,10 +164,10 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 type="button"
                 onClick={() => setGuestsOpen(true)}
                 aria-expanded={guestsOpen}
-                className="flex h-full w-full items-center gap-2.5 rounded-xl border border-surface-line bg-white p-3 text-left lg:w-[14rem]"
+                className="flex h-full w-full items-center gap-2 rounded-xl border border-surface-line bg-white p-2.5 text-left lg:w-[14rem]"
               >
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50">
-                  <User size={17} className="text-action-500" />
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
+                  <User size={16} className="text-action-500" />
                 </span>
                 <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
                   {summary}

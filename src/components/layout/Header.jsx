@@ -25,7 +25,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <Link
               href={memberBadge.href}
-              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-3.5 py-1.5 text-[13px] font-bold text-white transition hover:brightness-105"
+              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-2.5 py-1 text-[11px] font-bold text-white transition hover:brightness-105"
             >
               {memberBadge.label}
             </Link>
@@ -46,7 +46,7 @@ export default function Header() {
           <div className="ml-auto flex items-center gap-3">
             <Link
               href={memberBadge.href}
-              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-3.5 py-1.5 text-[13px] font-bold text-white transition hover:brightness-105"
+              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-2.5 py-1 text-[11px] font-bold text-white transition hover:brightness-105"
             >
               {memberBadge.label}
             </Link>

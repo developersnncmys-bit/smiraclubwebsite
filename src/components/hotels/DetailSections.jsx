@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Check, Crown, Expand, Info, Navigation, ShieldCheck } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
+import AllAmenities from '@/components/hotels/AllAmenities';
 import {
   hotelAmenities,
   hotelMemberBenefits,
@@ -66,9 +67,7 @@ export function AmenitiesCard({ id = 'amenities' }) {
           </div>
         ))}
       </div>
-      <button type="button" className="mt-6 text-[14px] font-bold text-ink-900 underline">
-        See all Amenities
-      </button>
+      <AllAmenities />
     </DetailCard>
   );
 }

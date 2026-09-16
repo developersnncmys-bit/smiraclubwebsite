@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
@@ -29,12 +29,30 @@ export default function Hero({ slides }) {
 
   const slide = heroSlides[at];
 
+  // A swipe moves between slides; a tap that is not a swipe opens the slide.
+  const touchX = useRef(null);
+  const swiped = useRef(false);
+  const onTouchStart = (e) => {
+    setPaused(true);
+    touchX.current = e.touches[0].clientX;
+    swiped.current = false;
+  };
+  const onTouchEnd = (e) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) < 40) return;
+    swiped.current = true;
+    setAt((n) => (n + (dx < 0 ? 1 : -1) + heroSlides.length) % heroSlides.length);
+  };
+
   return (
     <section
       className="relative"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
       aria-roledescription="carousel"
       aria-label="Membership offers"
     >
@@ -58,7 +76,17 @@ export default function Hero({ slides }) {
             </div>
           ))}
 
-          <div className="relative flex h-full items-center">
+          {/* The whole banner opens the slide's page, not just its button. */}
+          <Link
+            href={slide.cta.href}
+            aria-label={`${slide.headline} ${slide.figure}${slide.unit || ''} ${slide.suffix} — ${slide.cta.label}`}
+            onClick={(e) => {
+              if (swiped.current) e.preventDefault();
+            }}
+            className="absolute inset-0 z-[1]"
+          />
+
+          <div className="pointer-events-none relative z-[2] flex h-full items-center">
             <div className="shell">
               <div className="w-full max-w-[26rem] lg:max-w-[38rem]">
               <span className="inline-block rounded bg-gold px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-ink-900 sm:text-[11px]">
@@ -82,7 +110,7 @@ export default function Hero({ slides }) {
                 {slide.copy}
               </p>
 
-                <Link href={slide.cta.href} className="btn-pill mt-4 gap-1.5 px-3.5 py-1.5 text-[11px] uppercase tracking-wide sm:px-4 sm:py-2 sm:text-[12px]">
+                <Link href={slide.cta.href} className="pointer-events-auto btn-pill mt-4 gap-1.5 px-3.5 py-1.5 text-[11px] uppercase tracking-wide sm:px-4 sm:py-2 sm:text-[12px]">
                   {slide.cta.label}
                   <ArrowRight size={15} />
                 </Link>

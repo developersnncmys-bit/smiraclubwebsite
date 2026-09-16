@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import { offerTabs, offers as fallbackOffers } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 
@@ -43,7 +43,7 @@ export default function GrabOffers({ offers }) {
           {shown.map((offer) => (
             <Link
               key={offer.id}
-              href={`/offers#${offer.id}`}
+              href={offer.href || `/offers#${offer.id}`}
               className={`relative flex h-[11.5rem] w-[19rem] overflow-hidden rounded-2xl bg-gradient-to-r ${offer.tone} lg:h-[13rem] lg:w-auto`}
             >
               <div className="relative z-10 flex w-[58%] flex-col justify-between p-4 lg:p-5">
@@ -52,6 +52,18 @@ export default function GrabOffers({ offers }) {
                 </span>
                 <div>
                   <p className="text-lg font-extrabold leading-tight text-white lg:text-xl">{offer.title}</p>
+                  {offer.points?.length > 0 && (
+                    <ul className="mt-1.5 space-y-0.5">
+                      {offer.points.map((pt) => (
+                        <li key={pt} className="flex items-center gap-1.5 text-[11px] font-medium text-white/90">
+                          <span className="grid h-3.5 w-3.5 shrink-0 place-items-center rounded-[3px] bg-white text-green-600">
+                            <Check size={10} strokeWidth={3.5} />
+                          </span>
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <span className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white underline underline-offset-4">
                     Explore Offers
                     <ArrowRight size={14} />

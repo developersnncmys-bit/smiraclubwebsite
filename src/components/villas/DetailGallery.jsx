@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Heart, Share2, Star } from 'lucide-react';
@@ -8,6 +8,10 @@ import { ArrowLeft, Heart, Share2, Star } from 'lucide-react';
 /**
  * The photo at the top of a villa's page, with the screen's own controls
  * floating over it and the rating pill the design puts in the corner.
+ *
+ * Over it, a bar with the back arrow and the property's name sticks under the
+ * site header as the page scrolls — logo, then name, then the tabs — so the
+ * way back and what you are looking at stay in view. The photos swipe.
  *
  * Share uses the Web Share sheet where the browser has one and falls back to
  * copying the link, so the button always does something.
@@ -17,6 +21,17 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
   const [at, setAt] = useState(0);
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
+  const touchX = useRef(null);
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e) => {
+    if (touchX.current === null || photos.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) < 40) return;
+    setAt((n) => (n + (dx < 0 ? 1 : -1) + photos.length) % photos.length);
+  };
 
   const share = async () => {
     const url = window.location.href;
@@ -38,8 +53,27 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
   };
 
   return (
+    <>
+    <div className="sticky top-14 z-30 border-b border-surface-line bg-white lg:top-[68px]">
+      <div className="shell flex h-12 items-center gap-2">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          aria-label="Go back"
+          className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
+        >
+          <ArrowLeft size={21} />
+        </button>
+        <p className="truncate text-[16px] font-semibold text-ink-900">{name}</p>
+      </div>
+    </div>
+
     <section className="relative">
-      <div className="relative h-[300px] w-full overflow-hidden sm:h-[400px] lg:h-[520px]">
+      <div
+        className="relative h-[300px] w-full touch-pan-y overflow-hidden sm:h-[400px] lg:h-[520px]"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         {photos.map((src, i) => (
           <Image
             key={src}
@@ -56,16 +90,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
         ))}
 
         {/* -- The screen's controls, over the photo ------------------- */}
-        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-5">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            aria-label="Go back"
-            className="grid h-10 w-10 place-items-center rounded-full bg-white/90 text-ink-900 shadow-card backdrop-blur transition hover:bg-white"
-          >
-            <ArrowLeft size={20} />
-          </button>
-
+        <div className="absolute inset-x-0 top-0 flex items-center justify-end p-3 lg:p-5">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -102,7 +127,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
         )}
 
         {/* -- The rating, as the design corners it -------------------- */}
-        <div className="absolute left-4 top-16 rounded-xl bg-ink-900/75 px-4 py-2.5 text-white backdrop-blur lg:left-6 lg:top-20">
+        <div className="absolute left-4 top-3 rounded-xl bg-ink-900/75 px-4 py-2.5 text-white backdrop-blur lg:left-6 lg:top-20">
           <p className="flex items-center gap-1.5 text-lg font-bold">
             <Star size={17} className="text-gold" fill="currentColor" strokeWidth={0} />
             {rating}
@@ -126,5 +151,6 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
         )}
       </div>
     </section>
+    </>
   );
 }

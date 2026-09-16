@@ -979,6 +979,8 @@ export const offers = [
     tab: 'Weekend',
     badge: 'Weekend getaway',
     title: 'Perfect Escapes for your weekend',
+    href: '/free-stay',
+    points: ['Complimentary stays', 'Pay only for food'],
     tone: 'from-[#2b1e63] to-[#3d2a86]',
     image: 'offer-weekend',
   },
@@ -987,6 +989,8 @@ export const offers = [
     tab: 'Seasonal',
     badge: 'Seasonal',
     title: 'Amazing Deals this season',
+    href: '/packages',
+    points: ['Up to 40% OFF packages', 'Limited-time deals'],
     tone: 'from-[#0f3f77] to-[#1c62b0]',
     image: 'offer-seasonal',
   },
@@ -995,6 +999,8 @@ export const offers = [
     tab: 'Salon & Spa',
     badge: 'Salon & Spa',
     title: 'Unwind at member rates',
+    href: '/spa',
+    points: ['Up to 40% OFF services', 'Top-rated spas'],
     tone: 'from-[#5b2333] to-[#8c3b52]',
     image: 'offer-salon',
   },
@@ -1003,6 +1009,8 @@ export const offers = [
     tab: 'Weekend',
     badge: 'Dining',
     title: 'Table for two, on the house',
+    href: '/restaurants',
+    points: ['Up to 40% OFF the bill', 'Book a table in a tap'],
     tone: 'from-[#14532d] to-[#1f7a43]',
     image: 'offer-dining',
   },
@@ -1096,6 +1104,7 @@ export const plans = [
 export const primaryNav = [
   { key: 'home', label: 'Home', href: '/', icon: 'Home' },
   { key: 'wishlist', label: 'Wishlist', href: '/wishlist', icon: 'Heart' },
+  { key: 'bookings', label: 'My Booking', href: '/profile/bookings', icon: 'CalendarCheck' },
   { key: 'profile', label: 'Profile', href: '/profile', icon: 'CircleUser' },
   { key: 'more', label: 'More', href: '/more', icon: 'MoreHorizontal' },
 ];
@@ -1765,6 +1774,14 @@ export const hotelAmenities = [
   { key: 'bar', label: 'Bar & Lounge', icon: 'Martini' },
 ];
 
+/** The rest of what a property offers, behind See all Amenities. */
+export const hotelAmenitiesAll = [
+  { title: 'Property', icon: 'Building2', items: ['24-hour front desk', 'Parking', 'Lift', 'Power backup', 'Laundry service', 'Doctor on call'] },
+  { title: 'Rooms', icon: 'BedDouble', items: ['Air conditioning', 'Room service', 'Flat-screen TV', 'Tea & coffee maker', 'In-room safe', 'Daily housekeeping'] },
+  { title: 'Leisure', icon: 'Waves', items: ['Swimming pool', 'Spa & wellness', 'Fitness centre', 'Indoor games', 'Kids play area'] },
+  { title: 'Food & Drink', icon: 'Utensils', items: ['Multi-cuisine restaurant', 'Bar & lounge', 'Breakfast buffet', 'In-room dining'] },
+];
+
 export const hotelReviews = [
   {
     id: 'r1',
@@ -2410,8 +2427,8 @@ export const membershipCompare = [
 export const membershipHelp = {
   title: 'Need Help?',
   body: 'We’re here to assist you',
-  whatsapp: 'https://wa.me/919820011223',
-  phone: '+919820011223',
+  whatsapp: 'https://wa.me/919833733477',
+  phone: '+919833733477',
 };
 
 /* -- Claim Your Gifts ---------------------------------------------------- */
@@ -3322,7 +3339,7 @@ export const flashOffers = [
     deal: 'Get Up To 40% OFF',
     endsInHours: 34,
     tone: 'from-[#10284a] to-[#1b4b7e]',
-    href: '/offers?kind=restaurant-offers',
+    href: '/restaurants/phoenix-park-inn',
   },
   {
     id: 'imagicaa-flash',
@@ -3332,7 +3349,7 @@ export const flashOffers = [
     deal: 'Flat ₹300 OFF on tickets',
     endsInHours: 20,
     tone: 'from-[#1b1560] to-[#3b2f9c]',
-    href: '/offers?kind=water-park',
+    href: '/parks/imagicaa-water-park',
   },
   {
     id: 'salon-flash',
@@ -3342,7 +3359,7 @@ export const flashOffers = [
     deal: 'Up To 35% OFF on spa days',
     endsInHours: 52,
     tone: 'from-[#3d1f4a] to-[#6d3b6f]',
-    href: '/offers?kind=restaurant-offers',
+    href: '/spa/tattva-wellness-spa',
   },
 ];
 

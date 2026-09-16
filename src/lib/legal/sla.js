@@ -166,7 +166,7 @@ export const serviceAgreement = {
     title: 'Contact Us',
     lead: 'For any question about this Agreement or the service you have received, please contact Smira Club with your Member ID or booking ID.',
     email: 'support@smira.club',
-    phone: '+91 98200 11223',
+    phone: '+91 98337 33477',
     note: 'Our published membership information lists these support contact details and Mumbai-area office locations.',
   },
 
