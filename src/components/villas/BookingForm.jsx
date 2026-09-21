@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Info, Mail, User } from 'lucide-react';
 import { inr } from '@/lib/format';
+import { api } from '@/lib/api';
 
 const BLANK = { name: '', email: '', phone: '' };
 
@@ -95,12 +96,34 @@ export default function BookingForm({
     setFailed('');
     if (Object.keys(found).length !== 0) return;
 
-    // Where the screen sends bookings on, it has to land before we say so.
+    // Every booking goes to the Smira desk, and has to land before we say so.
+    // A screen with its own details to send passes `send`; the rest send what
+    // the confirmation screen is about to show.
+    const deliver =
+      send ||
+      (async (p) => {
+        const first = p.guests[0] || {};
+        const res = await api.websiteBooking({
+          name: first.name,
+          phone: first.phone,
+          email: first.email,
+          guests: p.guests,
+          coupon: p.coupon,
+          total: p.total,
+          kind: confirm.kind || 'stay',
+          itemName: confirm.name,
+          slot: confirm.slot,
+          nights: confirm.nights,
+          location: confirm.location,
+          pax: confirm.pax || p.guests.length,
+        });
+        return { reference: res.data?.reference };
+      });
     let reference = '';
-    if (send) {
+    {
       setBusy(true);
       try {
-        const res = await send({
+        const res = await deliver({
           guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
           coupon: coupon.trim(),
           total,
@@ -120,7 +143,7 @@ export default function BookingForm({
     // No payment step yet, so a clean form goes straight to confirmation.
     const query = new URLSearchParams({
       ref: reference || bookingRef(),
-      ...(send ? { status: 'requested' } : {}),
+      status: 'requested',
       name: confirm.name || '',
       slot: confirm.slot || '',
       nights: confirm.nights || '',

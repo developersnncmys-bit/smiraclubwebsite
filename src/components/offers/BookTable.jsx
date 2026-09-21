@@ -6,6 +6,7 @@ import { ArrowRight, X } from 'lucide-react';
 import { tableSittings } from '@/lib/content';
 import { clock, fullDate, shortDate, weekday } from '@/lib/format';
 import Portal from '@/components/ui/Portal';
+import { api } from '@/lib/api';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -39,6 +40,9 @@ export default function BookTable({ restaurant }) {
   const [sitting, setSitting] = useState(tableSittings[0].key);
   const [time, setTime] = useState(null);
   const [guests, setGuests] = useState(2);
+  const [who, setWho] = useState({ name: '', phone: '' });
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState('');
   const [now, setNow] = useState(null);
 
   // The clock is read after mount, so the server and the browser agree on
@@ -74,17 +78,45 @@ export default function BookTable({ restaurant }) {
     return h * 60 + m <= now.getHours() * 60 + now.getMinutes();
   };
 
-  const confirm = () => {
-    if (!time) return;
+  const confirm = async () => {
+    if (!time || busy) return;
+    if (who.name.trim().length < 2) return setFailed('Tell us whose name the table is under.');
+    if (!/^\d{10}$/.test(who.phone.replace(/\D/g, '').slice(-10))) return setFailed('A 10-digit mobile number, please.');
+
     const d = days[day].iso;
-    const stamp = new Date();
-    const ref = `SM-${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, '0')}${String(stamp.getDate()).padStart(2, '0')}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`;
+    const slot = `${weekday(d)}, ${fullDate(d)}`;
+    const nights = `${clock(time)} · ${current.label} · ${guests} Guest${guests === 1 ? '' : 's'}`;
+
+    // The restaurant desk has to have it before we say it is booked.
+    setBusy(true);
+    setFailed('');
+    let ref;
+    try {
+      const res = await api.websiteBooking({
+        name: who.name,
+        phone: who.phone,
+        kind: 'table',
+        itemName: restaurant.name,
+        location: restaurant.location || restaurant.area || restaurant.city,
+        slot,
+        nights,
+        pax: guests,
+        total: 0,
+      });
+      ref = res.data?.reference;
+    } catch (err) {
+      setBusy(false);
+      setFailed(err?.status ? err.message : 'We could not reach our desk just now. Please try again in a moment.');
+      return;
+    }
+
     router.push(`/booking/confirmed?${new URLSearchParams({
       ref,
+      status: 'requested',
       kind: 'table',
       name: restaurant.name,
-      slot: `${weekday(d)}, ${fullDate(d)}`,
-      nights: `${clock(time)} · ${current.label} · ${guests} Guest${guests === 1 ? '' : 's'}`,
+      slot,
+      nights,
     })}`);
   };
 
@@ -205,8 +237,27 @@ export default function BookTable({ restaurant }) {
                   <button type="button" onClick={() => setGuests((g) => Math.min(20, g + 1))} aria-label="One more guest" className="grid h-9 w-9 place-items-center text-[18px] font-semibold text-brand-700">+</button>
                 </span>
               </div>
-              <button type="button" onClick={confirm} disabled={!time} className="btn-primary w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal disabled:opacity-50">
-                {time ? 'Continue' : 'Pick a time to continue'}
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  value={who.name}
+                  onChange={(e) => setWho((w) => ({ ...w, name: e.target.value }))}
+                  placeholder="Your name"
+                  aria-label="Your name"
+                  className="min-w-0 rounded-xl border border-surface-line px-3 py-3 text-[14px] outline-none focus:border-action-500"
+                />
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  value={who.phone}
+                  onChange={(e) => setWho((w) => ({ ...w, phone: e.target.value }))}
+                  placeholder="Mobile number"
+                  aria-label="Mobile number"
+                  className="min-w-0 rounded-xl border border-surface-line px-3 py-3 text-[14px] outline-none focus:border-action-500"
+                />
+              </div>
+              {failed && <p role="alert" className="text-[13px] font-medium text-red-600">{failed}</p>}
+              <button type="button" onClick={confirm} disabled={!time || busy} className="btn-primary w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal disabled:opacity-50">
+                {busy ? 'Sending…' : time ? 'Continue' : 'Pick a time to continue'}
               </button>
             </div>
           </div>

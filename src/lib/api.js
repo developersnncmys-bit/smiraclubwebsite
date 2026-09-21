@@ -68,6 +68,14 @@ export const api = {
   packageBooking: (form) =>
     request('/website/package-booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
 
+  /**
+   * Any other booking made on the website — hotel, villa, free stay, table,
+   * park, spa and the rest. It lands on the Booking page as pending and in
+   * Sales & Leads as a new lead.
+   */
+  websiteBooking: (form) =>
+    request('/website/booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
+
   login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
   me: (token) => request('/auth/me', { token }),
 };

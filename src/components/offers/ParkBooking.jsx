@@ -6,6 +6,7 @@ import { Calendar, Mail, Phone, User } from 'lucide-react';
 import GuidelinesSheet from '@/components/offers/GuidelinesSheet';
 import { INPUT } from '@/components/forms/RequestFields';
 import { fullDate, inr, weekday } from '@/lib/format';
+import { api } from '@/lib/api';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -51,6 +52,8 @@ export default function ParkBooking({ park, tickets, children }) {
   const [who, setWho] = useState('myself');
   const [guests, setGuests] = useState([{ name: '', email: '', phone: '' }]);
   const [errors, setErrors] = useState({});
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState('');
 
   const chosen = tickets.filter((t) => qty[t.id]);
   const sub = chosen.reduce((s, t) => s + qty[t.id] * t.was, 0);
@@ -66,7 +69,8 @@ export default function ParkBooking({ park, tickets, children }) {
 
   const setGuest = (i, key, value) => setGuests((all) => all.map((g, n) => (n === i ? { ...g, [key]: value } : g)));
 
-  const book = () => {
+  const book = async () => {
+    if (busy) return;
     const found = {};
     if (!chosen.length) found.tickets = 'Select at least one ticket.';
     const lead = guests[0];
@@ -78,10 +82,37 @@ export default function ParkBooking({ park, tickets, children }) {
     if (found.tickets) return ticketsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (Object.keys(found).length) return formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    const stamp = new Date();
-    const ref = `SM-${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, '0')}${String(stamp.getDate()).padStart(2, '0')}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`;
+    const slot = `${weekday(date)}, ${fullDate(date)}`;
+    const nights = chosen.map((t) => `${qty[t.id]} × ${t.summary}`).join(', ');
+    const pax = chosen.reduce((s, t) => s + qty[t.id], 0);
+
+    // The desk has to have it before we say it is booked.
+    setBusy(true);
+    setFailed('');
+    let ref;
+    try {
+      const res = await api.websiteBooking({
+        name: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
+        total,
+        kind: 'park',
+        itemName: park.name,
+        slot,
+        nights,
+        pax,
+      });
+      ref = res.data?.reference;
+    } catch (err) {
+      setBusy(false);
+      setFailed(err?.status ? err.message : 'We could not reach our travel desk just now. Please try again in a moment.');
+      return;
+    }
+
     router.push(`/booking/confirmed?${new URLSearchParams({
       ref,
+      status: 'requested',
       kind: 'park',
       name: park.name,
       slot: `${weekday(date)}, ${fullDate(date)}`,
@@ -264,8 +295,9 @@ export default function ParkBooking({ park, tickets, children }) {
                 <p className="text-[12px] text-ink-500">Inclusive of all taxes</p>
               </div>
             </div>
-            <button type="button" onClick={book} className="btn-primary mt-4 w-full rounded-lg py-3.5 text-[15px] normal-case tracking-normal">
-              Book Ticket
+            {failed && <p role="alert" className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-[13px] font-medium text-red-600">{failed}</p>}
+            <button type="button" onClick={book} disabled={busy} className="btn-primary mt-4 w-full rounded-lg py-3.5 text-[15px] normal-case tracking-normal disabled:opacity-60">
+              {busy ? 'Sending…' : 'Book Ticket'}
             </button>
           </div>
         </aside>
@@ -273,13 +305,14 @@ export default function ParkBooking({ park, tickets, children }) {
 
       {/* -- Phone bar -------------------------------------------------------- */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:hidden">
+        {failed && <p role="alert" className="px-4 pt-2 text-[13px] font-medium text-red-600">{failed}</p>}
         <div className="flex items-center gap-4 px-4 py-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <div className="min-w-0 flex-1">
             <p className="text-xl font-extrabold text-ink-900">{inr(total)}</p>
             <p className="text-[12px] text-ink-600">Inclusive of all taxes</p>
           </div>
-          <button type="button" onClick={book} className="btn-primary shrink-0 rounded-lg px-10 py-3.5 text-[15px] normal-case tracking-normal">
-            Book Ticket
+          <button type="button" onClick={book} disabled={busy} className="btn-primary shrink-0 rounded-lg px-10 py-3.5 text-[15px] normal-case tracking-normal disabled:opacity-60">
+            {busy ? 'Sending…' : 'Book Ticket'}
           </button>
         </div>
       </div>

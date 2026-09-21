@@ -106,7 +106,7 @@ export default async function Page({ searchParams }) {
             {requested ? (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
                 Your {k.noun} request has reached our travel desk.
-                <span className="block">They will call you shortly to confirm seats and take payment.</span>
+                <span className="block">They will call you shortly to confirm it and take payment.</span>
               </p>
             ) : (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
