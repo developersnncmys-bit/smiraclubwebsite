@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, MoreVertical, Star } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
+import CardMenu from '@/components/ui/CardMenu';
 import Icon from '@/components/ui/Icon';
 import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
@@ -21,7 +22,7 @@ const TONES = {
  */
 export default function ResultCard({ item }) {
   return (
-    <article className="card overflow-hidden">
+    <article className="card">
       <div className="flex gap-3.5 p-3.5 sm:p-4">
         <span className="relative h-[104px] w-[104px] shrink-0 overflow-hidden rounded-xl sm:h-[124px] sm:w-[124px]">
           <Image
@@ -45,13 +46,13 @@ export default function ResultCard({ item }) {
               )}
             </h3>
 
-            <button
-              type="button"
-              aria-label={`More about ${item.name}`}
-              className="-mr-1 grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink-500 transition hover:bg-surface-soft"
-            >
-              <MoreVertical size={18} />
-            </button>
+            <CardMenu
+              item={{ href: item.href, name: item.name, place: item.place, image: toSrc(item.image) }}
+              similar={{
+                href: `/results?destination=${encodeURIComponent(item.place.split(',').pop().trim())}`,
+                label: item.kind === 'package' ? 'Similar packages' : 'Similar properties',
+              }}
+            />
           </div>
 
           <p className="mt-1 text-[14px] text-ink-600">{item.place}</p>

@@ -54,12 +54,21 @@ export default function ParksScreen({ parks }) {
             {shown.map((park) => {
               const href = `/parks/${park.id}`;
               return (
-                <article key={park.id} className="card overflow-hidden p-3 sm:p-4">
+                <article key={park.id} className="card p-3 sm:p-4">
                   <div className="flex gap-3.5">
                     <Link href={href} className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-xl sm:h-[130px] sm:w-[130px]">
                       <Image src={park.images[0]} alt={park.name} fill sizes="130px" className="object-cover" />
                     </Link>
-                    <CardHead name={park.name} place={park.place} rating={park.rating} reviews={park.reviews}>
+                    <CardHead
+                      name={park.name}
+                      place={park.place}
+                      rating={park.rating}
+                      reviews={park.reviews}
+                      menu={{
+                        item: { href, name: park.name, place: park.place, image: park.images[0] },
+                        similar: { href: '/parks', label: 'Similar parks' },
+                      }}
+                    >
                       <p className="mt-1.5 text-[13px] text-ink-700">
                         Activity &middot; <span className="font-medium">{park.schedule}</span>
                       </p>

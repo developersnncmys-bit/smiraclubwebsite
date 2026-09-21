@@ -57,7 +57,7 @@ export default function Hero({ slides }) {
       aria-label="Membership offers"
     >
       <div className="w-full">
-        <div className="relative h-[290px] w-full overflow-hidden sm:h-[380px] lg:h-[500px] 2xl:h-[560px]">
+        <div className="relative h-[200px] w-full overflow-hidden sm:h-[380px] lg:h-[500px] 2xl:h-[560px]">
           {heroSlides.map((s, i) => (
             <div
               key={s.id}
@@ -93,10 +93,10 @@ export default function Hero({ slides }) {
                 {slide.eyebrow}
               </span>
 
-              <p className="mt-4 flex items-end gap-3 text-white">
-                <span className="text-xl font-semibold uppercase tracking-wide sm:text-2xl">{slide.headline}</span>
+              <p className="mt-2 flex items-end gap-3 text-white sm:mt-4">
+                <span className="text-base font-semibold uppercase tracking-wide sm:text-2xl">{slide.headline}</span>
                 <span className="flex items-end border-l border-white/40 pl-3 leading-none">
-                  <span className="text-[49px] font-extrabold leading-[0.85] sm:text-6xl lg:text-7xl">
+                  <span className="text-[38px] font-extrabold leading-[0.85] sm:text-6xl lg:text-7xl">
                     {slide.figure}
                   </span>
                   <span className="ml-1 flex flex-col text-left leading-none">
@@ -106,11 +106,11 @@ export default function Hero({ slides }) {
                 </span>
               </p>
 
-              <p className="mt-3 max-w-[19rem] text-[14px] leading-snug text-white/90 sm:text-base lg:max-w-md lg:text-lg">
+              <p className="mt-1.5 line-clamp-2 max-w-[19rem] text-[12px] leading-snug text-white/90 sm:mt-3 sm:text-base lg:max-w-md lg:text-lg">
                 {slide.copy}
               </p>
 
-                <Link href={slide.cta.href} className="pointer-events-auto btn-pill mt-4 gap-1.5 px-3.5 py-1.5 text-[11px] uppercase tracking-wide sm:px-4 sm:py-2 sm:text-[12px]">
+                <Link href={slide.cta.href} className="pointer-events-auto btn-pill mt-2.5 gap-1.5 sm:mt-4 px-3.5 py-1.5 text-[11px] uppercase tracking-wide sm:px-4 sm:py-2 sm:text-[12px]">
                   {slide.cta.label}
                   <ArrowRight size={15} />
                 </Link>
@@ -121,7 +121,7 @@ export default function Hero({ slides }) {
       </div>
 
       {/* The 1/3 counter and dots, sitting under the banner as designed. */}
-      <div className="flex items-center justify-center gap-2 py-3">
+      <div className="absolute inset-x-0 bottom-2 z-[3] flex items-center justify-center gap-2 sm:static sm:py-3">
         <span className="num rounded-full bg-ink-900 px-2.5 py-1 text-[11px] font-bold text-white">
           {at + 1}/{heroSlides.length}
         </span>
@@ -132,7 +132,7 @@ export default function Hero({ slides }) {
               onClick={() => setAt(i)}
               aria-label={`Go to slide ${i + 1}`}
               className={`h-1.5 rounded-full transition-all ${
-                i === at ? 'w-5 bg-ink-700' : 'w-1.5 bg-ink-400/50 hover:bg-ink-400'
+                i === at ? 'w-5 bg-white sm:bg-ink-700' : 'w-1.5 bg-white/60 hover:bg-white sm:bg-ink-400/50 sm:hover:bg-ink-400'
               }`}
             />
           ))}

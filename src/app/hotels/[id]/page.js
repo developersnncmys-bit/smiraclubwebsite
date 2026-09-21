@@ -112,6 +112,12 @@ export default async function Page({ params, searchParams }) {
 
         <MemberBenefitsCard />
 
+        <RoomPicker
+          groups={groups}
+          defaultPlan={hotel.defaultPlan}
+          bookHref={`/hotels/${hotel.id}/book${carry ? `?${carry}` : ''}`}
+        />
+
         {/* -- The stay ----------------------------------------------- */}
         <DetailCard>
           <p className="text-center text-[15px] font-bold text-ink-900">
@@ -128,12 +134,6 @@ export default async function Page({ params, searchParams }) {
             </p>
           </div>
         </DetailCard>
-
-        <RoomPicker
-          groups={groups}
-          defaultPlan={hotel.defaultPlan}
-          bookHref={`/hotels/${hotel.id}/book${carry ? `?${carry}` : ''}`}
-        />
       </div>
 
       <DetailTabs />

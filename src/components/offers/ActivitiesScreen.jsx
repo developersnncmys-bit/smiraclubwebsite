@@ -181,12 +181,21 @@ export default function ActivitiesScreen({
               const href = `${hrefBase}/${a.id}`;
               const from = activityFrom(a);
               return (
-                <article key={a.id} className="card overflow-hidden p-3 sm:p-4">
+                <article key={a.id} className="card p-3 sm:p-4">
                   <div className="flex gap-3.5">
                     <Link href={href} className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-xl sm:h-[128px] sm:w-[128px]">
                       <Image src={a.image} alt={a.name} fill sizes="128px" className="object-cover" />
                     </Link>
-                    <CardHead name={a.cardName} place={a.place} rating={a.listRating ?? a.rating} reviews={a.listReviews ?? a.reviews}>
+                    <CardHead
+                      name={a.cardName}
+                      place={a.place}
+                      rating={a.listRating ?? a.rating}
+                      reviews={a.listReviews ?? a.reviews}
+                      menu={{
+                        item: { href, name: a.name, place: a.place, image: a.image },
+                        similar: { href: hrefBase, label: 'Similar offers' },
+                      }}
+                    >
                       {foot === 'price' && (
                         <p className="mt-1.5 flex items-center gap-1.5 text-[14px] font-medium text-[#6d4bd8]">
                           <Sparkle size={16} fill="currentColor" strokeWidth={0} />

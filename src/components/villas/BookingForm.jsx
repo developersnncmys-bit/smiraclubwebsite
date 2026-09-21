@@ -49,17 +49,23 @@ export default function BookingForm({
   afterNote,
   bar = { mode: 'per-night', notes: [] },
   confirm = {},
+  /**
+   * Optional: sends the booking somewhere before the confirmation screen.
+   * Called with the guests, GST and coupon and the total; it resolves to
+   * `{ reference }`, which the confirmation screen shows in place of a
+   * locally made one. A screen that does not pass it behaves as before.
+   */
+  send,
   /** The read-back cards above the form, so they share the left column. */
   children,
 }) {
   const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState('');
   const [coupon, setCoupon] = useState('');
   const [couponNote, setCouponNote] = useState('');
   const [who, setWho] = useState('myself');
   const [guests, setGuests] = useState([{ ...BLANK }]);
-  const [gst, setGst] = useState(false);
-  const [gstin, setGstin] = useState('');
-  const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState({});
 
   const afterDiscount = price - discount;
@@ -76,22 +82,45 @@ export default function BookingForm({
     );
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (busy) return;
     const found = {};
     const lead = guests[0];
     if (!lead.name.trim()) found.name = 'Tell us who is staying.';
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(lead.email.trim())) found.email = 'That email does not look right.';
     if (!/^\d{10}$/.test(lead.phone.replace(/\D/g, ''))) found.phone = 'A 10-digit mobile number, please.';
-    if (gst && !gstin.trim()) found.gstin = 'Add the GST number, or untick the box.';
-    if (!agreed) found.agreed = 'The terms have to be agreed before booking.';
 
     setErrors(found);
+    setFailed('');
     if (Object.keys(found).length !== 0) return;
+
+    // Where the screen sends bookings on, it has to land before we say so.
+    let reference = '';
+    if (send) {
+      setBusy(true);
+      try {
+        const res = await send({
+          guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
+          coupon: coupon.trim(),
+          total,
+        });
+        reference = res?.reference || '';
+      } catch (err) {
+        setBusy(false);
+        setFailed(
+          err?.status
+            ? err.message
+            : 'We could not reach our travel desk just now. Please try again in a moment.',
+        );
+        return;
+      }
+    }
 
     // No payment step yet, so a clean form goes straight to confirmation.
     const query = new URLSearchParams({
-      ref: bookingRef(),
+      ref: reference || bookingRef(),
+      ...(send ? { status: 'requested' } : {}),
       name: confirm.name || '',
       slot: confirm.slot || '',
       nights: confirm.nights || '',
@@ -303,57 +332,11 @@ export default function BookingForm({
         </button>
       </section>
 
-      {/* -- GST ------------------------------------------------------ */}
-      <section className="card p-4 sm:p-5">
-        <label className="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            checked={gst}
-            onChange={(e) => setGst(e.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
-          />
-          <span>
-            <span className="block text-[15px] font-bold text-ink-900">Add GST number</span>
-            <span className="block text-[13px] text-action-500">
-              Claim 18% credit using GST invoice
-            </span>
-          </span>
-        </label>
-
-        {gst && (
-          <>
-            <input
-              value={gstin}
-              onChange={(e) => setGstin(e.target.value.toUpperCase())}
-              placeholder="Enter your GSTIN"
-              aria-label="GST number"
-              className={`${field} mt-4`}
-            />
-            {errors.gstin && <p className="mt-1.5 text-[13px] text-red-600">{errors.gstin}</p>}
-          </>
-        )}
-      </section>
-
-      {/* -- Terms ---------------------------------------------------- */}
-      <section className="card p-4 sm:p-5">
-        <label className="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            checked={agreed}
-            onChange={(e) => setAgreed(e.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
-          />
-          <span className="text-[14px] leading-relaxed text-ink-900">
-            By Proceeding, I agree to Smira Club&rsquo;s{' '}
-            <a href="/more/terms" className="text-action-500 underline">User Agreement</a>,{' '}
-            <a href="/more/terms" className="text-action-500 underline">Terms of Service</a> and{' '}
-            <a href="/more/cancellation" className="text-action-500 underline">
-              Cancellation &amp; Hotel Booking Policies.
-            </a>
-          </span>
-        </label>
-        {errors.agreed && <p className="mt-2 text-[13px] text-red-600">{errors.agreed}</p>}
-      </section>
+      {failed && (
+        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] font-semibold text-red-700">
+          {failed}
+        </p>
+      )}
 
       {/*
         The bar that carries Continue.
@@ -393,9 +376,10 @@ export default function BookingForm({
             */}
             <button
               type="submit"
+              disabled={busy}
               className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide"
             >
-              {cta}
+              {busy ? 'Sending…' : cta}
             </button>
           </div>
         </div>
@@ -424,9 +408,10 @@ export default function BookingForm({
 
           <button
             type="submit"
+            disabled={busy}
             className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
           >
-            {cta}
+            {busy ? 'Sending…' : cta}
           </button>
         </div>
       </aside>

@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowRight, Building2, Cake, Calendar, Check, FileText, Headset, Info, Luggage, MapPin,
-  Users, Utensils, Zap,
+  ArrowRight, Building2, Cake, Calendar, Check, FileText, Headset, Info, Loader2, Luggage, MapPin,
+  Phone, Users, Utensils, Zap,
 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
+import { api } from '@/lib/api';
 import { intlForm, planTrip as opts } from '@/lib/content';
 
 const FIELD =
@@ -118,8 +119,12 @@ function Toggle({ on, onChange, label }) {
  * Customised Tours.
  *
  * The desk builds the trip from these answers, so nothing here is required
- * beyond where you want to go — an enquiry that refuses to send because the
- * meal plan is blank is an enquiry that never arrives.
+ * beyond where you want to go and how to reach you — an enquiry that refuses
+ * to send because the meal plan is blank is an enquiry that never arrives, and
+ * one with no number on it is one nobody can answer.
+ *
+ * Sending it creates a lead in the admin panel's Sales & Leads, with every
+ * answer written onto it for whoever calls back.
  *
  * It shares the option lists with Plan My Trip rather than repeating them, so
  * adding a transport mode or a meal plan reaches both screens at once.
@@ -156,8 +161,14 @@ export default function CustomisedTourForm() {
   const [support, setSupport] = useState([]);
   const [needs, setNeeds] = useState('');
 
-  const [error, setError] = useState('');
-  const [sent, setSent] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+
+  const [errors, setErrors] = useState({});
+  const [failed, setFailed] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(null);
 
   const toggle = (list, setList, value) =>
     setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -170,16 +181,65 @@ export default function CustomisedTourForm() {
         : ages.slice(0, n),
     );
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!where.trim()) {
-      setError('Tell us where you would like to go.');
+
+    // Only what the desk cannot do without.
+    const found = {};
+    if (!where.trim()) found.where = 'Tell us where you would like to go.';
+    if (name.trim().length < 2) found.name = 'Tell us your name.';
+    if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, '').slice(-10))) found.phone = 'Enter a 10-digit mobile number.';
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) found.email = 'That email does not look right.';
+    if (checkIn && checkOut && checkOut < checkIn) found.dates = 'Check-out has to be after check-in.';
+    setErrors(found);
+    setFailed('');
+    if (Object.keys(found).length) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    setError('');
-    setSent(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    setBusy(true);
+    try {
+      const res = await api.tripEnquiry({
+        name: name.trim(),
+        phone,
+        email: email.trim(),
+        destination: where.trim(),
+        hotel,
+        dateMode,
+        checkIn,
+        checkOut,
+        duration,
+        rooms,
+        adults,
+        childAges,
+        pets,
+        occasion,
+        note,
+        transport: opts.transport.filter((t) => transport.includes(t.key)).map((t) => t.label),
+        pickupFrom,
+        pickupTo,
+        dropFrom,
+        dropTo,
+        returnTransfer,
+        sightseeing,
+        mealPlan,
+        mealType: opts.mealTypes.find((m) => m.key === mealType)?.label || mealType,
+        extras,
+        support,
+        needs,
+      });
+      setSent({ reference: res.data?.reference });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      setFailed(
+        err.status
+          ? err.message
+          : 'We could not reach our travel desk just now. Please try again in a moment.',
+      );
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (sent) {
@@ -190,9 +250,16 @@ export default function CustomisedTourForm() {
         </span>
         <h2 className="mt-6 text-2xl font-extrabold text-ink-900">Enquiry sent</h2>
         <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-ink-600">
-          Our partnerships desk will call you within two working days with options for{' '}
-          <span className="font-semibold text-ink-900">{where}</span>.
+          Our travel desk will call you on{' '}
+          <span className="font-semibold text-ink-900">+91 {phone.replace(/\D/g, '').slice(-10)}</span> with
+          options for <span className="font-semibold text-ink-900">{where}</span>.
         </p>
+        {sent.reference && (
+          <p className="mt-5 inline-flex items-center gap-2 rounded-xl bg-surface-soft px-4 py-2.5 text-[14px] text-ink-700">
+            Your reference
+            <span className="font-extrabold tracking-wider text-brand-700">{sent.reference}</span>
+          </p>
+        )}
         <button
           type="button"
           onClick={() => router.push('/packages/international')}
@@ -213,9 +280,65 @@ export default function CustomisedTourForm() {
           value={where}
           onChange={(e) => setWhere(e.target.value)}
           placeholder="Enter City, destination, hotel name.."
+          aria-invalid={errors.where ? 'true' : undefined}
           className={`${FIELD} mt-4`}
         />
-        {error && <p className="mt-2 text-[13px] text-red-600">{error}</p>}
+        {errors.where && <p className="mt-2 text-[13px] text-red-600">{errors.where}</p>}
+      </section>
+
+      {/* -- Who to call ------------------------------------------- */}
+      <section className="card p-4 sm:p-5 lg:col-span-2">
+        <Ask icon={Phone} title="Your Details" note="So our travel desk can call you back" />
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <label className="block">
+            <span className="text-[14px] text-ink-700">Full Name</span>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+              placeholder="Your name"
+              aria-invalid={errors.name ? 'true' : undefined}
+              className={`${FIELD} mt-2`}
+            />
+            {errors.name && <span className="mt-1.5 block text-[13px] text-red-600">{errors.name}</span>}
+          </label>
+
+          <label className="block">
+            <span className="text-[14px] text-ink-700">Mobile Number</span>
+            <span className="mt-2 flex">
+              <span className="grid place-items-center rounded-l-xl border border-r-0 border-surface-line bg-surface-soft px-3 text-[14px] font-semibold text-ink-700">
+                +91
+              </span>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                inputMode="numeric"
+                autoComplete="tel-national"
+                placeholder="10-digit mobile"
+                aria-invalid={errors.phone ? 'true' : undefined}
+                className={`${FIELD} rounded-l-none`}
+              />
+            </span>
+            {errors.phone && <span className="mt-1.5 block text-[13px] text-red-600">{errors.phone}</span>}
+          </label>
+
+          <label className="block">
+            <span className="text-[14px] text-ink-700">
+              Email <span className="text-ink-400">(Optional)</span>
+            </span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
+              aria-invalid={errors.email ? 'true' : undefined}
+              className={`${FIELD} mt-2`}
+            />
+            {errors.email && <span className="mt-1.5 block text-[13px] text-red-600">{errors.email}</span>}
+          </label>
+        </div>
       </section>
 
       {/* -- What kind of stay ------------------------------------ */}
@@ -266,9 +389,11 @@ export default function CustomisedTourForm() {
             type="date"
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
+            min={checkIn || undefined}
             className={`${FIELD} mt-2`}
           />
         </label>
+        {errors.dates && <p className="mt-2 text-[13px] text-red-600">{errors.dates}</p>}
 
         <label className="mt-4 block">
           <span className="text-[14px] text-ink-700">Duration</span>
@@ -545,12 +670,28 @@ export default function CustomisedTourForm() {
         </div>
       </section>
 
+      {failed && (
+        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] font-semibold text-red-700 lg:col-span-2">
+          {failed}
+        </p>
+      )}
+
       <button
         type="submit"
+        disabled={busy}
         className="btn-primary w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:col-span-2 lg:w-auto lg:justify-self-start lg:px-10 lg:py-3.5"
       >
-        Check Availability
-        <ArrowRight size={19} />
+        {busy ? (
+          <>
+            <Loader2 size={19} className="animate-spin" />
+            Sending
+          </>
+        ) : (
+          <>
+            Check Availability
+            <ArrowRight size={19} />
+          </>
+        )}
       </button>
     </form>
   );

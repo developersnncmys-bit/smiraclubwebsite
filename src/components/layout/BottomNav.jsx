@@ -18,7 +18,7 @@ const OWNS_THE_BOTTOM = [
   // A free stay hotel and its Review Booking; the free stay list keeps the tabs.
   /^\/free-stay\/(?!results$)[^/]+(\/book)?$/,
   // Detail pages that pin Book Ticket / Book a Table / Book Tickets.
-  /^\/(parks|restaurants|activities|spa|luxury)\/[^/]+(\/book)?$/,
+  /^\/(parks|restaurants|activities|spa|luxury|group-departures)\/[^/]+(\/book)?$/,
   /^\/profile\/edit$/,
   /^\/membership$/,
 ];
@@ -49,7 +49,7 @@ export default function BottomNav() {
               <Link
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition ${
+                className={`flex flex-col items-center gap-1 whitespace-nowrap py-2.5 text-[10px] font-semibold transition min-[400px]:text-[11px] ${
                   active ? 'text-action-500' : 'text-ink-500'
                 }`}
               >

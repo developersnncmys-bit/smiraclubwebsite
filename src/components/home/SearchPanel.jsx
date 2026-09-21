@@ -63,12 +63,12 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
   };
 
   return (
-    <div className="shell">
+    <div id="home-search" className="shell scroll-mt-20 pt-3 lg:pt-0">
       <div className="lg:card lg:relative lg:z-10 lg:-mt-20 lg:p-7">
         {/* -- The four tabs -------------------------------------------- */}
         <nav
           aria-label="What are you looking for"
-          className="grid grid-cols-[repeat(4,minmax(0,1fr))_auto] overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
+          className="grid grid-cols-4 overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
         >
           {searchTabs.map((t) => {
             const on = t.key === active;
@@ -77,7 +77,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 key={t.key}
                 href={t.href}
                 aria-current={on ? 'page' : undefined}
-                className={`flex flex-col items-center gap-1 px-2 py-2.5 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
+                className={`flex flex-col items-center gap-0.5 px-2 py-2 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
                   on
                     ? 'bg-white text-ink-900 shadow-card lg:bg-brand-50 lg:text-brand-700 lg:shadow-none'
                     : 'text-ink-700 hover:text-ink-900'
@@ -89,7 +89,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                     alt=""
                     width={44}
                     height={44}
-                    className="h-11 w-11 object-contain"
+                    className="h-9 w-9 object-contain lg:h-11 lg:w-11"
                   />
                 ) : (
                   <Icon
@@ -104,30 +104,19 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             );
           })}
 
-          {/* AI Search lives behind a search icon straight after the slider. */}
-          <Link
-            href="/search"
-            aria-label="AI Search"
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2.5 text-[12px] font-semibold text-action-500 transition hover:text-action-600 lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:text-sm"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-card lg:h-9 lg:w-9">
-              <Search size={20} />
-            </span>
-            AI Search
-          </Link>
         </nav>
 
         {/* -- The form -------------------------------------------------- */}
         <form
           onSubmit={submit}
-          className="mt-4 space-y-3 lg:mt-5 lg:flex lg:items-stretch lg:gap-3 lg:space-y-0"
+          className="mt-3 space-y-2.5 lg:mt-5 lg:flex lg:items-stretch lg:gap-3 lg:space-y-0"
         >
           {/*
             Destination carries its caption because the field is empty until
             someone types; dates and guests always hold a value, and the frame
             shows that value on its own line with no label over it.
           */}
-          <label className="flex items-center gap-3 rounded-xl border border-surface-line bg-white p-3 lg:min-w-0 lg:flex-1">
+          <label className="flex items-center gap-3 rounded-xl border border-surface-line bg-white p-2.5 lg:min-w-0 lg:flex-1 lg:p-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-50">
               <MapPin size={18} className="text-action-500" />
             </span>
@@ -136,6 +125,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 Destination
               </span>
               <input
+                id="home-destination"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
                 placeholder="Where are you going?"
@@ -196,7 +186,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             />
           </div>
 
-          <button type="submit" className="btn-primary w-full gap-2.5 py-4 text-[17px] font-bold lg:w-auto lg:shrink-0 lg:px-9">
+          <button type="submit" className="btn-primary w-full gap-2.5 py-3.5 text-[17px] font-bold lg:w-auto lg:py-4 lg:shrink-0 lg:px-9">
             <Search size={18} />
             Search
           </button>

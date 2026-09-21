@@ -72,24 +72,8 @@ export default async function Page({ params, searchParams }) {
         </p>
         <p className="mt-3 text-xl font-extrabold text-green-600">Free Stay Pay For Food</p>
       </section>
-
       <MemberBenefitsCard />
 
-      <DetailCard>
-        <p className="text-center text-[15px] font-bold text-ink-900">
-          Check in: {stayTimes.checkIn} / Check out: {stayTimes.checkOut}
-        </p>
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-            <Calendar size={17} className="shrink-0" />
-            {shortDate(from)} - {shortDate(to)}
-          </p>
-          <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-            <User size={17} className="shrink-0" />
-            {adults} Adults/ {rooms} Room
-          </p>
-        </div>
-      </DetailCard>
     </>
   );
 
@@ -107,6 +91,25 @@ export default async function Page({ params, searchParams }) {
           bookBase={`/free-stay/${hotel.id}/book`}
           carry={carry}
         />
+      </div>
+
+      {/* -- The stay, just above the tabs -------------------------- */}
+      <div className="shell pb-4 lg:pb-8">
+        <DetailCard>
+          <p className="text-center text-[15px] font-bold text-ink-900">
+            Check in: {stayTimes.checkIn} / Check out: {stayTimes.checkOut}
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
+              <Calendar size={17} className="shrink-0" />
+              {shortDate(from)} - {shortDate(to)}
+            </p>
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
+              <User size={17} className="shrink-0" />
+              {adults} Adults/ {rooms} Room
+            </p>
+          </div>
+        </DetailCard>
       </div>
 
       <DetailTabs />

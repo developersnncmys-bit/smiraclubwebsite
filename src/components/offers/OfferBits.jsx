@@ -1,4 +1,7 @@
-import { MoreVertical, Search, SlidersHorizontal, Star, Tag } from 'lucide-react';
+'use client';
+
+import { Search, SlidersHorizontal, Star, Tag } from 'lucide-react';
+import CardMenu from '@/components/ui/CardMenu';
 
 /**
  * Pieces the park and restaurant listings share: the outlined search box,
@@ -51,18 +54,13 @@ export function MemberStrip({ percent, className = '' }) {
   );
 }
 
-export function CardHead({ name, place, rating, reviews, children }) {
+/** `menu` is { item, similar } for the card's ⋮ — see CardMenu. */
+export function CardHead({ name, place, rating, reviews, menu, children }) {
   return (
     <div className="min-w-0 flex-1">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-[16px] font-bold leading-tight text-ink-900">{name}</h3>
-        <button
-          type="button"
-          aria-label={`More about ${name}`}
-          className="-mr-1 grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
-        >
-          <MoreVertical size={18} />
-        </button>
+        <CardMenu item={menu?.item || { href: '#', name }} similar={menu?.similar} />
       </div>
       <p className="mt-1 text-[14px] text-ink-600">{place}</p>
       <p className="mt-1.5 flex items-center gap-1.5 text-[13px]">

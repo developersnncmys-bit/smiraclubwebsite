@@ -2,7 +2,8 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useWishlist } from '@/lib/wishlist';
 import { ArrowLeft, Heart, Share2, Star } from 'lucide-react';
 
 /**
@@ -19,7 +20,10 @@ import { ArrowLeft, Heart, Share2, Star } from 'lucide-react';
 export default function DetailGallery({ photos, name, rating, reviews }) {
   const router = useRouter();
   const [at, setAt] = useState(0);
-  const [saved, setSaved] = useState(false);
+  // The heart saves to the same wishlist as the cards' ⋮ menus.
+  const pathname = usePathname();
+  const { has, toggle } = useWishlist();
+  const saved = has(pathname);
   const [copied, setCopied] = useState(false);
   const touchX = useRef(null);
   const onTouchStart = (e) => {
@@ -94,7 +98,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => setSaved((s) => !s)}
+              onClick={() => toggle({ href: pathname, name, place: '', image: photos[0] })}
               aria-pressed={saved}
               aria-label={saved ? 'Remove from wishlist' : 'Save to wishlist'}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/90 shadow-card backdrop-blur transition hover:bg-white"

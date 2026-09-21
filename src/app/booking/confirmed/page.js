@@ -53,8 +53,12 @@ export default async function Page({ searchParams }) {
     spa: { noun: 'appointment', label: 'Saloon & Spa Name', slot: 'Date & Time', extra: 'Get ready for an amazing relaxation service.', art: 'spa' },
     luxury: { noun: 'Luxury Experience', label: 'Experience Name', slot: 'Date & Time', extra: 'Get ready for an unforgettable experience.', art: 'spa' },
     adventure: { noun: 'Adventure', label: 'Activity Name', slot: 'Date & Time', extra: 'Get ready for an amazing day out.', art: 'tent' },
+    package: { noun: 'trip', label: 'Package', slot: 'Departure' },
+    group: { noun: 'group trip', label: 'Trip', slot: 'Departure' },
   };
   const k = KINDS[params.kind] || { noun: 'stay', label: 'Hotel Name' };
+  // Sent to the desk but not yet paid for: they call to confirm and take payment.
+  const requested = params.status === 'requested';
 
   return (
     // White ground so the grey summary reads as a card, as drawn; on a desktop
@@ -97,12 +101,19 @@ export default async function Page({ searchParams }) {
             )}
 
             <h1 className="mt-5 text-[21px] font-extrabold text-ink-900 lg:text-3xl">
-              Booking Confirmed!
+              {requested ? 'Booking Requested!' : 'Booking Confirmed!'}
             </h1>
-            <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
-              Your {k.noun} {k.art ? 'has been' : 'is'} booked successfully.
-              {k.extra && <span className="block">{k.extra}</span>}
-            </p>
+            {requested ? (
+              <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
+                Your {k.noun} request has reached our travel desk.
+                <span className="block">They will call you shortly to confirm seats and take payment.</span>
+              </p>
+            ) : (
+              <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
+                Your {k.noun} {k.art ? 'has been' : 'is'} booked successfully.
+                {k.extra && <span className="block">{k.extra}</span>}
+              </p>
+            )}
           </div>
 
           <div>
@@ -120,7 +131,7 @@ export default async function Page({ searchParams }) {
               {location && <Row label="Location">{location}</Row>}
 
               {total > 0 && (
-                <Row label="Total Amount Paid">
+                <Row label={requested ? 'Total Amount' : 'Total Amount Paid'}>
                   {inr(total)}
                   <span className="block text-[13px] font-normal text-ink-500">(Incl. taxes &amp; fees)</span>
                 </Row>

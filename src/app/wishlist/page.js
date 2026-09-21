@@ -1,13 +1,13 @@
-import PageHead from '@/components/ui/PageHead';
-import ComingSoon from '@/components/ui/ComingSoon';
+import ScreenBar from '@/components/ui/ScreenBar';
+import WishlistScreen from '@/components/profile/WishlistScreen';
 
-export const metadata = { title: 'Wishlist' };
+export const metadata = { title: 'Wishlist', description: 'Everything you have saved for later.' };
 
 export default function Page() {
   return (
     <>
-      <PageHead title="Wishlist" subtitle="Everything you have saved for later." />
-      <ComingSoon what="Wishlist" />
+      <ScreenBar title="Wishlist" backHref="/" />
+      <WishlistScreen />
     </>
   );
 }

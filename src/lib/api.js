@@ -47,12 +47,26 @@ export const api = {
   offers: () => request('/offers'),
 
   /**
-   * A property owner applying from the Become a Partner page. The only write
-   * the public site makes, and it lands in the admin panel's partner
-   * onboarding as a registration waiting on papers.
+   * A property owner applying from the Become a Partner page. It lands in the
+   * admin panel's partner onboarding as a registration waiting on papers.
    */
   applyAsPartner: (form) =>
     request('/partners/apply', { method: 'POST', body: form, next: { revalidate: 0 } }),
+
+  /**
+   * A customised international tour asked for from International Trips. It
+   * lands in the admin panel's Sales & Leads as a new lead, with every answer
+   * on the form written onto it.
+   */
+  tripEnquiry: (form) =>
+    request('/website/trip-enquiry', { method: 'POST', body: form, next: { revalidate: 0 } }),
+
+  /**
+   * A fixed-departure package booked from its page. It lands on the admin
+   * panel's Booking page as a pending booking for the desk to confirm.
+   */
+  packageBooking: (form) =>
+    request('/website/package-booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
 
   login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
   me: (token) => request('/auth/me', { token }),

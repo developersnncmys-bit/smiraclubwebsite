@@ -79,7 +79,7 @@ export const searchTabs = [
  */
 export const services = [
   { key: 'international', label: 'International Trip', icon: 'Plane', href: '/packages/international' },
-  { key: 'group', label: 'Group Departure', icon: 'Users', href: '/packages?kind=group' },
+  { key: 'group', label: 'Group Departure', icon: 'Users', href: '/group-departures' },
   { key: 'support', label: 'Travel Support', icon: 'LifeBuoy', href: '/travel-support' },
   { key: 'homestay', label: 'Home Stay', icon: 'Home', href: '/villas?collection=homestay' },
   { key: 'restaurant', label: 'Restuarant Offers', icon: 'UtensilsCrossed', href: '/restaurants' },
@@ -1104,6 +1104,7 @@ export const plans = [
 export const primaryNav = [
   { key: 'home', label: 'Home', href: '/', icon: 'Home' },
   { key: 'wishlist', label: 'Wishlist', href: '/wishlist', icon: 'Heart' },
+  { key: 'search', label: 'AI Search', href: '/search', icon: 'Sparkles' },
   { key: 'bookings', label: 'My Booking', href: '/profile/bookings', icon: 'CalendarCheck' },
   { key: 'profile', label: 'Profile', href: '/profile', icon: 'CircleUser' },
   { key: 'more', label: 'More', href: '/more', icon: 'MoreHorizontal' },
@@ -2785,6 +2786,13 @@ export const moreTopics = [
     href: '/blogs',
   },
   {
+    key: 'gallery',
+    icon: 'Images',
+    label: 'Gallery',
+    body: 'Photos from our stays, parks & experiences.',
+    href: '/gallery',
+  },
+  {
     key: 'faqs',
     icon: 'CircleHelp',
     label: 'FAQs',
@@ -2840,7 +2848,7 @@ export const moreTopics = [
 export const blogHero = {
   title: 'Travel Stories, Tips & Inspirations',
   body: 'Explore travel guides, hidden destinations & expert tips for your next trip.',
-  image: 'blog-hero',
+  image: 'story-kerala',
 };
 
 export const blogCategories = [
@@ -2854,6 +2862,10 @@ export const blogCategories = [
  * The blogs. `popular` is an editor's pick rather than a computed view count
  * — that is what the design implies and what the desk can actually control
  * today, and a fake counter would be worse than an honest choice.
+ *
+ * `body` is the article, as blocks: a heading with its paragraphs and an
+ * optional list. Written to be general and safe to publish; the desk should
+ * still read each one before it goes live.
  */
 export const blogs = [
   {
@@ -2864,9 +2876,53 @@ export const blogs = [
     excerpt:
       'From the serene beaches to vibrant coastlines, explore the ten stretches of Indian coast worth planning a whole trip around.',
     date: 'May 2026',
+    readMins: 6,
     image: 'villa-beach',
     latest: true,
     popular: true,
+    body: [
+      {
+        p: [
+          'India has more than 7,500 km of coastline, and no two stretches feel the same. Some are made for parties, some for long quiet walks, and a few for doing nothing at all. Here are ten we keep sending members back to.',
+        ],
+      },
+      {
+        h: 'For the classic beach holiday',
+        list: [
+          'North Goa — Baga, Calangute and Anjuna for shacks, music and water sports.',
+          'South Goa — Palolem and Agonda for calm water and slower evenings.',
+          'Alibaug, Maharashtra — an easy weekend from Mumbai by ferry or road.',
+        ],
+      },
+      {
+        h: 'For clear water and island calm',
+        list: [
+          'Havelock (Swaraj Dweep), Andaman — Radhanagar Beach is famous for its sunsets.',
+          'Neil Island (Shaheed Dweep), Andaman — small, quiet and good for snorkelling.',
+        ],
+      },
+      {
+        h: 'For cliffs, temples and culture',
+        list: [
+          'Varkala, Kerala — a cliff-top walk above the sea, lined with cafes.',
+          'Gokarna, Karnataka — a temple town with a chain of beaches reached on foot.',
+          'Puri, Odisha — a long, lively beach beside one of India’s great pilgrim towns.',
+        ],
+      },
+      {
+        h: 'For something off the usual list',
+        list: [
+          'Tarkarli, Maharashtra — clean water, backwaters and scuba near Sindhudurg Fort.',
+          'Pondicherry — French-quarter streets and a seafront promenade made for walking.',
+        ],
+      },
+      {
+        h: 'When to go',
+        p: [
+          'October to March is the most comfortable season on most of these coasts. The monsoon, roughly June to September, is beautiful but the sea is rough and many water activities close.',
+        ],
+      },
+    ],
   },
   {
     id: 'hotel-stay-tips',
@@ -2876,8 +2932,38 @@ export const blogs = [
     excerpt:
       'Tips to enhance your stay experience and enjoy maximum value from the benefits your membership already includes.',
     date: 'May 2026',
+    readMins: 4,
     image: 'villa-room-1',
     latest: true,
+    body: [
+      {
+        p: [
+          'Your membership already does a lot of the work — member rates, free stays and complimentary nights are applied when you book. A little planning gets you more out of each stay.',
+        ],
+      },
+      {
+        h: 'Before you book',
+        list: [
+          'Compare rate plans. Room Only is often the best value if you plan to eat out.',
+          'Check the cancellation line on each plan — Non-Refundable rates are cheaper for a reason.',
+          'Book weekends early. Member inventory at popular properties goes first.',
+        ],
+      },
+      {
+        h: 'At check-in',
+        list: [
+          'Carry a valid photo ID for every adult. Hotels will ask for it.',
+          'Mention any special occasion — birthdays and anniversaries often get a small surprise.',
+          'Ask about early check-in or late check-out; it depends on availability on the day.',
+        ],
+      },
+      {
+        h: 'During your stay',
+        p: [
+          'Use the facilities that are included — pools, gyms and beach access are part of what you paid for. If something is not right with the room, tell the front desk straight away; it is far easier to fix on the day than afterwards.',
+        ],
+      },
+    ],
   },
   {
     id: 'first-international-trip',
@@ -2887,8 +2973,44 @@ export const blogs = [
     excerpt:
       'Everything you need to know before planning your first International trip, from documents to what to book first.',
     date: 'May 2026',
+    readMins: 7,
     image: 'villa-hero-private',
     popular: true,
+    body: [
+      {
+        p: [
+          'A first trip abroad feels like a lot to organise. Take it in the right order and it is simpler than it looks.',
+        ],
+      },
+      {
+        h: '1. Documents first',
+        list: [
+          'Passport — valid for at least six months beyond your return date, with blank pages.',
+          'Visa — check whether your destination needs one in advance, on arrival, or an e-visa.',
+          'Keep digital and paper copies of both, separately from the originals.',
+        ],
+      },
+      {
+        h: '2. Then book in this order',
+        list: [
+          'Flights, once the visa route is clear.',
+          'Your first night’s stay, so you have an address for immigration forms.',
+          'Travel insurance — do not skip it; medical care abroad is expensive.',
+        ],
+      },
+      {
+        h: '3. Money and staying connected',
+        p: [
+          'Carry some local currency for the first day and a card that works abroad. An international SIM or eSIM saves a lot on roaming. Smira Club Travel Support can arrange visa assistance, insurance, currency and SIM cards for you.',
+        ],
+      },
+      {
+        h: '4. On the day',
+        p: [
+          'Reach the airport three hours before an international flight, keep your passport and boarding pass in hand, and check the baggage allowance on your ticket before you pack.',
+        ],
+      },
+    ],
   },
   {
     id: 'hidden-goa',
@@ -2898,9 +3020,345 @@ export const blogs = [
     excerpt:
       'South Goa, the spice farms and the backroads most visitors drive straight past on the way to Baga.',
     date: 'Apr 2026',
+    readMins: 5,
     image: 'villa-hero-luxury',
     popular: true,
+    body: [
+      {
+        p: [
+          'Most visitors see Goa from a beach chair in the north. Drive an hour in any other direction and it becomes a different place — Portuguese villages, spice plantations and beaches you may have to yourself.',
+        ],
+      },
+      {
+        h: 'Head south',
+        p: [
+          'Agonda, Palolem and Galgibaga are slower and calmer than the northern beaches, with fewer crowds and quieter evenings.',
+        ],
+      },
+      {
+        h: 'Go inland',
+        list: [
+          'Old Goa — whitewashed churches that are a UNESCO World Heritage Site.',
+          'Fontainhas, Panjim — the Latin quarter, with colourful lanes to wander.',
+          'The spice farms near Ponda — guided walks, often with a Goan lunch.',
+        ],
+      },
+      {
+        h: 'Where to stay',
+        p: [
+          'A villa or a small boutique stay suits this side of Goa best. Browse Smira Club villas for private pools and quieter locations away from the busy strip.',
+        ],
+      },
+    ],
   },
+  {
+    id: 'monsoon-getaways',
+    category: 'destination',
+    tag: 'Destinations',
+    title: 'Five monsoon getaways near Mumbai and Pune',
+    excerpt:
+      'Waterfalls, misty hills and green valleys — short drives that are at their best when the rain arrives.',
+    date: 'Jun 2026',
+    readMins: 4,
+    image: 'villa-hero-hilltop',
+    latest: true,
+    body: [
+      {
+        p: [
+          'The Sahyadris turn green the moment the monsoon arrives, and some of the best of it is only a few hours’ drive away.',
+        ],
+      },
+      {
+        h: 'Worth the drive',
+        list: [
+          'Lonavala and Khandala — waterfalls, viewpoints and easy villa stays.',
+          'Lavasa — a lakeside town in the hills.',
+          'Malshej Ghat — known for waterfalls and misty roads.',
+          'Bhandardara — a lake, a dam and waterfalls in full flow.',
+          'Igatpuri — quiet hills and cool weather.',
+        ],
+      },
+      {
+        h: 'Travel safely',
+        p: [
+          'Ghat roads can be slippery and visibility drops quickly. Drive in daylight, check the weather before you leave, and follow any local closures at waterfalls and viewpoints.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'family-water-park',
+    category: 'guide',
+    tag: 'Travel Guides',
+    title: 'Planning a family day at a water park',
+    excerpt:
+      'What to pack, when to arrive and how to choose the right ticket so the whole family enjoys the day.',
+    date: 'Apr 2026',
+    readMins: 3,
+    image: 'ride-slides',
+    popular: true,
+    body: [
+      {
+        p: [
+          'A water park day goes much better with a little planning — especially with children.',
+        ],
+      },
+      {
+        h: 'Pack the right things',
+        list: [
+          'Proper swimwear — most parks do not allow cotton clothes on the rides.',
+          'Sunscreen, a towel and a change of clothes.',
+          'A small waterproof pouch for your phone.',
+        ],
+      },
+      {
+        h: 'Get there early',
+        p: [
+          'Arrive when the gates open. The popular slides have the shortest queues in the first hour, and the afternoon sun is at its strongest.',
+        ],
+      },
+      {
+        h: 'Choose the right ticket',
+        p: [
+          'Children’s tickets usually depend on age and height, so check before you book. Express tickets let you skip the regular queue, which is worth it on weekends. Smira Club members get up to 20% off selected park tickets.',
+        ],
+      },
+    ],
+  },
+];
+
+/* -- Group departures ----------------------------------------------------- */
+
+/**
+ * Group Departure: fixed-date trips that travel together — one itinerary,
+ * one tour manager, a set number of seats. How it works, in the order a
+ * member meets it on the page.
+ */
+export const groupHowItWorks = [
+  { icon: 'Compass', title: 'Pick a trip', body: 'Planned itineraries in India and abroad.' },
+  { icon: 'CalendarDays', title: 'Choose a date', body: 'Fixed departures — see the seats left on each.' },
+  { icon: 'Users', title: 'Reserve seats', body: 'Book for yourself or the whole family.' },
+  { icon: 'Plane', title: 'Travel together', body: 'A tour manager looks after the group throughout.' },
+];
+
+export const groupRegions = [
+  { key: 'all', label: 'All Trips' },
+  { key: 'domestic', label: 'India' },
+  { key: 'international', label: 'International' },
+];
+
+/** What every group trip includes, whatever the destination. */
+export const groupAlwaysIncluded = ['Dedicated tour manager', 'Fixed itinerary', 'Group sightseeing', 'Member price'];
+
+/**
+ * The trips. `departures` are days from today with the seats left on each,
+ * so the dates never fall into the past while there is no live inventory;
+ * a date with 0 seats shows as sold out. Prices are per person, placeholder
+ * until the desk loads the real departures.
+ */
+export const groupDepartures = [
+  {
+    id: 'kerala-backwaters-group',
+    region: 'domestic',
+    name: 'Kerala Backwaters & Hills',
+    place: 'Kochi · Munnar · Alleppey',
+    from: 'Kochi',
+    nights: 5,
+    price: 24999,
+    was: 29999,
+    rating: 4.6,
+    reviews: 284,
+    image: 'story-kerala',
+    photos: ['story-kerala', 'villa-hero-hilltop', 'gal-camp-4'],
+    groupSize: '20 - 25',
+    minAge: '5 years',
+    departures: [{ in: 12, seats: 6 }, { in: 26, seats: 14 }, { in: 40, seats: 0 }, { in: 54, seats: 18 }],
+    about: 'Tea gardens in the hills of Munnar, a night on a houseboat in Alleppey and the old streets of Fort Kochi — Kerala at an easy pace, with the group and a tour manager who knows the way.',
+    highlights: ['Houseboat night in Alleppey', 'Munnar tea gardens', 'Fort Kochi heritage walk', 'Kathakali performance'],
+    itinerary: [
+      { day: 1, title: 'Arrive in Kochi', body: 'Airport pick-up, check in and meet the group. Evening heritage walk in Fort Kochi.', meals: 'Dinner' },
+      { day: 2, title: 'Drive to Munnar', body: 'Scenic drive past waterfalls and spice gardens into the hills.', meals: 'Breakfast, Dinner' },
+      { day: 3, title: 'Munnar tea country', body: 'Tea museum, Mattupetty Dam and Echo Point.', meals: 'Breakfast, Dinner' },
+      { day: 4, title: 'Thekkady', body: 'Spice plantation walk and an optional boat ride on Periyar Lake.', meals: 'Breakfast, Dinner' },
+      { day: 5, title: 'Alleppey houseboat', body: 'Board a private houseboat and cruise the backwaters overnight.', meals: 'Breakfast, Lunch, Dinner' },
+      { day: 6, title: 'Departure', body: 'Disembark and transfer to Kochi airport.', meals: 'Breakfast' },
+    ],
+    inclusions: ['5 nights stay (4 hotel + 1 houseboat)', 'Daily breakfast and dinner', 'AC coach for all transfers', 'Sightseeing as per itinerary', 'Tour manager throughout'],
+    exclusions: ['Flights to and from Kochi', 'Lunches unless mentioned', 'Entry tickets to optional activities', 'Personal expenses and tips'],
+  },
+  {
+    id: 'goa-group-escape',
+    region: 'domestic',
+    name: 'Goa Beach Escape',
+    place: 'North & South Goa',
+    from: 'Goa',
+    nights: 3,
+    price: 12999,
+    was: 15999,
+    rating: 4.4,
+    reviews: 412,
+    image: 'villa-hero-beach',
+    photos: ['villa-hero-beach', 'villa-beach', 'rest-phoenix'],
+    groupSize: '20 - 30',
+    minAge: '5 years',
+    departures: [{ in: 9, seats: 3 }, { in: 16, seats: 11 }, { in: 23, seats: 20 }, { in: 30, seats: 16 }],
+    about: 'Beaches, forts, churches and a sunset cruise — the best of North and South Goa in four days, with the planning done for you.',
+    highlights: ['Sunset cruise on the Mandovi', 'Old Goa churches', 'Fort Aguada', 'Beach day in South Goa'],
+    itinerary: [
+      { day: 1, title: 'Arrive in Goa', body: 'Pick-up, check in and an evening at Baga and Calangute.', meals: 'Dinner' },
+      { day: 2, title: 'North Goa', body: 'Fort Aguada, Anjuna and Vagator, and a sunset cruise on the Mandovi.', meals: 'Breakfast, Dinner' },
+      { day: 3, title: 'Old Goa & South Goa', body: 'Old Goa churches in the morning, then Colva and Palolem beaches.', meals: 'Breakfast, Dinner' },
+      { day: 4, title: 'Departure', body: 'Breakfast and transfer to the airport or station.', meals: 'Breakfast' },
+    ],
+    inclusions: ['3 nights hotel stay', 'Daily breakfast and dinner', 'AC coach for all transfers', 'Sunset cruise', 'Tour manager throughout'],
+    exclusions: ['Travel to and from Goa', 'Water sports', 'Personal expenses and tips'],
+  },
+  {
+    id: 'dandeli-adventure-group',
+    region: 'domestic',
+    name: 'Dandeli Jungle & Rafting',
+    place: 'Dandeli, Karnataka',
+    from: 'Hubli',
+    nights: 2,
+    price: 7999,
+    was: 9999,
+    rating: 4.5,
+    reviews: 168,
+    image: 'story-dandeli',
+    photos: ['story-dandeli', 'act-rafting', 'gal-camp-3'],
+    groupSize: '15 - 20',
+    minAge: '14 years (rafting)',
+    departures: [{ in: 7, seats: 8 }, { in: 21, seats: 12 }, { in: 35, seats: 15 }],
+    about: 'White-water rafting on the Kali river, a jungle stay and a campfire night — a weekend of adventure with the group.',
+    highlights: ['White-water rafting on the Kali', 'Jungle stay', 'Kayaking & zip-line', 'Campfire night'],
+    itinerary: [
+      { day: 1, title: 'Arrive in Dandeli', body: 'Pick-up from Hubli, check in to the jungle stay, evening nature walk and campfire.', meals: 'Lunch, Dinner' },
+      { day: 2, title: 'River day', body: 'White-water rafting on the Kali, then kayaking and zip-line.', meals: 'Breakfast, Lunch, Dinner' },
+      { day: 3, title: 'Departure', body: 'Morning bird-watching walk, then drop to Hubli.', meals: 'Breakfast' },
+    ],
+    inclusions: ['2 nights jungle stay', 'All meals as mentioned', 'Rafting with safety gear', 'Hubli pick-up and drop', 'Tour manager throughout'],
+    exclusions: ['Travel to Hubli', 'Personal expenses'],
+  },
+  {
+    id: 'sri-lanka-group',
+    region: 'international',
+    name: 'Sri Lanka Explorer',
+    place: 'Colombo · Kandy · Bentota',
+    from: 'Colombo',
+    nights: 5,
+    price: 49999,
+    was: 57999,
+    rating: 4.7,
+    reviews: 206,
+    image: 'story-srilanka',
+    photos: ['story-srilanka', 'lux-cruise', 'villa-beach'],
+    groupSize: '20 - 25',
+    minAge: '5 years',
+    departures: [{ in: 20, seats: 5 }, { in: 41, seats: 17 }, { in: 62, seats: 22 }],
+    about: 'Kandy’s Temple of the Tooth, the tea country and the beaches of Bentota — Sri Lanka with a group, a tour manager and the visa help done for you.',
+    highlights: ['Temple of the Tooth, Kandy', 'Tea country train views', 'Bentota beach stay', 'Colombo city tour'],
+    itinerary: [
+      { day: 1, title: 'Arrive in Colombo', body: 'Airport pick-up, drive to Kandy and check in.', meals: 'Dinner' },
+      { day: 2, title: 'Kandy', body: 'Temple of the Tooth, botanical gardens and a cultural show.', meals: 'Breakfast, Dinner' },
+      { day: 3, title: 'Tea country', body: 'Tea estate visit and the hill country around Nuwara Eliya.', meals: 'Breakfast, Dinner' },
+      { day: 4, title: 'Bentota', body: 'Drive to the coast; afternoon at the beach.', meals: 'Breakfast, Dinner' },
+      { day: 5, title: 'Colombo', body: 'River safari in the morning, Colombo city tour and shopping.', meals: 'Breakfast, Dinner' },
+      { day: 6, title: 'Departure', body: 'Transfer to Colombo airport.', meals: 'Breakfast' },
+    ],
+    inclusions: ['5 nights hotel stay', 'Daily breakfast and dinner', 'AC coach for all transfers', 'Sightseeing as per itinerary', 'Visa assistance', 'Tour manager throughout'],
+    exclusions: ['International flights', 'Visa fee', 'Travel insurance', 'Personal expenses and tips'],
+  },
+  {
+    id: 'bali-group',
+    region: 'international',
+    name: 'Bali Group Holiday',
+    place: 'Ubud · Kintamani · Nusa Penida',
+    from: 'Bali',
+    nights: 5,
+    price: 64999,
+    was: 74999,
+    rating: 4.6,
+    reviews: 389,
+    image: 'story-bali',
+    photos: ['story-bali', 'lux-resort', 'villa-hero-private'],
+    groupSize: '20 - 25',
+    minAge: '5 years',
+    departures: [{ in: 28, seats: 9 }, { in: 49, seats: 0 }, { in: 70, seats: 21 }],
+    about: 'Temples, rice terraces, volcano views and a day on Nusa Penida — Bali with a group, planned end to end.',
+    highlights: ['Ubud rice terraces', 'Kintamani volcano view', 'Nusa Penida island day', 'Uluwatu sunset'],
+    itinerary: [
+      { day: 1, title: 'Arrive in Bali', body: 'Airport pick-up, check in and a welcome dinner.', meals: 'Dinner' },
+      { day: 2, title: 'Ubud & Kintamani', body: 'Tegenungan waterfall, Ubud market and the Kintamani volcano viewpoint.', meals: 'Breakfast, Lunch' },
+      { day: 3, title: 'Nusa Penida', body: 'Full-day island tour with the famous viewpoints and beaches.', meals: 'Breakfast, Lunch' },
+      { day: 4, title: 'Free day', body: 'A free day for spas, shopping or the beach.', meals: 'Breakfast' },
+      { day: 5, title: 'Uluwatu', body: 'Uluwatu temple at sunset and the Kecak dance.', meals: 'Breakfast, Dinner' },
+      { day: 6, title: 'Departure', body: 'Transfer to the airport.', meals: 'Breakfast' },
+    ],
+    inclusions: ['5 nights hotel stay', 'Meals as mentioned', 'Airport transfers', 'Sightseeing as per itinerary', 'Tour manager throughout'],
+    exclusions: ['International flights', 'Visa on arrival fee', 'Travel insurance', 'Personal expenses and tips'],
+  },
+];
+
+const dayIso = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+/** A trip's departures as real dates, with the seats left on each. */
+export function groupDepartureDates(trip) {
+  return trip.departures.map(({ in: days, seats }) => {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return { date: dayIso(d), seats };
+  });
+}
+
+/* -- Gallery -------------------------------------------------------------- */
+
+export const galleryCategories = [
+  { key: 'all', label: 'All' },
+  { key: 'stays', label: 'Stays & Villas' },
+  { key: 'destinations', label: 'Destinations' },
+  { key: 'parks', label: 'Water & Theme Parks' },
+  { key: 'adventure', label: 'Adventure' },
+  { key: 'dining', label: 'Dining' },
+  { key: 'wellness', label: 'Spa & Wellness' },
+  { key: 'luxury', label: 'Luxury' },
+];
+
+/** Every photo on the gallery page: its image slot, a caption and a place. */
+export const galleryPhotos = [
+  { slot: 'villa-hero-beach', title: 'Beachfront pool villa', place: 'Goa', category: 'stays' },
+  { slot: 'villa-casa-de-goa', title: 'Casa de Goa', place: 'Candolim, Goa', category: 'stays' },
+  { slot: 'villa-hilltop-lonavala', title: 'Hilltop villa', place: 'Lonavala', category: 'stays' },
+  { slot: 'villa-ocean-pearl', title: 'Ocean Pearl', place: 'Alibaug', category: 'stays' },
+  { slot: 'villa-room-1', title: 'Garden View Room', place: 'Baga, Goa', category: 'stays' },
+  { slot: 'villa-palm-grove', title: 'Palm Grove', place: 'Goa', category: 'stays' },
+  { slot: 'story-bali', title: 'Temples of Bali', place: 'Bali, Indonesia', category: 'destinations' },
+  { slot: 'story-kerala', title: 'Kerala backwaters', place: 'Alleppey, Kerala', category: 'destinations' },
+  { slot: 'story-srilanka', title: 'Sri Lanka coast', place: 'Sri Lanka', category: 'destinations' },
+  { slot: 'story-dandeli', title: 'White-water rafting', place: 'Dandeli, Karnataka', category: 'destinations' },
+  { slot: 'villa-beach', title: 'Quiet beach mornings', place: 'South Goa', category: 'destinations' },
+  { slot: 'park-imagicaa-water', title: 'Imagicaa Water Park', place: 'Khopoli', category: 'parks' },
+  { slot: 'ride-slides', title: 'Thrilling water slides', place: 'Lonavala', category: 'parks' },
+  { slot: 'ride-wave-pool', title: 'Wave pool', place: 'Lonavala', category: 'parks' },
+  { slot: 'park-imagicaa-theme', title: 'Imagicaa Theme Park', place: 'Khopoli', category: 'parks' },
+  { slot: 'park-theme-2', title: 'Roller coasters', place: 'Mumbai', category: 'parks' },
+  { slot: 'act-rafting', title: 'Kolad river rafting', place: 'Kolad', category: 'adventure' },
+  { slot: 'act-beach-camping', title: 'Camping by the lake', place: 'Sahyadris', category: 'adventure' },
+  { slot: 'gal-camp-2', title: 'Lakeside tents at dusk', place: 'Pawna Lake', category: 'adventure' },
+  { slot: 'gal-camp-3', title: 'Campfire under the stars', place: 'Alibaug', category: 'adventure' },
+  { slot: 'act-lake-camping', title: 'Lake camping', place: 'Pawna Lake', category: 'adventure' },
+  { slot: 'rest-courtyard-tree', title: 'The Courtyard Tree', place: 'Baga, Goa', category: 'dining' },
+  { slot: 'rest-phoenix', title: 'Dinner by the sea', place: 'Candolim, Goa', category: 'dining' },
+  { slot: 'rest-coconut-groove', title: 'Coconut Groove', place: 'Candolim, Goa', category: 'dining' },
+  { slot: 'menu-food', title: 'Chef’s specials', place: 'Goa', category: 'dining' },
+  { slot: 'spa-tattva', title: 'Tattva Wellness Spa', place: 'Lonavala', category: 'wellness' },
+  { slot: 'spa-thai', title: 'Hot stone therapy', place: 'Goa', category: 'wellness' },
+  { slot: 'spa-room', title: 'Spa suite', place: 'Baga, Goa', category: 'wellness' },
+  { slot: 'salon-studio', title: 'Looks Salon', place: 'Bandra, Mumbai', category: 'wellness' },
+  { slot: 'lux-yacht', title: 'Luxury yacht', place: 'Mumbai', category: 'luxury' },
+  { slot: 'lux-balloon', title: 'Hot air balloon at sunrise', place: 'Jaipur', category: 'luxury' },
+  { slot: 'lux-jet-2', title: 'Private jet getaway', place: 'Mumbai', category: 'luxury' },
+  { slot: 'lux-cruise', title: 'Island cruise', place: 'Goa', category: 'luxury' },
 ];
 
 /* -- FAQs ---------------------------------------------------------------- */
@@ -3169,7 +3627,7 @@ export const packageOffers = [
     duration: '5N/6D',
     tone: 'from-[#14532d] to-[#1f7a43]',
     image: 'plan-trip-hero',
-    href: '/packages?kind=group',
+    href: '/group-departures',
   },
   {
     id: 'international',
@@ -3682,6 +4140,27 @@ export const packageTabs = [
   { key: 'inclusions', label: 'Inclusions' },
   { key: 'policies', label: 'Policies' },
 ];
+
+/** GST on a tour package, charged on the package price. */
+export const packageTaxRate = 0.05;
+
+/**
+ * When a fixed-departure package leaves: every Saturday, starting at least a
+ * week out so there is time to confirm seats and visas. As yyyy-mm-dd, the
+ * same shape the other booking screens pass around.
+ */
+export function packageDepartures(count = 8) {
+  const out = [];
+  const d = new Date();
+  d.setDate(d.getDate() + 7);
+  while (out.length < count) {
+    if (d.getDay() === 6) {
+      out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
+}
 
 /** The member banner on a package page. */
 export const packageMemberBenefit = {

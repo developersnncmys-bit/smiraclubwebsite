@@ -147,6 +147,7 @@ export default async function Page({ params, searchParams }) {
           </button>
         </Card>
 
+
         {/* -- The stay ----------------------------------------------- */}
         <Card>
           <p className="text-center text-[15px] font-bold text-ink-900">

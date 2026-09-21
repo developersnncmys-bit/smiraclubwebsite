@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, Gift, MoreVertical, Star } from 'lucide-react';
+import { ArrowRight, ChevronRight, Gift, Star } from 'lucide-react';
+import CardMenu from '@/components/ui/CardMenu';
 
 /**
  * One free stay: the photo, the name, where, the rating, and the strip that
@@ -10,7 +11,7 @@ import { ArrowRight, ChevronRight, Gift, MoreVertical, Star } from 'lucide-react
  */
 export default function FreeStayCard({ hotel, href }) {
   return (
-    <article className="card overflow-hidden">
+    <article className="card">
       <div className="flex gap-3.5 p-3.5 sm:p-4">
         <Link href={href} className="relative h-[104px] w-[104px] shrink-0 overflow-hidden rounded-xl sm:h-[120px] sm:w-[120px]">
           <Image src={hotel.image} alt={hotel.name} fill sizes="120px" className="object-cover" />
@@ -31,13 +32,10 @@ export default function FreeStayCard({ hotel, href }) {
                 </span>
               )}
             </h3>
-            <button
-              type="button"
-              aria-label={`More about ${hotel.name}`}
-              className="-mr-1 grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink-700 transition hover:bg-surface-soft"
-            >
-              <MoreVertical size={18} />
-            </button>
+            <CardMenu
+              item={{ href, name: hotel.name, place: hotel.place, image: hotel.image }}
+              similar={{ href: `/free-stay/results?destination=${encodeURIComponent(hotel.place.split(',').pop().trim())}`, label: 'Similar properties' }}
+            />
           </div>
 
           <p className="mt-1 flex items-center gap-1 text-[14px] text-ink-700">

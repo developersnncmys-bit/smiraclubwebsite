@@ -217,7 +217,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
 
               <button
                 type="button"
-                className="mt-4 w-full rounded-xl bg-gradient-to-b from-[#d8a41f] to-[#b8860b] px-5 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105"
+                className={`mt-4 w-full rounded-xl bg-gradient-to-b ${plan.tone} px-5 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105`}
               >
                 Select The Plan
               </button>
@@ -346,12 +346,42 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
               })}
             </div>
 
+            {/* The coupon sits with the gifts, above their conditions. */}
+            <h3 className="mt-6 text-[15px] font-bold text-ink-900">Have a Coupon Code?</h3>
+            <div className="mt-2 flex gap-2">
+              <input
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value)}
+                placeholder="Have a Coupon Code"
+                aria-label="Coupon code"
+                className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[14px] outline-none placeholder:text-ink-400 focus:border-action-500"
+              />
+              <button
+                type="button"
+                onClick={applyCoupon}
+                className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f]"
+              >
+                Apply
+              </button>
+            </div>
+
+            {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
+
+            {discount > 0 && (
+              <p className="mt-4 flex items-center gap-2.5 rounded-lg bg-[#e8f6ec] px-3.5 py-3 text-[14px] font-semibold text-green-700">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-green-600 text-white">
+                  <Check size={14} strokeWidth={3} />
+                </span>
+                You saved {inr(discount)} on this purchase
+              </p>
+            )}
+
             <h3 className="mt-6 text-[15px] font-bold text-action-500">Gift Conditions</h3>
             <ul className="mt-2 space-y-2">
               {membershipGiftConditions.map((c) => (
                 <li key={c} className="flex gap-2.5 text-[14px] leading-snug text-ink-600">
                   <Info size={17} className="mt-0.5 shrink-0 text-action-500" />
-                  {c}
+                  {c.replace('Gold', plan.label)}
                 </li>
               ))}
             </ul>
@@ -403,33 +433,6 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           <section className="card p-4 sm:p-5">
             <h2 className="text-lg font-bold text-ink-900">Price Summary</h2>
 
-            <div className="mt-4 flex gap-2">
-              <input
-                value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
-                placeholder="Have a Coupon Code"
-                aria-label="Coupon code"
-                className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[14px] outline-none placeholder:text-ink-400 focus:border-action-500"
-              />
-              <button
-                type="button"
-                onClick={applyCoupon}
-                className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f]"
-              >
-                Apply
-              </button>
-            </div>
-
-            {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
-
-            {discount > 0 && (
-              <p className="mt-4 flex items-center gap-2.5 rounded-lg bg-[#e8f6ec] px-3.5 py-3 text-[14px] font-semibold text-green-700">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-green-600 text-white">
-                  <Check size={14} strokeWidth={3} />
-                </span>
-                You saved {inr(discount)} on this purchase
-              </p>
-            )}
 
             <dl className="mt-4 text-[14px]">
               <div className="flex items-center justify-between gap-4 py-2.5">
@@ -478,12 +481,14 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           */}
           <aside className="hidden lg:col-span-4 lg:block lg:sticky lg:top-24">
             <div className="overflow-hidden rounded-2xl bg-white shadow-card">
-              <p className="flex items-center gap-2 bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-5 py-3 text-[14px] font-semibold text-white">
+              <p className={`flex items-center gap-2 bg-gradient-to-r ${plan.tone} px-5 py-3 text-[14px] font-semibold text-white transition-colors`}>
                 <Check size={17} strokeWidth={3} />
                 Selected Plan ({plan.label} Membership)
               </p>
 
-              <div className="p-5">
+              <div className="relative p-5">
+                <span aria-hidden="true" className={`absolute inset-0 bg-gradient-to-b ${plan.tone} opacity-[0.08]`} />
+                <div className="relative">
                 <p className="text-[14px] text-ink-700">Total Amount</p>
                 <p className="text-2xl font-extrabold text-ink-900">{inr(total)}</p>
                 <p className="text-[13px] text-ink-500">(Taxes Included)</p>
@@ -492,10 +497,11 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                   type="button"
                   disabled={!agreed}
                   title={agreed ? undefined : 'Agree to the terms first'}
-                  className="btn-primary mt-5 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
+                  className={`mt-5 w-full rounded-lg bg-gradient-to-r ${plan.tone} py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
                 >
                   Pay now
                 </button>
+                </div>
               </div>
             </div>
           </aside>
@@ -512,7 +518,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
       {tab === 'plans' && (
       <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
         <div className="overflow-hidden border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
-          <p className="flex items-center gap-2 bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-4 py-2.5 text-[14px] font-semibold text-white sm:px-6">
+          <p className={`flex items-center gap-2 bg-gradient-to-r ${plan.tone} px-4 py-2.5 text-[14px] font-semibold text-white transition-colors sm:px-6`}>
             <Check size={17} strokeWidth={3} />
             Selected Plan ({plan.label} Membership)
           </p>
@@ -531,7 +537,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
               type="button"
               disabled={!agreed}
               title={agreed ? undefined : 'Agree to the terms first'}
-              className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide"
+              className={`min-w-[10.5rem] shrink-0 rounded-lg bg-gradient-to-r ${plan.tone} px-8 py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
             >
               Pay now
             </button>

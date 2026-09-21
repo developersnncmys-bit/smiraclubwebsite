@@ -9,6 +9,7 @@ import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
 import ClosingLine from '@/components/home/ClosingLine';
 import PlanTripReminder from '@/components/home/PlanTripReminder';
+import AiSearchFab from '@/components/home/AiSearchFab';
 import { heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
 import { image } from '@/lib/images';
 import { serviceArt } from '@/lib/serviceArt';
@@ -36,6 +37,7 @@ export default function HomePage() {
       <GrabOffers offers={offerCards} />
       <WatchExplore />
       <ClosingLine />
+      <AiSearchFab />
     </>
   );
 }

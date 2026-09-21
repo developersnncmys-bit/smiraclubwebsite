@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Calendar, Mail, Phone, User } from 'lucide-react';
 import GuidelinesSheet from '@/components/offers/GuidelinesSheet';
@@ -51,9 +50,6 @@ export default function ParkBooking({ park, tickets, children }) {
   const [guide, setGuide] = useState(false);
   const [who, setWho] = useState('myself');
   const [guests, setGuests] = useState([{ name: '', email: '', phone: '' }]);
-  const [gst, setGst] = useState(false);
-  const [gstin, setGstin] = useState('');
-  const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState({});
 
   const chosen = tickets.filter((t) => qty[t.id]);
@@ -77,8 +73,6 @@ export default function ParkBooking({ park, tickets, children }) {
     if (!lead.name.trim()) found.name = 'Tell us who is going.';
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(lead.email.trim())) found.email = 'That email does not look right.';
     if (!/^\d{10}$/.test(lead.phone.replace(/\D/g, ''))) found.phone = 'A 10-digit mobile number, please.';
-    if (gst && !gstin.trim()) found.gstin = 'Add the GST number, or untick the box.';
-    if (!agreed) found.agreed = 'The terms have to be agreed before booking.';
     setErrors(found);
 
     if (found.tickets) return ticketsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -254,33 +248,6 @@ export default function ParkBooking({ park, tickets, children }) {
             )}
           </section>
 
-          <section className="card p-4 sm:p-5">
-            <label className="flex cursor-pointer items-start gap-3">
-              <input type="checkbox" checked={gst} onChange={(e) => setGst(e.target.checked)} className="mt-0.5 h-5 w-5 accent-action-500" />
-              <span>
-                <span className="block text-[15px] font-semibold text-ink-900">Add GST number</span>
-                <span className="block text-[13px] text-action-500">Claim 18% credit using GST invoice</span>
-              </span>
-            </label>
-            {gst && (
-              <div className="mt-3">
-                <input value={gstin} onChange={(e) => setGstin(e.target.value.toUpperCase())} placeholder="GSTIN" aria-label="GST number" className={INPUT} />
-                {errors.gstin && <span className="mt-1.5 block text-[13px] text-red-600">{errors.gstin}</span>}
-              </div>
-            )}
-          </section>
-
-          <section className="card p-4 sm:p-5">
-            <label className="flex cursor-pointer items-start gap-3">
-              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-action-500" />
-              <span className="text-[14px] leading-snug text-ink-900">
-                By Proceeding, I agree to Smira Club&rsquo;s <Link href="/more/terms" className="text-action-500">User Agreement</Link>,{' '}
-                <Link href="/more/terms" className="text-action-500">Terms of Service</Link> and{' '}
-                <Link href="/more/cancellation" className="text-action-500">Cancellation &amp; Booking Policies.</Link>
-              </span>
-            </label>
-            {errors.agreed && <span className="mt-1.5 block text-[13px] text-red-600">{errors.agreed}</span>}
-          </section>
         </div>
 
         {/* -- Desktop rail --------------------------------------------------- */}

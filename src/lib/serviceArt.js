@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { SERVICE_ART_VERSION } from './assetVersion.mjs';
 
 /**
  * Which of the All Services tiles have their own illustration.
@@ -27,7 +28,7 @@ export function serviceArt(keys) {
     for (const ext of PREFERRED) {
       try {
         if (fs.existsSync(path.join(DIR, key + ext))) {
-          found[key] = `/img/services/${key}${ext}`;
+          found[key] = `/img/services/${key}${ext}?v=${SERVICE_ART_VERSION}`;
           break;
         }
       } catch {

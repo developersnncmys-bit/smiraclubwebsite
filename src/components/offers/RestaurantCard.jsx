@@ -7,12 +7,21 @@ import { CardHead, MemberStrip } from '@/components/offers/OfferBits';
 export default function RestaurantCard({ restaurant: r }) {
   const href = `/restaurants/${r.id}`;
   return (
-    <article className="card overflow-hidden p-3 sm:p-4">
+    <article className="card p-3 sm:p-4">
       <div className="flex gap-3.5">
         <Link href={href} className="relative h-[112px] w-[112px] shrink-0 overflow-hidden rounded-xl sm:h-[128px] sm:w-[128px]">
           <Image src={r.image} alt={r.name} fill sizes="128px" className="object-cover" />
         </Link>
-        <CardHead name={r.name} place={r.place} rating={r.rating} reviews={r.reviews}>
+        <CardHead
+          name={r.name}
+          place={r.place}
+          rating={r.rating}
+          reviews={r.reviews}
+          menu={{
+            item: { href, name: r.name, place: r.place, image: r.image },
+            similar: { href: '/restaurants', label: 'Similar restaurants' },
+          }}
+        >
           <MemberStrip percent={r.offer} className="mt-2" />
         </CardHead>
       </div>
