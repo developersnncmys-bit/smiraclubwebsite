@@ -263,13 +263,13 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           {/* -- What that tier is ---------------------------------- */}
           <section className={`overflow-hidden rounded-2xl bg-gradient-to-b ${plan.tone} p-1.5 pt-3`}>
             <div className="rounded-2xl bg-white p-4 sm:p-5">
-              <h2 className="text-xl font-bold text-[#b8860b]">{plan.title}</h2>
+              <h2 className={`text-xl font-bold ${plan.accent}`}>{plan.title}</h2>
               <p className="mt-1 text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
               <dl className="mt-5 grid grid-cols-2 gap-3">
                 {plan.stats.map((s) => (
-                  <div key={s.note} className="rounded-xl bg-[#fdf6e3] p-3.5">
-                    <dt className="text-[15px] font-bold text-[#b8860b]">{s.figure}</dt>
+                  <div key={s.note} className={`rounded-xl ${plan.soft} p-3.5`}>
+                    <dt className={`text-[15px] font-bold ${plan.accent}`}>{s.figure}</dt>
                     <dd className="text-[13px] leading-snug text-ink-700">{s.note}</dd>
                   </div>
                 ))}

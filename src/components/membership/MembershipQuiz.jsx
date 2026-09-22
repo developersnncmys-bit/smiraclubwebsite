@@ -80,7 +80,7 @@ export default function MembershipQuiz({ helper, onPick }) {
 
     const share = asked ? score / asked : 0.35;
     const key =
-      share >= 0.75 ? 'diamond' : share >= 0.5 ? 'platinum' : share >= 0.25 ? 'gold' : 'silver';
+      share >= 0.85 ? 'crown' : share >= 0.65 ? 'diamond' : share >= 0.45 ? 'platinum' : share >= 0.25 ? 'gold' : 'silver';
 
     setResult(membershipPlans.find((p) => p.key === key));
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });

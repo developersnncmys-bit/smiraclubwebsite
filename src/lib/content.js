@@ -2131,11 +2131,14 @@ export const membershipTabs = [
 ];
 
 /**
- * The four tiers.
+ * The five tiers, in the Figma's colours and numbers.
  *
- * Only Gold's numbers come from the Figma; the other three are set to sit
- * either side of it so the screen reads sensibly while you are choosing.
- * Replace them with the real rate card when it lands.
+ * Free stay, validity and people come from the Figma's comparison grid. The
+ * Figma shows placeholder prices above Gold, so those fees are set to climb
+ * from Gold's; replace them with the real rate card when it lands.
+ *
+ * `tone` is the tier's gradient (top to bottom, as the Figma headers run),
+ * `accent` its text colour on white and `soft` the tint behind its figures.
  */
 export const membershipPlans = [
   {
@@ -2145,11 +2148,13 @@ export const membershipPlans = [
     title: 'Easy Starter',
     blurb: 'For travellers taking their first trips with us',
     fee: 9999,
-    tone: 'from-[#c3c9cf] to-[#98a1a9]',
+    tone: 'from-[#8e969d] to-[#c4c9cd]',
+    accent: 'text-[#5f686f]',
+    soft: 'bg-[#f1f3f4]',
     stats: [
       { figure: '30 Days', note: 'Free Hotel Stay' },
-      { figure: '2 Years', note: 'Membership Validity' },
-      { figure: '2 - 4 People', note: 'Covered per stay' },
+      { figure: '1 Year', note: 'Membership Validity' },
+      { figure: '4 Persons', note: 'Covered per stay' },
       { figure: '1 Room', note: 'Allowed Per Booking' },
     ],
     privileges: 1,
@@ -2157,15 +2162,17 @@ export const membershipPlans = [
   {
     key: 'gold',
     label: 'Gold',
-    audience: 'Smart Traveller',
+    audience: 'Smart Travellers',
     title: 'Smart Traveller',
     blurb: 'For Families who travel few times a year',
     fee: 19999,
-    tone: 'from-[#d8a41f] to-[#b8860b]',
+    tone: 'from-[#b8860b] to-[#dca72a]',
+    accent: 'text-[#b8860b]',
+    soft: 'bg-[#fdf6e3]',
     stats: [
       { figure: '75 Days', note: 'Free Hotel Stay' },
       { figure: '3 Years', note: 'Membership Validity' },
-      { figure: '4 - 8 People', note: 'Covered per stay' },
+      { figure: '8 Persons', note: 'Covered per stay' },
       { figure: '2 Rooms', note: 'Allowed Per Booking' },
     ],
     privileges: 3,
@@ -2178,11 +2185,13 @@ export const membershipPlans = [
     blurb: 'For families on the road several times a year',
     fee: 34999,
     popular: true,
-    tone: 'from-[#8fa8b8] to-[#5d7d90]',
+    tone: 'from-[#4f6c80] to-[#8ea3b1]',
+    accent: 'text-[#4f6c80]',
+    soft: 'bg-[#eef2f5]',
     stats: [
-      { figure: '120 Days', note: 'Free Hotel Stay' },
+      { figure: '150 Days', note: 'Free Hotel Stay' },
       { figure: '5 Years', note: 'Membership Validity' },
-      { figure: '6 - 10 People', note: 'Covered per stay' },
+      { figure: '12 Persons', note: 'Covered per stay' },
       { figure: '3 Rooms', note: 'Allowed Per Booking' },
     ],
     privileges: 5,
@@ -2194,12 +2203,32 @@ export const membershipPlans = [
     title: 'Luxury Collector',
     blurb: 'For members who travel first class, every time',
     fee: 59999,
-    tone: 'from-[#4fbfc4] to-[#25868f]',
+    tone: 'from-[#1f8f98] to-[#4cbcc1]',
+    accent: 'text-[#1f8f98]',
+    soft: 'bg-[#e8f7f8]',
     stats: [
-      { figure: '180 Days', note: 'Free Hotel Stay' },
-      { figure: '7 Years', note: 'Membership Validity' },
-      { figure: '8 - 12 People', note: 'Covered per stay' },
+      { figure: '350 Days', note: 'Free Hotel Stay' },
+      { figure: '10 Years', note: 'Membership Validity' },
+      { figure: '16 Persons', note: 'Covered per stay' },
       { figure: '4 Rooms', note: 'Allowed Per Booking' },
+    ],
+    privileges: 8,
+  },
+  {
+    key: 'crown',
+    label: 'Crown',
+    audience: 'Elite Travellers',
+    title: 'Elite Traveller',
+    blurb: 'For members who want the most of everything, for decades',
+    fee: 99999,
+    tone: 'from-[#3a1348] to-[#a4501c]',
+    accent: 'text-[#6e2a4f]',
+    soft: 'bg-[#f7eef2]',
+    stats: [
+      { figure: '500 Days', note: 'Free Hotel Stay' },
+      { figure: '25 Years', note: 'Membership Validity' },
+      { figure: '16+ Persons', note: 'Covered per stay' },
+      { figure: '5 Rooms', note: 'Allowed Per Booking' },
     ],
     privileges: 10,
   },
