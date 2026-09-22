@@ -71,3 +71,26 @@ export function profileForBooking(p) {
     whatsapp: p.whatsapp,
   };
 }
+
+/**
+ * How much of the profile is filled in, as a whole percentage.
+ *
+ * Every field the five steps ask for counts the same: the three personal
+ * details, a birthday, the anniversary, and the address line, city and
+ * pincode. Nothing saved yet is 0%.
+ */
+export function profileCompletion(p) {
+  const filled = (v) => Boolean(String(v ?? '').trim());
+  const b = (p?.birthdays || []).find((x) => filled(x.dob)) || {};
+  const checks = [
+    filled(p?.details?.name),
+    /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p?.details?.email?.trim() || ''),
+    /^\d{10}$/.test((p?.details?.phone || '').replace(/\D/g, '').slice(-10)),
+    filled(b.dob),
+    filled(p?.anniversary?.date),
+    filled(p?.address?.line1),
+    filled(p?.address?.city),
+    filled(p?.address?.pincode),
+  ];
+  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}

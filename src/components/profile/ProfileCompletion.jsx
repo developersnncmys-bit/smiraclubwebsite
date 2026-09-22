@@ -1,13 +1,27 @@
+'use client';
+
 import Link from 'next/link';
 import { Pencil } from 'lucide-react';
-import { member } from '@/lib/content';
+import { profileCompletion, useProfile } from '@/lib/profile';
 
 const RADIUS = 26;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-/** How far through the profile you are — the ring and the bar, one number. */
+/** What the card says, by how far along the member is. */
+function nudge(pct) {
+  if (pct === 0) return 'Let’s get started! Complete your profile to unlock personalized Smira Benefits';
+  if (pct < 50) return 'Good start! Complete your profile to unlock personalized Smira Benefits';
+  if (pct < 100) return 'You’re more than half way there! Complete your profile to unlock personalized Smira Benefits';
+  return 'Your profile is complete. Enjoy your personalized Smira Benefits';
+}
+
+/**
+ * How far through the profile you are — the ring and the bar, one number,
+ * worked out from what the member has actually saved in Complete Your Profile.
+ */
 export default function ProfileCompletion() {
-  const pct = Math.min(100, Math.max(0, member.completion));
+  const { profile } = useProfile();
+  const pct = Math.min(100, Math.max(0, profileCompletion(profile)));
 
   return (
     <section className="card p-5 sm:p-6">
@@ -53,7 +67,7 @@ export default function ProfileCompletion() {
       </div>
 
       <p className="mt-4 text-[14px] leading-relaxed text-ink-700">
-        You&rsquo;re half way there! Complete your profile to unlock personalized Smira Benefits
+        {nudge(pct)}
       </p>
 
       <Link
@@ -61,7 +75,7 @@ export default function ProfileCompletion() {
         className="mt-3 inline-flex items-center gap-2 text-[14px] font-bold text-action-500 transition hover:text-action-600"
       >
         <Pencil size={16} />
-        Complete Profile
+        {pct === 100 ? 'Edit Profile' : 'Complete Profile'}
       </Link>
     </section>
   );
