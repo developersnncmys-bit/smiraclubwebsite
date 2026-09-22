@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BadgeCheck, Calendar, MapPin, User } from 'lucide-react';
+import { BadgeCheck, BedDouble, Calendar, MapPin, User } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import RoomPicker from '@/components/hotels/RoomPicker';
 import PackageCard from '@/components/hotels/PackageCard';
+import StayChooser from '@/components/hotels/StayChooser';
 import {
   AmenitiesCard, DetailCard, GuidelinesSection, LocationCard, MemberBenefitsCard, ReviewsCard,
 } from '@/components/hotels/DetailSections';
@@ -12,7 +13,7 @@ import {
   hotels, recommendedPackages, villaStay as stayTimes,
 } from '@/lib/content';
 import { image } from '@/lib/images';
-import { defaultStay, shortDate } from '@/lib/format';
+import { defaultStay, fullDate, nightsBetween, shortDate, ymd } from '@/lib/format';
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -60,11 +61,21 @@ export default async function Page({ params, searchParams }) {
   const adults = Number(query.adults) || 2;
   const rooms = Number(query.rooms) || 1;
 
+  const childAges = String(query.ages || '')
+    .split(',')
+    .map((a) => Number(a))
+    .filter((a) => Number.isInteger(a) && a >= 0 && a <= 17);
+  const nights = Math.max(1, nightsBetween(from, to));
+  const party = [
+    `${adults} Adult${adults === 1 ? '' : 's'}`,
+    childAges.length ? `${childAges.length} Child${childAges.length === 1 ? '' : 'ren'}` : null,
+  ].filter(Boolean).join(', ');
+
   const when = `${shortDate(from)} - ${shortDate(to)}`;
   const carry = new URLSearchParams({
     ...query,
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
+    from: ymd(from),
+    to: ymd(to),
     adults: String(adults),
     rooms: String(rooms),
   }).toString();
@@ -116,6 +127,7 @@ export default async function Page({ params, searchParams }) {
           groups={groups}
           defaultPlan={hotel.defaultPlan}
           bookHref={`/hotels/${hotel.id}/book${carry ? `?${carry}` : ''}`}
+          stay={{ when, nights, party }}
         />
 
         {/* -- The stay ----------------------------------------------- */}
@@ -123,16 +135,13 @@ export default async function Page({ params, searchParams }) {
           <p className="text-center text-[15px] font-bold text-ink-900">
             Check in: {stayTimes.checkIn} / Check out: {stayTimes.checkOut}
           </p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-              <Calendar size={17} className="shrink-0" />
-              {when}
-            </p>
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-              <User size={17} className="shrink-0" />
-              {adults} Adults/ {rooms} Room
-            </p>
-          </div>
+          <StayChooser
+            from={ymd(from)}
+            to={ymd(to)}
+            adults={adults}
+            rooms={rooms}
+            childAges={childAges}
+          />
         </DetailCard>
       </div>
 
@@ -147,6 +156,36 @@ export default async function Page({ params, searchParams }) {
             Read More
           </button>
         </section>
+
+        {/* -- Who is staying: the party chosen above, before the amenities */}
+        <DetailCard>
+          <h2 className="text-lg font-bold text-ink-900">Your Stay</h2>
+          <dl className="mt-3 grid grid-cols-2 gap-3 text-[14px] sm:grid-cols-4">
+            <div className="rounded-xl bg-surface-soft p-3">
+              <dt className="flex items-center gap-1.5 text-ink-500"><Calendar size={15} /> Check-in</dt>
+              <dd className="mt-1 font-bold text-ink-900">{fullDate(from)}</dd>
+            </div>
+            <div className="rounded-xl bg-surface-soft p-3">
+              <dt className="flex items-center gap-1.5 text-ink-500"><Calendar size={15} /> Check-out</dt>
+              <dd className="mt-1 font-bold text-ink-900">{fullDate(to)}</dd>
+            </div>
+            <div className="rounded-xl bg-surface-soft p-3">
+              <dt className="flex items-center gap-1.5 text-ink-500"><User size={15} /> Guests</dt>
+              <dd className="mt-1 font-bold text-ink-900">{party}</dd>
+            </div>
+            <div className="rounded-xl bg-surface-soft p-3">
+              <dt className="flex items-center gap-1.5 text-ink-500"><BedDouble size={15} /> Rooms</dt>
+              <dd className="mt-1 font-bold text-ink-900">
+                {rooms} Room{rooms === 1 ? '' : 's'} · {nights} Night{nights === 1 ? '' : 's'}
+              </dd>
+            </div>
+          </dl>
+          {childAges.length > 0 && (
+            <p className="mt-3 text-[13px] text-ink-500">
+              Children&rsquo;s ages: {childAges.map((a) => (a === 0 ? 'under 1' : `${a} yrs`)).join(', ')}
+            </p>
+          )}
+        </DetailCard>
 
         {/* -- Packages worth a look, still under Overview ------------- */}
         <section className="pt-2">

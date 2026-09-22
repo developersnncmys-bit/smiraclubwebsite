@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BedDouble, Check, Images, Ruler, User } from 'lucide-react';
+import { BedDouble, CalendarDays, Check, Images, Ruler, User } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
@@ -16,7 +16,7 @@ import { inr } from '@/lib/format';
  * which is why the bottom bar's price moves as you pick — the bar reads the
  * same selection, so the two can never disagree about what you are booking.
  */
-export default function RoomPicker({ groups, defaultPlan, bookHref }) {
+export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
   const [picked, setPicked] = useState(defaultPlan);
 
   /** The chosen plan, and the room it belongs to. */
@@ -190,6 +190,15 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
       */}
       <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
         <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
+          {/* The dates and party chosen on the page, so Book Room says what it books. */}
+          {stay && (
+            <p className="flex items-center gap-2 border-b border-surface-line bg-brand-50 px-4 py-2 text-[13px] font-semibold text-brand-700 sm:px-6">
+              <CalendarDays size={15} className="shrink-0" />
+              <span className="truncate">
+                {stay.when} · {stay.nights} Night{stay.nights === 1 ? '' : 's'} · {stay.party}
+              </span>
+            </p>
+          )}
           <div
             className="flex items-center gap-4 px-4 py-3.5 sm:px-6 lg:px-6"
             style={{ paddingBottom: 'max(0.875rem, env(safe-area-inset-bottom))' }}
@@ -201,7 +210,7 @@ export default function RoomPicker({ groups, defaultPlan, bookHref }) {
           */}
           <div className="hidden min-w-0 flex-1 lg:block">
             <p className="truncate text-[14px] font-bold text-ink-900">{chosen?.room.name}</p>
-            <p className="truncate text-[13px] text-ink-500">{chosen?.plan.name}</p>
+            <p className="truncate text-[13px] text-ink-500">{chosen?.plan.name}{stay ? ` · ${stay.when}` : ''}</p>
           </div>
 
           <div className="min-w-0 flex-1 lg:flex-none lg:text-right">
