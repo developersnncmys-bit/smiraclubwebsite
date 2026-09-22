@@ -1,9 +1,18 @@
+'use client';
+
 import Link from 'next/link';
 import { Pencil, Phone, User } from 'lucide-react';
 import { member } from '@/lib/content';
+import { useProfile } from '@/lib/profile';
 
 /** The blue card the screen opens on — who you are, and the way to edit it. */
 export default function IdentityCard() {
+  // What the member saved on Complete Your Profile, where there is something.
+  const { profile } = useProfile();
+  const name = profile?.details?.name?.trim() || member.name;
+  const phone = profile?.details?.phone?.trim() || member.phone;
+  const photo = profile?.photo;
+
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6">
       {member.active && (
@@ -14,18 +23,23 @@ export default function IdentityCard() {
       )}
 
       <div className="flex items-center gap-4">
-        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-white/85 sm:h-[72px] sm:w-[72px]">
-          <User size={34} className="text-brand-500" fill="currentColor" strokeWidth={0} />
+        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-white/85 sm:h-[72px] sm:w-[72px]">
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photo} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <User size={34} className="text-brand-500" fill="currentColor" strokeWidth={0} />
+          )}
         </span>
 
         <div className="min-w-0">
           <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl">
-            Hey {member.name}!
+            Hey {name}!
           </h1>
 
           <p className="mt-2 flex items-center gap-2 text-[14px] font-medium text-white/95">
             <Phone size={15} fill="currentColor" strokeWidth={0} />
-            {member.phone}
+            {phone}
           </p>
 
           <Link

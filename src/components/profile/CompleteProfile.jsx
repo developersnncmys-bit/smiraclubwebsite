@@ -102,6 +102,8 @@ export default function CompleteProfile() {
     line1: '', line2: '', city: '', state: 'Karnataka', pincode: '', useForAll: true,
   });
   const [whatsapp, setWhatsapp] = useState(true);
+  const [photo, setPhoto] = useState('');
+  const [photoNote, setPhotoNote] = useState('');
   /** Where to go once it is saved — the booking that sent them here, if any. */
   const [returnTo, setReturnTo] = useState('');
 
@@ -114,13 +116,48 @@ export default function CompleteProfile() {
       if (saved.anniversary) setAnniversary(saved.anniversary);
       if (saved.address) setAddress(saved.address);
       if (typeof saved.whatsapp === 'boolean') setWhatsapp(saved.whatsapp);
+      if (saved.photo) setPhoto(saved.photo);
     }
     const next = new URLSearchParams(window.location.search).get('next') || '';
     // Only ever back into this site.
     if (next.startsWith('/') && !next.startsWith('//')) setReturnTo(next);
   }, []);
 
-  const persist = () => saveProfile({ details, birthdays, anniversary, address, whatsapp });
+  const persist = () => saveProfile({ details, birthdays, anniversary, address, whatsapp, photo });
+
+  /**
+   * The photo is shrunk to a small square JPEG in the browser before it is
+   * kept — a phone photo is several megabytes, far more than a profile picture
+   * needs or than the browser will store — and saved straight away.
+   */
+  const savePhoto = (next) => {
+    setPhoto(next);
+    saveProfile({ ...(loadProfile() || {}), photo: next });
+  };
+  const pickPhoto = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    setPhotoNote('');
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return setPhotoNote('That file is not a picture — choose a photo.');
+    const url = URL.createObjectURL(file);
+    const img = new window.Image();
+    img.onload = () => {
+      const side = 320;
+      const crop = Math.min(img.width, img.height);
+      const canvas = document.createElement('canvas');
+      canvas.width = side;
+      canvas.height = side;
+      canvas.getContext('2d').drawImage(img, (img.width - crop) / 2, (img.height - crop) / 2, crop, crop, 0, 0, side, side);
+      URL.revokeObjectURL(url);
+      savePhoto(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      setPhotoNote('We could not read that picture — try another one.');
+    };
+    img.src = url;
+  };
 
   const step = profileSteps[at];
 
@@ -238,19 +275,32 @@ export default function CompleteProfile() {
 
               <div className="mt-6 flex justify-center">
                 <span className="relative">
-                  <span className="grid h-28 w-28 place-items-center rounded-full bg-surface-soft ring-1 ring-surface-line">
-                    <User size={44} className="text-ink-400" />
+                  <span className="grid h-28 w-28 place-items-center overflow-hidden rounded-full bg-surface-soft ring-1 ring-surface-line">
+                    {photo ? (
+                      // A data URL made in this browser, so next/image has nothing to optimise.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo} alt="Your profile photo" className="h-full w-full object-cover" />
+                    ) : (
+                      <User size={44} className="text-ink-400" />
+                    )}
                   </span>
-                  <button
-                    type="button"
-                    aria-label="Add a profile photo"
-                    title="Photo upload arrives with the accounts work"
-                    className="absolute bottom-0 left-1/2 grid h-11 w-11 -translate-x-1/2 translate-y-1/3 place-items-center rounded-full bg-action-500 text-white ring-4 ring-white transition hover:bg-action-600"
+                  <label
+                    aria-label={photo ? 'Change your profile photo' : 'Add a profile photo'}
+                    className="absolute bottom-0 left-1/2 grid h-11 w-11 -translate-x-1/2 translate-y-1/3 cursor-pointer place-items-center rounded-full bg-action-500 text-white ring-4 ring-white transition hover:bg-action-600"
                   >
                     <Camera size={19} />
-                  </button>
+                    <input type="file" accept="image/*" onChange={pickPhoto} className="sr-only" />
+                  </label>
                 </span>
               </div>
+              {photoNote && <p className="mt-6 text-center text-[13px] text-red-600">{photoNote}</p>}
+              {photo && (
+                <p className="mt-6 text-center">
+                  <button type="button" onClick={() => savePhoto('')} className="text-[13px] font-semibold text-ink-500 underline underline-offset-2">
+                    Remove photo
+                  </button>
+                </p>
+              )}
 
               <div className="mt-12 space-y-5">
                 <Field
