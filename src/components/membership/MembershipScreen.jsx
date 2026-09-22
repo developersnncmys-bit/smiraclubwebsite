@@ -16,7 +16,7 @@ import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
-import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
+import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 
 /** A ticked square in the plan's own gold. */
@@ -105,16 +105,18 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
    * then the membership goes to the Smira desk and is recorded here, and the
    * member goes back to whatever sent them to join.
    */
-  const { ready, profile } = useProfile();
+  const { profile } = useProfile();
   const [joining, setJoining] = useState(false);
   const [failed, setFailed] = useState('');
   const join = async () => {
     if (joining || !agreed) return;
-    if (ready && !isComplete(profile)) return router.push(completeProfileHref());
+    // Read it now rather than trust the first render, which may not have it yet.
+    const current = profile || loadProfile();
+    if (!isComplete(current)) return router.push(completeProfileHref());
     setJoining(true);
     setFailed('');
     try {
-      const d = profile.details;
+      const d = current.details;
       const res = await api.joinMembership({
         name: d.name,
         phone: d.phone,
@@ -125,7 +127,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
         privileges,
         sharing,
         coupon: applied || undefined,
-        profile: profileForBooking(profile),
+        profile: profileForBooking(current),
         attribution: readAttribution(),
       });
       saveMembership({
@@ -188,11 +190,6 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           <p role="status" className="rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[14px] font-medium text-brand-700">
             Details and bookings are for Smira Club members. Choose a plan below and we will take you straight back.
           </p>
-        </div>
-      )}
-      {failed && (
-        <div className="shell pt-4">
-          <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-[14px] font-medium text-red-600">{failed}</p>
         </div>
       )}
 
@@ -570,6 +567,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                 >
                   {joining ? 'Sending…' : 'Pay now'}
                 </button>
+                {failed && <p role="alert" className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-[13px] font-medium text-red-600">{failed}</p>}
                 </div>
               </div>
             </div>
@@ -587,6 +585,10 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
       {tab === 'plans' && (
       <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
         <div className="overflow-hidden border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
+          {/* Right by the button, where someone who just pressed it is looking. */}
+          {failed && (
+            <p role="alert" className="bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-600 sm:px-6">{failed}</p>
+          )}
           <p className={`flex items-center gap-2 bg-gradient-to-r ${plan.tone} px-4 py-2.5 text-[14px] font-semibold text-white transition-colors sm:px-6`}>
             <Check size={17} strokeWidth={3} />
             Selected Plan ({plan.label} Membership)
