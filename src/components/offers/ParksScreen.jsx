@@ -16,8 +16,17 @@ import { inr } from '@/lib/format';
  * place as you type, because a handful of parks does not need a separate
  * results screen.
  */
-export default function ParksScreen({ parks }) {
-  const [kind, setKind] = useState(parkKinds[0].key);
+export default function ParksScreen({
+  parks,
+  kinds = parkKinds,
+  basePath = '/parks',
+  title = 'Water park & Theme park',
+  /** The search box's prompt for each kind, by key. */
+  searchLabels = { theme: 'Search Theme Parks or location', water: 'Search Water Parks or location' },
+  similarLabel = 'Similar parks',
+  empty = 'No parks match that yet.',
+}) {
+  const [kind, setKind] = useState(kinds[0].key);
   const [q, setQ] = useState('');
 
   const shown = useMemo(() => {
@@ -31,12 +40,12 @@ export default function ParksScreen({ parks }) {
     <div className="pb-10 lg:pb-16">
       <div className="bg-white">
         <div className="shell space-y-5 py-5 lg:py-8">
-          <h1 className="hidden text-2xl font-bold text-ink-900 lg:block">Water park &amp; Theme park</h1>
-          <Segmented options={parkKinds} value={kind} onChange={setKind} label="Kind of park" className="lg:max-w-md" />
+          <h1 className="hidden text-2xl font-bold text-ink-900 lg:block">{title}</h1>
+          <Segmented options={kinds} value={kind} onChange={setKind} label="Kind" className="lg:max-w-md" />
           <SearchBox
             value={q}
             onChange={setQ}
-            placeholder={kind === 'theme' ? 'Search Theme Parks or location' : 'Search Water Parks or location'}
+            placeholder={searchLabels[kind] || 'Search by name or location'}
             label="Search parks"
           />
         </div>
@@ -47,12 +56,12 @@ export default function ParksScreen({ parks }) {
 
         {shown.length === 0 ? (
           <p className="mt-5 rounded-2xl bg-white p-6 text-center text-[14px] text-ink-500">
-            No parks match that yet.
+            {empty}
           </p>
         ) : (
           <div className="mt-4 grid gap-4 lg:grid-cols-2 lg:gap-6">
             {shown.map((park) => {
-              const href = `/parks/${park.id}`;
+              const href = `${basePath}/${park.id}`;
               return (
                 <article key={park.id} className="card p-3 sm:p-4">
                   <div className="flex gap-3.5">
@@ -66,7 +75,7 @@ export default function ParksScreen({ parks }) {
                       reviews={park.reviews}
                       menu={{
                         item: { href, name: park.name, place: park.place, image: park.images[0] },
-                        similar: { href: '/parks', label: 'Similar parks' },
+                        similar: { href: basePath, label: similarLabel },
                       }}
                     >
                       <p className="mt-1.5 text-[13px] text-ink-700">

@@ -84,7 +84,7 @@ export const services = [
   { key: 'homestay', label: 'Home Stay', icon: 'Home', href: '/villas?collection=homestay' },
   { key: 'restaurant', label: 'Restuarant Offers', icon: 'UtensilsCrossed', href: '/restaurants' },
   { key: 'waterpark', label: 'Waterpark & Themepark', icon: 'Waves', href: '/parks' },
-  { key: 'games', label: 'Games Zone', icon: 'Gamepad2', href: '/offers?kind=games' },
+  { key: 'games', label: 'Games Zone', icon: 'Gamepad2', href: '/games' },
   { key: 'salon', label: 'Saloon & Spa', icon: 'Sparkles', href: '/spa' },
   { key: 'luxury', label: 'Luxury Experiences', icon: 'Palmtree', href: '/luxury' },
   { key: 'camping', label: 'Camping & Adventure', icon: 'Tent', href: '/activities' },
@@ -1193,6 +1193,7 @@ export const profileMenu = [
     items: [
       { label: 'Change Password', icon: 'Pencil', href: '/profile/password' },
       { label: 'My Bookings', icon: 'Briefcase', href: '/profile/bookings' },
+      { label: 'My Wishlist', icon: 'Heart', href: '/wishlist' },
       { label: 'My Membership', icon: 'Ticket', href: '/membership' },
       { label: 'My Travel Year', icon: 'PlaneTakeoff', href: '/profile/travel-year' },
       { label: 'Refer & Earn', icon: 'Wallet', href: '/profile/referrals' },
@@ -4165,6 +4166,115 @@ export const packages = [
       '24/7 Travel Assistance',
     ],
   },
+  // -- Domestic ------------------------------------------------------------
+  // The two Goa packages the hotel pages recommend; their Book Now needs a
+  // page of its own, so they live here with the rest.
+  {
+    id: 'goa-escape',
+    name: 'Goa Escape Package',
+    place: 'Goa, India',
+    destination: 'goa',
+    kinds: ['honeymoon'],
+    verified: true,
+    rating: 4.6,
+    reviews: 412,
+    nights: 4,
+    chips: [
+      { label: 'Hotel Stay', icon: 'Building2' },
+      { label: 'Meals', icon: 'Coffee' },
+    ],
+    more: 2,
+    promo: {
+      tone: 'blue',
+      icon: 'Gift',
+      title: 'Complimentary stay for members',
+      note: 'Pay for food · Breakfast & Dinner included',
+    },
+    price: 24999,
+    was: 27999,
+    image: 'villa-beach',
+    about:
+      'Four easy nights on the North Goa coast — beach days at Baga and Calangute, a sunset cruise on the Mandovi, and the old churches of Panjim.',
+    highlights: [
+      '4 Nights Beach Resort Stay',
+      'Daily Breakfast & Dinner',
+      'Airport Transfers',
+      'North Goa Sightseeing',
+      'Mandovi Sunset Cruise',
+      '24/7 Travel Assistance',
+    ],
+    info: {
+      bestTime: 'Nov - Feb',
+      groupSize: '2 - 10',
+      kind: 'Domestic Trip',
+    },
+    itinerary: [
+      { day: 1, title: 'Arrival In Goa', body: 'Airport pick-up and check in at the beach resort.', meals: 'Dinner' },
+      { day: 2, title: 'North Goa Beaches', body: 'Baga, Calangute and Fort Aguada, back for sunset.', meals: 'Breakfast & Dinner' },
+      { day: 3, title: 'Old Goa & Panjim', body: 'The Basilica, the Latin Quarter and an evening cruise on the Mandovi.', meals: 'Breakfast & Dinner' },
+      { day: 4, title: 'Leisure Day', body: 'Water sports, the spa or a lazy day by the pool.', meals: 'Breakfast & Dinner' },
+      { day: 5, title: 'Departure', body: 'Check-out and airport drop.', meals: 'Breakfast' },
+    ],
+    inclusions: [
+      '4 Nights Accommodation (Beach Resort)',
+      'Daily Breakfast & Dinner',
+      'Airport Transfers (Pick-up & Drop)',
+      'North Goa & Old Goa Sightseeing',
+      'Mandovi Sunset Cruise',
+      '24/7 Travel Assistance',
+    ],
+  },
+  {
+    id: 'goa-premium',
+    name: 'Goa Premium Escape',
+    place: 'Goa, India',
+    destination: 'goa',
+    kinds: ['premium', 'honeymoon'],
+    verified: true,
+    rating: 4.6,
+    reviews: 412,
+    nights: 4,
+    chips: [
+      { label: 'Luxury Stay', icon: 'Building2' },
+      { label: 'Bar', icon: 'Martini' },
+    ],
+    more: 4,
+    promo: null,
+    price: 36999,
+    was: 41999,
+    image: 'villa-hero-private',
+    about:
+      'The quieter South Goa — a private-pool villa near Palolem, a spa afternoon, a candlelit beach dinner and the Dudhsagar falls.',
+    highlights: [
+      '4 Nights Private-Pool Villa',
+      'Daily Breakfast & Dinner',
+      'Candlelit Beach Dinner',
+      'Spa Session For Two',
+      'Dudhsagar Falls Day Trip',
+      'Airport Transfers',
+    ],
+    info: {
+      bestTime: 'Nov - Mar',
+      groupSize: '2 - 6',
+      kind: 'Domestic Trip',
+    },
+    itinerary: [
+      { day: 1, title: 'Arrival In South Goa', body: 'Private transfer to the villa near Palolem.', meals: 'Dinner' },
+      { day: 2, title: 'Beaches Of The South', body: 'Palolem, Agonda and Butterfly Beach by boat.', meals: 'Breakfast & Dinner' },
+      { day: 3, title: 'Dudhsagar Falls', body: 'A jeep safari to the falls and the spice plantation.', meals: 'Breakfast & Dinner' },
+      { day: 4, title: 'Spa & Beach Dinner', body: 'An afternoon at the spa and a candlelit dinner on the sand.', meals: 'Breakfast & Dinner' },
+      { day: 5, title: 'Departure', body: 'Check-out and private airport drop.', meals: 'Breakfast' },
+    ],
+    inclusions: [
+      '4 Nights Accommodation (Private-Pool Villa)',
+      'Daily Breakfast & Dinner',
+      'Candlelit Beach Dinner',
+      'Spa Session For Two',
+      'Dudhsagar Falls Day Trip',
+      'Private Airport Transfers',
+      '24/7 Travel Assistance',
+    ],
+  },
 ];
 
 /** The tabs on a package's own page. */
@@ -4232,4 +4342,109 @@ export const packagePolicies = [
     title: 'Travel Policy',
     lines: ['Passport should be valid for atleast 6 months from travel date.'],
   },
+];
+
+// -- Games Zone ----------------------------------------------------------------
+
+/**
+ * Games Zone — arcades, bowling and VR, sold like the parks: a list with a
+ * kind switch, then a venue's page with its passes and the booking under it.
+ * Member prices only; a pass is a request the desk confirms, like any booking.
+ */
+export const gameKinds = [
+  { key: 'arcade', label: 'Arcade & Gaming' },
+  { key: 'bowling', label: 'Bowling & Sports' },
+  { key: 'vr', label: 'VR & E-sports' },
+];
+
+export const gameZones = [
+  {
+    id: 'timezone-phoenix', kind: 'arcade', label: 'Arcade',
+    name: 'Timezone | Phoenix Marketcity', place: 'Bengaluru, India', rating: 4.4, reviews: 862,
+    schedule: 'Daily 11 AM onwards', hours: '11:00 AM - 10:00 PM', offer: 25, from: 499,
+    images: ['game-arcade', 'game-vr', 'game-bowling'],
+    blurb: 'Two floors of arcade games, bumper cars and a prize counter — the easy family evening out.',
+    address: 'Phoenix Marketcity, Whitefield Main Road, Mahadevapura, Bengaluru, Karnataka 560048',
+  },
+  {
+    id: 'funcity-orion', kind: 'arcade', label: 'Family Entertainment',
+    name: 'Fun City | Orion Mall', place: 'Bengaluru, India', rating: 4.2, reviews: 410,
+    schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 10:00 PM', offer: 20, from: 399,
+    images: ['game-arcade', 'game-bowling', 'game-vr'],
+    blurb: 'Soft play for the little ones, arcade games for the rest, and a kids’ party room.',
+    address: 'Orion Mall, Dr Rajkumar Road, Rajajinagar, Bengaluru, Karnataka 560055',
+  },
+  {
+    id: 'smaaash-lower-parel', kind: 'bowling', label: 'Bowling & Sports',
+    name: 'Smaaash | Lower Parel', place: 'Mumbai, India', rating: 4.3, reviews: 1204,
+    schedule: 'Daily 11 AM onwards', hours: '11:00 AM - 11:00 PM', offer: 25, from: 699,
+    images: ['game-bowling', 'game-arcade', 'game-vr'],
+    blurb: 'Bowling lanes, cricket and go-kart simulators and a sports bar under one roof.',
+    address: 'Kamala Mills Compound, Senapati Bapat Marg, Lower Parel, Mumbai, Maharashtra 400013',
+  },
+  {
+    id: 'amoeba-church-street', kind: 'bowling', label: 'Bowling',
+    name: 'Amoeba | Church Street', place: 'Bengaluru, India', rating: 4.1, reviews: 655,
+    schedule: 'Daily 10 AM onwards', hours: '10:00 AM - 11:00 PM', offer: 20, from: 450,
+    images: ['game-bowling', 'game-arcade', 'game-vr'],
+    blurb: 'The city’s favourite bowling alley, with pool tables and an arcade upstairs.',
+    address: '37 Church Street, Shanthala Nagar, Bengaluru, Karnataka 560001',
+  },
+  {
+    id: 'hijinks-vr', kind: 'vr', label: 'VR Arena',
+    name: 'Hijinks VR Arena', place: 'Pune, India', rating: 4.5, reviews: 318,
+    schedule: 'Daily Multiple Slots', hours: '12:00 PM - 10:00 PM', offer: 25, from: 599,
+    images: ['game-vr', 'game-arcade', 'game-bowling'],
+    blurb: 'Free-roam virtual reality for up to eight players, with zombie, space and heist missions.',
+    address: 'Phoenix Marketcity, Viman Nagar, Pune, Maharashtra 411014',
+  },
+  {
+    id: 'the-arena-esports', kind: 'vr', label: 'E-sports Lounge',
+    name: 'The Arena | E-sports Lounge', place: 'Hyderabad, India', rating: 4.3, reviews: 207,
+    schedule: 'Daily 11 AM onwards', hours: '11:00 AM - 11:00 PM', offer: 20, from: 299,
+    images: ['game-vr', 'game-arcade', 'game-bowling'],
+    blurb: 'High-end gaming PCs, consoles and racing rigs, by the hour or for a whole tournament.',
+    address: 'Inorbit Mall, Madhapur, Hyderabad, Telangana 500081',
+  },
+];
+
+export const gameTicketBase = [
+  { id: 'play-pass', name: 'Play Pass | 1 Hour', price: 499, was: 699, summary: 'Play Pass (1 hour)', note: 'Unlimited play on the standard games for one hour, from the time you check in.' },
+  { id: 'play-pass-day', name: 'Play Pass | All Day', price: 999, was: 1399, summary: 'All-Day Pass', note: 'Unlimited play on the standard games all day, in and out as you like.' },
+  { id: 'kids-pass', name: 'Kids Pass | Under 12', price: 349, was: 499, summary: 'Kids (under 12)', note: 'For children under 12, with the soft-play and junior games included.' },
+  { id: 'group-pass', name: 'Group Pass | 10+ People', price: 399, was: 599, summary: 'Group (per person)', note: 'For groups of 10 or more, booked together for the same slot.' },
+  { id: 'premium-pass', name: 'Premium Pass', price: 1499, was: 1999, summary: 'Premium (all games)', note: 'Every game on the floor, the premium ones included, for two hours.', extra: 'Premium Pass — includes the VR, simulators and the prize-counter bonus.' },
+];
+
+/** A venue's passes, scaled so its cheapest is its From price. */
+export function gameTickets(zone) {
+  const cheapest = Math.min(...gameTicketBase.map((t) => t.price));
+  const scale = zone.from / cheapest;
+  return gameTicketBase.map((t) => ({
+    ...t,
+    price: Math.round((t.price * scale) / 10) * 10,
+    was: Math.round((t.was * scale) / 10) * 10,
+  }));
+}
+
+export const gameAbout = 'Arcade classics, the newest simulators, bowling and VR — a few hours of play for kids, friends and teams, at member prices.';
+export const gameIdealFor = ['Kids & Families', 'Friends Night Out', 'Birthday Parties', 'Team Outings'];
+export const gameHighlights = [
+  { key: 'arcade', label: 'Arcade Games', image: 'game-arcade' },
+  { key: 'bowling', label: 'Bowling Lanes', image: 'game-bowling' },
+  { key: 'vr', label: 'VR Missions', image: 'game-vr' },
+  { key: 'party', label: 'Party Rooms', image: 'game-arcade' },
+];
+export const gameFacilities = [
+  { label: 'Parking', icon: 'SquareParking' },
+  { label: 'Food Court', icon: 'UtensilsCrossed' },
+  { label: 'Lockers', icon: 'Lock' },
+  { label: 'Party Rooms', icon: 'Cake' },
+  { label: 'Kids Zone', icon: 'Baby' },
+  { label: 'Card Payments', icon: 'CreditCard' },
+];
+export const gameSafety = [
+  { title: 'Before You Play', lines: ['Carry a photo ID for the pass holder.', 'Closed shoes are needed on the bowling lanes and in the VR arena.'] },
+  { title: 'VR & Simulators', lines: ['Not recommended for children under 8, or anyone who is pregnant or has a heart condition.', 'Staff will brief every player before a session.'] },
+  { title: 'Children', lines: ['Children under 12 must be with an adult at all times.'] },
 ];

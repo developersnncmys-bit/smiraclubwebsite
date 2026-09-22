@@ -39,7 +39,7 @@ function Stepper({ value, onDec, onInc, label }) {
  * No payment step exists yet, so Book Ticket validates and goes straight to
  * the confirmation screen.
  */
-export default function ParkBooking({ park, tickets, children }) {
+export default function ParkBooking({ park, tickets, children, kind = 'park' }) {
   const router = useRouter();
   const formRef = useRef(null);
   const ticketsRef = useRef(null);
@@ -108,7 +108,7 @@ export default function ParkBooking({ park, tickets, children }) {
         email: lead.email,
         guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
         total,
-        kind: 'park',
+        kind,
         itemName: park.name,
         slot,
         nights,
@@ -127,7 +127,7 @@ export default function ParkBooking({ park, tickets, children }) {
     router.push(`/booking/confirmed?${new URLSearchParams({
       ref,
       status: 'requested',
-      kind: 'park',
+      kind,
       name: park.name,
       slot: `${weekday(date)}, ${fullDate(date)}`,
       nights: chosen.map((t) => `${qty[t.id]} × ${t.summary}`).join(', '),

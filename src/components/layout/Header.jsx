@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, Heart } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 
@@ -67,14 +67,6 @@ export default function Header() {
               className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition hover:bg-surface-soft hover:text-ink-900"
             >
               More
-            </Link>
-
-            <Link
-              href="/wishlist"
-              className="grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"
-              aria-label="Wishlist"
-            >
-              <Heart size={18} />
             </Link>
 
             <Link

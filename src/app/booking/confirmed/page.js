@@ -55,6 +55,7 @@ export default async function Page({ searchParams }) {
     adventure: { noun: 'Adventure', label: 'Activity Name', slot: 'Date & Time', extra: 'Get ready for an amazing day out.', art: 'tent' },
     package: { noun: 'trip', label: 'Package', slot: 'Departure' },
     group: { noun: 'group trip', label: 'Trip', slot: 'Departure' },
+    games: { noun: 'game pass', label: 'Game Zone', slot: 'Visit Date' },
   };
   const k = KINDS[params.kind] || { noun: 'stay', label: 'Hotel Name' };
   // Sent to the desk but not yet paid for: they call to confirm and take payment.

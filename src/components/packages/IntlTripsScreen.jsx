@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -44,6 +44,10 @@ function Trust() {
 export default function IntlTripsScreen({ art = {} }) {
   const router = useRouter();
   const [tab, setTab] = useState(intlTabs[0]);
+  // ?tab=fixed opens Fixed departure, for links that mean the ready-made trips.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('tab') === 'fixed') setTab(intlTabs[1]);
+  }, []);
 
   const stay = defaultStay();
   const [from, setFrom] = useState('New Delhi, India');

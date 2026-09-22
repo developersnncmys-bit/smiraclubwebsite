@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img">
+  <defs>
+    <linearGradient id="wall-bowl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f2a4a"/><stop offset="1" stop-color="#1c4876"/>
+    </linearGradient>
+    <linearGradient id="lane-bowl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e9c48a"/><stop offset="1" stop-color="#c8924a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="700" fill="url(#wall-bowl)"/>
+  <polygon points="420,250 580,250 900,700 100,700" fill="url(#lane-bowl)"/>
+  <g stroke="#b07a38" stroke-width="4" opacity="0.6">
+    <line x1="460" y1="250" x2="300" y2="700"/><line x1="500" y1="250" x2="500" y2="700"/><line x1="540" y1="250" x2="700" y2="700"/>
+  </g>
+  <g fill="#ffffff" stroke="#d9dde3" stroke-width="2">
+    <ellipse cx="470" cy="230" rx="13" ry="30"/><ellipse cx="500" cy="225" rx="13" ry="30"/><ellipse cx="530" cy="230" rx="13" ry="30"/>
+    <ellipse cx="485" cy="215" rx="12" ry="28"/><ellipse cx="515" cy="215" rx="12" ry="28"/><ellipse cx="500" cy="205" rx="12" ry="27"/>
+  </g>
+  <g fill="#e8436b"><rect x="460" y="222" width="20" height="5"/><rect x="490" y="217" width="20" height="5"/><rect x="520" y="222" width="20" height="5"/></g>
+  <circle cx="520" cy="560" r="70" fill="#1273e6"/>
+  <g fill="#0b3f82"><circle cx="500" cy="535" r="10"/><circle cx="530" cy="525" r="10"/><circle cx="520" cy="560" r="10"/></g>
+  <rect x="0" y="120" width="1000" height="36" fill="#1273e6" opacity="0.35"/>
+</svg>
