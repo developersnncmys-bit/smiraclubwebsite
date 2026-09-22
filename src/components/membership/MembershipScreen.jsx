@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Check, Crown, Gift, Info, ShieldCheck } from 'lucide-react';
 import {
   membershipCoupon, membershipGiftConditions, membershipGifts, membershipIncluded,
@@ -13,6 +14,10 @@ import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
 import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
+import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
+import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
+import { saveMembership } from '@/lib/membership';
 
 /** A ticked square in the plan's own gold. */
 function Tick({ on }) {
@@ -36,6 +41,7 @@ function Tick({ on }) {
  * same total rather than keeping its own copy.
  */
 export default function MembershipScreen({ hero, helper, compare, gifts: giftArt = {} }) {
+  const router = useRouter();
   const [tab, setTab] = useState('plans');
   const [planKey, setPlanKey] = useState('gold');
   const [privileges, setPrivileges] = useState([]);
@@ -45,6 +51,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const [coupon, setCoupon] = useState('');
   const [applied, setApplied] = useState(membershipCoupon.code);
   const [note, setNote] = useState('');
+  /** Sent here from a details page they could not open yet. */
+  const [returning, setReturning] = useState(false);
 
   const plan = membershipPlans.find((p) => p.key === planKey);
   const versus = tab === 'versus';
@@ -57,11 +65,15 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   useEffect(() => {
     const view = new URLSearchParams(window.location.search).get('view');
     if (membershipTabs.some((t) => t.key === view)) setTab(view);
+    setReturning(Boolean(new URLSearchParams(window.location.search).get('next')));
   }, []);
 
   const goTo = (key) => {
     setTab(key);
-    const url = key === 'plans' ? '/membership' : `/membership?view=${key}`;
+    const q = new URLSearchParams(window.location.search);
+    if (key === 'plans') q.delete('view');
+    else q.set('view', key);
+    const url = q.toString() ? `/membership?${q}` : '/membership';
     window.history.replaceState(null, '', url);
   };
 
@@ -87,6 +99,49 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
     () => plan.fee - discount + sharingPrice,
     [plan.fee, discount, sharingPrice],
   );
+
+  /**
+   * Pay now: the profile has to be there (the desk needs to know who to call),
+   * then the membership goes to the Smira desk and is recorded here, and the
+   * member goes back to whatever sent them to join.
+   */
+  const { ready, profile } = useProfile();
+  const [joining, setJoining] = useState(false);
+  const [failed, setFailed] = useState('');
+  const join = async () => {
+    if (joining || !agreed) return;
+    if (ready && !isComplete(profile)) return router.push(completeProfileHref());
+    setJoining(true);
+    setFailed('');
+    try {
+      const d = profile.details;
+      const res = await api.joinMembership({
+        name: d.name,
+        phone: d.phone,
+        email: d.email,
+        plan: plan.label,
+        total,
+        gifts,
+        privileges,
+        sharing,
+        coupon: applied || undefined,
+        profile: profileForBooking(profile),
+        attribution: readAttribution(),
+      });
+      saveMembership({
+        plan: plan.label,
+        reference: res.data?.reference,
+        since: new Date().toISOString(),
+        expiresOn: res.data?.expiresOn,
+        status: 'Payment pending',
+      });
+      const next = new URLSearchParams(window.location.search).get('next') || '';
+      router.push(next.startsWith('/') && !next.startsWith('//') ? next : '/profile');
+    } catch (err) {
+      setJoining(false);
+      setFailed(err?.status ? err.message : 'We could not reach our desk just now. Please try again in a moment.');
+    }
+  };
 
   const applyCoupon = () => {
     const code = coupon.trim().toUpperCase();
@@ -127,6 +182,19 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           </div>
         </div>
       </section>
+
+      {returning && (
+        <div className="shell pt-4">
+          <p role="status" className="rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[14px] font-medium text-brand-700">
+            Details and bookings are for Smira Club members. Choose a plan below and we will take you straight back.
+          </p>
+        </div>
+      )}
+      {failed && (
+        <div className="shell pt-4">
+          <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-[14px] font-medium text-red-600">{failed}</p>
+        </div>
+      )}
 
       {/* -- Three ways to decide ---------------------------------- */}
       <div className="border-b border-surface-line bg-white">
@@ -495,11 +563,12 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
 
                 <button
                   type="button"
-                  disabled={!agreed}
+                  onClick={join}
+                  disabled={!agreed || joining}
                   title={agreed ? undefined : 'Agree to the terms first'}
                   className={`mt-5 w-full rounded-lg bg-gradient-to-r ${plan.tone} py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
                 >
-                  Pay now
+                  {joining ? 'Sending…' : 'Pay now'}
                 </button>
                 </div>
               </div>
@@ -535,11 +604,12 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
 
             <button
               type="button"
-              disabled={!agreed}
+              onClick={join}
+              disabled={!agreed || joining}
               title={agreed ? undefined : 'Agree to the terms first'}
               className={`min-w-[10.5rem] shrink-0 rounded-lg bg-gradient-to-r ${plan.tone} px-8 py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
             >
-              Pay now
+              {joining ? 'Sending…' : 'Pay now'}
             </button>
           </div>
         </div>

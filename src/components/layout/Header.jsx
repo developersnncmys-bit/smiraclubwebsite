@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Bell, Heart } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
-import { memberBadge } from '@/lib/content';
+import { isMember, useMembership } from '@/lib/membership';
 
 /**
  * One header, two shapes.
@@ -15,6 +15,12 @@ import { memberBadge } from '@/lib/content';
  * twice.
  */
 export default function Header() {
+  // The badge is the member's own tier, or the way to become one.
+  const { membership } = useMembership();
+  const memberBadge = isMember(membership)
+    ? { label: `${membership.plan} Member`, href: '/membership' }
+    : { label: 'Become a Member', href: '/membership' };
+
   return (
     <header className="sticky top-0 z-40 border-b border-surface-line bg-white/95 backdrop-blur pt-safe">
       <div className="shell">

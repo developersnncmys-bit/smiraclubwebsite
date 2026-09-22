@@ -76,6 +76,13 @@ export const api = {
   websiteBooking: (form) =>
     request('/website/booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
 
+  /**
+   * A membership bought on the membership page. It lands on the admin
+   * panel's Members page as new, payment pending, for the desk to activate.
+   */
+  joinMembership: (form) =>
+    request('/website/membership', { method: 'POST', body: form, next: { revalidate: 0 } }),
+
   login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
   me: (token) => request('/auth/me', { token }),
 };

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Pencil, Phone, User } from 'lucide-react';
 import { member } from '@/lib/content';
 import { useProfile } from '@/lib/profile';
+import { isMember, useMembership } from '@/lib/membership';
 
 /** The blue card the screen opens on — who you are, and the way to edit it. */
 export default function IdentityCard() {
@@ -12,10 +13,11 @@ export default function IdentityCard() {
   const name = profile?.details?.name?.trim() || member.name;
   const phone = profile?.details?.phone?.trim() || member.phone;
   const photo = profile?.photo;
+  const { membership } = useMembership();
 
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6">
-      {member.active && (
+      {isMember(membership) && (
         <span className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1.5 text-[13px] font-semibold backdrop-blur">
           <span className="h-2 w-2 rounded-full bg-white" />
           Active
