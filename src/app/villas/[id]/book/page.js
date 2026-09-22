@@ -7,7 +7,7 @@ import {
   villaBooking, villaDetails, villaHost, villaResults, villaRules, villaStay, villas,
 } from '@/lib/content';
 import { image } from '@/lib/images';
-import { defaultStay, fullDate, nightsBetween } from '@/lib/format';
+import { defaultStay, fullDate, nightsBetween, ymd } from '@/lib/format';
 
 const ALL = [...villaResults, ...villas];
 
@@ -59,6 +59,8 @@ export default async function Page({ params, searchParams }) {
             kind: 'villa',
             name: villa.name,
             slot: `${fullDate(from)} - ${fullDate(to)}`,
+            checkIn: ymd(from),
+            checkOut: ymd(to),
             nights: `${nights} Night${nights === 1 ? '' : 's'}/${nights + 1} Days`,
           }}
         >

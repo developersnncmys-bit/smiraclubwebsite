@@ -78,3 +78,11 @@ export function weekday(date) {
 export function cx(...parts) {
   return parts.filter(Boolean).join(' ');
 }
+
+/** A date as yyyy-mm-dd, the way the API takes it. Accepts a Date or that string. */
+export function ymd(date) {
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}

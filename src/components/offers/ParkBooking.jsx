@@ -1,12 +1,14 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Mail, Phone, User } from 'lucide-react';
 import GuidelinesSheet from '@/components/offers/GuidelinesSheet';
 import { INPUT } from '@/components/forms/RequestFields';
 import { fullDate, inr, weekday } from '@/lib/format';
 import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
+import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -69,8 +71,17 @@ export default function ParkBooking({ park, tickets, children }) {
 
   const setGuest = (i, key, value) => setGuests((all) => all.map((g, n) => (n === i ? { ...g, [key]: value } : g)));
 
+  // The saved profile fills in who is going; without one there is no booking.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (!ready || !isComplete(profile)) return;
+    const d = profile.details;
+    setGuests((all) => all.map((g, i) => (i === 0 && !g.name && !g.email && !g.phone ? { name: d.name, email: d.email, phone: d.phone } : g)));
+  }, [ready, profile]);
+
   const book = async () => {
     if (busy) return;
+    if (ready && !isComplete(profile)) return router.push(completeProfileHref());
     const found = {};
     if (!chosen.length) found.tickets = 'Select at least one ticket.';
     const lead = guests[0];
@@ -102,6 +113,9 @@ export default function ParkBooking({ park, tickets, children }) {
         slot,
         nights,
         pax,
+        checkIn: date,
+        profile: profileForBooking(profile),
+        attribution: readAttribution(),
       });
       ref = res.data?.reference;
     } catch (err) {

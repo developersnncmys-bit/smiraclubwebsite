@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CalendarDays, Star } from 'lucide-react';
 import BookingForm from '@/components/villas/BookingForm';
 import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
 import { fullDate, inr, weekday } from '@/lib/format';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -85,7 +86,7 @@ export default function PackageBooking({
     .join(', ');
   const stay = `${pkg.nights + 1} Days / ${plural(pkg.nights, 'Night', 'Nights')}`;
 
-  const send = async ({ guests, gstin, coupon, total }) => {
+  const send = async ({ guests, gstin, coupon, total, profile }) => {
     const lead = guests[0] || {};
     const res = await api.packageBooking({
       name: lead.name,
@@ -101,6 +102,8 @@ export default function PackageBooking({
       adults,
       children,
       total,
+      profile,
+      attribution: readAttribution(),
     });
     return { reference: res.data?.reference };
   };

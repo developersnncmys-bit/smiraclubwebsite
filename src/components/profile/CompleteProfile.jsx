@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, ArrowRight, BellRing, Cake, Calendar, Camera, Check, ContactRound, Heart,
   Info, Mail, MapPin, Phone, ShieldCheck, User, UserPen,
 } from 'lucide-react';
 import { indianStates, profileSteps } from '@/lib/content';
+import { loadProfile, saveProfile } from '@/lib/profile';
 
 const FIELD =
   'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
@@ -101,6 +102,25 @@ export default function CompleteProfile() {
     line1: '', line2: '', city: '', state: 'Karnataka', pincode: '', useForAll: true,
   });
   const [whatsapp, setWhatsapp] = useState(true);
+  /** Where to go once it is saved — the booking that sent them here, if any. */
+  const [returnTo, setReturnTo] = useState('');
+
+  // Pick up what was saved before, and where they came from.
+  useEffect(() => {
+    const saved = loadProfile();
+    if (saved) {
+      if (saved.details) setDetails(saved.details);
+      if (saved.birthdays?.length) setBirthdays(saved.birthdays);
+      if (saved.anniversary) setAnniversary(saved.anniversary);
+      if (saved.address) setAddress(saved.address);
+      if (typeof saved.whatsapp === 'boolean') setWhatsapp(saved.whatsapp);
+    }
+    const next = new URLSearchParams(window.location.search).get('next') || '';
+    // Only ever back into this site.
+    if (next.startsWith('/') && !next.startsWith('//')) setReturnTo(next);
+  }, []);
+
+  const persist = () => saveProfile({ details, birthdays, anniversary, address, whatsapp });
 
   const step = profileSteps[at];
 
@@ -125,13 +145,19 @@ export default function CompleteProfile() {
     const found = validate();
     setErrors(found);
     if (Object.keys(found).length) return;
+    persist();
 
+    // Sent here to book: step one is all a booking needs, so go straight back.
+    if (returnTo && at === 0) {
+      router.push(returnTo);
+      return;
+    }
     if (at < profileSteps.length - 1) {
       setAt(at + 1);
       window.scrollTo({ top: 0 });
       return;
     }
-    router.push('/profile');
+    router.push(returnTo || '/profile');
   };
 
   const back = () => {
@@ -168,6 +194,12 @@ export default function CompleteProfile() {
         <p className="mt-2 max-w-sm text-[13px] leading-snug text-ink-600">
           Help us know you better and enjoy personalized benefits
         </p>
+
+        {returnTo && (
+          <p role="status" className="mt-4 rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[14px] font-medium text-brand-700">
+            Complete your profile to continue with your booking. It takes a minute, and we will take you straight back.
+          </p>
+        )}
 
         {/* -- Where you are in it --------------------------------- */}
         <ol className="mt-7 flex items-start justify-between">

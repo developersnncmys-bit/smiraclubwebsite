@@ -5,7 +5,7 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import BookingForm from '@/components/villas/BookingForm';
 import { hotels, villaRules } from '@/lib/content';
 import { image } from '@/lib/images';
-import { defaultStay, nightsBetween, shortDate } from '@/lib/format';
+import { defaultStay, nightsBetween, shortDate, ymd } from '@/lib/format';
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -71,6 +71,9 @@ export default async function Page({ params, searchParams }) {
             kind: 'hotel',
             name: hotel.name,
             slot: slotLabel(from, to),
+            checkIn: ymd(from),
+            checkOut: ymd(to),
+            pax: adults,
             nights: stay,
           }}
         >

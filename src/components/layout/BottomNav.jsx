@@ -29,10 +29,11 @@ export default function BottomNav() {
 
   if (OWNS_THE_BOTTOM.some((route) => route.test(pathname))) return null;
 
-  // The longest matching href wins, so My Booking (/profile/bookings) lights
-  // on its own rather than alongside Profile (/profile).
+  // The longest matching path wins, so My Booking (/profile/bookings) lights
+  // on its own rather than alongside Account (/profile).
   const activeKey = primaryNav
-    .filter((item) => (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)))
+    .flatMap((item) => [item.href, ...(item.also || [])].map((href) => ({ key: item.key, href })))
+    .filter(({ href }) => (href === '/' ? pathname === '/' : pathname.startsWith(href)))
     .sort((a, b) => b.href.length - a.href.length)[0]?.key;
 
   return (
@@ -44,6 +45,27 @@ export default function BottomNav() {
       <ul className="mx-auto flex max-w-phone items-stretch">
         {primaryNav.map((item) => {
           const active = item.key === activeKey;
+          if (item.center) {
+            // AI Search: a raised round button in the middle of the bar.
+            return (
+              <li key={item.key} className="flex flex-1 justify-center">
+                <Link
+                  href={item.href}
+                  aria-current={active ? 'page' : undefined}
+                  className="-mt-5 flex flex-col items-center gap-1 whitespace-nowrap text-[10px] font-semibold min-[400px]:text-[11px]"
+                >
+                  <span
+                    className={`grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-action-500 to-brand-700 text-white shadow-lift ring-4 ring-white transition active:scale-95 ${
+                      active ? 'brightness-110' : ''
+                    }`}
+                  >
+                    <Icon name={item.icon} size={24} strokeWidth={2.2} />
+                  </span>
+                  <span className={active ? 'text-action-500' : 'text-ink-700'}>{item.label}</span>
+                </Link>
+              </li>
+            );
+          }
           return (
             <li key={item.key} className="flex-1">
               <Link

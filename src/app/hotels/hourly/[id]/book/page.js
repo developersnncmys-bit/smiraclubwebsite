@@ -61,6 +61,7 @@ export default async function Page({ params, searchParams }) {
             kind: 'hourly',
             name: hotel.name,
             slot: fullDate(date),
+            checkIn: date,
             nights: span,
           }}
         >

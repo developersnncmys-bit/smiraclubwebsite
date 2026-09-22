@@ -67,7 +67,7 @@ export default async function Page({ params, searchParams }) {
           showEmptyDiscount
           baseNote={`Breakfast & dinner · ${eaters} · ${plural(nights, 'night')}`}
           bar={{ mode: 'total', notes: [stay, '(Taxes Included)'] }}
-          confirm={{ kind: 'free-stay', name: hotel.name, slot, nights: stay }}
+          confirm={{ kind: 'free-stay', name: hotel.name, slot, nights: stay, checkIn: from, checkOut: to }}
         >
           {/* -- What is being booked ----------------------------------- */}
           <section className="card overflow-hidden">

@@ -7,6 +7,8 @@ import { tableSittings } from '@/lib/content';
 import { clock, fullDate, shortDate, weekday } from '@/lib/format';
 import Portal from '@/components/ui/Portal';
 import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
+import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -44,6 +46,16 @@ export default function BookTable({ restaurant }) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState('');
   const [now, setNow] = useState(null);
+
+  // No table without a profile; with one, the name and number are already known.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (ready && isComplete(profile)) setWho({ name: profile.details.name, phone: profile.details.phone });
+  }, [ready, profile]);
+  const openSheet = () => {
+    if (ready && !isComplete(profile)) router.push(completeProfileHref());
+    else setOpen(true);
+  };
 
   // The clock is read after mount, so the server and the browser agree on
   // the first paint and "already gone" is judged by the member's own time.
@@ -102,6 +114,10 @@ export default function BookTable({ restaurant }) {
         nights,
         pax: guests,
         total: 0,
+        checkIn: d,
+        email: profile?.details?.email,
+        profile: profileForBooking(profile),
+        attribution: readAttribution(),
       });
       ref = res.data?.reference;
     } catch (err) {
@@ -130,13 +146,13 @@ export default function BookTable({ restaurant }) {
   return (
     <>
       {/* Desktop: in the rail beside the page. */}
-      <button type="button" onClick={() => setOpen(true)} className="btn-primary hidden w-full justify-between rounded-xl px-6 py-3.5 text-[16px] normal-case tracking-normal lg:flex">
+      <button type="button" onClick={openSheet} className="btn-primary hidden w-full justify-between rounded-xl px-6 py-3.5 text-[16px] normal-case tracking-normal lg:flex">
         {opener}
       </button>
 
       {/* Phone: pinned to the foot, as drawn. */}
       <div className="fixed inset-x-0 bottom-0 z-40 bg-white/95 px-4 pt-3 backdrop-blur lg:hidden" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
-        <button type="button" onClick={() => setOpen(true)} className="btn-primary flex w-full justify-between rounded-xl px-6 py-3.5 text-[16px] normal-case tracking-normal">
+        <button type="button" onClick={openSheet} className="btn-primary flex w-full justify-between rounded-xl px-6 py-3.5 text-[16px] normal-case tracking-normal">
           <span className="flex-1 text-center">Book a Table</span>
           <ArrowRight size={20} />
         </button>

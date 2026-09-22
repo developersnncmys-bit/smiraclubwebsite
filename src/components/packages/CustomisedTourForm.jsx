@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
 import { intlForm, planTrip as opts } from '@/lib/content';
 
 const FIELD =
@@ -201,6 +202,7 @@ export default function CustomisedTourForm() {
     setBusy(true);
     try {
       const res = await api.tripEnquiry({
+        attribution: readAttribution(),
         name: name.trim(),
         phone,
         email: email.trim(),

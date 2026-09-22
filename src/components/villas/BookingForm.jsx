@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Info, Mail, User } from 'lucide-react';
 import { inr } from '@/lib/format';
 import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
+import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
 
 const BLANK = { name: '', email: '', phone: '' };
 
@@ -69,6 +71,21 @@ export default function BookingForm({
   const [guests, setGuests] = useState([{ ...BLANK }]);
   const [errors, setErrors] = useState({});
 
+  // No booking without step one of the profile: send them to finish it, and
+  // bring them back here after. Once it is there, it fills in the guest.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (!ready) return;
+    if (!isComplete(profile)) {
+      router.replace(completeProfileHref());
+      return;
+    }
+    const d = profile.details;
+    setGuests((list) =>
+      list.map((g, i) => (i === 0 && !g.name && !g.email && !g.phone ? { name: d.name, email: d.email, phone: d.phone } : g)),
+    );
+  }, [ready, profile, router]);
+
   const afterDiscount = price - discount;
   const total = afterDiscount + taxes;
 
@@ -115,7 +132,11 @@ export default function BookingForm({
           slot: confirm.slot,
           nights: confirm.nights,
           location: confirm.location,
+          checkIn: p.checkIn,
+          checkOut: p.checkOut,
           pax: confirm.pax || p.guests.length,
+          profile: p.profile,
+          attribution: readAttribution(),
         });
         return { reference: res.data?.reference };
       });
@@ -127,6 +148,9 @@ export default function BookingForm({
           guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
           coupon: coupon.trim(),
           total,
+          checkIn: confirm.checkIn,
+          checkOut: confirm.checkOut,
+          profile: profileForBooking(profile),
         });
         reference = res?.reference || '';
       } catch (err) {

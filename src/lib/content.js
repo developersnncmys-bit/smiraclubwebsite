@@ -1101,13 +1101,17 @@ export const plans = [
  * bottom-right corner instead, and a tab saying the same thing would be the
  * second way into one screen.
  */
+/**
+ * The phone's tab bar: five tabs with AI Search in the middle. Account is
+ * the profile, and also lights on the More pages, which it links to.
+ * `also` lists the other paths a tab owns.
+ */
 export const primaryNav = [
   { key: 'home', label: 'Home', href: '/', icon: 'Home' },
   { key: 'wishlist', label: 'Wishlist', href: '/wishlist', icon: 'Heart' },
-  { key: 'search', label: 'AI Search', href: '/search', icon: 'Sparkles' },
+  { key: 'search', label: 'AI Search', href: '/search', icon: 'Sparkles', center: true },
   { key: 'bookings', label: 'My Booking', href: '/profile/bookings', icon: 'CalendarCheck' },
-  { key: 'profile', label: 'Profile', href: '/profile', icon: 'CircleUser' },
-  { key: 'more', label: 'More', href: '/more', icon: 'MoreHorizontal' },
+  { key: 'account', label: 'Account', href: '/profile', icon: 'CircleUser', also: ['/more'] },
 ];
 
 /** The desktop header's links — a phone gets these under More. */
@@ -1201,6 +1205,7 @@ export const profileMenu = [
   {
     id: 'support',
     items: [
+      { label: 'More from Smira Club', icon: 'MoreHorizontal', href: '/more' },
       { label: 'Get Help', icon: 'Headset', href: '/more/support' },
       { label: 'Account Settings', icon: 'Settings', href: '/profile/settings' },
       { label: 'Language Settings', icon: 'Languages', href: '/profile/language' },

@@ -61,7 +61,7 @@ export default async function Page({ params, searchParams }) {
           afterNote={times('price')}
           cta="Confirm Booking"
           bar={{ mode: 'total', notes: ['Inclusive of taxes & fees'] }}
-          confirm={{ kind: a.kind, name: a.name, slot: fullDate(date), nights: clock(time), location: a.place.split(',')[0] }}
+          confirm={{ kind: a.kind, name: a.name, slot: fullDate(date), checkIn: date, nights: clock(time), location: a.place.split(',')[0] }}
         >
           <section className="card overflow-hidden">
             <div className="p-4 sm:p-5">

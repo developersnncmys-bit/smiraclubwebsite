@@ -2,6 +2,7 @@ import { Montserrat } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
+import Attribution from '@/components/layout/Attribution';
 import { site } from '@/lib/content';
 import './globals.css';
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning>
         <Header />
         {/* The bottom bar takes its room back on a phone only. */}
+        <Attribution />
         <main className="pb-nav lg:pb-0">{children}</main>
         <Footer />
         <BottomNav />
