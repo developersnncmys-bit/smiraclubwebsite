@@ -80,6 +80,9 @@ export const api = {
    * A membership bought on the membership page. It lands on the admin
    * panel's Members page as new, payment pending, for the desk to activate.
    */
+  /** The membership plans as set up on the admin panel's Plans page. */
+  websitePlans: () => request('/website/plans', { next: { revalidate: 60 } }),
+
   joinMembership: (form) =>
     request('/website/membership', { method: 'POST', body: form, next: { revalidate: 0 } }),
 

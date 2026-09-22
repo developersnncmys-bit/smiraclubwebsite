@@ -19,17 +19,44 @@ import { readAttribution } from '@/components/layout/Attribution';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 
-/** A ticked square in the plan's own gold. */
-function Tick({ on }) {
+/** A ticked square in the chosen plan's own colour, as the Figma's grid draws them. */
+function Tick({ on, colour = '#b8860b' }) {
   return (
     <span
-      className={`grid h-5 w-5 shrink-0 place-items-center rounded border-2 transition ${
-        on ? 'border-[#b8860b] bg-[#b8860b] text-white' : 'border-[#d8a41f] bg-white'
-      }`}
+      className="grid h-5 w-5 shrink-0 place-items-center rounded border-2 text-white transition"
+      style={{ borderColor: colour, background: on ? colour : '#fff' }}
     >
       {on && <Check size={13} strokeWidth={3.5} />}
     </span>
   );
+}
+
+const years = (months) => {
+  const y = Math.round((Number(months) || 0) / 12);
+  return y >= 1 ? `${y} Year${y === 1 ? '' : 's'}` : `${months} Months`;
+};
+
+/**
+ * One website plan with the admin panel's numbers laid over it. The Crown's
+ * persons read "16+" on the Figma, so the top tier keeps its plus.
+ */
+function fromDesk(p, d) {
+  const persons = Number(d.persons) || 0;
+  const rooms = Number(d.rooms) || 0;
+  const nights = Number(d.freeStay?.nights) || 0;
+  const figures = {
+    'Free Hotel Stay': nights ? `${nights} Days` : null,
+    'Membership Validity': d.durationMonths ? years(d.durationMonths) : null,
+    'Covered per stay': persons ? `${persons}${p.key === 'crown' ? '+' : ''} Persons` : null,
+    'Allowed Per Booking': rooms ? `${rooms} Room${rooms === 1 ? '' : 's'}` : null,
+  };
+  return {
+    ...p,
+    fee: Number(d.price) || p.fee,
+    popular: Boolean(d.popular),
+    privileges: Number(d.privileges) || p.privileges,
+    stats: p.stats.map((s) => ({ ...s, figure: figures[s.note] || s.figure })),
+  };
 }
 
 /**
@@ -54,7 +81,28 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   /** Sent here from a details page they could not open yet. */
   const [returning, setReturning] = useState(false);
 
-  const plan = membershipPlans.find((p) => p.key === planKey);
+  /**
+   * The plans as the Smira desk has them set up on the admin panel — price,
+   * free-stay days, validity, persons, rooms and preferred services — laid
+   * over the website's own copy by tier name. The colours and wording stay the
+   * website's; if the desk cannot be reached, the website's numbers stand.
+   */
+  const [plans, setPlans] = useState(membershipPlans);
+  useEffect(() => {
+    let live = true;
+    api.websitePlans()
+      .then((res) => {
+        if (!live || !Array.isArray(res.data)) return;
+        setPlans(membershipPlans.map((p) => {
+          const desk = res.data.find((d) => d.name?.toLowerCase().startsWith(p.key));
+          return desk ? fromDesk(p, desk) : p;
+        }));
+      })
+      .catch(() => {});
+    return () => { live = false; };
+  }, []);
+
+  const plan = plans.find((p) => p.key === planKey);
   const versus = tab === 'versus';
 
   /**
@@ -233,7 +281,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           <div className="space-y-4 lg:col-span-8">
           {/* -- Pick a tier --------------------------------------- */}
           <div className="rail items-end gap-3 pt-4">
-            {membershipPlans.map((p) => {
+            {plans.map((p) => {
               const on = p.key === planKey;
               return (
                 <button
@@ -263,13 +311,13 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           {/* -- What that tier is ---------------------------------- */}
           <section className={`overflow-hidden rounded-2xl bg-gradient-to-b ${plan.tone} p-1.5 pt-3`}>
             <div className="rounded-2xl bg-white p-4 sm:p-5">
-              <h2 className={`text-xl font-bold ${plan.accent}`}>{plan.title}</h2>
+              <h2 className="text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
               <p className="mt-1 text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
               <dl className="mt-5 grid grid-cols-2 gap-3">
                 {plan.stats.map((s) => (
-                  <div key={s.note} className={`rounded-xl ${plan.soft} p-3.5`}>
-                    <dt className={`text-[15px] font-bold ${plan.accent}`}>{s.figure}</dt>
+                  <div key={s.note} className="rounded-xl p-3.5" style={{ background: plan.soft }}>
+                    <dt className="text-[15px] font-bold" style={{ color: plan.accent }}>{s.figure}</dt>
                     <dd className="text-[13px] leading-snug text-ink-700">{s.note}</dd>
                   </div>
                 ))}
@@ -295,7 +343,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             <ul className="card mt-3 divide-y divide-surface-line">
               {membershipIncluded.map((item) => (
                 <li key={item.title} className="flex gap-3 p-4 sm:p-5">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#b8860b] text-white">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-white" style={{ background: plan.accent }}>
                     <Check size={13} strokeWidth={3} />
                   </span>
                   <span>
@@ -332,7 +380,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                       onChange={() => togglePrivilege(p.key)}
                       className="sr-only"
                     />
-                    <Tick on={on} />
+                    <Tick on={on} colour={plan.accent} />
                     <span className="min-w-0">
                       <span className="block text-[15px] font-bold text-ink-900">{p.label}</span>
                       <span className="mt-0.5 block text-[14px] leading-snug text-ink-600">
@@ -404,7 +452,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                       className="sr-only"
                     />
                     <span className="pr-4">
-                      <Tick on={on} />
+                      <Tick on={on} colour={plan.accent} />
                     </span>
                   </label>
                 );
