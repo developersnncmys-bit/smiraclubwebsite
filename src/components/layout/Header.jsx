@@ -27,9 +27,11 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-surface-line bg-white/95 backdrop-blur pt-safe">
-      <div className="shell">
+      {/* A slim bar: the mark sits nearer the edge and the row is shorter,
+          so the page underneath starts higher up. */}
+      <div className="shell px-3 lg:px-5">
         {/* -- Phone ------------------------------------------------------ */}
-        <div className="relative flex h-14 items-center justify-between lg:hidden">
+        <div className="relative flex h-12 items-center justify-between lg:hidden">
           <Logo compact />
 
           <div className="flex items-center gap-2">
@@ -50,7 +52,7 @@ export default function Header() {
         </div>
 
         {/* -- Desktop ---------------------------------------------------- */}
-        <div className="hidden h-[68px] items-center lg:flex">
+        <div className="hidden h-14 items-center lg:flex">
           <Logo />
 
           <div className="ml-auto flex items-center gap-3">

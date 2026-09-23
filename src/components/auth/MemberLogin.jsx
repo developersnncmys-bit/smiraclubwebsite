@@ -111,17 +111,17 @@ export default function MemberLogin() {
         <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-brand-50">
           <Crown size={26} className="text-action-500" />
         </span>
-        <h1 className="mt-4 text-center text-2xl font-bold text-ink-900">Log in to Smira Club</h1>
+        <h1 className="mt-4 text-center text-2xl font-bold text-ink-900">Welcome to Smira Club</h1>
         <p className="mt-2 text-center text-[14px] text-ink-500">
           {step === 'phone'
-            ? 'Your mobile number is your account. We will send a code to confirm it.'
+            ? 'Login or create account to continue'
             : `Enter the 6-digit code we sent to ${phone}.`}
         </p>
 
         <form onSubmit={step === 'phone' ? askForCode : signIn} className="card mt-6 space-y-4 p-5 sm:p-6">
           {step === 'phone' ? (
             <label className="block">
-              <span className="text-[14px] font-semibold text-ink-900">Mobile number</span>
+              <span className="text-[14px] font-semibold text-ink-900">Contact Number <span className="text-red-500">*</span></span>
               <span className="relative mt-2 block">
                 <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />
                 <input
@@ -130,7 +130,7 @@ export default function MemberLogin() {
                   autoComplete="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter your mobile number"
+                  placeholder="Enter your Mobile Number"
                   className="w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition focus:border-action-500"
                 />
               </span>
@@ -172,7 +172,7 @@ export default function MemberLogin() {
           {failed && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600">{failed}</p>}
 
           <button type="submit" disabled={busy} className="btn-primary w-full gap-2 rounded-xl py-3.5 text-[15px] normal-case tracking-normal disabled:opacity-60">
-            {busy ? 'Please wait…' : step === 'phone' ? 'Send code' : 'Log in'}
+            {busy ? 'Please wait…' : step === 'phone' ? 'Send OTP' : 'Log in'}
             {!busy && <ArrowRight size={17} />}
           </button>
 

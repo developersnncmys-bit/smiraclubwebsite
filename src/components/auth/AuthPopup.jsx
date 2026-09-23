@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Crown, Mail, Phone, ShieldCheck, User, X } from 'lucide-react';
+import { ArrowRight, CalendarHeart, Check, Crown, Gift, Mail, Phone, ShieldCheck, User, X } from 'lucide-react';
 import Portal from '@/components/ui/Portal';
 import { api } from '@/lib/api';
 import { isComplete, loadProfile, saveProfile } from '@/lib/profile';
@@ -10,16 +10,16 @@ import { isMember, loadMembership, saveMembership } from '@/lib/membership';
 import { setSessionToken } from '@/lib/session';
 
 /**
- * Log in or register, in a sheet over whatever the visitor was reading.
+ * Log in or create an account, without leaving the page.
  *
- * Both are the same two steps — a mobile number, then the code sent to it —
- * because the number is the account. Registering asks for a name and email
- * first, so a new member arrives with a profile rather than an empty one, and
- * logging in brings back what the desk already holds for that number.
+ * Both are the same two steps — a number, then the code sent to it — because
+ * the number is the account. Registering adds a third step inside the sheet
+ * for the special days the club runs on, so a new member never lands on a
+ * half-empty profile screen; it all finishes here.
  *
- * It opens on its own once on the home page for anybody signed out, and from
- * Log in in the header or the tab bar — `window.dispatchEvent(new Event(OPEN))`
- * from anywhere else.
+ * Opens on its own once on the home page for anybody signed out, and from Log
+ * in anywhere else:
+ *   window.dispatchEvent(new CustomEvent(OPEN_AUTH, { detail: 'register' }))
  */
 
 export const OPEN_AUTH = 'smira:auth';
@@ -27,11 +27,47 @@ const DISMISSED = 'smira:auth-dismissed';
 
 const tenDigits = (v) => String(v || '').replace(/\D/g, '').slice(-10);
 
+/** A field the way the design draws it: label above, icon inside. */
+function Field({ label, required, icon: Glyph, children }) {
+  return (
+    <label className="block">
+      <span className="text-[14px] font-semibold text-ink-900">
+        {label} {required && <span className="text-red-500">*</span>}
+      </span>
+      <span className="relative mt-2 block">
+        {Glyph && <Glyph size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />}
+        {children}
+      </span>
+    </label>
+  );
+}
+
+/** A square tick, as the design has it. */
+function Tick({ on, onChange, children }) {
+  return (
+    <button type="button" onClick={() => onChange(!on)} className="flex w-full items-start gap-3 text-left">
+      <span
+        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded border-2 transition ${
+          on ? 'border-action-500 bg-action-500 text-white' : 'border-surface-line bg-white'
+        }`}
+      >
+        {on && <Check size={13} strokeWidth={3.5} />}
+      </span>
+      <span className="text-[13px] leading-snug text-ink-700">{children}</span>
+    </button>
+  );
+}
+
+const INPUT =
+  'w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
+
 export default function AuthPopup() {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState('login');
   const [step, setStep] = useState('who');
   const [form, setForm] = useState({ name: '', phone: '', email: '' });
+  const [wants, setWants] = useState({ whatsapp: true, gift: true });
+  const [days, setDays] = useState({ dob: '', anniversary: '', years: '' });
   const [code, setCode] = useState('');
   const [demoCode, setDemoCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -43,14 +79,13 @@ export default function AuthPopup() {
     try {
       window.sessionStorage.setItem(DISMISSED, '1');
     } catch {
-      /* storage blocked — it may ask again next page */
+      /* storage blocked — it may ask again on the next page */
     }
   }, []);
 
-  // Asked for from the header, the tab bar, or anywhere else.
+  // Asked for from the header, the tab bar, or the account card.
   useEffect(() => {
     const show = (e) => {
-      // A caller may ask for a tab: dispatch with { detail: 'register' }.
       if (e?.detail === 'register' || e?.detail === 'login') setMode(e.detail);
       setStep('who');
       setFailed('');
@@ -60,10 +95,7 @@ export default function AuthPopup() {
     return () => window.removeEventListener(OPEN_AUTH, show);
   }, []);
 
-  /**
-   * On the home page, once a visit: somebody already signed in, or who has
-   * closed it, is not asked again.
-   */
+  /** Once a visit, on the home page, and never to somebody already signed in. */
   useEffect(() => {
     if (window.location.pathname !== '/') return undefined;
     let dismissed = false;
@@ -91,13 +123,33 @@ export default function AuthPopup() {
   }, [open, close]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setDay = (key) => (e) => setDays((d) => ({ ...d, [key]: e.target.value }));
+  const registering = mode === 'register';
+
+  /** Keeps what has been gathered so far against this browser. */
+  const keep = (extra = {}) => {
+    const existing = loadProfile() || {};
+    const digits = tenDigits(form.phone);
+    saveProfile({
+      ...existing,
+      details: {
+        name: extra.name ?? form.name.trim() ?? existing.details?.name ?? '',
+        email: extra.email ?? form.email.trim() ?? existing.details?.email ?? '',
+        phone: extra.phone || `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`,
+      },
+      whatsapp: wants.whatsapp,
+      ...(days.dob ? { birthdays: [{ name: extra.name || form.name.trim() || 'Me', dob: days.dob, relationship: 'Self' }] } : {}),
+      ...(days.anniversary ? { anniversary: { date: days.anniversary, years: days.years } } : {}),
+      ...(extra.rest || {}),
+    });
+  };
 
   const askForCode = async (e) => {
     e?.preventDefault();
     if (busy) return;
-    if (mode === 'register' && form.name.trim().length < 2) return setFailed('Tell us your name.');
+    if (registering && form.name.trim().length < 2) return setFailed('Tell us your name.');
     if (!/^[6-9]\d{9}$/.test(tenDigits(form.phone))) return setFailed('Enter your 10-digit mobile number.');
-    if (mode === 'register' && form.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) {
+    if (registering && form.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) {
       return setFailed('That email does not look right.');
     }
     setBusy(true);
@@ -112,7 +164,8 @@ export default function AuthPopup() {
     setBusy(false);
   };
 
-  const finish = async (e) => {
+  /** The code proves the number; registering then carries on inside the sheet. */
+  const verify = async (e) => {
     e?.preventDefault();
     if (busy) return;
     if (code.replace(/\D/g, '').length !== 6) return setFailed('Enter the 6-digit code.');
@@ -122,18 +175,7 @@ export default function AuthPopup() {
       const res = await api.memberVerify(form.phone, code);
       const { member, membership, token } = res.data || {};
       setSessionToken(token || '');
-
-      // What the desk holds wins; what they just typed fills the gaps.
-      const existing = loadProfile() || {};
-      const digits = tenDigits(form.phone);
-      saveProfile({
-        ...existing,
-        details: {
-          name: member?.name || form.name.trim() || existing.details?.name || '',
-          email: member?.email || form.email.trim() || existing.details?.email || '',
-          phone: member?.phone || `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`,
-        },
-      });
+      keep({ name: member?.name || form.name.trim(), email: member?.email || form.email.trim(), phone: member?.phone });
       if (membership) {
         saveMembership({
           plan: membership.plan,
@@ -143,18 +185,33 @@ export default function AuthPopup() {
           status: membership.status,
         });
       }
-      // Registering ends on the profile, where the rest of it is filled in;
-      // logging in stays where they were, with the session now in hand.
-      window.location.assign(mode === 'register' || !member?.name ? '/profile/edit' : window.location.pathname + window.location.search);
+      setBusy(false);
+      // A new member finishes here; somebody logging in is already done.
+      if (registering) setStep('days');
+      else window.location.reload();
     } catch (err) {
       setBusy(false);
       setFailed(err?.status ? err.message : 'We could not reach Smira just now. Please try again in a moment.');
     }
   };
 
+  /** The special days, and then they are in. */
+  const finish = (e) => {
+    e?.preventDefault();
+    keep();
+    window.location.reload();
+  };
+
   if (!open) return null;
 
-  const registering = mode === 'register';
+  const heading =
+    step === 'code' ? 'Enter the code' : step === 'days' ? 'A little about you' : 'Welcome to Smira Club';
+  const under =
+    step === 'code'
+      ? `We sent a 6-digit code to ${form.phone}.`
+      : step === 'days'
+        ? 'So we can make your special days count. You can skip this.'
+        : 'Login or create account to continue';
 
   return (
     <Portal>
@@ -168,7 +225,7 @@ export default function AuthPopup() {
           ref={panel}
           role="dialog"
           aria-modal="true"
-          aria-label={registering ? 'Register' : 'Log in'}
+          aria-label={registering ? 'Create your account' : 'Log in'}
           className="flex max-h-[92vh] w-full max-w-phone flex-col overflow-hidden rounded-t-2xl bg-white shadow-lift sm:rounded-2xl"
         >
           <header className="flex shrink-0 items-start justify-between gap-4 px-5 pt-5">
@@ -185,19 +242,11 @@ export default function AuthPopup() {
             </button>
           </header>
 
-          <div className="px-5 pb-5 pt-2">
-            <h2 className="text-[19px] font-bold text-ink-900">
-              {step === 'code' ? 'Enter the code' : registering ? 'Join Smira Club' : 'Welcome back'}
-            </h2>
-            <p className="mt-1 text-[14px] text-ink-500">
-              {step === 'code'
-                ? `We sent a 6-digit code to ${form.phone}.`
-                : registering
-                  ? 'Your mobile number is your account — no password to remember.'
-                  : 'Log in with your mobile number to see your bookings and membership.'}
-            </p>
+          <div className="overflow-y-auto px-5 pb-5 pt-2">
+            <h2 className="text-center text-[20px] font-bold text-ink-900">{heading}</h2>
+            <p className="mt-1 text-center text-[14px] text-ink-500">{under}</p>
 
-            {/* The same switch the hotels screen uses, for the two ways in. */}
+            {/* The two ways in, on the switch the rest of the site uses. */}
             {step === 'who' && (
               <div className="mt-4 grid grid-cols-2 gap-1 rounded-xl bg-surface-soft p-1">
                 {[
@@ -222,52 +271,57 @@ export default function AuthPopup() {
               </div>
             )}
 
-            <form onSubmit={step === 'who' ? askForCode : finish} className="mt-4 space-y-3">
-              {step === 'who' ? (
+            <form
+              onSubmit={step === 'who' ? askForCode : step === 'code' ? verify : finish}
+              className="mt-5 space-y-4"
+            >
+              {step === 'who' && (
                 <>
                   {registering && (
-                    <label className="relative block">
-                      <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />
-                      <input
-                        value={form.name}
-                        onChange={set('name')}
-                        placeholder="Your name"
-                        aria-label="Your name"
-                        className="w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition focus:border-action-500"
-                      />
-                    </label>
+                    <Field label="Your Name" required icon={User}>
+                      <input value={form.name} onChange={set('name')} placeholder="Enter your full name" className={INPUT} />
+                    </Field>
                   )}
 
-                  <label className="relative block">
-                    <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />
+                  <Field label="Contact Number" required icon={Phone}>
                     <input
                       type="tel"
                       inputMode="numeric"
                       autoComplete="tel"
                       value={form.phone}
                       onChange={set('phone')}
-                      placeholder="Mobile number"
-                      aria-label="Mobile number"
-                      className="w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition focus:border-action-500"
+                      placeholder="Enter your Mobile Number"
+                      className={INPUT}
                     />
-                  </label>
+                  </Field>
 
                   {registering && (
-                    <label className="relative block">
-                      <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />
-                      <input
-                        type="email"
-                        autoComplete="email"
-                        value={form.email}
-                        onChange={set('email')}
-                        placeholder="Email (optional)"
-                        aria-label="Email"
-                        className="w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition focus:border-action-500"
-                      />
-                    </label>
+                    <>
+                      <Field label="Email" icon={Mail}>
+                        <input
+                          type="email"
+                          autoComplete="email"
+                          value={form.email}
+                          onChange={set('email')}
+                          placeholder="Enter your email (optional)"
+                          className={INPUT}
+                        />
+                      </Field>
+
+                      <div className="space-y-3">
+                        <Tick on={wants.whatsapp} onChange={(v) => setWants((w) => ({ ...w, whatsapp: v }))}>
+                          Receive WhatsApp updates about exclusive offers, new destinations &amp; more
+                        </Tick>
+                        <Tick on={wants.gift} onChange={(v) => setWants((w) => ({ ...w, gift: v }))}>
+                          Claim your welcome gift
+                        </Tick>
+                      </div>
+                    </>
                   )}
                 </>
-              ) : (
+              )}
+
+              {step === 'code' && (
                 <>
                   <input
                     type="text"
@@ -296,6 +350,20 @@ export default function AuthPopup() {
                 </>
               )}
 
+              {step === 'days' && (
+                <>
+                  <Field label="Date of Birth" icon={Gift}>
+                    <input type="date" value={days.dob} onChange={setDay('dob')} className={INPUT} />
+                  </Field>
+                  <Field label="Anniversary Date" icon={CalendarHeart}>
+                    <input type="date" value={days.anniversary} onChange={setDay('anniversary')} className={INPUT} />
+                  </Field>
+                  <Field label="Years of Anniversary (Optional)" icon={CalendarHeart}>
+                    <input value={days.years} onChange={setDay('years')} placeholder="Enter years of togetherness" className={INPUT} />
+                  </Field>
+                </>
+              )}
+
               {failed && <p role="alert" className="rounded-xl bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-600">{failed}</p>}
 
               <button
@@ -303,9 +371,15 @@ export default function AuthPopup() {
                 disabled={busy}
                 className="btn-primary w-full gap-2 rounded-xl py-3.5 text-[15px] normal-case tracking-normal disabled:opacity-60"
               >
-                {busy ? 'Please wait…' : step === 'code' ? (registering ? 'Create my account' : 'Log in') : 'Send code'}
+                {busy ? 'Please wait…' : step === 'who' ? 'Send OTP' : step === 'code' ? 'Verify' : 'Continue'}
                 {!busy && <ArrowRight size={17} />}
               </button>
+
+              {step === 'days' && (
+                <button type="button" onClick={finish} className="w-full text-center text-[13px] font-semibold text-ink-500">
+                  Skip for now
+                </button>
+              )}
             </form>
 
             <p className="mt-3 flex items-center justify-center gap-2 text-[12px] text-ink-500">
@@ -313,16 +387,18 @@ export default function AuthPopup() {
               We only use your number to find your bookings and membership.
             </p>
 
-            <p className="mt-3 text-center text-[13px] text-ink-500">
-              Browsing for now?{' '}
-              <button type="button" onClick={close} className="font-semibold text-action-500">
-                Keep looking around
-              </button>
-              {' · '}
-              <Link href="/membership" onClick={close} className="font-semibold text-action-500">
-                Membership plans
-              </Link>
-            </p>
+            {step === 'who' && (
+              <p className="mt-3 text-center text-[13px] text-ink-500">
+                Browsing for now?{' '}
+                <button type="button" onClick={close} className="font-semibold text-action-500">
+                  Keep looking around
+                </button>
+                {' · '}
+                <Link href="/membership" onClick={close} className="font-semibold text-action-500">
+                  Membership plans
+                </Link>
+              </p>
+            )}
           </div>
         </div>
       </div>

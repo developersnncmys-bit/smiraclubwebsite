@@ -6,11 +6,11 @@ export const metadata = {
   description: 'Log in to Smira Club with your mobile number to see your membership and bookings.',
 };
 
-/** Reached from Log in in the header, and from anywhere that needs a member. */
+/** The sheet's own page, for a link sent straight to signing in. */
 export default function Page() {
   return (
     <>
-      <ScreenBar title="Log in" backHref="/" />
+      <ScreenBar title="Login" backHref="/" />
       <MemberLogin />
     </>
   );
