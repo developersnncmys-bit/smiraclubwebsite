@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Pencil, Phone, User } from 'lucide-react';
+import { LogIn, Pencil, Phone, User } from 'lucide-react';
 import { member } from '@/lib/content';
 import { useProfile } from '@/lib/profile';
 import { isMember, useMembership } from '@/lib/membership';
@@ -46,13 +46,23 @@ export default function IdentityCard() {
             {phone}
           </p>
 
-          <Link
-            href={signedIn ? '/profile/edit' : '/login'}
-            className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-semibold transition hover:text-white/80"
-          >
-            <Pencil size={15} />
-            {signedIn ? 'Edit Profile' : 'Log in with your mobile number'}
-          </Link>
+          {signedIn ? (
+            <Link
+              href="/profile/edit"
+              className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-semibold transition hover:text-white/80"
+            >
+              <Pencil size={15} />
+              Edit Profile
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[14px] font-bold text-action-500 transition hover:bg-surface-soft"
+            >
+              <LogIn size={16} />
+              Log in
+            </Link>
+          )}
         </div>
       </div>
     </section>

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Icon from '@/components/ui/Icon';
 import { primaryNav } from '@/lib/content';
+import { isMember, useMembership } from '@/lib/membership';
+import { useProfile } from '@/lib/profile';
 
 /**
  * Screens that pin their own price bar to the bottom: a property's page and
@@ -26,6 +28,14 @@ const OWNS_THE_BOTTOM = [
 /** The phone's tab bar. It leaves the page entirely on a desktop. */
 export default function BottomNav() {
   const pathname = usePathname();
+  // Account is the way in until somebody is signed in, and the way to their
+  // own screens after — the same as Log in / My account on a desktop. Read
+  // before the early return, because hooks cannot be skipped.
+  const { profile } = useProfile();
+  const { membership } = useMembership();
+  const signedIn = Boolean(profile?.details?.name?.trim() || isMember(membership));
+  const asAccount = (item) =>
+    item.key === 'account' && !signedIn ? { ...item, label: 'Log in', href: '/login' } : item;
 
   if (OWNS_THE_BOTTOM.some((route) => route.test(pathname))) return null;
 
@@ -43,7 +53,7 @@ export default function BottomNav() {
       aria-label="Main"
     >
       <ul className="mx-auto flex max-w-phone items-stretch">
-        {primaryNav.map((item) => {
+        {primaryNav.map(asAccount).map((item) => {
           const active = item.key === activeKey;
           if (item.center) {
             // AI Search: a raised round button in the middle of the bar.
