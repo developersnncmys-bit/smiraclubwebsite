@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
+import { useProfile } from '@/lib/profile';
 
 /**
  * One header, two shapes.
@@ -20,6 +21,8 @@ export default function Header() {
   const memberBadge = isMember(membership)
     ? { label: `${membership.plan} Member`, href: '/membership' }
     : { label: 'Become a Member', href: '/membership' };
+  const { profile } = useProfile();
+  const signedIn = Boolean(profile?.details?.name || isMember(membership));
 
   return (
     <header className="sticky top-0 z-40 border-b border-surface-line bg-white/95 backdrop-blur pt-safe">
@@ -78,9 +81,16 @@ export default function Header() {
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500" />
             </Link>
 
-            <Link href="/profile" className="btn-primary py-2.5">
-              My account
-            </Link>
+            {/* Signed in on this device or not — the number is the account. */}
+            {signedIn ? (
+              <Link href="/profile" className="btn-primary py-2.5">
+                My account
+              </Link>
+            ) : (
+              <Link href="/login" className="btn-primary py-2.5">
+                Log in
+              </Link>
+            )}
           </div>
         </div>
       </div>

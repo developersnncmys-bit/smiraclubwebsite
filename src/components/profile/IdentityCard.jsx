@@ -10,10 +10,12 @@ import { isMember, useMembership } from '@/lib/membership';
 export default function IdentityCard() {
   // What the member saved on Complete Your Profile, where there is something.
   const { profile } = useProfile();
-  const name = profile?.details?.name?.trim() || member.name;
-  const phone = profile?.details?.phone?.trim() || member.phone;
-  const photo = profile?.photo;
   const { membership } = useMembership();
+  // Nobody signed in on this device yet: the card offers the way in instead.
+  const signedIn = Boolean(profile?.details?.name?.trim() || isMember(membership));
+  const name = profile?.details?.name?.trim() || (signedIn ? member.name : 'there');
+  const phone = profile?.details?.phone?.trim() || (signedIn ? member.phone : 'Not signed in');
+  const photo = profile?.photo;
 
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6">
@@ -45,11 +47,11 @@ export default function IdentityCard() {
           </p>
 
           <Link
-            href="/profile/edit"
+            href={signedIn ? '/profile/edit' : '/login'}
             className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-semibold transition hover:text-white/80"
           >
             <Pencil size={15} />
-            Edit Profile
+            {signedIn ? 'Edit Profile' : 'Log in with your mobile number'}
           </Link>
         </div>
       </div>

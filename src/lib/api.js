@@ -80,6 +80,16 @@ export const api = {
    * A membership bought on the membership page. It lands on the admin
    * panel's Members page as new, payment pending, for the desk to activate.
    */
+  /**
+   * Signing in with a mobile number: ask for the code, then prove it. What
+   * comes back is the member's own details and membership, so they can pick
+   * up on any device.
+   */
+  memberOtpRequest: (phone) =>
+    request('/website/member/otp', { method: 'POST', body: { phone }, next: { revalidate: 0 } }),
+  memberVerify: (phone, code) =>
+    request('/website/member/verify', { method: 'POST', body: { phone, code }, next: { revalidate: 0 } }),
+
   /** The membership plans as set up on the admin panel's Plans page. */
   websitePlans: () => request('/website/plans', { next: { revalidate: 60 } }),
 

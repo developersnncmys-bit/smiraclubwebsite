@@ -80,6 +80,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const [note, setNote] = useState('');
   /** Sent here from a details page they could not open yet. */
   const [returning, setReturning] = useState(false);
+  /** Where they were headed, carried on to the sign-in link as well. */
+  const [nextTo, setNextTo] = useState('');
 
   /**
    * The plans as the Smira desk has them set up on the admin panel — price,
@@ -113,7 +115,9 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   useEffect(() => {
     const view = new URLSearchParams(window.location.search).get('view');
     if (membershipTabs.some((t) => t.key === view)) setTab(view);
-    setReturning(Boolean(new URLSearchParams(window.location.search).get('next')));
+    const to = new URLSearchParams(window.location.search).get('next') || '';
+    setReturning(Boolean(to));
+    if (to.startsWith('/') && !to.startsWith('//')) setNextTo(to);
   }, []);
 
   const goTo = (key) => {
@@ -236,7 +240,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
       {returning && (
         <div className="shell pt-4">
           <p role="status" className="rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[14px] font-medium text-brand-700">
-            Details and bookings are for Smira Club members. Choose a plan below and we will take you straight back.
+            Details and bookings are for Smira Club members. Choose a plan below and we will take you straight back.{' '}
+            <a href={`/login?next=${encodeURIComponent(nextTo || '/profile')}`} className="font-bold underline">Already a member? Log in</a>
           </p>
         </div>
       )}
