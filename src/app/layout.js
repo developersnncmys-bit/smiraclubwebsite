@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
 import Attribution from '@/components/layout/Attribution';
+import AuthPopup from '@/components/auth/AuthPopup';
 import { site } from '@/lib/content';
 import './globals.css';
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
         <Header />
         {/* The bottom bar takes its room back on a phone only. */}
         <Attribution />
+        <AuthPopup />
         <main className="pb-nav lg:pb-0">{children}</main>
         <Footer />
         <BottomNav />

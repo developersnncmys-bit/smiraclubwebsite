@@ -5,6 +5,7 @@ import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
+import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 
 /**
  * One header, two shapes.
@@ -87,9 +88,13 @@ export default function Header() {
                 My account
               </Link>
             ) : (
-              <Link href="/login" className="btn-primary py-2.5">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
+                className="btn-primary py-2.5"
+              >
                 Log in
-              </Link>
+              </button>
             )}
           </div>
         </div>

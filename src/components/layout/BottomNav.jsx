@@ -6,6 +6,7 @@ import Icon from '@/components/ui/Icon';
 import { primaryNav } from '@/lib/content';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
+import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 
 /**
  * Screens that pin their own price bar to the bottom: a property's page and
@@ -76,18 +77,29 @@ export default function BottomNav() {
               </li>
             );
           }
+          const face = (
+            <>
+              <Icon name={item.icon} size={22} strokeWidth={active ? 2.4 : 2} />
+              {item.label}
+            </>
+          );
+          const look = `flex w-full flex-col items-center gap-1 whitespace-nowrap py-2.5 text-[10px] font-semibold transition min-[400px]:text-[11px] ${
+            active ? 'text-action-500' : 'text-ink-500'
+          }`;
+
+          // Signed out, Account is Log in — and that opens the sheet rather
+          // than taking the visitor away from what they were reading.
           return (
             <li key={item.key} className="flex-1">
-              <Link
-                href={item.href}
-                aria-current={active ? 'page' : undefined}
-                className={`flex flex-col items-center gap-1 whitespace-nowrap py-2.5 text-[10px] font-semibold transition min-[400px]:text-[11px] ${
-                  active ? 'text-action-500' : 'text-ink-500'
-                }`}
-              >
-                <Icon name={item.icon} size={22} strokeWidth={active ? 2.4 : 2} />
-                {item.label}
-              </Link>
+              {item.key === 'account' && !signedIn ? (
+                <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))} className={look}>
+                  {face}
+                </button>
+              ) : (
+                <Link href={item.href} aria-current={active ? 'page' : undefined} className={look}>
+                  {face}
+                </Link>
+              )}
             </li>
           );
         })}
