@@ -49,7 +49,13 @@ export default function AuthPopup() {
 
   // Asked for from the header, the tab bar, or anywhere else.
   useEffect(() => {
-    const show = () => { setOpen(true); setFailed(''); };
+    const show = (e) => {
+      // A caller may ask for a tab: dispatch with { detail: 'register' }.
+      if (e?.detail === 'register' || e?.detail === 'login') setMode(e.detail);
+      setStep('who');
+      setFailed('');
+      setOpen(true);
+    };
     window.addEventListener(OPEN_AUTH, show);
     return () => window.removeEventListener(OPEN_AUTH, show);
   }, []);
@@ -137,8 +143,9 @@ export default function AuthPopup() {
           status: membership.status,
         });
       }
-      // A fresh load, so the header and every screen read the new session.
-      window.location.reload();
+      // Registering ends on the profile, where the rest of it is filled in;
+      // logging in stays where they were, with the session now in hand.
+      window.location.assign(mode === 'register' || !member?.name ? '/profile/edit' : window.location.pathname + window.location.search);
     } catch (err) {
       setBusy(false);
       setFailed(err?.status ? err.message : 'We could not reach Smira just now. Please try again in a moment.');

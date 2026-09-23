@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { LogIn, Pencil, Phone, User } from 'lucide-react';
+import { LogIn, Pencil, Phone, User, UserPlus } from 'lucide-react';
 import { member } from '@/lib/content';
 import { useProfile } from '@/lib/profile';
 import { isMember, useMembership } from '@/lib/membership';
+import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 
 /** The blue card the screen opens on — who you are, and the way to edit it. */
 export default function IdentityCard() {
@@ -55,13 +56,25 @@ export default function IdentityCard() {
               Edit Profile
             </Link>
           ) : (
-            <Link
-              href="/login"
-              className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[14px] font-bold text-action-500 transition hover:bg-surface-soft"
-            >
-              <LogIn size={16} />
-              Log in
-            </Link>
+            // Both ways in, side by side — each opens the sheet on its own tab.
+            <span className="mt-2.5 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_AUTH, { detail: 'login' }))}
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[14px] font-bold text-action-500 transition hover:bg-surface-soft"
+              >
+                <LogIn size={16} />
+                Log in
+              </button>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_AUTH, { detail: 'register' }))}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/70 px-4 py-2.5 text-[14px] font-bold text-white transition hover:bg-white/10"
+              >
+                <UserPlus size={16} />
+                Register
+              </button>
+            </span>
           )}
         </div>
       </div>

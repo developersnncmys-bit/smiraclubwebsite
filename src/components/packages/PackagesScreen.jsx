@@ -47,21 +47,28 @@ export default function PackagesScreen({ packages }) {
         <div className="shell space-y-5 py-5 lg:py-8">
           <h1 className="hidden text-2xl font-bold text-ink-900 lg:block">Packages</h1>
 
-          <ul className="grid gap-3 sm:grid-cols-3">
+          {/*
+            Three across on a phone, stacked icon over label, because full-width
+            rows here pushed the packages themselves off the screen. From `sm`
+            up they have the room to read as rows again.
+          */}
+          <ul className="grid grid-cols-3 gap-2 sm:gap-3">
             {WAYS.map((w) => (
               <li key={w.title}>
                 <Link
                   href={w.href}
-                  className="flex h-full items-center gap-3 rounded-2xl border border-surface-line bg-white p-3.5 transition hover:border-action-500 hover:bg-brand-50"
+                  className="flex h-full flex-col items-center gap-2 rounded-2xl border border-surface-line bg-white p-3 text-center transition hover:border-action-500 hover:bg-brand-50 sm:flex-row sm:gap-3 sm:p-3.5 sm:text-left"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50">
-                    <w.icon size={20} className="text-action-500" />
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 sm:h-11 sm:w-11">
+                    <w.icon size={19} className="text-action-500" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[15px] font-bold text-ink-900">{w.title}</span>
-                    <span className="block text-[12px] text-ink-500">{w.note}</span>
+                    <span className="block text-[12.5px] font-bold leading-tight text-ink-900 sm:text-[15px]">
+                      {w.title}
+                    </span>
+                    <span className="mt-0.5 hidden text-[12px] text-ink-500 sm:block">{w.note}</span>
                   </span>
-                  <ArrowRight size={16} className="shrink-0 text-action-500" />
+                  <ArrowRight size={16} className="hidden shrink-0 text-action-500 sm:block" />
                 </Link>
               </li>
             ))}
