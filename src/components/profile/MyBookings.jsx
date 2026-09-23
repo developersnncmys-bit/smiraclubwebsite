@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -10,6 +10,8 @@ import NeedHelp from '@/components/ui/NeedHelp';
 import { bookingStages, bookingTabs, myBookings } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 import { nightsBetween } from '@/lib/format';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
 
 /** How each status announces itself at the top of a card. */
 const STATUS = {
@@ -28,6 +30,29 @@ const when = (iso) =>
     hour12: true,
   }).replace(' am', ' AM').replace(' pm', ' PM');
 
+/** How far along the stepper a booking is, by where the desk has got to. */
+const STAGE = { Pending: 2, Confirmed: 3, 'Part paid': 3, Completed: 5, Cancelled: 1 };
+
+/** A booking as the API gives it, in the shape these cards read. */
+function fromDesk(b) {
+  const status = b.status === 'Cancelled' ? 'cancelled' : b.status === 'Pending' ? 'pending' : 'confirmed';
+  return {
+    id: b.reference,
+    kind: `${b.kind} booking`,
+    status,
+    stage: /Confirmed by the property/i.test(b.progress) ? 5 : STAGE[b.status] || 2,
+    name: b.name,
+    place: b.destination || '',
+    image: 'villa-hero-beach',
+    from: b.checkIn || b.bookedOn,
+    to: b.checkOut || b.checkIn || b.bookedOn,
+    href: '/profile/bookings',
+    progress: b.progress,
+    amount: b.amount,
+    paid: b.paid,
+  };
+}
+
 /**
  * My Bookings.
  *
@@ -40,8 +65,30 @@ export default function MyBookings({ art = {} }) {
   const [query, setQuery] = useState('');
   const [newestFirst, setNewestFirst] = useState(true);
 
+  /**
+   * A signed-in member sees their own bookings, fetched with their token and
+   * carrying where each one has got to between the desk and the property.
+   * Signed out, the screen shows the sample bookings it always has.
+   */
+  const [mine, setMine] = useState(null);
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    const token = getSessionToken();
+    setSignedIn(Boolean(token));
+    if (!token) return undefined;
+    let live = true;
+    const load = () =>
+      api.memberMe(token)
+        .then((res) => live && setMine((res.data?.bookings || []).map(fromDesk)))
+        .catch(() => live && setMine([]));
+    load();
+    // The desk or the property may answer while this is open.
+    const timer = setInterval(load, 20000);
+    return () => { live = false; clearInterval(timer); };
+  }, []);
+
   const shown = useMemo(() => {
-    let list = myBookings;
+    let list = mine || (signedIn ? [] : myBookings);
 
     if (tab !== 'All Bookings') {
       const want = tab.toLowerCase().replace('ed', '');
@@ -63,7 +110,7 @@ export default function MyBookings({ art = {} }) {
         ? new Date(b.from) - new Date(a.from)
         : new Date(a.from) - new Date(b.from),
     );
-  }, [tab, query, newestFirst]);
+  }, [tab, query, newestFirst, mine, signedIn]);
 
   return (
     <div className="pb-8">
@@ -162,6 +209,11 @@ export default function MyBookings({ art = {} }) {
                       {booking.place}
                       <Send size={14} className="shrink-0 text-action-500" fill="currentColor" strokeWidth={0} />
                     </span>
+                    {booking.progress && (
+                      <span className="mt-1 block text-[13px] font-semibold text-action-500">
+                        {booking.progress}
+                      </span>
+                    )}
                     <span className="mt-1 block text-[14px] text-ink-500">
                       Booking ID: {booking.id}
                     </span>

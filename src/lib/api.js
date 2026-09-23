@@ -90,6 +90,9 @@ export const api = {
   memberVerify: (phone, code) =>
     request('/website/member/verify', { method: 'POST', body: { phone, code }, next: { revalidate: 0 } }),
 
+  /** The signed-in member's own details, membership and bookings. */
+  memberMe: (token) => request('/website/member/me', { token, next: { revalidate: 0 } }),
+
   /** The membership plans as set up on the admin panel's Plans page. */
   websitePlans: () => request('/website/plans', { next: { revalidate: 60 } }),
 

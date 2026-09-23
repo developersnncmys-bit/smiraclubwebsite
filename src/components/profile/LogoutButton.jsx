@@ -17,7 +17,7 @@ import { X } from 'lucide-react';
  * header, the profile cards and the members-only doors all read that storage
  * as they mount.
  */
-const SESSION_KEYS = ['smira:profile', 'smira:membership', 'smira:wishlist'];
+const SESSION_KEYS = ['smira:profile', 'smira:membership', 'smira:wishlist', 'smira:token'];
 
 export default function LogoutButton() {
   const [asking, setAsking] = useState(false);

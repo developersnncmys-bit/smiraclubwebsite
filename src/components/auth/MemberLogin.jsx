@@ -7,6 +7,7 @@ import { ArrowRight, Crown, Phone, ShieldCheck } from 'lucide-react';
 import { api } from '@/lib/api';
 import { loadProfile, saveProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
+import { setSessionToken } from '@/lib/session';
 
 /**
  * Signing in with a mobile number and the code sent to it.
@@ -83,7 +84,9 @@ export default function MemberLogin() {
     setFailed('');
     try {
       const res = await api.memberVerify(phone, code);
-      const { member, membership } = res.data || {};
+      const { member, membership, token } = res.data || {};
+      // The token is what later lets the site ask for their own bookings.
+      setSessionToken(token || '');
       saveProfile(profileFrom(member || {}, loadProfile()));
       if (membership) {
         saveMembership({
