@@ -6,7 +6,7 @@ import { Info, Mail, User } from 'lucide-react';
 import { inr } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
-import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
+import { profileForBooking, useProfile } from '@/lib/profile';
 
 const BLANK = { name: '', email: '', phone: '' };
 
@@ -71,20 +71,19 @@ export default function BookingForm({
   const [guests, setGuests] = useState([{ ...BLANK }]);
   const [errors, setErrors] = useState({});
 
-  // No booking without step one of the profile: send them to finish it, and
-  // bring them back here after. Once it is there, it fills in the guest.
+  /**
+   * Anyone may book. A member's booking is confirmed on the spot; anybody
+   * else is putting in a request the desk answers, which is what the
+   * confirmation screen then says. A saved profile only saves typing.
+   */
   const { ready, profile } = useProfile();
   useEffect(() => {
-    if (!ready) return;
-    if (!isComplete(profile)) {
-      router.replace(completeProfileHref());
-      return;
-    }
+    if (!ready || !profile?.details) return;
     const d = profile.details;
     setGuests((list) =>
-      list.map((g, i) => (i === 0 && !g.name && !g.email && !g.phone ? { name: d.name, email: d.email, phone: d.phone } : g)),
+      list.map((g, i) => (i === 0 && !g.name && !g.email && !g.phone ? { name: d.name || '', email: d.email || '', phone: d.phone || '' } : g)),
     );
-  }, [ready, profile, router]);
+  }, [ready, profile]);
 
   const afterDiscount = price - discount;
   const total = afterDiscount + taxes;
@@ -138,9 +137,11 @@ export default function BookingForm({
           profile: p.profile,
           attribution: readAttribution(),
         });
-        return { reference: res.data?.reference };
+        return { reference: res.data?.reference, status: res.data?.status };
       });
     let reference = '';
+    // The desk's answer: a member is confirmed, anybody else has requested.
+    let outcome = 'requested';
     {
       setBusy(true);
       try {
@@ -153,6 +154,7 @@ export default function BookingForm({
           profile: profileForBooking(profile),
         });
         reference = res?.reference || '';
+        outcome = res?.status || 'requested';
       } catch (err) {
         setBusy(false);
         setFailed(
@@ -167,7 +169,7 @@ export default function BookingForm({
     // No payment step yet, so a clean form goes straight to confirmation.
     const query = new URLSearchParams({
       ref: reference || bookingRef(),
-      status: 'requested',
+      status: outcome,
       name: confirm.name || '',
       slot: confirm.slot || '',
       nights: confirm.nights || '',

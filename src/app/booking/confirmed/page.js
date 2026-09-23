@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { CircleCheck, ChevronLeft, Flower2, Sparkles, Tent, Trees } from 'lucide-react';
+import { ArrowUpRight, CircleCheck, ChevronLeft, Flower2, Sparkles, Tent, Trees } from 'lucide-react';
 import { image } from '@/lib/images';
 import { inr } from '@/lib/format';
 
@@ -102,12 +102,12 @@ export default async function Page({ searchParams }) {
             )}
 
             <h1 className="mt-5 text-[21px] font-extrabold text-ink-900 lg:text-3xl">
-              {requested ? 'Booking Requested!' : 'Booking Confirmed!'}
+              {requested ? 'Request received' : 'Booking Confirmed!'}
             </h1>
             {requested ? (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
-                Your {k.noun} request has reached our travel desk.
-                <span className="block">They will call you shortly to confirm it and take payment.</span>
+                We&rsquo;re checking availability for your {k.noun}.
+                <span className="block">We&rsquo;ll get back to you within 24 hours.</span>
               </p>
             ) : (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
@@ -139,12 +139,35 @@ export default async function Page({ searchParams }) {
               )}
             </dl>
 
+            {/*
+              A request is answered by the desk within the day; a membership
+              skips that wait altogether, which is the one thing worth saying
+              on this screen to somebody who is not a member yet.
+            */}
+            {requested && (
+              <section className="mt-6 rounded-2xl border border-action-500/30 bg-brand-50 p-5 text-center">
+                <span className="inline-block rounded-full bg-action-500/10 px-3 py-1 text-[12px] font-bold uppercase tracking-wide text-action-500">
+                  Skip the wait
+                </span>
+                <h2 className="mt-3 text-[17px] font-extrabold text-ink-900">Become a member</h2>
+                <p className="mt-1.5 text-[14px] leading-snug text-ink-600">
+                  Members get instant booking confirmation, no waiting on requests.
+                </p>
+                <Link
+                  href="/membership"
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl bg-ink-900 px-5 py-3 text-[14px] font-bold text-white transition hover:bg-ink-800"
+                >
+                  View membership plans <ArrowUpRight size={16} />
+                </Link>
+              </section>
+            )}
+
             <div className="mt-8 grid gap-3 lg:grid-cols-2">
               <Link
                 href="/profile/bookings"
                 className="btn-primary w-full rounded-xl py-3.5 text-[15px] normal-case tracking-normal"
               >
-                View Booking Details
+                {requested ? 'Track this request' : 'View Booking Details'}
               </Link>
 
               <Link

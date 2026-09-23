@@ -8,7 +8,7 @@ import { INPUT } from '@/components/forms/RequestFields';
 import { fullDate, inr, weekday } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
-import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
+import { profileForBooking, useProfile } from '@/lib/profile';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -74,14 +74,14 @@ export default function ParkBooking({ park, tickets, children, kind = 'park' }) 
   // The saved profile fills in who is going; without one there is no booking.
   const { ready, profile } = useProfile();
   useEffect(() => {
-    if (!ready || !isComplete(profile)) return;
+    if (!ready || !profile?.details) return;
     const d = profile.details;
     setGuests((all) => all.map((g, i) => (i === 0 && !g.name && !g.email && !g.phone ? { name: d.name, email: d.email, phone: d.phone } : g)));
   }, [ready, profile]);
 
   const book = async () => {
     if (busy) return;
-    if (ready && !isComplete(profile)) return router.push(completeProfileHref());
+
     const found = {};
     if (!chosen.length) found.tickets = 'Select at least one ticket.';
     const lead = guests[0];
@@ -101,6 +101,7 @@ export default function ParkBooking({ park, tickets, children, kind = 'park' }) 
     setBusy(true);
     setFailed('');
     let ref;
+    let outcome = 'requested';
     try {
       const res = await api.websiteBooking({
         name: lead.name,
@@ -118,6 +119,7 @@ export default function ParkBooking({ park, tickets, children, kind = 'park' }) 
         attribution: readAttribution(),
       });
       ref = res.data?.reference;
+      outcome = res.data?.status || 'requested';
     } catch (err) {
       setBusy(false);
       setFailed(err?.status ? err.message : 'We could not reach our travel desk just now. Please try again in a moment.');
@@ -126,7 +128,7 @@ export default function ParkBooking({ park, tickets, children, kind = 'park' }) 
 
     router.push(`/booking/confirmed?${new URLSearchParams({
       ref,
-      status: 'requested',
+      status: outcome,
       kind,
       name: park.name,
       slot: `${weekday(date)}, ${fullDate(date)}`,

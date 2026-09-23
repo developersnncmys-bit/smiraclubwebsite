@@ -105,7 +105,7 @@ export default function PackageBooking({
       profile,
       attribution: readAttribution(),
     });
-    return { reference: res.data?.reference };
+    return { reference: res.data?.reference, status: res.data?.status };
   };
 
   return (

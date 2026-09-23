@@ -8,7 +8,7 @@ import { clock, fullDate, shortDate, weekday } from '@/lib/format';
 import Portal from '@/components/ui/Portal';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
-import { completeProfileHref, isComplete, profileForBooking, useProfile } from '@/lib/profile';
+import { profileForBooking, useProfile } from '@/lib/profile';
 
 const isoDay = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -50,12 +50,9 @@ export default function BookTable({ restaurant }) {
   // No table without a profile; with one, the name and number are already known.
   const { ready, profile } = useProfile();
   useEffect(() => {
-    if (ready && isComplete(profile)) setWho({ name: profile.details.name, phone: profile.details.phone });
+    if (ready && profile?.details) setWho({ name: profile.details.name || '', phone: profile.details.phone || '' });
   }, [ready, profile]);
-  const openSheet = () => {
-    if (ready && !isComplete(profile)) router.push(completeProfileHref());
-    else setOpen(true);
-  };
+  const openSheet = () => setOpen(true);
 
   // The clock is read after mount, so the server and the browser agree on
   // the first paint and "already gone" is judged by the member's own time.
@@ -103,6 +100,7 @@ export default function BookTable({ restaurant }) {
     setBusy(true);
     setFailed('');
     let ref;
+    let outcome = 'requested';
     try {
       const res = await api.websiteBooking({
         name: who.name,
@@ -120,6 +118,7 @@ export default function BookTable({ restaurant }) {
         attribution: readAttribution(),
       });
       ref = res.data?.reference;
+      outcome = res.data?.status || 'requested';
     } catch (err) {
       setBusy(false);
       setFailed(err?.status ? err.message : 'We could not reach our desk just now. Please try again in a moment.');
@@ -128,7 +127,7 @@ export default function BookTable({ restaurant }) {
 
     router.push(`/booking/confirmed?${new URLSearchParams({
       ref,
-      status: 'requested',
+      status: outcome,
       kind: 'table',
       name: restaurant.name,
       slot,
