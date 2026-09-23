@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 
 /**
@@ -12,18 +11,27 @@ import { X } from 'lucide-react';
  * has it that way round, and it is right to: the safe choice should be the
  * one your thumb lands on.
  *
- * There is no session to clear yet. When auth lands, drop the token clear
- * into `confirmLogout` and nothing else here needs to change.
+ * The site has no server session yet: what makes someone a member here is
+ * the profile and the membership kept in this browser, so logging out clears
+ * those. The page is then loaded afresh rather than pushed, because the
+ * header, the profile cards and the members-only doors all read that storage
+ * as they mount.
  */
+const SESSION_KEYS = ['smira:profile', 'smira:membership', 'smira:wishlist'];
+
 export default function LogoutButton() {
-  const router = useRouter();
   const [asking, setAsking] = useState(false);
 
   const close = () => setAsking(false);
 
   const confirmLogout = () => {
     close();
-    router.push('/');
+    try {
+      SESSION_KEYS.forEach((key) => window.localStorage.removeItem(key));
+    } catch {
+      /* storage blocked — there was nothing kept to clear */
+    }
+    window.location.assign('/');
   };
 
   return (
