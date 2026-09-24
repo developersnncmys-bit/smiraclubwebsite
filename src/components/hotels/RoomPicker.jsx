@@ -173,7 +173,14 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
 
             {stay && (
               <div className="mt-4 overflow-hidden rounded-lg border border-surface-line">
-                <StayDates from={stay.from} to={stay.to} />
+                <StayDates
+                  stack
+                  from={stay.from}
+                  to={stay.to}
+                  adults={stay.adults}
+                  rooms={stay.rooms}
+                  childAges={stay.childAges}
+                />
               </div>
             )}
 
@@ -198,9 +205,17 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
       <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
         <div className="border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
           {/* The dates and party chosen on the page, so Book Room says what it books. */}
-          {stay && <StayDates from={stay.from} to={stay.to} />}
+          {stay && (
+            <StayDates
+              from={stay.from}
+              to={stay.to}
+              adults={stay.adults}
+              rooms={stay.rooms}
+              childAges={stay.childAges}
+            />
+          )}
           <div
-            className="flex items-center gap-4 px-4 py-3.5 sm:px-6 lg:px-6"
+            className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-6"
             style={{ paddingBottom: 'max(0.875rem, env(safe-area-inset-bottom))' }}
           >
           {/*
@@ -213,28 +228,27 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
             <p className="truncate text-[13px] text-ink-500">{chosen?.plan.name}</p>
           </div>
 
+          {/* The price keeps to two tight lines, so the button can sit beside
+              it on a phone rather than being crowded onto a third. */}
           <div className="min-w-0 flex-1 lg:flex-none lg:text-right">
-            <p className="flex flex-wrap items-baseline gap-2 lg:justify-end">
+            <p className="flex items-baseline gap-1.5 whitespace-nowrap lg:justify-end">
               <span className="text-xl font-extrabold text-ink-900">
                 {inr(chosen?.plan.price ?? 0)}
               </span>
               {chosen?.plan.was && (
-                <span className="text-[14px] font-semibold text-red-500 line-through">
+                <span className="text-[13px] font-semibold text-red-500 line-through">
                   {inr(chosen.plan.was)}
                 </span>
               )}
             </p>
-            <p className="text-[13px] leading-tight text-ink-500">
-              (Taxes Included) <span className="lg:hidden">
-                <br />
-              </span>
-              Per night
+            <p className="truncate text-[12px] leading-tight text-ink-500 sm:text-[13px]">
+              Per night · Taxes included
             </p>
           </div>
 
           <Link
             href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
-            className="btn-primary min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] uppercase tracking-wide lg:min-w-[13rem]"
+            className="btn-primary shrink-0 whitespace-nowrap rounded-lg px-6 py-3.5 text-[14px] uppercase tracking-wide sm:px-8 sm:py-4 lg:min-w-[13rem]"
           >
             Book room
           </Link>

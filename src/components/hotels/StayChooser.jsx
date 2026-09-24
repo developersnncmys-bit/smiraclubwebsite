@@ -29,36 +29,84 @@ function useCommit() {
 }
 
 /**
- * The stay's dates, as a line in the Book Room bar: tap it to change the
- * check-in and check-out.
+ * The stay, as the line above Book Room: the dates on one side and who is
+ * going on the other, each opening its own picker. Both halves are here
+ * because the button underneath books both, and a bar that names only the
+ * dates leaves the party to be taken on trust.
  */
-export function StayDates({ from: initialFrom, to: initialTo }) {
+export function StayDates({
+  from: initialFrom,
+  to: initialTo,
+  adults: initialAdults,
+  rooms: initialRooms,
+  childAges: initialAges = [],
+  stack = false,
+}) {
   const commit = useCommit();
   const [from, setFrom] = useState(initialFrom);
   const [to, setTo] = useState(initialTo);
-  const [open, setOpen] = useState(false);
+  const [adults, setAdults] = useState(initialAdults ?? 2);
+  const [rooms, setRooms] = useState(initialRooms ?? 1);
+  const [childAges, setChildAges] = useState(initialAges);
+  const [open, setOpen] = useState('');
   const nights = Math.max(1, nightsBetween(from, to));
+  const guests = initialAdults !== undefined;
+
+  const who = [
+    plural(adults, 'Adult'),
+    childAges.length ? plural(childAges.length, 'Child', 'Children') : null,
+  ].filter(Boolean).join(', ');
+
+  // Two short lines rather than one long one: at a phone's width a single
+  // line of either half is cut off halfway through, which tells nobody
+  // anything.
+  const half =
+    'flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left transition hover:bg-brand-100 sm:px-5';
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="flex w-full items-center gap-2 border-b border-surface-line bg-brand-50 px-4 py-2.5 text-left text-[13px] font-semibold text-brand-700 transition hover:bg-brand-100 sm:px-6"
-      >
-        <CalendarDays size={16} className="shrink-0" />
-        <span className="min-w-0 flex-1 truncate">
-          Check-in {shortDate(from)} · Check-out {shortDate(to)} · {plural(nights, 'Night')}
-        </span>
-        <span className="inline-flex shrink-0 items-center gap-1 text-action-500">
-          Change <ChevronRight size={15} />
-        </span>
-      </button>
+      {/* Side by side across a phone's bar; one above the other in the
+          desktop card, which is too narrow to hold both across. */}
+      <div className={`flex border-b border-surface-line bg-brand-50 ${stack ? 'flex-col' : 'items-stretch'}`}>
+        <button type="button" onClick={() => setOpen('dates')} className={half}>
+          <CalendarDays size={16} className="shrink-0 text-brand-700" />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[13px] font-semibold leading-tight text-brand-700">
+              {shortDate(from)} – {shortDate(to)}
+            </span>
+            <span className="block truncate text-[11px] leading-tight text-brand-700/70">
+              {plural(nights, 'Night')}
+            </span>
+          </span>
+          <ChevronRight size={15} className="shrink-0 text-action-500" />
+        </button>
+
+        {guests && (
+          <>
+            <span
+              aria-hidden
+              className={stack ? 'mx-3 h-px bg-brand-700/15' : 'my-2 w-px shrink-0 bg-brand-700/15'}
+            />
+            <button type="button" onClick={() => setOpen('guests')} className={half}>
+              <User size={16} className="shrink-0 text-brand-700" />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[13px] font-semibold leading-tight text-brand-700">
+                  {who}
+                </span>
+                <span className="block truncate text-[11px] leading-tight text-brand-700/70">
+                  {plural(rooms, 'Room')}
+                </span>
+              </span>
+              <ChevronRight size={15} className="shrink-0 text-action-500" />
+            </button>
+          </>
+        )}
+      </div>
 
       <DatesPicker
-        open={open}
+        open={open === 'dates'}
         onClose={() => {
-          setOpen(false);
+          setOpen('');
           commit({ from, to });
         }}
         from={from}
@@ -66,6 +114,27 @@ export function StayDates({ from: initialFrom, to: initialTo }) {
         to={to}
         setTo={setTo}
       />
+
+      {guests && (
+        <GuestsPicker
+          open={open === 'guests'}
+          onClose={() => {
+            setOpen('');
+            commit({
+              adults,
+              rooms,
+              children: childAges.length,
+              ages: childAges.length ? childAges.join(',') : '',
+            });
+          }}
+          rooms={rooms}
+          setRooms={setRooms}
+          adults={adults}
+          setAdults={setAdults}
+          childAges={childAges}
+          setChildAges={setChildAges}
+        />
+      )}
     </>
   );
 }

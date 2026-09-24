@@ -120,7 +120,7 @@ export default async function Page({ params, searchParams }) {
           groups={groups}
           defaultPlan={hotel.defaultPlan}
           bookHref={`/hotels/${hotel.id}/book${carry ? `?${carry}` : ''}`}
-          stay={{ from: ymd(from), to: ymd(to) }}
+          stay={{ from: ymd(from), to: ymd(to), adults, rooms, childAges }}
         />
       </div>
 
