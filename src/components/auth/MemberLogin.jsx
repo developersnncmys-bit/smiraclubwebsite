@@ -29,6 +29,7 @@ export default function MemberLogin() {
             // A full load, so the header and every members-only door read the
             // new session.
             onDone={() => window.location.assign(next)}
+            onRegister={() => window.location.assign('/profile/edit')}
             footer={
               <p className="mt-4 text-center text-[14px] text-ink-500">
                 New to Smira Club?{' '}

@@ -102,6 +102,10 @@ export default function AuthPopup() {
           <div className="overflow-y-auto px-5 pb-6 pt-1">
             <AuthFlow
               onDone={() => window.location.reload()}
+              onRegister={() => {
+                close();
+                window.location.assign('/profile/edit');
+              }}
               footer={
                 <p className="mt-3 text-center text-[13px] text-ink-500">
                   Browsing for now?{' '}
