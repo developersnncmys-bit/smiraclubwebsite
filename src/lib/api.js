@@ -42,9 +42,16 @@ export const api = {
     return Boolean(BASE);
   },
 
-  plans: () => request('/membership-plans'),
-  inventory: (query = '') => request(`/inventory${query}`),
-  offers: () => request('/offers'),
+  /**
+   * What the desk is selling, from Travel Inventory on the admin panel —
+   * hotels, villas, restaurants, spas, activities, packages and the rest.
+   * Anything the desk adds there reaches the site without a deploy.
+   */
+  catalog: (query = '') => request(`/website/catalog${query}`, { next: { revalidate: 60 } }),
+  catalogItem: (id) => request(`/website/catalog/${encodeURIComponent(id)}`, { next: { revalidate: 60 } }),
+
+  /** The offers the desk has put live on the panel's Offers page. */
+  deskOffers: () => request('/website/offers', { next: { revalidate: 60 } }),
 
   /**
    * A property owner applying from the Become a Partner page. It lands in the

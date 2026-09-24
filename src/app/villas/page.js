@@ -6,6 +6,8 @@ import VillaCard from '@/components/villas/VillaCard';
 import Section from '@/components/ui/Section';
 import { villaCollections, villaHero, villas } from '@/lib/content';
 import { image } from '@/lib/images';
+import DeskPicks from '@/components/desk/DeskPicks';
+import { deskItems } from '@/lib/desk';
 
 export const metadata = {
   title: 'Villas & Home Stays',
@@ -24,7 +26,10 @@ export const metadata = {
  * The hero slots are resolved here rather than in the carousel because
  * `image()` reads the filesystem, which only the server can do.
  */
-export default function Page() {
+export default async function Page() {
+  /** Whatever the desk has put into Travel Inventory under Villas. */
+  const picks = await deskItems('Villas');
+
   const slides = villaHero.map((s) => ({ ...s, image: image(s.image) }));
   const recommended = villas.map((v) => ({ ...v, image: image(v.image) }));
   const collections = villaCollections.map((c) => ({ ...c, image: image(c.image) }));
@@ -49,6 +54,7 @@ export default function Page() {
           </div>
         </Section>
       </div>
+      <DeskPicks items={picks} title="More villas from Smira" />
     </>
   );
 }

@@ -2,13 +2,18 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import ActivitiesScreen from '@/components/offers/ActivitiesScreen';
 import { spaKinds, spas } from '@/lib/content';
 import { image } from '@/lib/images';
+import DeskPicks from '@/components/desk/DeskPicks';
+import { deskItems } from '@/lib/desk';
 
 export const metadata = {
   title: 'Saloon & Spa',
   description: 'Member discounts at saloons and spas.',
 };
 
-export default function Page() {
+export default async function Page() {
+  /** Whatever the desk has put into Travel Inventory under Spa and salon. */
+  const picks = await deskItems('Spa and salon');
+
   const list = spas.map((s) => ({ ...s, image: image(s.image) }));
   return (
     <>
@@ -21,6 +26,7 @@ export default function Page() {
         placeholder="Search by Saloon & Spa name, location"
         hrefBase="/spa"
       />
+      <DeskPicks items={picks} title="More spas and salons from Smira" />
     </>
   );
 }

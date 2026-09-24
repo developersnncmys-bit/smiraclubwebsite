@@ -2,6 +2,8 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import ActivitiesScreen from '@/components/offers/ActivitiesScreen';
 import { luxuries, luxuryAvailableFrom, luxuryKinds } from '@/lib/content';
 import { image } from '@/lib/images';
+import DeskPicks from '@/components/desk/DeskPicks';
+import { deskItems } from '@/lib/desk';
 
 export const metadata = {
   title: 'Luxury Experiences',
@@ -10,6 +12,9 @@ export const metadata = {
 
 /** `searchParams` is read so "Bookings available from" is worked out per request. */
 export default async function Page({ searchParams }) {
+  /** Whatever the desk has put into Travel Inventory under Experiences. */
+  const picks = await deskItems('Experiences');
+
   await searchParams;
   const list = luxuries.map((l) => ({ ...l, image: image(l.image), availableFrom: luxuryAvailableFrom(l) }));
   return (
@@ -24,6 +29,7 @@ export default async function Page({ searchParams }) {
         placeholder="Search luxury experiences or location"
         hrefBase="/luxury"
       />
+      <DeskPicks items={picks} title="More luxury from Smira" />
     </>
   );
 }
