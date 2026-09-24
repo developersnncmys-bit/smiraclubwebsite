@@ -20,8 +20,9 @@ const OWNS_THE_BOTTOM = [
   /^\/hotels\/hourly\/[^/]+(\/book)?$/,
   // A free stay hotel and its Review Booking; the free stay list keeps the tabs.
   /^\/free-stay\/(?!results$)[^/]+(\/book)?$/,
-  // Detail pages that pin Book Ticket / Book a Table / Book Tickets.
-  /^\/(parks|restaurants|activities|spa|luxury|group-departures)\/[^/]+(\/book)?$/,
+  // Detail pages that pin Book Ticket / Book a Table / Book Tickets. A game
+  // zone and a package pin one too, so the tabs would sit over the button.
+  /^\/(parks|restaurants|activities|spa|luxury|group-departures|games|packages)\/(?!international$)[^/]+(\/book)?$/,
   /^\/profile\/edit$/,
   /^\/membership$/,
 ];

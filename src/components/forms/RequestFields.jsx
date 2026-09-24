@@ -84,7 +84,7 @@ export function Segmented({ options, value, onChange, label, className = '' }) {
             role="tab"
             aria-selected={on}
             onClick={() => onChange(o.key)}
-            className={`rounded-xl py-3 text-[14px] font-semibold transition ${
+            className={`rounded-xl px-2 py-3 text-[13px] font-semibold leading-tight transition sm:text-[14px] ${
               on ? 'border border-brand-700 bg-brand-50 text-brand-700' : 'border border-transparent text-ink-500 hover:text-ink-900'
             }`}
           >
