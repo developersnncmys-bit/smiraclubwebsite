@@ -19,6 +19,14 @@ import { StayDates } from '@/components/hotels/StayChooser';
  */
 export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
   const [picked, setPicked] = useState(defaultPlan);
+  /**
+   * No stay, no booking. Until the dates are actually chosen, Book Room asks
+   * for them rather than carrying a guessed stay through to Review Booking —
+   * bumping this opens the picker in the strip above the button.
+   */
+  const [askDates, setAskDates] = useState(0);
+  const [askDesk, setAskDesk] = useState(0);
+  const needsDates = stay?.chosen === false;
 
   /** The chosen plan, and the room it belongs to. */
   const chosen = groups
@@ -180,16 +188,28 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
                   adults={stay.adults}
                   rooms={stay.rooms}
                   childAges={stay.childAges}
+                  chosen={stay.chosen}
+                  openSignal={askDesk}
                 />
               </div>
             )}
 
-            <Link
-              href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
-              className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
-            >
-              Book room
-            </Link>
+            {needsDates ? (
+              <button
+                type="button"
+                onClick={() => setAskDesk((n) => n + 1)}
+                className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
+              >
+                Book room
+              </button>
+            ) : (
+              <Link
+                href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
+                className="btn-primary mt-4 w-full rounded-lg py-4 text-[14px] uppercase tracking-wide"
+              >
+                Book room
+              </Link>
+            )}
           </div>
         </aside>
       </section>
@@ -212,6 +232,8 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
               adults={stay.adults}
               rooms={stay.rooms}
               childAges={stay.childAges}
+              chosen={stay.chosen}
+              openSignal={askDates}
             />
           )}
           <div
@@ -246,12 +268,22 @@ export default function RoomPicker({ groups, defaultPlan, bookHref, stay }) {
             </p>
           </div>
 
-          <Link
-            href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
-            className="btn-primary shrink-0 whitespace-nowrap rounded-lg px-6 py-3.5 text-[14px] uppercase tracking-wide sm:px-8 sm:py-4 lg:min-w-[13rem]"
-          >
-            Book room
-          </Link>
+          {needsDates ? (
+            <button
+              type="button"
+              onClick={() => setAskDates((n) => n + 1)}
+              className="btn-primary shrink-0 whitespace-nowrap rounded-lg px-6 py-3.5 text-[14px] uppercase tracking-wide sm:px-8 sm:py-4 lg:min-w-[13rem]"
+            >
+              Book room
+            </button>
+          ) : (
+            <Link
+              href={`${bookHref}${bookHref.includes('?') ? '&' : '?'}plan=${picked}`}
+              className="btn-primary shrink-0 whitespace-nowrap rounded-lg px-6 py-3.5 text-[14px] uppercase tracking-wide sm:px-8 sm:py-4 lg:min-w-[13rem]"
+            >
+              Book room
+            </Link>
+          )}
           </div>
         </div>
       </div>

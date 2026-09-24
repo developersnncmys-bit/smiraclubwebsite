@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronRight, Pencil, User } from 'lucide-react';
 import DatesPicker from '@/components/home/DatesPicker';
@@ -41,6 +41,8 @@ export function StayDates({
   rooms: initialRooms,
   childAges: initialAges = [],
   stack = false,
+  chosen = true,
+  openSignal = 0,
 }) {
   const commit = useCommit();
   const [from, setFrom] = useState(initialFrom);
@@ -49,8 +51,17 @@ export function StayDates({
   const [rooms, setRooms] = useState(initialRooms ?? 1);
   const [childAges, setChildAges] = useState(initialAges);
   const [open, setOpen] = useState('');
+  const [picked, setPicked] = useState(false);
   const nights = Math.max(1, nightsBetween(from, to));
   const guests = initialAdults !== undefined;
+  // Until a stay is actually chosen the dates on show would be a guess, and
+  // a guess dressed as a choice is what sends somebody to the wrong nights.
+  const set = chosen || picked;
+
+  // Book Now refuses without dates and asks for them here.
+  useEffect(() => {
+    if (openSignal) setOpen('dates');
+  }, [openSignal]);
 
   const who = [
     plural(adults, 'Adult'),
@@ -72,10 +83,10 @@ export function StayDates({
           <CalendarDays size={16} className="shrink-0 text-brand-700" />
           <span className="min-w-0 flex-1">
             <span className="block truncate text-[13px] font-semibold leading-tight text-brand-700">
-              {shortDate(from)} – {shortDate(to)}
+              {set ? `${shortDate(from)} – ${shortDate(to)}` : 'Select dates'}
             </span>
             <span className="block truncate text-[11px] leading-tight text-brand-700/70">
-              {plural(nights, 'Night')}
+              {set ? plural(nights, 'Night') : 'Check-in · Check-out'}
             </span>
           </span>
           <ChevronRight size={15} className="shrink-0 text-action-500" />
@@ -107,6 +118,7 @@ export function StayDates({
         open={open === 'dates'}
         onClose={() => {
           setOpen('');
+          setPicked(true);
           commit({ from, to });
         }}
         from={from}

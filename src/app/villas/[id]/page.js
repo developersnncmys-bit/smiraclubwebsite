@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import {
-  BadgeCheck, Bed, Calendar, Crown, Expand, Images, Info, MapPin, Navigation,
-  ShieldCheck, User, Users,
+  BadgeCheck, Bed, Crown, Expand, Images, Info, MapPin, Navigation,
+  ShieldCheck, Users,
 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import DetailGallery from '@/components/villas/DetailGallery';
@@ -14,7 +14,8 @@ import {
   villaWhatsIncluded,
 } from '@/lib/content';
 import { image } from '@/lib/images';
-import { shortDate } from '@/lib/format';
+import { StayDates } from '@/components/hotels/StayChooser';
+import { defaultStay, ymd } from '@/lib/format';
 
 /** Every villa the site knows about, from both lists. */
 const ALL = [...villaResults, ...villas];
@@ -29,14 +30,6 @@ export async function generateMetadata({ params }) {
   return villa
     ? { title: villa.name, description: villaDetails[villa.id]?.about }
     : { title: 'Villa not found' };
-}
-
-function stayLabel(from, to) {
-  if (!from || !to) return '29 Aug - 31 Aug';
-  const a = new Date(from);
-  const b = new Date(to);
-  if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return '29 Aug - 31 Aug';
-  return `${shortDate(a)} - ${shortDate(b)}`;
 }
 
 /** A small labelled card, which most of this page is made of. */
@@ -71,9 +64,22 @@ export default async function Page({ params, searchParams }) {
     ...villaAmenities,
   ];
 
-  const when = stayLabel(query.from, query.to);
+  /**
+   * The stay the search carried here. Without one we still need dates to
+   * show a picker around, so a sensible pair stands in — but `hasStay` says
+   * they were never chosen, and Book Now asks before it will go anywhere.
+   */
+  const hasStay = Boolean(query.from && query.to);
+  const fallback = defaultStay();
+  const stayFrom = ymd(query.from ? new Date(query.from) : fallback.from);
+  const stayTo = ymd(query.to ? new Date(query.to) : fallback.to);
   const adults = Number(query.adults) || 2;
   const rooms = Number(query.rooms) || 1;
+  const childAges = String(query.ages || '')
+    .split(',')
+    .filter(Boolean)
+    .map((a) => Number(a))
+    .filter((a) => Number.isInteger(a) && a >= 0 && a <= 17);
   const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(detail.address)}`;
   /** The search that led here rides along, so Review Booking reads the same stay. */
   const carry = new URLSearchParams(query).toString();
@@ -148,20 +154,20 @@ export default async function Page({ params, searchParams }) {
         </Card>
 
 
-        {/* -- The stay ----------------------------------------------- */}
+        {/* -- The stay, the same strip the bar and a hotel's page use -- */}
         <Card>
           <p className="text-center text-[15px] font-bold text-ink-900">
             Check in: {villaStay.checkIn} / Check out: {villaStay.checkOut}
           </p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-              <Calendar size={17} className="shrink-0" />
-              {when}
-            </p>
-            <p className="flex items-center justify-center gap-2 rounded-xl border border-action-500 px-3 py-3 text-[13px] font-semibold text-action-500">
-              <User size={17} className="shrink-0" />
-              {adults} Adults/ {rooms} Room
-            </p>
+          <div className="mt-4 overflow-hidden rounded-xl border border-surface-line">
+            <StayDates
+              from={stayFrom}
+              to={stayTo}
+              adults={adults}
+              rooms={rooms}
+              childAges={childAges}
+              chosen={hasStay}
+            />
           </div>
         </Card>
       </div>
@@ -385,6 +391,7 @@ export default async function Page({ params, searchParams }) {
         was={villa.was}
         taxes={villa.taxes}
         bookHref={`/villas/${villa.id}/book${carry ? `?${carry}` : ''}`}
+        stay={{ from: stayFrom, to: stayTo, adults, rooms, childAges, chosen: hasStay }}
       />
     </div>
   );

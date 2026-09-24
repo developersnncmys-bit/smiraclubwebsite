@@ -63,6 +63,7 @@ export default async function Page({ params, searchParams }) {
 
   const childAges = String(query.ages || '')
     .split(',')
+    .filter(Boolean)
     .map((a) => Number(a))
     .filter((a) => Number.isInteger(a) && a >= 0 && a <= 17);
   const carry = new URLSearchParams({
@@ -120,7 +121,14 @@ export default async function Page({ params, searchParams }) {
           groups={groups}
           defaultPlan={hotel.defaultPlan}
           bookHref={`/hotels/${hotel.id}/book${carry ? `?${carry}` : ''}`}
-          stay={{ from: ymd(from), to: ymd(to), adults, rooms, childAges }}
+          stay={{
+            from: ymd(from),
+            to: ymd(to),
+            adults,
+            rooms,
+            childAges,
+            chosen: Boolean(query.from && query.to),
+          }}
         />
       </div>
 
