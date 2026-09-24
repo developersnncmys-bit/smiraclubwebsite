@@ -60,7 +60,7 @@ export default function IdentityCard() {
             <span className="mt-2.5 flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_AUTH, { detail: 'login' }))}
+                onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[14px] font-bold text-action-500 transition hover:bg-surface-soft"
               >
                 <LogIn size={16} />
@@ -68,7 +68,7 @@ export default function IdentityCard() {
               </button>
               <button
                 type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_AUTH, { detail: 'register' }))}
+                onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
                 className="inline-flex items-center gap-2 rounded-xl border border-white/70 px-4 py-2.5 text-[14px] font-bold text-white transition hover:bg-white/10"
               >
                 <UserPlus size={16} />
