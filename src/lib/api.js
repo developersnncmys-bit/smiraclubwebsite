@@ -54,6 +54,14 @@ export const api = {
   deskOffers: () => request('/website/offers', { next: { revalidate: 60 } }),
 
   /**
+   * Any other service asked for on the site — a trip planned, a visa,
+   * insurance, forex. It lands in the admin panel's Sales & Leads as a new
+   * lead, tagged by service, with every answer on the form written onto it.
+   */
+  enquiry: (form) =>
+    request('/website/enquiry', { method: 'POST', body: form, next: { revalidate: 0 } }),
+
+  /**
    * A property owner applying from the Become a Partner page. It lands in the
    * admin panel's partner onboarding as a registration waiting on papers.
    */

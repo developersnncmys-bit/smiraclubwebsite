@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,9 @@ import Icon from '@/components/ui/Icon';
 import { planTrip as opts, planTripDone, planTripHero } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 import { nightsBetween, shortDate } from '@/lib/format';
+import { api } from '@/lib/api';
+import { useProfile } from '@/lib/profile';
+import { readAttribution } from '@/components/layout/Attribution';
 
 const FIELD =
   'w-full rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[14px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
@@ -92,6 +95,9 @@ export default function PlanTripForm({ hero, doneImage }) {
     mealPlan: opts.mealPlans[0],
     mealType: 'veg',
     needs: '',
+    /** Who the desk calls back — the trip's own name is not a person's. */
+    who: '',
+    phone: '',
   });
   const [companions, setCompanions] = useState([]);
   const [tripTypes, setTripTypes] = useState([]);
@@ -99,6 +105,20 @@ export default function PlanTripForm({ hero, doneImage }) {
   const [extras, setExtras] = useState([]);
   const [errors, setErrors] = useState({});
   const [saved, setSaved] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState('');
+
+  // A signed-in member should not type their own number again.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (!ready || !profile?.details) return;
+    const d = profile.details;
+    setForm((f) =>
+      f.who || f.phone
+        ? f
+        : { ...f, who: d.name || '', phone: String(d.phone || '').replace(/\D/g, '').slice(-10) },
+    );
+  }, [ready, profile]);
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
   const toggle = (list, setList, value) =>
@@ -116,11 +136,52 @@ export default function PlanTripForm({ hero, doneImage }) {
       found.end = 'The end date has to be after the start.';
     }
 
+    if (!form.who.trim()) found.who = 'Tell us who to call.';
+    if (!/^[6-9]\d{9}$/.test(form.phone)) found.phone = 'A 10-digit mobile number, please.';
+
     setErrors(found);
     if (Object.keys(found).length) return;
 
-    setSaved({ ...form, companions, tripTypes, transport, extras });
-    window.scrollTo({ top: 0 });
+    // The plan goes to the travel desk, not just onto this screen.
+    setBusy(true);
+    setFailed('');
+    const say = (v) => (Array.isArray(v) ? v.join(', ') : String(v ?? ''));
+    api
+      .enquiry({
+        service: 'Plan a trip',
+        name: form.who,
+        phone: form.phone,
+        destination: form.to,
+        pax: Number(String(form.party).replace(/\D/g, '')) || undefined,
+        travelDate: form.start,
+        tags: ['Trip plan'],
+        answers: [
+          ['Trip name', form.name],
+          ['From', form.from],
+          ['To', form.to],
+          ['Dates', `${form.start} to ${form.end}`],
+          ['Party size', form.party],
+          ['Travelling with', say(companions)],
+          ['Trip type', say(tripTypes)],
+          ['Occasion', form.occasion],
+          ['Note', form.note],
+          ['Transport', say(transport)],
+          ['Pick-up', `${form.pickupFrom} → ${form.pickupTo}`],
+          ['Sightseeing', form.sightseeing],
+          ['Meals', `${form.mealPlan} (${form.mealType})`],
+          ['Extras', say(extras)],
+          ['Travel needs', form.needs],
+        ].map(([label, value]) => ({ label, value })),
+        attribution: readAttribution(),
+      })
+      .then((res) => {
+        setSaved({ ...form, companions, tripTypes, transport, extras, reference: res.data?.reference });
+        window.scrollTo({ top: 0 });
+      })
+      .catch((err) =>
+        setFailed(err?.status ? err.message : 'We could not reach Smira just now. Please try again in a moment.'),
+      )
+      .finally(() => setBusy(false));
   };
 
   /* -- Saved ------------------------------------------------------ */
@@ -526,11 +587,48 @@ export default function PlanTripForm({ hero, doneImage }) {
           </div>
         </section>
 
+        {/* -- Who the desk calls back ----------------------------------- */}
+        <section className="lg:col-span-2">
+          <Ask icon={Users} title="Who should we call?" note="So our travel desk can plan this with you." />
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <label className="block">
+              <span className="mb-1.5 block text-[13px] font-semibold text-ink-700">Your name *</span>
+              <input
+                value={form.who}
+                onChange={(e) => set('who', e.target.value)}
+                placeholder="Enter your full name"
+                className={FIELD}
+              />
+              {errors.who && <span className="mt-1 block text-[13px] text-red-600">{errors.who}</span>}
+            </label>
+
+            <label className="block">
+              <span className="mb-1.5 block text-[13px] font-semibold text-ink-700">Mobile number *</span>
+              <input
+                value={form.phone}
+                onChange={(e) => set('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                inputMode="numeric"
+                placeholder="10-digit mobile number"
+                className={FIELD}
+              />
+              {errors.phone && <span className="mt-1 block text-[13px] text-red-600">{errors.phone}</span>}
+            </label>
+          </div>
+
+          {failed && (
+            <p role="alert" className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600">
+              {failed}
+            </p>
+          )}
+        </section>
+
         <button
           type="submit"
-          className="btn-primary mt-4 w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:col-span-2 lg:w-auto lg:justify-self-start lg:px-10 lg:py-3.5"
+          disabled={busy}
+          className="btn-primary mt-4 w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal disabled:opacity-60 lg:col-span-2 lg:w-auto lg:justify-self-start lg:px-10 lg:py-3.5"
         >
-          Save My Trip
+          {busy ? 'Sending…' : 'Save My Trip'}
           <ArrowRight size={19} />
         </button>
       </div>

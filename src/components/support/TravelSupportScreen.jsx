@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { CountedText, FormField, INPUT, RequestSent } from '@/components/forms/RequestFields';
 import { travelSupportCommon, travelSupportHero, travelSupportTabs } from '@/lib/content';
+import { api } from '@/lib/api';
+import { readAttribution } from '@/components/layout/Attribution';
 
 const DATE_ICON = 'Calendar';
 
@@ -16,14 +18,17 @@ const DATE_ICON = 'Calendar';
  * the required fields, a ten-digit number, and that a return date is not
  * before the date it returns from.
  *
- * There is no support desk API yet, so a sent request confirms on screen and
- * goes nowhere; that is the one line to change when there is.
+ * Send Request reaches the desk: it lands in the admin panel's Sales & Leads
+ * as a new lead, tagged with the service asked for and carrying every answer
+ * on the tab. Nobody has to be signed in — the number is the way back.
  */
 export default function TravelSupportScreen() {
   const [tab, setTab] = useState(travelSupportTabs[0].key);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState('');
 
   const current = travelSupportTabs.find((t) => t.key === tab);
   const form = values[tab] || {};
@@ -53,7 +58,28 @@ export default function TravelSupportScreen() {
     }
     setErrors(found);
     if (Object.keys(found).length) return;
-    setSent({ label: current.label, phone: form.phone });
+
+    // Every answer on this tab, labelled, so the desk reads the form itself.
+    setBusy(true);
+    setFailed('');
+    api
+      .enquiry({
+        service: current.label,
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        destination: form.destination,
+        travelDate: form.travelDate,
+        pax: form.travellers,
+        tags: ['Travel support'],
+        answers: fields.map((f) => ({ label: f.label, value: String(valueOf(f)) })),
+        attribution: readAttribution(),
+      })
+      .then((res) => setSent({ label: current.label, phone: form.phone, reference: res.data?.reference }))
+      .catch((err) =>
+        setFailed(err?.status ? err.message : 'We could not reach Smira just now. Please try again in a moment.'),
+      )
+      .finally(() => setBusy(false));
   };
 
   const control = (f) => {
@@ -133,7 +159,7 @@ export default function TravelSupportScreen() {
         <div className="shell py-7 lg:py-10">
           {sent ? (
             <RequestSent
-              body={`Your ${sent.label} request is with our travel desk. We will call you on ${sent.phone} within one working day.`}
+              body={`Your ${sent.label} request is with our travel desk${sent.reference ? ` — reference ${sent.reference}` : ''}. We will call you on ${sent.phone} within one working day.`}
               onReset={() => {
                 setValues((all) => ({ ...all, [tab]: {} }));
                 setSent(null);
@@ -179,11 +205,18 @@ export default function TravelSupportScreen() {
                 </div>
               </div>
 
+              {failed && (
+                <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600">
+                  {failed}
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="btn-primary mt-8 w-full justify-between rounded-xl px-6 py-3.5 text-[15px] normal-case tracking-normal lg:w-auto lg:min-w-[18rem] lg:gap-10"
+                disabled={busy}
+                className="btn-primary mt-8 w-full justify-between rounded-xl px-6 py-3.5 text-[15px] normal-case tracking-normal disabled:opacity-60 lg:w-auto lg:min-w-[18rem] lg:gap-10"
               >
-                <span className="flex-1 text-center">Send Request</span>
+                <span className="flex-1 text-center">{busy ? 'Sending…' : 'Send Request'}</span>
                 <ArrowRight size={18} />
               </button>
             </form>
