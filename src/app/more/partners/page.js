@@ -9,7 +9,7 @@ import {
   Landmark,
   Users,
 } from 'lucide-react';
-import ApplyForm from '@/components/partners/ApplyForm';
+import PartnerWizard from '@/components/partners/PartnerWizard';
 import { image } from '@/lib/images';
 
 export const metadata = {
@@ -178,8 +178,9 @@ export default function Page() {
             <div className="lg:col-span-4 lg:sticky lg:top-24">
               <h2 className="section-title">Apply to partner</h2>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-500">
-                It takes about three minutes. Only the property name, city and a phone number are
-                required — our desk collects the rest when they call.
+                Five short steps — your property, its rooms, what it offers, your rates and the
+                paperwork. Only the property name and a phone number are needed to send it; our
+                desk collects whatever is missing when they call.
               </p>
 
               <div className="card mt-5 p-5">
@@ -201,7 +202,7 @@ export default function Page() {
             </div>
 
             <div className="mt-6 lg:col-span-8 lg:mt-0">
-              <ApplyForm />
+              <PartnerWizard />
             </div>
           </div>
         </section>
