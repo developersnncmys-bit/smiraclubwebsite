@@ -37,8 +37,28 @@ const years = (months) => {
 };
 
 /**
- * One website plan with the admin panel's numbers laid over it. The Crown's
- * persons read "16+" on the Figma, so the top tier keeps its plus.
+ * The colours a plan may wear, named on the admin panel and drawn here. The
+ * website's own tier colours stay the fallback, so a plan the desk has never
+ * given a colour looks exactly as it always did.
+ */
+const ACCENTS = {
+  slate: { tone: 'from-[#8e969d] to-[#c4c9cd]', accent: '#5f686f', soft: '#f1f3f4' },
+  amber: { tone: 'from-[#b8860b] to-[#dca72a]', accent: '#b8860b', soft: '#fdf6e3' },
+  violet: { tone: 'from-[#5b4a9c] to-[#8f7fd4]', accent: '#5b4a9c', soft: '#f3f0fb' },
+  brand: { tone: 'from-[#1b3a6b] to-[#2f6fb8]', accent: '#1b3a6b', soft: '#eef3fa' },
+  sky: { tone: 'from-[#0f6f8c] to-[#4bb3cf]', accent: '#0f6f8c', soft: '#ecf7fa' },
+  emerald: { tone: 'from-[#12674a] to-[#3fa981]', accent: '#12674a', soft: '#ecf7f2' },
+  rose: { tone: 'from-[#9c2a4f] to-[#d76a8c]', accent: '#9c2a4f', soft: '#fcf0f4' },
+};
+
+/**
+ * One website plan with the admin panel's plan laid over it.
+ *
+ * Whatever the desk has filled in wins — the name, the tagline, the price,
+ * the colour, the features and the gifts — and whatever it has left empty
+ * falls back to the website's own copy, so no field is ever blank because
+ * nobody has got round to it. The Crown's persons read "16+" on the Figma,
+ * so the top tier keeps its plus.
  */
 function fromDesk(p, d) {
   const persons = Number(d.persons) || 0;
@@ -50,11 +70,18 @@ function fromDesk(p, d) {
     'Covered per stay': persons ? `${persons}${p.key === 'crown' ? '+' : ''} Persons` : null,
     'Allowed Per Booking': rooms ? `${rooms} Room${rooms === 1 ? '' : 's'}` : null,
   };
+
   return {
     ...p,
+    ...(ACCENTS[d.accent] || {}),
+    label: d.name?.trim() || p.label,
+    audience: d.tagline?.trim() || p.audience,
     fee: Number(d.price) || p.fee,
+    discount: Number(d.discount) || 0,
     popular: Boolean(d.popular),
     privileges: Number(d.privileges) || p.privileges,
+    features: Array.isArray(d.features) ? d.features.filter(Boolean) : [],
+    gifts: Array.isArray(d.gifts) ? d.gifts.filter(Boolean) : [],
     stats: p.stats.map((s) => ({ ...s, figure: figures[s.note] || s.figure })),
   };
 }
@@ -95,8 +122,12 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
     api.websitePlans()
       .then((res) => {
         if (!live || !Array.isArray(res.data)) return;
-        setPlans(membershipPlans.map((p) => {
-          const desk = res.data.find((d) => d.name?.toLowerCase().startsWith(p.key));
+        // By tier name where the desk has kept one — "Gold Voyager" is our
+        // gold — and otherwise by position, cheapest first, so a plan the
+        // desk has renamed outright still lands somewhere sensible.
+        setPlans(membershipPlans.map((p, i) => {
+          const named = res.data.find((d) => (d.name || '').toLowerCase().includes(p.key));
+          const desk = named || res.data[i];
           return desk ? fromDesk(p, desk) : p;
         }));
       })
@@ -327,6 +358,47 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                   </div>
                 ))}
               </dl>
+
+              {/* What the desk put on this plan. Nothing added, nothing shown. */}
+              {plan.discount > 0 && (
+                <p
+                  className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px] font-bold"
+                  style={{ background: plan.soft, color: plan.accent }}
+                >
+                  {plan.discount}% off every package, for as long as you are a member
+                </p>
+              )}
+
+              {plan.features?.length > 0 && (
+                <>
+                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">Included in this plan</h3>
+                  <ul className="mt-2.5 space-y-2">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-[14px] leading-snug text-ink-700">
+                        <Check size={16} className="mt-0.5 shrink-0" style={{ color: plan.accent }} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {plan.gifts?.length > 0 && (
+                <>
+                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">Gifts for members</h3>
+                  <ul className="mt-2.5 flex flex-wrap gap-2">
+                    {plan.gifts.map((g) => (
+                      <li
+                        key={g}
+                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold"
+                        style={{ background: plan.soft, color: plan.accent }}
+                      >
+                        <Gift size={14} /> {g}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
               <div className="mt-6 flex items-center justify-between gap-4">
                 <span className="text-[15px] font-semibold text-ink-900">Membership fee</span>
