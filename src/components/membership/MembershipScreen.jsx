@@ -74,7 +74,13 @@ function fromDesk(p, d) {
   return {
     ...p,
     ...(ACCENTS[d.accent] || {}),
-    label: d.name?.trim() || p.label,
+    /**
+     * The chip keeps the short tier word the design draws — three of "Gold
+     * Voyager" across a phone wraps to two lines each and shoulders the
+     * third tier off the screen. The desk's full name heads the card below,
+     * where there is room for it.
+     */
+    title: d.name?.trim() || p.title,
     audience: d.tagline?.trim() || p.audience,
     fee: Number(d.price) || p.fee,
     discount: Number(d.discount) || 0,
