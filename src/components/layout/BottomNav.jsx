@@ -7,6 +7,7 @@ import { primaryNav } from '@/lib/content';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import { OPEN_AUTH } from '@/components/auth/AuthPopup';
+import { hasAccount } from '@/lib/account';
 
 /**
  * Screens that pin their own price bar to the bottom: a property's page and
@@ -35,7 +36,9 @@ export default function BottomNav() {
   // before the early return, because hooks cannot be skipped.
   const { profile } = useProfile();
   const { membership } = useMembership();
-  const signedIn = Boolean(profile?.details?.name?.trim() || isMember(membership));
+  // The same test the sheet uses, so the two cannot disagree about whether
+  // somebody is signed in — which is how the sheet came to greet members.
+  const signedIn = hasAccount(profile, membership);
   const asAccount = (item) =>
     item.key === 'account' && !signedIn ? { ...item, label: 'Log in', href: '/login' } : item;
 

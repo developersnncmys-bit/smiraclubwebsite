@@ -6,6 +6,7 @@ import { member } from '@/lib/content';
 import { useProfile } from '@/lib/profile';
 import { isMember, useMembership } from '@/lib/membership';
 import { OPEN_AUTH } from '@/components/auth/AuthPopup';
+import { hasAccount } from '@/lib/account';
 
 /** The blue card the screen opens on — who you are, and the way to edit it. */
 export default function IdentityCard() {
@@ -13,7 +14,9 @@ export default function IdentityCard() {
   const { profile } = useProfile();
   const { membership } = useMembership();
   // Nobody signed in on this device yet: the card offers the way in instead.
-  const signedIn = Boolean(profile?.details?.name?.trim() || isMember(membership));
+  // The same test the sheet uses, so the two cannot disagree about whether
+  // somebody is signed in — which is how the sheet came to greet members.
+  const signedIn = hasAccount(profile, membership);
   const name = profile?.details?.name?.trim() || (signedIn ? member.name : 'there');
   const phone = profile?.details?.phone?.trim() || (signedIn ? member.phone : 'Not signed in');
   const photo = profile?.photo;

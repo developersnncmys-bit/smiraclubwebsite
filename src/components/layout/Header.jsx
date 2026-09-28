@@ -5,7 +5,6 @@ import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
-import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 import ProfileDot from '@/components/layout/ProfileDot';
 
 /**
@@ -24,7 +23,6 @@ export default function Header() {
     ? { label: `${membership.plan} Member`, href: '/membership' }
     : { label: 'Become a Member', href: '/membership' };
   const { profile } = useProfile();
-  const signedIn = Boolean(profile?.details?.name || isMember(membership));
 
   return (
     <header className="sticky top-0 z-40 border-b border-surface-line bg-white/95 backdrop-blur pt-safe">
@@ -69,18 +67,6 @@ export default function Header() {
 
             <ProfileDot profile={profile} size={36} />
 
-            {/*
-              The bottom tab bar is a phone idea, so More has no way in on a
-              desktop without this — and More is where the policies, the
-              guidelines and the FAQs live.
-            */}
-            <Link
-              href="/more"
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition hover:bg-surface-soft hover:text-ink-900"
-            >
-              More
-            </Link>
-
             <Link
               href="/notifications"
               className="relative grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"
@@ -90,20 +76,15 @@ export default function Header() {
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500" />
             </Link>
 
-            {/* Signed in on this device or not — the number is the account. */}
-            {signedIn ? (
-              <Link href="/profile" className="btn-primary py-2.5">
-                My account
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
-                className="btn-primary py-2.5"
-              >
-                Log in
-              </button>
-            )}
+            {/*
+              One way in, signed in or not: the account page. Logging in and
+              registering happen there, and in the sheet — a header that says
+              "Log in" is a third place to keep in step with the other two,
+              and it went out of step.
+            */}
+            <Link href="/profile" className="btn-primary py-2.5">
+              Account
+            </Link>
           </div>
         </div>
       </div>

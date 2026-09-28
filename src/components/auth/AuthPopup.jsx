@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 import Portal from '@/components/ui/Portal';
 import AuthFlow from '@/components/auth/AuthFlow';
-import { isComplete, loadProfile } from '@/lib/profile';
-import { isMember, loadMembership } from '@/lib/membership';
+import { hasAccount } from '@/lib/account';
 
 /**
  * The way in, over whatever page they are on.
@@ -44,7 +43,15 @@ export default function AuthPopup() {
     return () => window.removeEventListener(OPEN_AUTH, show);
   }, []);
 
-  /** Once a visit, on the home page, and never to somebody already signed in. */
+  /**
+   * Once a visit, on the home page, and never to somebody who already has
+   * an account.
+   *
+   * It waits. Asking somebody to sign in a second after they arrive is
+   * asking before they know what they would be signing into, so it holds
+   * for ten seconds — or until they scroll, which says they are interested
+   * without having to wait out the clock.
+   */
   useEffect(() => {
     if (window.location.pathname !== '/') return undefined;
     let dismissed = false;
@@ -53,9 +60,27 @@ export default function AuthPopup() {
     } catch {
       dismissed = false;
     }
-    if (dismissed || isComplete(loadProfile()) || isMember(loadMembership())) return undefined;
-    const timer = setTimeout(() => setOpen(true), 1200);
-    return () => clearTimeout(timer);
+    if (dismissed || hasAccount()) return undefined;
+
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      window.removeEventListener('scroll', onScroll);
+      setOpen(true);
+    };
+    // Past the hero is a real look, not a stray wheel nudge on arrival.
+    function onScroll() {
+      if (window.scrollY > 400) show();
+    }
+
+    const timer = setTimeout(show, 10000);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      done = true;
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   // Escape closes it, and the page behind it stays still.
