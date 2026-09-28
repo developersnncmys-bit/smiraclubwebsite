@@ -42,6 +42,13 @@ const years = (months) => {
  * given a colour looks exactly as it always did.
  */
 const ACCENTS = {
+  // The five the site was designed in, to the exact value.
+  silver: { tone: 'from-[#8e969d] to-[#c4c9cd]', accent: '#5f686f', soft: '#f1f3f4' },
+  gold: { tone: 'from-[#b8860b] to-[#dca72a]', accent: '#b8860b', soft: '#fdf6e3' },
+  platinum: { tone: 'from-[#4f6c80] to-[#8ea3b1]', accent: '#4f6c80', soft: '#eef2f5' },
+  diamond: { tone: 'from-[#1f8f98] to-[#4cbcc1]', accent: '#1f8f98', soft: '#e8f7f8' },
+  crown: { tone: 'from-[#3a1348] to-[#a4501c]', accent: '#6e2a4f', soft: '#f7eef2' },
+  // And a few more, for a plan that is not one of the five.
   slate: { tone: 'from-[#8e969d] to-[#c4c9cd]', accent: '#5f686f', soft: '#f1f3f4' },
   amber: { tone: 'from-[#b8860b] to-[#dca72a]', accent: '#b8860b', soft: '#fdf6e3' },
   violet: { tone: 'from-[#5b4a9c] to-[#8f7fd4]', accent: '#5b4a9c', soft: '#f3f0fb' },
@@ -75,13 +82,15 @@ function fromDesk(p, d) {
     ...p,
     ...(ACCENTS[d.accent] || {}),
     /**
-     * The chip keeps the short tier word the design draws — three of "Gold
-     * Voyager" across a phone wraps to two lines each and shoulders the
-     * third tier off the screen. The desk's full name heads the card below,
-     * where there is room for it.
+     * The chip wants one short word — three of "Gold Voyager" across a phone
+     * wraps to two lines each and shoulders the third tier off the screen —
+     * so the desk sets that separately from the full name, which heads the
+     * card below where there is room for it.
      */
+    label: d.shortLabel?.trim() || p.label,
     title: d.name?.trim() || p.title,
     audience: d.tagline?.trim() || p.audience,
+    blurb: d.blurb?.trim() || p.blurb,
     fee: Number(d.price) || p.fee,
     discount: Number(d.discount) || 0,
     popular: Boolean(d.popular),
