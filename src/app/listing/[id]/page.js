@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { BedDouble, Check, Clock, MapPin, Tag } from 'lucide-react';
 import ScreenBar from '@/components/ui/ScreenBar';
 import DeskBooking from '@/components/desk/DeskBooking';
+import CountView from '@/components/desk/CountView';
 import NeedHelp from '@/components/ui/NeedHelp';
 import { deskItem } from '@/lib/desk';
 import { inr } from '@/lib/format';
@@ -36,6 +37,7 @@ export default async function Page({ params }) {
   return (
     <div className="pb-10">
       <ScreenBar title={item.name} backHref="/" />
+      <CountView id={item.id} />
 
       <div className="relative aspect-[16/10] w-full sm:aspect-[21/9]">
         <Image src={photos[0]} alt={item.name} fill sizes="100vw" priority className="object-cover" />

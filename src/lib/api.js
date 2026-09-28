@@ -92,6 +92,13 @@ export const api = {
     request('/website/booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
 
   /**
+   * Somebody opened a listing. It is a tally for the partner's Performance
+   * page, so it is sent and forgotten — the reply carries nothing.
+   */
+  countListingView: (id) =>
+    request(`/website/catalog/${encodeURIComponent(id)}/view`, { method: 'POST', next: { revalidate: 0 } }),
+
+  /**
    * A membership bought on the membership page. It lands on the admin
    * panel's Members page as new, payment pending, for the desk to activate.
    */
