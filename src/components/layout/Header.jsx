@@ -6,6 +6,7 @@ import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import { OPEN_AUTH } from '@/components/auth/AuthPopup';
+import ProfileDot from '@/components/layout/ProfileDot';
 
 /**
  * One header, two shapes.
@@ -42,7 +43,10 @@ export default function Header() {
               {memberBadge.label}
             </Link>
 
-            <Link href="/notifications" className="relative -mr-1 p-2" aria-label="Notifications">
+            {/* Who you are, and how much of that this site knows. */}
+            <ProfileDot profile={profile} />
+
+            <Link href="/notifications" className="relative -mr-2 p-2" aria-label="Notifications">
               <Bell size={21} className="text-ink-700" />
               <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                 1
@@ -62,6 +66,8 @@ export default function Header() {
             >
               {memberBadge.label}
             </Link>
+
+            <ProfileDot profile={profile} size={36} />
 
             {/*
               The bottom tab bar is a phone idea, so More has no way in on a

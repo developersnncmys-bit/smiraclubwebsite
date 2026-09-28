@@ -5,6 +5,22 @@
 @layer base {
   :root {
     --font-sans: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+
+    /*
+     * How tall the sticky header actually is — its row, its hairline border
+     * and the notch above it. Anything that sticks beneath it offsets by
+     * this instead of a number somebody typed, which is how a detail page
+     * came to show a sliver of itself sliding through the seam.
+     */
+    --header-h: calc(3rem + 1px + env(safe-area-inset-top));
+    /* The title bar that sticks directly under the header, at every size. */
+    --title-h: calc(3rem + 1px);
+  }
+
+  @screen lg {
+    :root {
+      --header-h: calc(3.5rem + 1px + env(safe-area-inset-top));
+    }
   }
 
   html {

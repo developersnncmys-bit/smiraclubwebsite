@@ -79,18 +79,29 @@ export function profileForBooking(p) {
  * details, a birthday, the anniversary, and the address line, city and
  * pincode. Nothing saved yet is 0%.
  */
-export function profileCompletion(p) {
+function profileChecks(p) {
   const filled = (v) => Boolean(String(v ?? '').trim());
   const b = (p?.birthdays || []).find((x) => filled(x.dob)) || {};
-  const checks = [
-    filled(p?.details?.name),
-    /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p?.details?.email?.trim() || ''),
-    /^\d{10}$/.test((p?.details?.phone || '').replace(/\D/g, '').slice(-10)),
-    filled(b.dob),
-    filled(p?.anniversary?.date),
-    filled(p?.address?.line1),
-    filled(p?.address?.city),
-    filled(p?.address?.pincode),
+  return [
+    ['Your name', filled(p?.details?.name)],
+    ['Email address', /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p?.details?.email?.trim() || '')],
+    ['Mobile number', /^\d{10}$/.test((p?.details?.phone || '').replace(/\D/g, '').slice(-10))],
+    ['Date of birth', filled(b.dob)],
+    ['Anniversary', filled(p?.anniversary?.date)],
+    ['Address', filled(p?.address?.line1)],
+    ['City', filled(p?.address?.city)],
+    ['PIN code', filled(p?.address?.pincode)],
   ];
-  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}
+
+export function profileCompletion(p) {
+  const checks = profileChecks(p);
+  return Math.round((checks.filter(([, ok]) => ok).length / checks.length) * 100);
+}
+
+/** What is still missing, named the way the profile form names it. */
+export function profileGaps(p) {
+  return profileChecks(p)
+    .filter(([, ok]) => !ok)
+    .map(([label]) => label);
 }

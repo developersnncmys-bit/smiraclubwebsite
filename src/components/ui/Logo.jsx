@@ -21,7 +21,7 @@ export default function Logo({ className = '', compact = false }) {
       <Image
         src="/img/smira-logo.svg"
         alt="Smira Club"
-        width={360}
+        width={298}
         height={82}
         priority
         className={compact ? 'h-7 w-auto' : 'h-9 w-auto lg:h-10'}
