@@ -113,6 +113,62 @@ export function CaptionField({ icon, caption, className = '', children }) {
   );
 }
 
+/**
+ * Who is asking: the name, number and email a request cannot be answered
+ * without.
+ *
+ * A flight or a train has no membership behind it and no sign-in, so the
+ * desk gets nothing but a route unless the screen asks here. A saved profile
+ * fills it in, and someone who has one never types it twice.
+ */
+export function ContactFields({ value, onChange, note = 'So the desk can call you back with fares.' }) {
+  const set = (key) => (e) => onChange({ ...value, [key]: e.target.value });
+  return (
+    <div className="space-y-2.5 pt-2">
+      <p className="text-[15px] font-medium uppercase text-ink-900">Your Details</p>
+      <div className="grid gap-3 lg:grid-cols-3">
+        <CaptionField icon="User" caption="Full Name">
+          <input
+            value={value.name}
+            onChange={set('name')}
+            placeholder="Your name"
+            aria-label="Your name"
+            autoComplete="name"
+            className={CONTACT_INPUT}
+          />
+        </CaptionField>
+        <CaptionField icon="Phone" caption="Mobile Number">
+          <input
+            type="tel"
+            inputMode="numeric"
+            value={value.phone}
+            onChange={set('phone')}
+            placeholder="10-digit mobile"
+            aria-label="Mobile number"
+            autoComplete="tel"
+            className={CONTACT_INPUT}
+          />
+        </CaptionField>
+        <CaptionField icon="Mail" caption="Email">
+          <input
+            type="email"
+            value={value.email}
+            onChange={set('email')}
+            placeholder="you@example.com"
+            aria-label="Email address"
+            autoComplete="email"
+            className={CONTACT_INPUT}
+          />
+        </CaptionField>
+      </div>
+      <p className="text-[12px] text-ink-500">{note}</p>
+    </div>
+  );
+}
+
+const CONTACT_INPUT =
+  'w-full min-w-0 border-0 bg-transparent p-0 text-[14px] font-medium text-ink-900 outline-none placeholder:text-ink-400 sm:text-[15px]';
+
 /** What replaces a form once it has been sent. */
 export function RequestSent({ title = 'Request sent', body, onReset, resetLabel = 'Send another request' }) {
   return (

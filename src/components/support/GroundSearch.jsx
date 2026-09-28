@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar, Minus, Plus, User } from 'lucide-react';
-import { CaptionField, RequestSent, Segmented } from '@/components/forms/RequestFields';
+import { CaptionField, ContactFields, RequestSent, Segmented } from '@/components/forms/RequestFields';
+import { api } from '@/lib/api';
+import { profileForBooking, useProfile } from '@/lib/profile';
 import { groundModes } from '@/lib/content';
 import { fullDate, weekday } from '@/lib/format';
 
@@ -30,16 +32,59 @@ export default function GroundSearch() {
   const [to, setTo] = useState('');
   const [date, setDate] = useState(todayIso);
   const [travellers, setTravellers] = useState(1);
+  const [who, setWho] = useState({ name: '', phone: '', email: '' });
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+
+  // A saved profile answers this already; nobody should type it twice.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (ready && profile?.details) {
+      setWho((w) => ({
+        name: w.name || profile.details.name || '',
+        phone: w.phone || profile.details.phone || '',
+        email: w.email || profile.details.email || '',
+      }));
+    }
+  }, [ready, profile]);
 
   const current = groundModes.find((m) => m.key === mode);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!from.trim() || !to.trim()) return setError(`Tell us where you are travelling from and to.`);
+    if (busy) return;
+    if (!from.trim() || !to.trim()) return setError('Tell us where you are travelling from and to.');
     if (from.trim().toLowerCase() === to.trim().toLowerCase()) return setError('The two places are the same.');
+    if (who.name.trim().length < 2) return setError('Tell us who is travelling.');
+    if (!/^[6-9]d{9}$/.test(who.phone.replace(/D/g, '').slice(-10))) return setError('A 10-digit mobile number, please.');
+    if (who.email.trim() && !/^S+@S+.S+$/.test(who.email.trim())) return setError('That email does not look right.');
+
     setError('');
+    setBusy(true);
+    try {
+      // It goes to the desk as a Transport booking, and — since nobody is
+      // signed in here — raises the sales call alongside it.
+      await api.websiteBooking({
+        name: who.name,
+        phone: who.phone,
+        email: who.email.trim() || undefined,
+        kind: mode,
+        itemName: `${current.label}: ${from.trim()} to ${to.trim()}`,
+        location: to.trim(),
+        slot: `${fullDate(date)}, ${weekday(date)}`,
+        nights: `${travellers} traveller${travellers === 1 ? '' : 's'}`,
+        pax: travellers,
+        total: 0,
+        checkIn: date,
+        profile: profileForBooking(profile),
+      });
+    } catch (err) {
+      setBusy(false);
+      setError(err?.message || 'That did not send. Please try again.');
+      return;
+    }
+    setBusy(false);
     return setSent(true);
   };
 
@@ -120,10 +165,12 @@ export default function GroundSearch() {
         </CaptionField>
       </div>
 
+      <ContactFields value={who} onChange={setWho} note="So the desk can call you back with times and fares." />
+
       {error && <p role="alert" className="text-[14px] font-medium text-red-600">{error}</p>}
 
-      <button type="submit" className="btn-primary mt-3 w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal lg:w-auto lg:px-16">
-        Send Request
+      <button type="submit" disabled={busy} className="btn-primary mt-3 w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal disabled:opacity-60 lg:w-auto lg:px-16">
+        {busy ? 'Sending…' : 'Send Request'}
       </button>
     </form>
   );

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Minus, Plus, User, X } from 'lucide-react';
-import { CaptionField, RequestSent, Segmented } from '@/components/forms/RequestFields';
+import { CaptionField, ContactFields, RequestSent, Segmented } from '@/components/forms/RequestFields';
+import { api } from '@/lib/api';
+import { profileForBooking, useProfile } from '@/lib/profile';
 import { cabinClasses, flightOffers, flightTrips } from '@/lib/content';
 import { fullDate, weekday } from '@/lib/format';
 
@@ -54,13 +56,28 @@ export default function FlightSearch() {
   const [travellers, setTravellers] = useState(1);
   const [cabin, setCabin] = useState(cabinClasses[0]);
   const [offer, setOffer] = useState('student');
+  const [who, setWho] = useState({ name: '', phone: '', email: '' });
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+
+  // A saved profile answers this already; nobody should type it twice.
+  const { ready, profile } = useProfile();
+  useEffect(() => {
+    if (ready && profile?.details) {
+      setWho((w) => ({
+        name: w.name || profile.details.name || '',
+        phone: w.phone || profile.details.phone || '',
+        email: w.email || profile.details.email || '',
+      }));
+    }
+  }, [ready, profile]);
 
   const setLeg = (i, key, value) => setLegs((all) => all.map((l, n) => (n === i ? { ...l, [key]: value } : l)));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (busy) return;
     const route = trip === 'multi' ? legs : [{ from, to, date: depart }];
     if (route.some((l) => !l.from.trim() || !l.to.trim())) {
       setError('Tell us where you are flying from and to.');
@@ -74,7 +91,49 @@ export default function FlightSearch() {
       setError('The return date is before the departure.');
       return;
     }
+    if (who.name.trim().length < 2) {
+      setError('Tell us who is flying.');
+      return;
+    }
+    if (!/^[6-9]d{9}$/.test(who.phone.replace(/D/g, '').slice(-10))) {
+      setError('A 10-digit mobile number, please.');
+      return;
+    }
+    if (who.email.trim() && !/^S+@S+.S+$/.test(who.email.trim())) {
+      setError('That email does not look right.');
+      return;
+    }
+
+    const legText = route.map((l) => `${l.from.trim()} to ${l.to.trim()}`).join(', then ');
+    const when = trip === 'round'
+      ? `${fullDate(depart)} — back ${fullDate(back)}`
+      : route.map((l) => fullDate(l.date)).join(' · ');
+
     setError('');
+    setBusy(true);
+    try {
+      // It goes to the desk as a Transport booking, and — since nobody is
+      // signed in here — raises the sales call alongside it.
+      await api.websiteBooking({
+        name: who.name,
+        phone: who.phone,
+        email: who.email.trim() || undefined,
+        kind: 'flight',
+        itemName: `Flight: ${legText}`,
+        location: route[route.length - 1].to.trim(),
+        slot: when,
+        nights: `${flightTrips.find((t) => t.key === trip)?.label || trip} · ${cabin} · ${travellers} traveller${travellers === 1 ? '' : 's'}${offer ? ` · ${flightOffers.find((o) => o.key === offer)?.label || offer}` : ''}`,
+        pax: travellers,
+        total: 0,
+        checkIn: route[0].date,
+        profile: profileForBooking(profile),
+      });
+    } catch (err) {
+      setBusy(false);
+      setError(err?.message || 'That did not send. Please try again.');
+      return;
+    }
+    setBusy(false);
     setSent(true);
   };
 
@@ -188,10 +247,12 @@ export default function FlightSearch() {
         })}
       </div>
 
+      <ContactFields value={who} onChange={setWho} note="So the desk can call you back with fares." />
+
       {error && <p role="alert" className="text-[14px] font-medium text-red-600">{error}</p>}
 
-      <button type="submit" className="btn-primary mt-3 w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal lg:w-auto lg:px-16">
-        Send Request
+      <button type="submit" disabled={busy} className="btn-primary mt-3 w-full rounded-xl py-3.5 text-[16px] normal-case tracking-normal disabled:opacity-60 lg:w-auto lg:px-16">
+        {busy ? 'Sending…' : 'Send Request'}
       </button>
     </form>
   );

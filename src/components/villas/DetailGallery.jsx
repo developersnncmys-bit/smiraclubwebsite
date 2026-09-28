@@ -4,7 +4,8 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useWishlist } from '@/lib/wishlist';
-import { ArrowLeft, Heart, Share2, Star } from 'lucide-react';
+import { ArrowLeft, Heart, Images, Share2, Star } from 'lucide-react';
+import GalleryViewer from '@/components/ui/GalleryViewer';
 
 /**
  * The photo at the top of a villa's page, with the screen's own controls
@@ -25,6 +26,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
   const { has, toggle } = useWishlist();
   const saved = has(pathname);
   const [copied, setCopied] = useState(false);
+  const [gallery, setGallery] = useState(false);
   const touchX = useRef(null);
   const onTouchStart = (e) => {
     touchX.current = e.touches[0].clientX;
@@ -58,7 +60,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
 
   return (
     <>
-    <div className="sticky top-14 z-30 border-b border-surface-line bg-white lg:top-[68px]">
+    <div className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white">
       <div className="shell flex h-12 items-center gap-2">
         <button
           type="button"
@@ -153,8 +155,28 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
             ))}
           </div>
         )}
+
+        {/* One photo at a time is the hero's job; this is how you see the
+            rest without swiping through them one by one. */}
+        <button
+          type="button"
+          onClick={() => setGallery(true)}
+          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-lg bg-black/60 px-3 py-2 text-[13px] font-semibold text-white backdrop-blur transition hover:bg-black/75 lg:bottom-5 lg:right-5"
+        >
+          <Images size={15} />
+          View gallery
+          <span className="text-white/70">{photos.length}</span>
+        </button>
       </div>
     </section>
+
+    <GalleryViewer
+      photos={photos}
+      name={name}
+      open={gallery}
+      at={-1}
+      onClose={() => setGallery(false)}
+    />
     </>
   );
 }

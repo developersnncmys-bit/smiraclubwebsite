@@ -5,7 +5,6 @@ import DetailGallery from '@/components/villas/DetailGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import RoomPicker from '@/components/hotels/RoomPicker';
 import PackageCard from '@/components/hotels/PackageCard';
-import { StayGuests } from '@/components/hotels/StayChooser';
 import {
   AmenitiesCard, GuidelinesSection, LocationCard, MemberBenefitsCard, ReviewsCard,
 } from '@/components/hotels/DetailSections';
@@ -144,14 +143,10 @@ export default async function Page({ params, searchParams }) {
           </button>
         </section>
 
-        {/* -- Who is staying, under Overview and above the amenities -- */}
-        <StayGuests
-          adults={adults}
-          rooms={rooms}
-          childAges={childAges}
-          checkIn={stayTimes.checkIn}
-          checkOut={stayTimes.checkOut}
-        />
+        {/* Who is staying used to be asked again here. It is in the Book
+            Room bar now, and asking twice is how the two disagree. The
+            property's own hours were the one thing this card said that the
+            bar does not, so they moved into the stay guidelines below. */}
 
         {/* -- Packages worth a look, still under Overview ------------- */}
         <section className="pt-2">
@@ -176,7 +171,12 @@ export default async function Page({ params, searchParams }) {
         {/* -- Reviews, location, guidelines ------------------------- */}
         <ReviewsCard rating={hotel.rating} reviews={hotel.reviews} href={`/hotels/${hotel.id}/reviews`} />
         <LocationCard address={hotel.address} nearby={hotel.nearby} />
-        <GuidelinesSection />
+        <GuidelinesSection
+          extra={{
+            title: 'Check-in and check-out',
+            lines: [`Check in from ${stayTimes.checkIn}. Check out by ${stayTimes.checkOut}.`],
+          }}
+        />
       </div>
     </div>
   );
