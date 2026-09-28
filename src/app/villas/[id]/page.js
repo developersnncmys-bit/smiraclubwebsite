@@ -152,24 +152,6 @@ export default async function Page({ params, searchParams }) {
             View Details
           </button>
         </Card>
-
-
-        {/* -- The stay, the same strip the bar and a hotel's page use -- */}
-        <Card>
-          <p className="text-center text-[15px] font-bold text-ink-900">
-            Check in: {villaStay.checkIn} / Check out: {villaStay.checkOut}
-          </p>
-          <div className="mt-4 overflow-hidden rounded-xl border border-surface-line">
-            <StayDates
-              from={stayFrom}
-              to={stayTo}
-              adults={adults}
-              rooms={rooms}
-              childAges={childAges}
-              chosen={hasStay}
-            />
-          </div>
-        </Card>
       </div>
 
       <DetailTabs />

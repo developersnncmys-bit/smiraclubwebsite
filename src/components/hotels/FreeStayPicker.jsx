@@ -1,5 +1,7 @@
 'use client';
 
+import { StayDates } from '@/components/hotels/StayChooser';
+
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -55,7 +57,7 @@ function Stepper({ value, min, onChange, label }) {
  * name, benefits, dates — passed in so it shares the left column with these
  * cards while the booking sits in a sticky rail beside them on a desktop.
  */
-export default function FreeStayPicker({ head, groups, nights, adults: startAdults, children: startChildren, bookBase, carry }) {
+export default function FreeStayPicker({ head, groups, nights, adults: startAdults, children: startChildren, bookBase, carry, stay }) {
   const [room, setRoom] = useState(groups[0].id);
   const [adults, setAdults] = useState(startAdults);
   const [kids, setKids] = useState(startChildren);
@@ -214,6 +216,18 @@ export default function FreeStayPicker({ head, groups, nights, adults: startAdul
 
       {/* -- Phone: pinned bar ------------------------------------------- */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)] lg:hidden">
+        {/* The stay belongs with the button that books it, as it does on a
+            hotel and a villa, not in a card further up the page. */}
+        {stay && (
+          <StayDates
+            from={stay.from}
+            to={stay.to}
+            adults={stay.adults}
+            rooms={stay.rooms}
+            childAges={stay.childAges}
+            chosen={stay.chosen}
+          />
+        )}
         <div className="flex items-center gap-4 px-4 py-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <div className="min-w-0 flex-1">
             <p className="text-[15px] font-bold leading-tight text-ink-900">Free Stay Pay for Food</p>
