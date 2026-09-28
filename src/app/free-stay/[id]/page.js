@@ -90,7 +90,7 @@ export default async function Page({ params, searchParams }) {
           children={children}
           bookBase={`/free-stay/${hotel.id}/book`}
           carry={carry}
-          stay={{ from: ymd(from), to: ymd(to), adults, rooms, childAges: [], chosen: Boolean(query.from && query.to) }}
+          stay={{ from, to, adults, rooms, childAges: [], chosen: Boolean(query.from && query.to) }}
         />
       </div>
 
