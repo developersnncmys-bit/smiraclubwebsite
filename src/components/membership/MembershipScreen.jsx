@@ -177,7 +177,9 @@ function fromDesk(p, d) {
 export default function MembershipScreen({ hero, helper, compare, gifts: giftArt = {}, desk = [] }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
-  const [planKey, setPlanKey] = useState('gold');
+  // Nothing is chosen until they choose: the card below falls back to the
+  // highlighted plan, which survives the desk renaming or hiding any of them.
+  const [planKey, setPlanKey] = useState('');
   const [privileges, setPrivileges] = useState([]);
   const [gifts, setGifts] = useState(['jewellery']);
   const [sharing, setSharing] = useState(true);
@@ -204,17 +206,33 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
    * desk has renamed outright still lands somewhere sensible. Where the
    * desk has nothing to say, the built-in copy stands.
    */
-  const plans = useMemo(
-    () =>
-      membershipPlans.map((p, i) => {
-        const named = desk.find((d) => (d.name || '').toLowerCase().includes(p.key));
-        const found = named || desk[i];
-        return found ? fromDesk(p, found) : withPalette(p);
-      }),
-    [desk],
-  );
-
-  const plan = plans.find((p) => p.key === planKey);
+  /**
+   * The plans, as the desk has them.
+   *
+   * The desk's list is the list. It used to be the other way round — five
+   * built-in tiers with whatever the desk had laid over the top — which
+   * meant hiding a plan did not remove it: the empty slot fell through to
+   * the next plan along and the page showed Gold twice.
+   *
+   * Each one still borrows a built-in tier for the wording the desk has
+   * not filled in, matched by name where it can be and by position
+   * otherwise. With nothing from the desk at all, the built-in five stand
+   * so the page is never blank.
+   */
+  const plans = useMemo(() => {
+    if (!desk.length) return membershipPlans.map(withPalette);
+    return desk.map((d, i) => {
+      const name = (d.name || '').toLowerCase();
+      const base =
+        membershipPlans.find((m) => name.includes(m.key)) ||
+        membershipPlans[i] ||
+        membershipPlans[membershipPlans.length - 1];
+      // Its own identity, so two plans borrowing one tier stay distinct.
+      return { ...fromDesk(base, d), key: d.code || String(d._id || `plan-${i}`) };
+    });
+  }, [desk]);
+  const plan =
+    plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
   const versus = tab === 'versus';
 
   /**
