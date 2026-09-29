@@ -4,10 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Icon from '@/components/ui/Icon';
 import { primaryNav } from '@/lib/content';
-import { isMember, useMembership } from '@/lib/membership';
-import { useProfile } from '@/lib/profile';
 import { OPEN_AUTH } from '@/components/auth/AuthPopup';
-import { hasAccount } from '@/lib/account';
+import { useAccount } from '@/lib/account';
 
 /**
  * Screens that pin their own price bar to the bottom: a property's page and
@@ -34,11 +32,10 @@ export default function BottomNav() {
   // Account is the way in until somebody is signed in, and the way to their
   // own screens after — the same as Log in / My account on a desktop. Read
   // before the early return, because hooks cannot be skipped.
-  const { profile } = useProfile();
-  const { membership } = useMembership();
   // The same test the sheet uses, so the two cannot disagree about whether
-  // somebody is signed in — which is how the sheet came to greet members.
-  const signedIn = hasAccount(profile, membership);
+  // somebody is signed in — and it waits for the browser, so the tab bar
+  // renders the same on the server as it does on the first paint.
+  const { signedIn } = useAccount();
   const asAccount = (item) =>
     item.key === 'account' && !signedIn ? { ...item, label: 'Log in', href: '/login' } : item;
 
