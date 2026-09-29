@@ -120,6 +120,14 @@ export const api = {
   memberVerify: (phone, code) =>
     request('/website/member/verify', { method: 'POST', body: { phone, code }, next: { revalidate: 0 } }),
 
+  /**
+   * The member's wishlist, kept against their account rather than the
+   * browser. `merge` carries whatever they saved before signing in.
+   */
+  wishlistRead: (token) => request('/website/member/wishlist', { token, next: { revalidate: 0 } }),
+  wishlistWrite: (token, body) =>
+    request('/website/member/wishlist', { method: 'POST', token, body, next: { revalidate: 0 } }),
+
   /** The signed-in member's own details, membership and bookings. */
   memberMe: (token) => request('/website/member/me', { token, next: { revalidate: 0 } }),
 
