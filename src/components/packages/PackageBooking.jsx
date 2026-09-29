@@ -86,7 +86,7 @@ export default function PackageBooking({
     .join(', ');
   const stay = `${pkg.nights + 1} Days / ${plural(pkg.nights, 'Night', 'Nights')}`;
 
-  const send = async ({ guests, gstin, coupon, total, profile }) => {
+  const send = async ({ guests, gstin, coupon, total, profile, upiId }) => {
     const lead = guests[0] || {};
     const res = await api.packageBooking({
       name: lead.name,
@@ -102,6 +102,7 @@ export default function PackageBooking({
       adults,
       children,
       total,
+      upiId,
       profile,
       attribution: readAttribution(),
     });

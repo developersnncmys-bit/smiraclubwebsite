@@ -173,7 +173,10 @@ export default function PartnerWizard() {
     type: '', pan: '', gst: '', tan: '',
     documentLinks: { ownershipProof: '', leaseAgreement: '', authorisation: '' },
   });
-  const [bank, setBank] = useState({ holder: '', bankName: '', accountNumber: '', ifsc: '', branch: '', proofLink: '' });
+  const [bank, setBank] = useState({
+    holder: '', bankName: '', accountNumber: '', ifsc: '', branch: '', proofLink: '',
+    upiId: '', upiName: '', preferred: '',
+  });
   const [agreed, setAgreed] = useState(false);
 
   const toggle = (list, setList, value) =>
@@ -615,7 +618,9 @@ export default function PartnerWizard() {
               </Field>
             </Group>
 
-            <Group title="Bank details" note="Where Smira settles your payouts.">
+            {/* Two ways to be paid, asked as two things — see the desk's
+                own listing form for why they were split. */}
+            <Group title="Account information" note="Where Smira settles your payouts by bank transfer.">
               <Field label="Account holder name" optional>
                 <input className={input} value={bank.holder} onChange={(e) => setBank({ ...bank, holder: e.target.value })} />
               </Field>
@@ -638,6 +643,29 @@ export default function PartnerWizard() {
                   upload={sendFile}
                   onChange={(url) => setBank({ ...bank, proofLink: url })}
                 />
+              </Field>
+            </Group>
+
+            <Group title="UPI" note="Quicker for small settlements. Either this or the account above, or both.">
+              <Field label="UPI ID" optional>
+                <input
+                  className={input}
+                  value={bank.upiId}
+                  onChange={(e) => setBank({ ...bank, upiId: e.target.value })}
+                  placeholder="yourname@okhdfcbank"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                />
+              </Field>
+              <Field label="Name on the UPI account" optional>
+                <input className={input} value={bank.upiName} onChange={(e) => setBank({ ...bank, upiName: e.target.value })} />
+              </Field>
+              <Field label="How you would rather be paid" optional>
+                <select className={input} value={bank.preferred} onChange={(e) => setBank({ ...bank, preferred: e.target.value })}>
+                  <option value="">No preference</option>
+                  <option>Bank transfer</option>
+                  <option>UPI</option>
+                </select>
               </Field>
             </Group>
 

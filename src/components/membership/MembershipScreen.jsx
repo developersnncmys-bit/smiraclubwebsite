@@ -18,6 +18,7 @@ import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
+import UpiField, { upiLooksWrong } from '@/components/forms/UpiField';
 
 /** A ticked square in the chosen plan's own colour, as the Figma's grid draws them. */
 function Tick({ on, colour = '#b8860b' }) {
@@ -184,6 +185,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const [gifts, setGifts] = useState(['jewellery']);
   const [sharing, setSharing] = useState(true);
   const [agreed, setAgreed] = useState(true);
+  const [upiId, setUpiId] = useState('');
   const [coupon, setCoupon] = useState('');
   const [applied, setApplied] = useState(membershipCoupon.code);
   const [note, setNote] = useState('');
@@ -290,6 +292,10 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const [failed, setFailed] = useState('');
   const join = async () => {
     if (joining || !agreed) return;
+    if (upiLooksWrong(upiId)) {
+      setFailed('A UPI ID looks like yourname@okhdfcbank — or leave it blank.');
+      return;
+    }
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
     if (!isComplete(current)) return router.push(completeProfileHref());
@@ -307,6 +313,7 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
         privileges,
         sharing,
         coupon: applied || undefined,
+        upiId: upiId.trim() || undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
@@ -698,6 +705,12 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             </p>
             <p className="text-[14px] text-ink-500">{membershipSharing.label}</p>
           </section>
+
+          <UpiField
+            value={upiId}
+            onChange={setUpiId}
+            note="Nothing is charged now. Leave your UPI ID and our desk sends the request — your membership starts once it is paid."
+          />
 
           <section className="card p-4 sm:p-5">
             <label className="flex cursor-pointer gap-3">
