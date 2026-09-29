@@ -26,7 +26,41 @@ const STEPS = [
   'Ownership and legal',
 ];
 
-const PROPERTY_TYPES = ['Hotel', 'Resort', 'Homestay', 'Villa', 'Camp', 'Lifestyle'];
+const PROPERTY_TYPES = [
+  'Hotel', 'Resort', 'Homestay', 'Villa', 'Camp',
+  'Restaurant', 'Spa & Salon', 'Games Zone', 'Theme Park',
+  'Activity', 'Transport', 'Lifestyle',
+];
+
+/**
+ * What the form asks, by what kind of place they run — the same profiles
+ * the desk's own listing form uses, so a partner who applies here and a
+ * partner the desk adds are asked the same questions.
+ *
+ * Every type used to get the hotel's form, so a restaurant was asked for
+ * its star category and its bed types. The fields underneath are the same
+ * — a thing you sell, how many there are, who it holds, what it costs —
+ * so this renames them and hides the ones that mean nothing.
+ */
+const STAY = { star: true, bed: true, extraBed: true, meals: true, times: 'stay', nightly: true };
+const VISIT = { star: false, bed: false, extraBed: false, meals: false, times: 'open', nightly: false };
+
+const PROFILES = {
+  Hotel: { ...STAY, unit: 'Room', units: 'Rooms', eg: 'Deluxe Room', egType: 'Deluxe' },
+  Resort: { ...STAY, unit: 'Room', units: 'Rooms', eg: 'Garden Villa Room', egType: 'Premium' },
+  Homestay: { ...STAY, star: false, unit: 'Room', units: 'Rooms', eg: 'Upstairs bedroom', egType: 'Double' },
+  Villa: { ...STAY, star: false, unit: 'Villa', units: 'Villas', eg: '3-bedroom pool villa', egType: 'Pool villa' },
+  Camp: { ...STAY, star: false, unit: 'Tent', units: 'Tents', eg: 'Riverside tent', egType: 'Deluxe tent' },
+  Restaurant: { ...VISIT, unit: 'Table', units: 'Tables', eg: 'Window table for four', egType: 'Four-seater', occupancyLabel: 'Seats' },
+  'Spa & Salon': { ...VISIT, unit: 'Treatment', units: 'Treatments', eg: 'Aroma full body massage', egType: '60 minutes', occupancyLabel: 'People at once' },
+  'Games Zone': { ...VISIT, unit: 'Game', units: 'Games', eg: 'Bowling lane', egType: 'Lane', occupancyLabel: 'Players' },
+  'Theme Park': { ...VISIT, unit: 'Ticket', units: 'Tickets', eg: 'Day pass', egType: 'Day pass', occupancyLabel: 'People covered' },
+  Activity: { ...VISIT, unit: 'Activity', units: 'Activities', eg: 'Sunrise trek', egType: 'Half day', occupancyLabel: 'People per slot' },
+  Transport: { ...VISIT, unit: 'Vehicle', units: 'Vehicles', eg: 'Innova Crysta', egType: 'SUV', occupancyLabel: 'Seats', times: 'none' },
+  Lifestyle: { ...VISIT, unit: 'Experience', units: 'Experiences', eg: 'Private yacht evening', egType: 'Evening', occupancyLabel: 'Guests' },
+};
+const DEFAULT_PROFILE = { ...STAY, unit: 'Room', units: 'Rooms', eg: 'Deluxe Room', egType: 'Deluxe' };
+const profileOf = (type) => PROFILES[type] || DEFAULT_PROFILE;
 const ACCOUNT_TYPES = ['Hotel / Property', 'Channel manager'];
 const OWNERSHIP = ['Self owned', 'Company owned', 'Family owned', 'Lease', 'Other'];
 const MEAL_PLANS = ['EP — Room only', 'CP — Breakfast', 'MAP — Breakfast + Dinner', 'AP — All meals'];
@@ -109,6 +143,12 @@ export default function PartnerWizard() {
     type: '', name: '', starCategory: '', contactName: '', contactPhone: '', contactEmail: '',
     bookingStartDate: '', description: '',
   });
+  /**
+   * What this partner is, and so what the rest of the form asks them.
+   * The fields below read this rather than naming rooms and beds outright.
+   */
+  const kind = profileOf(property.type);
+
   const [location, setLocation] = useState({
     line1: '', line2: '', landmark: '', city: '', state: '', country: 'India', pin: '',
     latitude: '', longitude: '', mapsUrl: '',
@@ -309,9 +349,11 @@ export default function PartnerWizard() {
               <Field label="Property name" required error={errors.name}>
                 <input className={input} value={property.name} onChange={(e) => setProperty({ ...property, name: e.target.value })} placeholder="Sunrise Beach Resort" />
               </Field>
-              <Field label="Star category" optional>
-                <input className={input} value={property.starCategory} onChange={(e) => setProperty({ ...property, starCategory: e.target.value })} placeholder="3 star" />
-              </Field>
+              {kind.star && (
+                <Field label="Star category" optional>
+                  <input className={input} value={property.starCategory} onChange={(e) => setProperty({ ...property, starCategory: e.target.value })} placeholder="3 star" />
+                </Field>
+              )}
               <Field label="Property contact name" optional>
                 <input className={input} value={property.contactName} onChange={(e) => setProperty({ ...property, contactName: e.target.value })} />
               </Field>
@@ -362,23 +404,25 @@ export default function PartnerWizard() {
         {step === 2 && (
           <>
             {rooms.map((room, i) => (
-              <Group key={`room-${i}`} title={`Room category ${i + 1}`} note="A room type and what it sleeps.">
-                <Field label="Room name" optional>
-                  <input className={input} value={room.name} onChange={(e) => setRoom(i, 'name', e.target.value)} placeholder="Deluxe Room" />
+              <Group key={`room-${i}`} title={`${kind.unit} ${i + 1}`} note={kind.nightly ? 'A room type and what it sleeps.' : `One ${kind.unit.toLowerCase()} you take bookings for.`}>
+                <Field label={`${kind.unit} name`} optional>
+                  <input className={input} value={room.name} onChange={(e) => setRoom(i, 'name', e.target.value)} placeholder={kind.eg} />
                 </Field>
-                <Field label="Room type" optional>
-                  <input className={input} value={room.type} onChange={(e) => setRoom(i, 'type', e.target.value)} placeholder="Deluxe" />
+                <Field label={`${kind.unit} type`} optional>
+                  <input className={input} value={room.type} onChange={(e) => setRoom(i, 'type', e.target.value)} placeholder={kind.egType} />
                 </Field>
-                <Field label="Number of rooms" optional>
+                <Field label={`How many ${kind.units.toLowerCase()}`} optional>
                   <input className={input} inputMode="numeric" value={room.count} onChange={(e) => setRoom(i, 'count', e.target.value)} placeholder="10" />
                 </Field>
-                <Field label="Room size" optional>
-                  <input className={input} value={room.size} onChange={(e) => setRoom(i, 'size', e.target.value)} placeholder="320 sq ft" />
+                <Field label={kind.nightly ? `${kind.unit} size` : 'Size or duration'} optional>
+                  <input className={input} value={room.size} onChange={(e) => setRoom(i, 'size', e.target.value)} placeholder={kind.nightly ? '320 sq ft' : '60 minutes'} />
                 </Field>
-                <Field label="Bed type" optional>
-                  <input className={input} value={room.bedType} onChange={(e) => setRoom(i, 'bedType', e.target.value)} placeholder="1 King Bed" />
-                </Field>
-                <Field label="Maximum occupancy" optional>
+                {kind.bed && (
+                  <Field label="Bed type" optional>
+                    <input className={input} value={room.bedType} onChange={(e) => setRoom(i, 'bedType', e.target.value)} placeholder="1 King Bed" />
+                  </Field>
+                )}
+                <Field label={kind.occupancyLabel || 'Maximum occupancy'} optional>
                   <input className={input} inputMode="numeric" value={room.maxOccupancy} onChange={(e) => setRoom(i, 'maxOccupancy', e.target.value)} placeholder="3" />
                 </Field>
                 <Field label="Adults" optional>
@@ -387,17 +431,19 @@ export default function PartnerWizard() {
                 <Field label="Children" optional>
                   <input className={input} inputMode="numeric" value={room.children} onChange={(e) => setRoom(i, 'children', e.target.value)} placeholder="1" />
                 </Field>
-                <Field label="Room amenities" optional className="sm:col-span-2">
+                <Field label={`${kind.unit} amenities`} optional className="sm:col-span-2">
                   <input className={input} value={room.amenities} onChange={(e) => setRoom(i, 'amenities', e.target.value)} placeholder="AC, TV, balcony…" />
                 </Field>
-                <Field label="Room description" optional className="sm:col-span-2">
+                <Field label={`${kind.unit} description`} optional className="sm:col-span-2">
                   <textarea className={`${input} min-h-[80px] resize-y`} value={room.description} onChange={(e) => setRoom(i, 'description', e.target.value)} />
                 </Field>
 
-                <label className="flex items-center gap-2 text-[13px] font-medium text-ink-700">
-                  <input type="checkbox" checked={room.extraBed} onChange={(e) => setRoom(i, 'extraBed', e.target.checked)} className="h-4 w-4 rounded border-surface-line" />
-                  Extra bed available
-                </label>
+                {kind.extraBed && (
+                  <label className="flex items-center gap-2 text-[13px] font-medium text-ink-700">
+                    <input type="checkbox" checked={room.extraBed} onChange={(e) => setRoom(i, 'extraBed', e.target.checked)} className="h-4 w-4 rounded border-surface-line" />
+                    Extra bed available
+                  </label>
+                )}
 
                 {rooms.length > 1 && (
                   <button
@@ -494,7 +540,7 @@ export default function PartnerWizard() {
             </Group>
 
             <Group title="Inventory" note="How many rooms Smira may sell.">
-              <Field label="Total rooms" optional>
+              <Field label={`Total ${kind.units.toLowerCase()}`} optional>
                 <input className={input} inputMode="numeric" value={inventory.totalRooms} onChange={(e) => setInventory({ ...inventory, totalRooms: e.target.value })} />
               </Field>
               <Field label="Available rooms" optional>
@@ -509,7 +555,7 @@ export default function PartnerWizard() {
             </Group>
 
             <Group title="Policies" note="Check-in, check-out and cancellation.">
-              <Field label="Check-in time" optional>
+              <Field label={kind.times === 'stay' ? 'Check-in time' : 'Opens at'} optional>
                 <input className={input} value={policies.checkIn} onChange={(e) => setPolicies({ ...policies, checkIn: e.target.value })} placeholder="2 PM" />
               </Field>
               <Field label="Check-out time" optional>
