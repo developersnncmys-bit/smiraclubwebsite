@@ -93,3 +93,18 @@ export async function deskOffers() {
     return [];
   }
 }
+
+/**
+ * The membership plans the desk has published, or `[]` if the API cannot
+ * be reached — the screen falls back to its own copy in that case, so the
+ * pricing page is never blank.
+ */
+export async function deskPlans() {
+  if (!api.isConfigured) return [];
+  try {
+    const res = await api.websitePlans();
+    return Array.isArray(res.data) ? res.data : [];
+  } catch {
+    return [];
+  }
+}

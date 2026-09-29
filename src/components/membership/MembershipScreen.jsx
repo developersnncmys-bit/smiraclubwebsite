@@ -41,22 +41,70 @@ const years = (months) => {
  * website's own tier colours stay the fallback, so a plan the desk has never
  * given a colour looks exactly as it always did.
  */
+/**
+ * The tier colours, as pairs the page paints with.
+ *
+ * They are values rather than Tailwind classes because the desk can now type
+ * a colour of its own on the panel, and a class like `from-[#123456]` only
+ * exists if Tailwind saw it when the site was built. A colour that arrives
+ * from the database never has.
+ */
 const ACCENTS = {
   // The five the site was designed in, to the exact value.
-  silver: { tone: 'from-[#8e969d] to-[#c4c9cd]', accent: '#5f686f', soft: '#f1f3f4' },
-  gold: { tone: 'from-[#b8860b] to-[#dca72a]', accent: '#b8860b', soft: '#fdf6e3' },
-  platinum: { tone: 'from-[#4f6c80] to-[#8ea3b1]', accent: '#4f6c80', soft: '#eef2f5' },
-  diamond: { tone: 'from-[#1f8f98] to-[#4cbcc1]', accent: '#1f8f98', soft: '#e8f7f8' },
-  crown: { tone: 'from-[#3a1348] to-[#a4501c]', accent: '#6e2a4f', soft: '#f7eef2' },
+  silver: { from: '#8e969d', to: '#c4c9cd', accent: '#5f686f', soft: '#f1f3f4' },
+  gold: { from: '#b8860b', to: '#dca72a', accent: '#b8860b', soft: '#fdf6e3' },
+  platinum: { from: '#4f6c80', to: '#8ea3b1', accent: '#4f6c80', soft: '#eef2f5' },
+  diamond: { from: '#1f8f98', to: '#4cbcc1', accent: '#1f8f98', soft: '#e8f7f8' },
+  crown: { from: '#3a1348', to: '#a4501c', accent: '#6e2a4f', soft: '#f7eef2' },
   // And a few more, for a plan that is not one of the five.
-  slate: { tone: 'from-[#8e969d] to-[#c4c9cd]', accent: '#5f686f', soft: '#f1f3f4' },
-  amber: { tone: 'from-[#b8860b] to-[#dca72a]', accent: '#b8860b', soft: '#fdf6e3' },
-  violet: { tone: 'from-[#5b4a9c] to-[#8f7fd4]', accent: '#5b4a9c', soft: '#f3f0fb' },
-  brand: { tone: 'from-[#1b3a6b] to-[#2f6fb8]', accent: '#1b3a6b', soft: '#eef3fa' },
-  sky: { tone: 'from-[#0f6f8c] to-[#4bb3cf]', accent: '#0f6f8c', soft: '#ecf7fa' },
-  emerald: { tone: 'from-[#12674a] to-[#3fa981]', accent: '#12674a', soft: '#ecf7f2' },
-  rose: { tone: 'from-[#9c2a4f] to-[#d76a8c]', accent: '#9c2a4f', soft: '#fcf0f4' },
+  slate: { from: '#8e969d', to: '#c4c9cd', accent: '#5f686f', soft: '#f1f3f4' },
+  amber: { from: '#b8860b', to: '#dca72a', accent: '#b8860b', soft: '#fdf6e3' },
+  violet: { from: '#5b4a9c', to: '#8f7fd4', accent: '#5b4a9c', soft: '#f3f0fb' },
+  brand: { from: '#1b3a6b', to: '#2f6fb8', accent: '#1b3a6b', soft: '#eef3fa' },
+  sky: { from: '#0f6f8c', to: '#4bb3cf', accent: '#0f6f8c', soft: '#ecf7fa' },
+  emerald: { from: '#12674a', to: '#3fa981', accent: '#12674a', soft: '#ecf7f2' },
+  rose: { from: '#9c2a4f', to: '#d76a8c', accent: '#9c2a4f', soft: '#fcf0f4' },
 };
+
+/** #abc and #aabbcc both, to [r, g, b]. Anything else is not a colour. */
+function rgbOf(hex) {
+  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(hex || '').trim());
+  if (!m) return null;
+  const h = m[1].length === 3 ? m[1].split('').map((c) => c + c).join('') : m[1];
+  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+}
+
+const clamp = (n) => Math.max(0, Math.min(255, Math.round(n)));
+const hexOf = ([r, g, b]) => `#${[r, g, b].map((v) => clamp(v).toString(16).padStart(2, '0')).join('')}`;
+/** Towards white by `amount`, which is how the five pairs were built. */
+const lighten = (rgb, amount) => hexOf(rgb.map((v) => v + (255 - v) * amount));
+
+/**
+ * The palette for whatever the desk put in the colour box.
+ *
+ * One of the names gives the designed pair exactly. A hex code gives a pair
+ * built from it — a lighter partner for the gradient and a very pale tint
+ * for the stat tiles — so a colour nobody anticipated still produces a card
+ * that looks like the others rather than a flat block.
+ */
+export function paletteFor(accent, fallback = 'brand') {
+  const key = String(accent || '').trim().toLowerCase();
+  if (ACCENTS[key]) return ACCENTS[key];
+  const rgb = rgbOf(key);
+  if (rgb) {
+    return {
+      from: hexOf(rgb),
+      to: lighten(rgb, 0.38),
+      accent: hexOf(rgb),
+      soft: lighten(rgb, 0.92),
+    };
+  }
+  return ACCENTS[fallback] || ACCENTS.brand;
+}
+
+/** The gradient the cards and the buttons are painted with. */
+export const gradientOf = (pal) => `linear-gradient(to bottom, ${pal.from}, ${pal.to})`;
+export const gradientAcrossOf = (pal) => `linear-gradient(to right, ${pal.from}, ${pal.to})`;
 
 /**
  * One website plan with the admin panel's plan laid over it.
@@ -67,6 +115,17 @@ const ACCENTS = {
  * nobody has got round to it. The Crown's persons read "16+" on the Figma,
  * so the top tier keeps its plus.
  */
+/**
+ * The bundled copy, painted the same way as a plan from the desk.
+ *
+ * It is what the page draws before the desk's answer arrives, and what it
+ * keeps if the answer never comes, so it has to carry a gradient too.
+ */
+function withPalette(p) {
+  const pal = paletteFor(p.key);
+  return { ...p, ...pal, gradient: gradientOf(pal), gradientAcross: gradientAcrossOf(pal) };
+}
+
 function fromDesk(p, d) {
   const persons = Number(d.persons) || 0;
   const rooms = Number(d.rooms) || 0;
@@ -78,9 +137,15 @@ function fromDesk(p, d) {
     'Allowed Per Booking': rooms ? `${rooms} Room${rooms === 1 ? '' : 's'}` : null,
   };
 
+  // Whatever the desk typed in the colour box — one of the tier names, or
+  // a hex code of its own — becomes this card's palette.
+  const pal = paletteFor(d.accent, p.key);
+
   return {
     ...p,
-    ...(ACCENTS[d.accent] || {}),
+    ...pal,
+    gradient: gradientOf(pal),
+    gradientAcross: gradientAcrossOf(pal),
     /**
      * The chip wants one short word — three of "Gold Voyager" across a phone
      * wraps to two lines each and shoulders the third tier off the screen —
@@ -109,7 +174,7 @@ function fromDesk(p, d) {
  * sharing the benefits, and the coupon. The bar at the bottom reads that
  * same total rather than keeping its own copy.
  */
-export default function MembershipScreen({ hero, helper, compare, gifts: giftArt = {} }) {
+export default function MembershipScreen({ hero, helper, compare, gifts: giftArt = {}, desk = [] }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
   const [planKey, setPlanKey] = useState('gold');
@@ -131,24 +196,23 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
    * over the website's own copy by tier name. The colours and wording stay the
    * website's; if the desk cannot be reached, the website's numbers stand.
    */
-  const [plans, setPlans] = useState(membershipPlans);
-  useEffect(() => {
-    let live = true;
-    api.websitePlans()
-      .then((res) => {
-        if (!live || !Array.isArray(res.data)) return;
-        // By tier name where the desk has kept one — "Gold Voyager" is our
-        // gold — and otherwise by position, cheapest first, so a plan the
-        // desk has renamed outright still lands somewhere sensible.
-        setPlans(membershipPlans.map((p, i) => {
-          const named = res.data.find((d) => (d.name || '').toLowerCase().includes(p.key));
-          const desk = named || res.data[i];
-          return desk ? fromDesk(p, desk) : p;
-        }));
-      })
-      .catch(() => {});
-    return () => { live = false; };
-  }, []);
+  /**
+   * The website's five tiers, wearing whatever the desk has filled in.
+   *
+   * Matched by tier name where the desk has kept one — "Gold Voyager" is
+   * our gold — and otherwise by position, cheapest first, so a plan the
+   * desk has renamed outright still lands somewhere sensible. Where the
+   * desk has nothing to say, the built-in copy stands.
+   */
+  const plans = useMemo(
+    () =>
+      membershipPlans.map((p, i) => {
+        const named = desk.find((d) => (d.name || '').toLowerCase().includes(p.key));
+        const found = named || desk[i];
+        return found ? fromDesk(p, found) : withPalette(p);
+      }),
+    [desk],
+  );
 
   const plan = plans.find((p) => p.key === planKey);
   const versus = tab === 'versus';
@@ -340,7 +404,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                   type="button"
                   onClick={() => setPlanKey(p.key)}
                   aria-pressed={on}
-                  className={`relative w-[8.5rem] shrink-0 rounded-2xl bg-gradient-to-b px-3 text-white transition ${p.tone} ${
+                  style={{ backgroundImage: p.gradient }}
+                  className={`relative w-[8.5rem] shrink-0 rounded-2xl px-3 text-white transition ${
                     on ? 'py-9 shadow-lift' : 'py-6 opacity-90 hover:opacity-100'
                   }`}
                 >
@@ -360,7 +425,10 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           </div>
 
           {/* -- What that tier is ---------------------------------- */}
-          <section className={`overflow-hidden rounded-2xl bg-gradient-to-b ${plan.tone} p-1.5 pt-3`}>
+          <section
+            style={{ backgroundImage: plan.gradient }}
+            className="overflow-hidden rounded-2xl p-1.5 pt-3"
+          >
             <div className="rounded-2xl bg-white p-4 sm:p-5">
               <h2 className="text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
               <p className="mt-1 text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
@@ -422,7 +490,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
 
               <button
                 type="button"
-                className={`mt-4 w-full rounded-xl bg-gradient-to-b ${plan.tone} px-5 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105`}
+                style={{ backgroundImage: plan.gradient }}
+                className="mt-4 w-full rounded-xl px-5 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105"
               >
                 Select The Plan
               </button>
@@ -686,13 +755,16 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           */}
           <aside className="hidden lg:col-span-4 lg:block lg:sticky lg:top-24">
             <div className="overflow-hidden rounded-2xl bg-white shadow-card">
-              <p className={`flex items-center gap-2 bg-gradient-to-r ${plan.tone} px-5 py-3 text-[14px] font-semibold text-white transition-colors`}>
+              <p
+                style={{ backgroundImage: plan.gradientAcross }}
+                className="flex items-center gap-2 px-5 py-3 text-[14px] font-semibold text-white transition-colors"
+              >
                 <Check size={17} strokeWidth={3} />
                 Selected Plan ({plan.label} Membership)
               </p>
 
               <div className="relative p-5">
-                <span aria-hidden="true" className={`absolute inset-0 bg-gradient-to-b ${plan.tone} opacity-[0.08]`} />
+                <span aria-hidden="true" style={{ backgroundImage: plan.gradient }} className="absolute inset-0 opacity-[0.08]" />
                 <div className="relative">
                 <p className="text-[14px] text-ink-700">Total Amount</p>
                 <p className="text-2xl font-extrabold text-ink-900">{inr(total)}</p>
@@ -703,7 +775,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                   onClick={join}
                   disabled={!agreed || joining}
                   title={agreed ? undefined : 'Agree to the terms first'}
-                  className={`mt-5 w-full rounded-lg bg-gradient-to-r ${plan.tone} py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
+                  style={{ backgroundImage: plan.gradientAcross }}
+                  className="mt-5 w-full rounded-lg py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
                 >
                   {joining ? 'Sending…' : 'Pay now'}
                 </button>
@@ -729,7 +802,10 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
           {failed && (
             <p role="alert" className="bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-600 sm:px-6">{failed}</p>
           )}
-          <p className={`flex items-center gap-2 bg-gradient-to-r ${plan.tone} px-4 py-2.5 text-[14px] font-semibold text-white transition-colors sm:px-6`}>
+          <p
+            style={{ backgroundImage: plan.gradientAcross }}
+            className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold text-white transition-colors sm:px-6"
+          >
             <Check size={17} strokeWidth={3} />
             Selected Plan ({plan.label} Membership)
           </p>
@@ -749,7 +825,8 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
               onClick={join}
               disabled={!agreed || joining}
               title={agreed ? undefined : 'Agree to the terms first'}
-              className={`min-w-[10.5rem] shrink-0 rounded-lg bg-gradient-to-r ${plan.tone} px-8 py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50`}
+              style={{ backgroundImage: plan.gradientAcross }}
+              className="min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
             >
               {joining ? 'Sending…' : 'Pay now'}
             </button>
