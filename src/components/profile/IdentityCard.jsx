@@ -41,8 +41,11 @@ export default function IdentityCard() {
         </span>
 
         <div className="min-w-0">
+          {/* The name, and only the name. "Hey " ate the width a long name
+              needed, so anybody called more than a few letters was cut off
+              mid-word by the Edit Profile button. */}
           <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl">
-            Hey {name}!
+            {name}
           </h1>
 
           <p className="mt-2 flex items-center gap-2 text-[14px] font-medium text-white/95">
