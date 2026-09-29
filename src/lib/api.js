@@ -92,6 +92,14 @@ export const api = {
     request('/website/booking', { method: 'POST', body: form, next: { revalidate: 0 } }),
 
   /**
+   * A document from somebody applying to be a partner — a scan of a lease,
+   * a photograph of a cancelled cheque. Nobody is signed in at this point,
+   * so the route that takes it is capped hard.
+   */
+  uploadPartnerDocument: (body) =>
+    request('/uploads/apply', { method: 'POST', body, next: { revalidate: 0 } }),
+
+  /**
    * Somebody opened a listing. It is a tally for the partner's Performance
    * page, so it is sent and forgotten — the reply carries nothing.
    */

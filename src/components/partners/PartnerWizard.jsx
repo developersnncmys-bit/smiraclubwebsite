@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Loader2, Plus, ShieldCheck, Trash2 } from 'lucide-react';
 import { api } from '@/lib/api';
+import FileField from '@/components/partners/FileField';
 
 /**
  * Becoming a partner, in the client's five steps.
@@ -148,6 +149,9 @@ export default function PartnerWizard() {
    * The fields below read this rather than naming rooms and beds outright.
    */
   const kind = profileOf(property.type);
+
+  /** Papers go straight to Smira rather than living in somebody's Drive. */
+  const sendFile = async (body) => (await api.uploadPartnerDocument(body)).data;
 
   const [location, setLocation] = useState({
     line1: '', line2: '', landmark: '', city: '', state: '', country: 'India', pin: '',
@@ -593,11 +597,21 @@ export default function PartnerWizard() {
               <Field label="TAN" optional>
                 <input className={input} value={ownership.tan} onChange={(e) => setOwnership({ ...ownership, tan: e.target.value.toUpperCase() })} />
               </Field>
-              <Field label="Ownership proof (link)" optional>
-                <input className={input} value={ownership.documentLinks.ownershipProof} onChange={(e) => setOwnership({ ...ownership, documentLinks: { ...ownership.documentLinks, ownershipProof: e.target.value } })} placeholder="https://…" />
+              <Field label="Ownership proof" optional>
+                <FileField
+                  label="Ownership proof"
+                  value={ownership.documentLinks.ownershipProof}
+                  upload={sendFile}
+                  onChange={(url) => setOwnership({ ...ownership, documentLinks: { ...ownership.documentLinks, ownershipProof: url } })}
+                />
               </Field>
-              <Field label="Lease agreement (link)" optional>
-                <input className={input} value={ownership.documentLinks.leaseAgreement} onChange={(e) => setOwnership({ ...ownership, documentLinks: { ...ownership.documentLinks, leaseAgreement: e.target.value } })} placeholder="https://…" />
+              <Field label="Lease agreement" optional>
+                <FileField
+                  label="Lease agreement"
+                  value={ownership.documentLinks.leaseAgreement}
+                  upload={sendFile}
+                  onChange={(url) => setOwnership({ ...ownership, documentLinks: { ...ownership.documentLinks, leaseAgreement: url } })}
+                />
               </Field>
             </Group>
 
@@ -617,8 +631,13 @@ export default function PartnerWizard() {
               <Field label="Branch" optional>
                 <input className={input} value={bank.branch} onChange={(e) => setBank({ ...bank, branch: e.target.value })} />
               </Field>
-              <Field label="Cancelled cheque or bank proof (link)" optional>
-                <input className={input} value={bank.proofLink} onChange={(e) => setBank({ ...bank, proofLink: e.target.value })} placeholder="https://…" />
+              <Field label="Cancelled cheque or bank proof" optional>
+                <FileField
+                  label="Bank proof"
+                  value={bank.proofLink}
+                  upload={sendFile}
+                  onChange={(url) => setBank({ ...bank, proofLink: url })}
+                />
               </Field>
             </Group>
 
