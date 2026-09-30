@@ -330,6 +330,13 @@ export default function PartnerWizard() {
         {step === 1 && (
           <>
             <Group title="Account registration" note="Who runs the account with us.">
+              {/* What kind of account this is comes first. */}
+              <Field label="Account type" optional>
+                <select className={input} value={account.accountType} onChange={(e) => setAccount({ ...account, accountType: e.target.value })}>
+                  <option value="">Select</option>
+                  {ACCOUNT_TYPES.map((o) => <option key={o}>{o}</option>)}
+                </select>
+              </Field>
               <Field label="Full name">
                 <input className={input} value={account.fullName} onChange={(e) => setAccount({ ...account, fullName: e.target.value })} autoComplete="name" />
               </Field>
@@ -341,12 +348,6 @@ export default function PartnerWizard() {
               </Field>
               <Field label="Alternate number" optional>
                 <input className={input} inputMode="numeric" value={account.alternatePhone} onChange={(e) => setAccount({ ...account, alternatePhone: e.target.value })} />
-              </Field>
-              <Field label="Account type" optional>
-                <select className={input} value={account.accountType} onChange={(e) => setAccount({ ...account, accountType: e.target.value })}>
-                  <option value="">Select</option>
-                  {ACCOUNT_TYPES.map((o) => <option key={o}>{o}</option>)}
-                </select>
               </Field>
             </Group>
 
