@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Loader2, Plus, ShieldCheck, Trash2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import FileField from '@/components/partners/FileField';
+import ImagesField from '@/components/partners/ImagesField';
 
 /**
  * Becoming a partner, in the client's five steps.
@@ -158,6 +159,8 @@ export default function PartnerWizard() {
     latitude: '', longitude: '', mapsUrl: '',
   });
   const [rooms, setRooms] = useState([{ ...EMPTY_ROOM }]);
+  const [propertyPhotos, setPropertyPhotos] = useState([]);
+  const [roomPhotos, setRoomPhotos] = useState([]);
   const [amenities, setAmenities] = useState([]);
   const [facilities, setFacilities] = useState([]);
   const [rules, setRules] = useState([]);
@@ -236,6 +239,7 @@ export default function PartnerWizard() {
               count: num(r.count), adults: num(r.adults),
               children: num(r.children), maxOccupancy: num(r.maxOccupancy),
             })),
+          photos: { property: propertyPhotos, rooms: roomPhotos },
           amenities,
           facilities,
           rules,
@@ -469,8 +473,34 @@ export default function PartnerWizard() {
               onClick={() => setRooms((all) => [...all, { ...EMPTY_ROOM }])}
               className="inline-flex items-center gap-2 rounded-xl border border-action-500 px-4 py-2.5 text-[14px] font-bold text-action-500"
             >
-              <Plus size={16} /> Add another room category
+              <Plus size={16} /> Add another {kind.unit.toLowerCase()}
             </button>
+
+            {/*
+              Photographs, chosen from the phone or the laptop. Without
+              them a listing reaches the website with nothing to look at,
+              which is the one thing a member decides on.
+            */}
+            <Group title="Photographs" note="These are what a member sees first. The first one leads the listing.">
+              <Field label="Property photos" optional className="sm:col-span-2">
+                <ImagesField
+                  label="Property photo"
+                  value={propertyPhotos}
+                  onChange={setPropertyPhotos}
+                  upload={sendFile}
+                  hint="Exterior, lobby, reception, restaurant, pool, other areas"
+                />
+              </Field>
+              <Field label={`${kind.unit} photos`} optional className="sm:col-span-2">
+                <ImagesField
+                  label={`${kind.unit} photo`}
+                  value={roomPhotos}
+                  onChange={setRoomPhotos}
+                  upload={sendFile}
+                  hint={kind.nightly ? 'Room, bathroom, view, amenities' : 'Whatever a member would want to see before booking'}
+                />
+              </Field>
+            </Group>
           </>
         )}
 
