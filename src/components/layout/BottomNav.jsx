@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Icon from '@/components/ui/Icon';
 import { primaryNav } from '@/lib/content';
-import { OPEN_AUTH } from '@/components/auth/AuthPopup';
-import { useAccount } from '@/lib/account';
 
 /**
  * Screens that pin their own price bar to the bottom: a property's page and
@@ -35,9 +33,13 @@ export default function BottomNav() {
   // The same test the sheet uses, so the two cannot disagree about whether
   // somebody is signed in — and it waits for the browser, so the tab bar
   // renders the same on the server as it does on the first paint.
-  const { signedIn } = useAccount();
-  const asAccount = (item) =>
-    item.key === 'account' && !signedIn ? { ...item, label: 'Log in', href: '/login' } : item;
+  /*
+    Account is Account, signed in or not — the same as the desktop header.
+    It used to become "Log in" for a visitor, which meant the two halves of
+    the site disagreed about what the tab was called, and somebody who had
+    not signed in had nowhere to go and read their own page. Logging in and
+    registering happen on the account page, and in the sheet.
+  */
 
   if (OWNS_THE_BOTTOM.some((route) => route.test(pathname))) return null;
 
@@ -55,7 +57,7 @@ export default function BottomNav() {
       aria-label="Main"
     >
       <ul className="mx-auto flex max-w-phone items-stretch">
-        {primaryNav.map(asAccount).map((item) => {
+        {primaryNav.map((item) => {
           const active = item.key === activeKey;
           if (item.center) {
             // AI Search: a raised round button in the middle of the bar.
@@ -88,19 +90,11 @@ export default function BottomNav() {
             active ? 'text-action-500' : 'text-ink-500'
           }`;
 
-          // Signed out, Account is Log in — and that opens the sheet rather
-          // than taking the visitor away from what they were reading.
           return (
             <li key={item.key} className="flex-1">
-              {item.key === 'account' && !signedIn ? (
-                <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))} className={look}>
-                  {face}
-                </button>
-              ) : (
-                <Link href={item.href} aria-current={active ? 'page' : undefined} className={look}>
-                  {face}
-                </Link>
-              )}
+              <Link href={item.href} aria-current={active ? 'page' : undefined} className={look}>
+                {face}
+              </Link>
             </li>
           );
         })}
