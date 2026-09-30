@@ -56,18 +56,48 @@ export function MemberBenefitsCard() {
   );
 }
 
-export function AmenitiesCard({ id = 'amenities' }) {
+/** A word from the desk, matched to the icon the site already uses. */
+const ICON_FOR = {
+  'swimming pool': 'Waves', pool: 'Waves', 'wi-fi': 'Wifi', wifi: 'Wifi',
+  parking: 'Car', restaurant: 'UtensilsCrossed', breakfast: 'Coffee',
+  gym: 'Dumbbell', spa: 'Flower2', bar: 'Martini', ac: 'Snowflake',
+  'air conditioning': 'Snowflake', tv: 'Tv', 'room service': 'ConciergeBell',
+  'pet friendly': 'PawPrint', 'beach access': 'Waves', garden: 'Trees',
+  laundry: 'Shirt', 'kids play area': 'Baby', 'conference room': 'Presentation',
+  'airport transfer': 'Car', elevator: 'MoveVertical', 'power backup': 'Zap',
+  'indoor games': 'Gamepad2', 'outdoor games': 'Volleyball', bonfire: 'Flame',
+};
+const iconFor = (label) => ICON_FOR[String(label).toLowerCase()] || 'Check';
+
+/**
+ * What this property actually has.
+ *
+ * It used to draw the same six amenities on every page, which is fine
+ * while every page is hand-written and wrong the moment a partner lists
+ * a place with a spa and no pool. Given a list it shows that list; given
+ * nothing it falls back to the site's own, so the built-in pages are
+ * unchanged.
+ */
+export function AmenitiesCard({ id = 'amenities', amenities }) {
+  const own = (amenities || []).filter(Boolean);
+  const shown = own.length
+    ? own.slice(0, 12).map((label) => ({ key: label, label, icon: iconFor(label) }))
+    : hotelAmenities;
+
   return (
     <DetailCard id={id} title="Amenities For Couple">
       <div className="mt-5 grid grid-cols-3 gap-y-7 sm:grid-cols-6">
-        {hotelAmenities.map((a) => (
+        {shown.map((a) => (
           <div key={a.key} className="flex flex-col items-center gap-2 px-1 text-center">
             <Icon name={a.icon} size={26} className="text-action-500" strokeWidth={1.7} />
             <span className="text-[13px] font-semibold leading-tight text-action-500">{a.label}</span>
           </div>
         ))}
       </div>
-      <AllAmenities />
+      {own.length > 12 && (
+        <p className="mt-4 text-[13px] text-ink-500">and {own.length - 12} more</p>
+      )}
+      {!own.length && <AllAmenities />}
     </DetailCard>
   );
 }

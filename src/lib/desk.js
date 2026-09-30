@@ -108,3 +108,109 @@ export async function deskPlans() {
     return [];
   }
 }
+
+/* -- Desk stock, wearing the site's own shapes --------------------------- */
+
+/**
+ * A partner's listing has to look like everything else on the site.
+ *
+ * The site was built around its own hand-written content, and a partner
+ * added on the panel arrives as a Travel Inventory row with different
+ * field names. Rather than give partner listings a second, plainer set of
+ * screens — which is what a generic /listing page amounts to — these turn
+ * a desk item into exactly the shape the existing screens already read, so
+ * a partner hotel draws the hotel page and a partner villa the villa page.
+ *
+ * Anything the partner did not fill in is left out rather than faked, and
+ * the screens already cope with a missing field.
+ */
+
+const ICON_FOR = {
+  'swimming pool': 'Waves', pool: 'Waves',
+  'wi-fi': 'Wifi', wifi: 'Wifi',
+  parking: 'Car', restaurant: 'UtensilsCrossed', breakfast: 'Coffee',
+  gym: 'Dumbbell', spa: 'Flower2', bar: 'Martini', ac: 'Snowflake',
+  tv: 'Tv', 'room service': 'ConciergeBell', 'pet friendly': 'PawPrint',
+  'beach access': 'Waves', garden: 'Trees', laundry: 'Shirt',
+};
+const iconFor = (label) => ICON_FOR[String(label).toLowerCase()] || 'Check';
+
+/** What a card in the results list needs. */
+export function asResult(item, kind = 'hotel') {
+  const amenities = (item.amenities || []).slice(0, 2).map((a) => ({ label: a, icon: iconFor(a) }));
+  return {
+    id: item.id,
+    kind,
+    desk: true,
+    name: item.name,
+    place: item.place || '',
+    verified: true,
+    rating: item.rating || null,
+    reviews: item.reviews || 0,
+    amenities,
+    more: Math.max(0, (item.amenities || []).length - 2),
+    image: item.photo || (item.images || [])[0] || '',
+    priceLabel: 'Per night',
+    price: item.price,
+    was: item.was || 0,
+    off: item.off || 0,
+    href: `/${kind === 'villa' ? 'villas' : 'hotels'}/${item.id}`,
+  };
+}
+
+/**
+ * What a hotel or villa detail page needs.
+ *
+ * The room groups are built from the room types the partner listed: one
+ * group each, with the rate they gave. A page with no rooms at all still
+ * renders — it simply has nothing to pick.
+ */
+export function asProperty(item) {
+  const rooms = item.rooms || [];
+  const photos = item.photos?.length ? item.photos : [item.photo].filter(Boolean);
+
+  return {
+    id: item.id,
+    desk: true,
+    name: item.name,
+    place: item.place || '',
+    locality: item.address || '',
+    taxes: 0,
+    verified: true,
+    rating: item.rating || null,
+    reviews: item.reviews || 0,
+    from: item.price,
+    was: item.was || 0,
+    image: photos[0] || '',
+    photos,
+    about: item.description || '',
+    address: item.address || '',
+    nearby: [],
+    amenities: item.amenities || [],
+    checkIn: item.checkIn || '',
+    checkOut: item.checkOut || '',
+    defaultPlan: rooms.length ? `${item.id}-room-0` : '',
+    roomGroups: rooms.map((r, i) => ({
+      id: `${item.id}-group-${i}`,
+      label: r.type || `Room ${i + 1}`,
+      room: {
+        name: r.type || `Room ${i + 1}`,
+        guests: r.occupancy ? `${r.occupancy} Adults` : '',
+        size: '',
+        bed: '',
+        view: '',
+        photos: photos.length,
+        image: photos[i % Math.max(1, photos.length)] || '',
+      },
+      plans: [
+        {
+          id: `${item.id}-room-${i}`,
+          name: r.mealPlan || 'Room only',
+          lines: [r.mealPlan, r.extraBed ? 'Extra bed available' : null, r.childPolicy].filter(Boolean),
+          price: r.price || item.price,
+          was: r.was || item.was || 0,
+        },
+      ],
+    })),
+  };
+}

@@ -13,6 +13,15 @@ import {
 } from '@/lib/content';
 import { image } from '@/lib/images';
 import { defaultStay, ymd } from '@/lib/format';
+import { asProperty, deskItem } from '@/lib/desk';
+
+/**
+ * Only the built-in hotels are pre-rendered. A partner the desk puts
+ * live has an id nobody knew at build time, so those pages are rendered
+ * when somebody asks for them and cached for a minute like the rest.
+ */
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -20,9 +29,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const hotel = hotels.find((h) => h.id === id);
+  const hotel = hotels.find((h) => h.id === id) || (await deskItem(id));
   return hotel
-    ? { title: hotel.name, description: hotel.about }
+    ? { title: hotel.name, description: hotel.about || hotel.description || '' }
     : { title: 'Hotel not found' };
 }
 
@@ -39,8 +48,18 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
 
-  const hotel = hotels.find((h) => h.id === id);
-  if (!hotel) notFound();
+  /**
+   * One of the site's own hotels, or a partner the desk has put live.
+   *
+   * A partner used to land on a separate, plainer page, which meant a
+   * property Smira had signed looked worse than one written into the
+   * build. Mapped into the same shape, it draws this page — gallery,
+   * tabs, rooms, amenities, the lot.
+   */
+  const own = hotels.find((h) => h.id === id);
+  const listed = own || (await deskItem(id).then((i) => (i ? asProperty(i) : null)));
+  if (!listed) notFound();
+  const hotel = listed;
 
   const photos = [image(hotel.image), image('villa-room-1'), image('villa-room-2')];
   const groups = hotel.roomGroups.map((g) => ({
@@ -166,7 +185,7 @@ export default async function Page({ params, searchParams }) {
           </Link>
         </section>
 
-        <AmenitiesCard />
+        <AmenitiesCard amenities={hotel?.amenities} />
 
         {/* -- Reviews, location, guidelines ------------------------- */}
         <ReviewsCard rating={hotel.rating} reviews={hotel.reviews} href={`/hotels/${hotel.id}/reviews`} />

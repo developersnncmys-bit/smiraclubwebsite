@@ -105,7 +105,7 @@ export default async function Page({ params, searchParams }) {
           </button>
         </section>
 
-        <AmenitiesCard />
+        <AmenitiesCard amenities={hotel?.amenities} />
         <ReviewsCard rating={hotel.rating} reviews={hotel.reviews} href={`/hotels/${hotel.id}/reviews`} />
         <LocationCard address={hotel.address} nearby={hotel.nearby} />
         <GuidelinesSection extra={freeStayGuideline} />

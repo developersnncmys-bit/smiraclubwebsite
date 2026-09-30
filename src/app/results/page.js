@@ -1,5 +1,6 @@
 import ResultsScreen from '@/components/results/ResultsScreen';
 import { searchResults } from '@/lib/content';
+import { asResult, deskItems } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { shortDate } from '@/lib/format';
 
@@ -44,7 +45,25 @@ export default async function Page({ searchParams }) {
       : stayLabel(params.from, params.to);
   const guests = guestLabel(params.adults, params.children);
 
-  const results = searchResults.map((r) => ({ ...r, image: image(r.image) }));
+  /**
+   * The site's own listings, and every partner the desk has put live.
+   *
+   * A partner used to reach only a "More from Smira" strip at the foot of
+   * a category screen, which is not where anybody browses. They belong in
+   * the same list as everything else, so they are mapped into the same
+   * shape and sorted in — newest partners first, so a place that has just
+   * joined is seen.
+   */
+  const [hotels, villas] = await Promise.all([deskItems('Hotels'), deskItems('Villas')]);
+  const fromDesk = [
+    ...hotels.map((h) => asResult(h, 'hotel')),
+    ...villas.map((v) => asResult(v, 'villa')),
+  ];
+
+  const results = [
+    ...fromDesk,
+    ...searchResults.map((r) => ({ ...r, image: image(r.image) })),
+  ];
 
   // Arriving from Hotels & Resorts brings that screen's chips and back arrow.
   const fromHotels = params.kind === 'hotel';
