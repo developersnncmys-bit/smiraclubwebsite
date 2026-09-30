@@ -133,11 +133,11 @@ const ICON_FOR = {
   tv: 'Tv', 'room service': 'ConciergeBell', 'pet friendly': 'PawPrint',
   'beach access': 'Waves', garden: 'Trees', laundry: 'Shirt',
 };
-const iconFor = (label) => ICON_FOR[String(label).toLowerCase()] || 'Check';
+export const iconForAmenity = (label) => ICON_FOR[String(label).toLowerCase()] || 'Check';
 
 /** What a card in the results list needs. */
 export function asResult(item, kind = 'hotel') {
-  const amenities = (item.amenities || []).slice(0, 2).map((a) => ({ label: a, icon: iconFor(a) }));
+  const amenities = (item.amenities || []).slice(0, 2).map((a) => ({ label: a, icon: iconForAmenity(a) }));
   return {
     id: item.id,
     kind,
@@ -151,6 +151,11 @@ export function asResult(item, kind = 'hotel') {
     more: Math.max(0, (item.amenities || []).length - 2),
     image: item.photo || (item.images || [])[0] || '',
     priceLabel: 'Per night',
+    highlight: item.details?.highlight || '',
+    layout: item.details?.layout || '',
+    notes: item.details?.notes || [],
+    freeCancellation: Boolean(item.details?.freeCancellation),
+    taxes: item.details?.taxes || 0,
     price: item.price,
     was: item.was || 0,
     off: item.off || 0,
@@ -168,14 +173,32 @@ export function asResult(item, kind = 'hotel') {
 export function asProperty(item) {
   const rooms = item.rooms || [];
   const photos = item.photos?.length ? item.photos : [item.photo].filter(Boolean);
+  const d = item.details || {};
 
   return {
+    // Everything the detail pages print beyond the basics, as the partner
+    // gave it. A section left empty is simply not drawn.
+    layout: d.layout || '',
+    bedrooms: d.bedrooms ?? null,
+    beds: d.beds || '',
+    baths: d.baths ?? null,
+    sleeps: d.sleeps ?? null,
+    extra: d.extraGuests ?? null,
+    unit: d.unitType || '',
+    highlight: d.highlight || '',
+    notes: d.notes || [],
+    freeCancellation: Boolean(d.freeCancellation),
+    taxes: d.taxes ?? 0,
+    host: d.host || null,
+    spaces: d.spaces || [],
+    included: d.included || [],
+    ruleNotes: d.ruleNotes || [],
+    guidelines: d.guidelines || [],
     id: item.id,
     desk: true,
     name: item.name,
     place: item.place || '',
     locality: item.address || '',
-    taxes: 0,
     verified: true,
     rating: item.rating || null,
     reviews: item.reviews || 0,
@@ -185,7 +208,7 @@ export function asProperty(item) {
     photos,
     about: item.description || '',
     address: item.address || '',
-    nearby: [],
+    nearby: d.nearby || [],
     amenities: item.amenities || [],
     checkIn: item.checkIn || '',
     checkOut: item.checkOut || '',

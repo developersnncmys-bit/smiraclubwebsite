@@ -16,9 +16,18 @@ import {
 import { image } from '@/lib/images';
 import { StayDates } from '@/components/hotels/StayChooser';
 import { defaultStay, ymd } from '@/lib/format';
+import { asProperty, deskItem, iconForAmenity } from '@/lib/desk';
 
 /** Every villa the site knows about, from both lists. */
 const ALL = [...villaResults, ...villas];
+
+/**
+ * Only the built-in villas are pre-rendered. A partner the desk puts live
+ * has an id nobody knew at build time, so those pages are rendered on
+ * request and cached for a minute like the rest of the site.
+ */
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return ALL.map((v) => ({ id: v.id }));
@@ -26,9 +35,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const villa = ALL.find((v) => v.id === id);
+  const villa = ALL.find((v) => v.id === id) || (await deskItem(id));
   return villa
-    ? { title: villa.name, description: villaDetails[villa.id]?.about }
+    ? { title: villa.name, description: villaDetails[villa.id]?.about || villa.description || '' }
     : { title: 'Villa not found' };
 }
 
@@ -54,15 +63,57 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
 
-  const villa = ALL.find((v) => v.id === id);
+  /**
+   * One of the site's own villas, or a partner the desk has put live.
+   *
+   * A partner listing used to land on a separate, plainer page. Mapped
+   * into the same shape it draws this one, and whatever the partner left
+   * empty falls back to the site's own copy rather than to a blank.
+   */
+  const own = ALL.find((v) => v.id === id);
+  const fromDesk = own ? null : await deskItem(id).then((i) => (i ? asProperty(i) : null));
+  const villa = own || fromDesk;
   if (!villa) notFound();
 
-  const detail = villaDetails[villa.id];
-  const photos = [image(villa.image), image('villa-room-1'), image('villa-room-2')];
-  const amenities = [
-    { key: 'bhk', label: `${detail.bedrooms} BHK`, icon: 'BedDouble' },
-    ...villaAmenities,
-  ];
+  const detail = own
+    ? villaDetails[villa.id]
+    : {
+        bedrooms: villa.bedrooms, beds: villa.beds, baths: villa.baths,
+        sleeps: villa.sleeps, extra: villa.extra, unit: villa.unit,
+        about: villa.about, address: villa.address, nearby: villa.nearby || [],
+        rooms: (villa.spaces || []).map((sp, i) => ({
+          id: `sp-${i}`,
+          name: sp.name,
+          floor: sp.floor,
+          tag: sp.tag,
+          photos: (sp.images || []).length,
+          image: (sp.images || [])[0] || villa.image,
+          lines: sp.lines || [],
+        })),
+      };
+
+  const photos = own
+    ? [image(villa.image), image('villa-room-1'), image('villa-room-2')]
+    : (villa.photos || []).filter(Boolean);
+
+  /**
+   * The property's own words, or the site's where it gave none.
+   *
+   * Every one of these sections used to read a constant, which is right
+   * while every villa is hand-written and wrong the moment a partner
+   * describes their own house.
+   */
+  const host = (!own && villa.host?.title) ? villa.host : villaHost;
+  const included = (!own && villa.included?.length) ? villa.included : villaWhatsIncluded;
+  const houseRules = (!own && villa.ruleNotes?.length) ? villa.ruleNotes : villaRules;
+  const guidelines = (!own && villa.guidelines?.length) ? villa.guidelines : villaGuidelines;
+
+  const amenities = own
+    ? [{ key: 'bhk', label: `${detail.bedrooms} BHK`, icon: 'BedDouble' }, ...villaAmenities]
+    : [
+        ...(detail.bedrooms ? [{ key: 'bhk', label: `${detail.bedrooms} BHK`, icon: 'BedDouble' }] : []),
+        ...(villa.amenities || []).slice(0, 8).map((a) => ({ key: a, label: a, icon: iconForAmenity(a) })),
+      ];
 
   /**
    * The stay the search carried here. Without one we still need dates to
@@ -142,12 +193,12 @@ export default async function Page({ params, searchParams }) {
         </section>
 
         {/* -- The host ----------------------------------------------- */}
-        <Card title={villaHost.title}>
+        <Card title={host.title}>
           <p className="mt-3 flex gap-2 border-t border-surface-line pt-3 text-[14px] text-ink-700">
             <span aria-hidden="true" className="text-ink-400">&bull;</span>
-            {villaHost.speaks}
+            {host.speaks}
           </p>
-          <p className="mt-3 text-[14px] leading-relaxed text-ink-700">{villaHost.blurb}</p>
+          <p className="mt-3 text-[14px] leading-relaxed text-ink-700">{host.blurb}</p>
           <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">
             View Details
           </button>
@@ -231,7 +282,7 @@ export default async function Page({ params, searchParams }) {
         {/* -- What is included --------------------------------------- */}
         <Card title="What&rsquo;s Included?">
           <ul className="mt-3 space-y-1.5">
-            {villaWhatsIncluded.map((line) => (
+            {included.map((line) => (
               <li key={line} className="flex gap-2 text-[14px] text-ink-700">
                 <span aria-hidden="true" className="text-ink-400">&#9702;</span>
                 {line}
@@ -327,7 +378,7 @@ export default async function Page({ params, searchParams }) {
         {/* -- Rules -------------------------------------------------- */}
         <Card title="Property Rules &amp; Information">
           <ul className="mt-3 space-y-3">
-            {villaRules.map((rule) => (
+            {houseRules.map((rule) => (
               <li key={rule.title || rule.body} className="flex gap-2">
                 <span aria-hidden="true" className="text-ink-400">&#9702;</span>
                 <span>
@@ -347,7 +398,7 @@ export default async function Page({ params, searchParams }) {
         {/* -- Guidelines --------------------------------------------- */}
         <Card id="guidelines" title="Stay Guide Lines">
           <div className="mt-3 space-y-5">
-            {villaGuidelines.map((g) => (
+            {guidelines.map((g) => (
               <div key={g.title}>
                 <h3 className="font-bold text-ink-900 underline">{g.title}</h3>
                 {g.lines.map((line) => (
