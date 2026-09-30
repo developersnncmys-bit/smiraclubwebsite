@@ -28,6 +28,26 @@ export const DESK_CATEGORY = {
   flights: 'Flights',
 };
 
+/**
+ * Where a desk item's card points.
+ *
+ * Every card used to link to /listing/<id> — one plain page for a partner
+ * of any kind, sitting next to the bespoke page the site's own content
+ * gets. A partner spa is a spa, so it goes to the spa page.
+ */
+export const DESK_ROUTE = {
+  Hotels: '/hotels',
+  Villas: '/villas',
+  Restaurants: '/restaurants',
+  'Spa and salon': '/spa',
+  Activities: '/activities',
+  Attractions: '/parks',
+  Experiences: '/luxury',
+  Games: '/games',
+  Packages: '/packages',
+};
+export const deskHref = (item) => `${DESK_ROUTE[item.category] || '/listing'}/${item.id}`;
+
 /** A picture for a desk item: its own if it has one, else the slot we keep. */
 const FALLBACK_SLOT = {
   Hotels: 'hotel-la-calypso',
@@ -62,7 +82,7 @@ export async function deskItems(category, { destination, q, limit = 24 } = {}) {
     const res = await api.catalog(`?${query.toString()}`);
     return (res.data || []).slice(0, limit).map((item) => ({
       ...item,
-      href: `/listing/${item.id}`,
+      href: deskHref(item),
       photo: deskPhoto(item),
     }));
   } catch {
@@ -241,4 +261,135 @@ export function asProperty(item) {
       ],
     })),
   };
+}
+
+/* -- The services that are not a stay ------------------------------------ */
+
+/** The times a venue takes bookings at, when the partner named none. */
+const DEFAULT_SLOTS = ['10:00', '11:30', '12:45', '16:00', '17:45', '18:00'];
+
+/**
+ * What a spa, restaurant, games zone, park, activity or experience page needs.
+ *
+ * These pages were written around the site's own content, and each one has
+ * its own shape — a spa has treatments and locations, a park has tickets, an
+ * activity has sessions. What they share is a venue: a name, a place, a
+ * rating, photos, what it costs and what you can book. This builds that core
+ * from a Travel Inventory row and adds the per-page pieces on top, so a
+ * partner draws the same page as the content it sits beside rather than a
+ * plainer one of its own.
+ *
+ * The units a partner listed — treatments, passes, tables, departures —
+ * become the things the page lets you pick. A listing with none still
+ * renders: it gets one line at the listing's own rate.
+ */
+export function asService(item, kind = 'spa') {
+  if (!item) return null;
+
+  const d = item.details || {};
+  const photos = item.photos?.length ? item.photos : [item.photo].filter(Boolean);
+  const price = item.price || 0;
+
+  const tickets = (item.rooms || []).map((r, i) => ({
+    id: `${item.id}-t${i}`,
+    label: r.type || `Option ${i + 1}`,
+    name: r.type || `Option ${i + 1}`,
+    group: r.mealPlan || d.tag || 'Bookings',
+    summary: r.occupancy ? `Up to ${r.occupancy}` : '',
+    note: r.childPolicy || r.mealPlan || '',
+    price: r.price || price,
+    was: r.was || item.was || 0,
+  }));
+
+  if (!tickets.length) {
+    tickets.push({
+      id: `${item.id}-t0`,
+      label: 'Standard booking',
+      name: 'Standard booking',
+      group: d.tag || 'Bookings',
+      summary: '',
+      note: '',
+      price,
+      was: item.was || 0,
+    });
+  }
+
+  const cheapest = tickets.reduce((m, t) => (t.price < m.price ? t : m), tickets[0]);
+
+  return {
+    id: item.id,
+    kind,
+    desk: true,
+
+    // Who and where.
+    name: item.name,
+    cardName: item.name,
+    place: item.place || '',
+    subtitle: item.place || '',
+    address: item.address || '',
+    label: d.tag || '',
+    tag: d.tag || '',
+
+    // How it reads.
+    rating: d.rating || null,
+    reviews: d.reviews || 0,
+    listRating: d.rating || null,
+    listReviews: d.reviews || 0,
+    offer: item.off || 0,
+    hours: d.hours || '',
+    schedule: d.hours ? `Daily ${d.hours}` : 'Daily',
+    opensAt: (d.hours || '').split('-')[0]?.trim() || '',
+
+    // Pictures. These are already full URLs, not the site's own image slots,
+    // so a page that draws a desk item must not put them through image().
+    image: photos[0] || '',
+    photos,
+    images: photos,
+    gallery: photos.slice(1),
+    moreGallery: Math.max(0, photos.length - 3),
+
+    // What it is.
+    about: item.description || '',
+    blurb: item.description || '',
+    facilities: item.amenities || [],
+    amenities: item.amenities || [],
+    things: d.notes || [],
+    highlight: d.highlight || '',
+
+    // What you can book, and for how much.
+    tickets,
+    from: cheapest.price,
+    price: cheapest.price,
+    was: item.was || 0,
+    slots: DEFAULT_SLOTS,
+    startsAt: DEFAULT_SLOTS[0],
+    sessions: { day: null, slots: DEFAULT_SLOTS.slice(0, 3) },
+    modes: ['walk-in', 'dining'],
+    locations: [
+      {
+        id: `${item.id}-loc`,
+        title: item.place || item.name,
+        address: item.address || item.place || '',
+      },
+    ],
+    nearby: d.nearby || [],
+    guidelines: d.guidelines || [],
+    ruleNotes: d.ruleNotes || [],
+    included: d.included || [],
+    // Every page that draws an "Organized By" block expects one, so a
+    // partner who named no host is their own: it is their venue.
+    organizer: {
+      name: d.host?.title || item.name,
+      rating: d.rating || null,
+      reviews: d.reviews || 0,
+      hosted: d.host?.hosted ?? '—',
+      years: d.host?.years ?? '—',
+    },
+  };
+}
+
+/** One desk item for a service page, already in that page's shape. */
+export async function deskService(id, kind) {
+  const item = await deskItem(id);
+  return item ? asService(item, kind) : null;
 }

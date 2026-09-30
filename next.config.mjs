@@ -46,6 +46,10 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
+      // Seeded partners point at this site's own photographs by their full
+      // address, because the admin panel shows the same listing from a
+      // different origin and a site-relative path would break there.
+      { protocol: 'https', hostname: 'smiraclubwebsite.vercel.app', pathname: '/img/**' },
       ...apiPatterns(),
     ],
     // Setting localPatterns blocks every local image not listed, so the

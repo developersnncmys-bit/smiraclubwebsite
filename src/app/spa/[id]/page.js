@@ -7,10 +7,16 @@ import SpaBooking from '@/components/offers/SpaBooking';
 import { DetailCard, ReviewsCard } from '@/components/hotels/DetailSections';
 import { spaDates, spas } from '@/lib/content';
 import { image } from '@/lib/images';
+import { deskItem, deskService } from '@/lib/desk';
+
+// A partner spa is not known at build time, so the page is drawn on demand
+// and then held for a minute.
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const s = spas.find((x) => x.id === id);
+  const s = spas.find((x) => x.id === id) || (await deskItem(id));
   return { title: s ? s.name : 'Not found' };
 }
 
@@ -28,10 +34,14 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   // Read so the page renders per request: the booking days start today.
   await searchParams;
-  const s = spas.find((x) => x.id === id);
+  // The site's own spas first; anything else is a partner the desk has
+  // signed, drawn on this same page rather than a plainer one.
+  const own = spas.find((x) => x.id === id);
+  const s = own || (await deskService(id, 'spa'));
   if (!s) notFound();
 
-  const photos = s.photos.map((p) => image(p));
+  // Bundled spas name an image slot; a partner's photos are already URLs.
+  const photos = own ? s.photos.map((p) => image(p)) : s.photos;
 
   return (
     <div className="pb-28 lg:pb-16">

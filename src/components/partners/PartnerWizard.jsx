@@ -28,10 +28,13 @@ const STEPS = [
   'Ownership and legal',
 ];
 
+// One entry for every service this site sells, so an operator who runs
+// tours, flights or coaches has somewhere to put themselves.
 const PROPERTY_TYPES = [
   'Hotel', 'Resort', 'Homestay', 'Villa', 'Camp',
-  'Restaurant', 'Spa & Salon', 'Games Zone', 'Theme Park',
-  'Activity', 'Transport', 'Lifestyle',
+  'Restaurant', 'Spa & Salon', 'Games Zone', 'Theme Park', 'Water Park',
+  'Activity', 'Package', 'Group Departure',
+  'Flight', 'Train & Bus', 'Transport', 'Lifestyle',
 ];
 
 /**
@@ -60,6 +63,11 @@ const PROFILES = {
   Activity: { ...VISIT, unit: 'Activity', units: 'Activities', eg: 'Sunrise trek', egType: 'Half day', occupancyLabel: 'People per slot' },
   Transport: { ...VISIT, unit: 'Vehicle', units: 'Vehicles', eg: 'Innova Crysta', egType: 'SUV', occupancyLabel: 'Seats', times: 'none' },
   Lifestyle: { ...VISIT, unit: 'Experience', units: 'Experiences', eg: 'Private yacht evening', egType: 'Evening', occupancyLabel: 'Guests' },
+  'Water Park': { ...VISIT, unit: 'Ticket', units: 'Tickets', eg: 'Day pass with locker', egType: 'Day pass', occupancyLabel: 'People covered' },
+  Package: { ...VISIT, unit: 'Departure', units: 'Departures', eg: '5 nights Kerala, twin sharing', egType: 'Twin sharing', occupancyLabel: 'Travellers', times: 'none' },
+  'Group Departure': { ...VISIT, unit: 'Departure', units: 'Departures', eg: '12 Nov, 20 seats', egType: 'Fixed departure', occupancyLabel: 'Seats', times: 'none' },
+  Flight: { ...VISIT, unit: 'Fare', units: 'Fares', eg: 'Mumbai - Goa, economy', egType: 'Economy', occupancyLabel: 'Seats', times: 'none' },
+  'Train & Bus': { ...VISIT, unit: 'Service', units: 'Services', eg: 'Bengaluru - Goa sleeper', egType: 'Sleeper', occupancyLabel: 'Seats', times: 'none' },
 };
 const DEFAULT_PROFILE = { ...STAY, unit: 'Room', units: 'Rooms', eg: 'Deluxe Room', egType: 'Deluxe' };
 const profileOf = (type) => PROFILES[type] || DEFAULT_PROFILE;

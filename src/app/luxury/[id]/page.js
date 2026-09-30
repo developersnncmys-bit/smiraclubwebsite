@@ -7,10 +7,14 @@ import SpaBooking from '@/components/offers/SpaBooking';
 import { DetailCard, ReviewsCard } from '@/components/hotels/DetailSections';
 import { luxuries, luxuryAvailableFrom, spaDates } from '@/lib/content';
 import { image } from '@/lib/images';
+import { deskItem, deskService } from '@/lib/desk';
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const l = luxuries.find((x) => x.id === id);
+  const l = luxuries.find((x) => x.id === id) || (await deskItem(id));
   return { title: l ? l.name : 'Not found' };
 }
 
@@ -25,15 +29,20 @@ const TABS = [
 export default async function Page({ params, searchParams }) {
   const { id } = await params;
   await searchParams;
-  const l = luxuries.find((x) => x.id === id);
+  // A partner experience the desk has signed draws this same page.
+  const own = luxuries.find((x) => x.id === id);
+  const l = own || (await deskService(id, 'luxury'));
   if (!l) notFound();
+
+  // Bundled experiences name an image slot; a partner's are already URLs.
+  const pic = (g) => (own ? image(g) : g);
 
   // Bookings open tomorrow, so the sheet's days start there too.
   const dates = spaDates(8).slice(1);
 
   return (
     <div className="pb-28 lg:pb-16">
-      <DetailGallery photos={l.photos.map((p) => image(p))} name={l.name} rating={l.rating} reviews={l.reviews} />
+      <DetailGallery photos={l.photos.map(pic)} name={l.name} rating={l.rating} reviews={l.reviews} />
 
       <div className="shell py-4 lg:py-8">
         <section className="lg:max-w-3xl">
@@ -88,7 +97,7 @@ export default async function Page({ params, searchParams }) {
           <ul className="mt-4 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
             {l.gallery.map((g, i) => (
               <li key={`${g}-${i}`} className="relative aspect-[5/6] overflow-hidden rounded-xl">
-                <Image src={image(g)} alt="" fill sizes="(min-width: 1024px) 18vw, 45vw" className="object-cover" />
+                <Image src={pic(g)} alt="" fill sizes="(min-width: 1024px) 18vw, 45vw" className="object-cover" />
                 {i === l.gallery.length - 1 && l.moreGallery > 0 && (
                   <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[12px] font-semibold text-white">
                     <Images size={13} />+{l.moreGallery} More

@@ -10,6 +10,10 @@ import {
   parkAbout, parkFacilities, parkIdealFor, parkNearby, parkRides, parkSafety, parks, parkTickets,
 } from '@/lib/content';
 import { image } from '@/lib/images';
+import { deskItem, deskService, iconForAmenity } from '@/lib/desk';
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return parks.map((p) => ({ id: p.id }));
@@ -17,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const park = parks.find((p) => p.id === id);
+  const park = parks.find((p) => p.id === id) || (await deskItem(id));
   return { title: park ? `${park.name} — Offer Details` : 'Park not found' };
 }
 
@@ -38,11 +42,21 @@ const TABS = [
  */
 export default async function Page({ params }) {
   const { id } = await params;
-  const park = parks.find((p) => p.id === id);
+  // A partner park or attraction draws this page too.
+  const own = parks.find((p) => p.id === id);
+  const park = own || (await deskService(id, 'park'));
   if (!park) notFound();
 
-  const photos = park.images.map((slot) => image(slot));
-  const tickets = parkTickets(park);
+  // Bundled parks name an image slot; a partner's are already URLs.
+  const photos = own ? park.images.map((slot) => image(slot)) : park.photos;
+
+  // The tickets the partner listed, or the standard set scaled to their rate.
+  const tickets = !own && park.tickets?.length ? park.tickets : parkTickets(park);
+  const facilities = !own && park.amenities?.length
+    ? park.amenities.map((a) => ({ label: a, icon: iconForAmenity(a) }))
+    : parkFacilities;
+  const safety = !own && park.guidelines?.length ? park.guidelines : parkSafety;
+  const nearby = !own && park.nearby?.length ? park.nearby : parkNearby;
 
   return (
     <div className="pb-28 lg:pb-16">
@@ -83,7 +97,7 @@ export default async function Page({ params }) {
         {/* -- About ------------------------------------------------------ */}
         <section id="overview" className="card scroll-mt-32 p-4 sm:p-5">
           <h2 className="text-[16px] font-bold text-ink-900">About This Place</h2>
-          <p className="mt-2 text-[14px] leading-relaxed text-ink-700">{parkAbout}</p>
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-700">{park.about || parkAbout}</p>
           <button type="button" className="mt-2 text-[14px] font-semibold text-action-500">Read More</button>
 
           <h3 className="mt-5 text-[15px] font-bold text-ink-900">Ideal For</h3>
@@ -111,7 +125,7 @@ export default async function Page({ params }) {
         {/* -- Facilities ------------------------------------------------- */}
         <DetailCard id="facilities" title="Facilities at the venue">
           <ul className="mt-5 grid grid-cols-3 gap-y-6 sm:grid-cols-6">
-            {parkFacilities.map((f) => (
+            {facilities.map((f) => (
               <li key={f.label} className="flex flex-col items-center gap-2 px-1 text-center">
                 <Icon name={f.icon} size={24} className="text-action-500" strokeWidth={1.7} />
                 <span className="text-[12px] font-medium leading-tight text-action-500">{f.label}</span>
@@ -130,13 +144,13 @@ export default async function Page({ params }) {
           <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">View Details</button>
         </DetailCard>
 
-        <LocationCard address={park.address} nearby={parkNearby} />
+        <LocationCard address={park.address} nearby={nearby} />
 
         {/* -- Safety ----------------------------------------------------- */}
         <section className="card p-4 sm:p-5">
           <h2 className="text-[16px] font-bold text-ink-900">Safety Guide Lines</h2>
           <div className="mt-4 space-y-4">
-            {parkSafety.map((s) => (
+            {safety.map((s) => (
               <div key={s.title}>
                 <h3 className="text-[15px] font-bold text-ink-900 underline">{s.title}</h3>
                 {s.lines.map((line) => (

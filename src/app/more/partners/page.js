@@ -174,36 +174,44 @@ export default function Page() {
 
         {/* -- The form ------------------------------------------------------ */}
         <section id="apply" className="scroll-mt-24 py-8 lg:py-12">
-          <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-10">
-            <div className="lg:col-span-4 lg:sticky lg:top-24">
+          {/*
+            The form gets the whole width.
+
+            The intro and the checklist used to sit in a sticky column beside
+            it, which left the five steps in two thirds of the page — tight,
+            since a step is a full form of its own. They read once, at the
+            top, and the wizard has the room it needs underneath.
+          */}
+          <div className="lg:flex lg:items-start lg:justify-between lg:gap-10">
+            <div className="lg:max-w-xl">
               <h2 className="section-title">Apply to partner</h2>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-500">
                 Five short steps — your property, its rooms, what it offers, your rates and the
                 paperwork. Only the property name and a phone number are needed to send it; our
                 desk collects whatever is missing when they call.
               </p>
-
-              <div className="card mt-5 p-5">
-                <h3 className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-400">
-                  Handy to have ready
-                </h3>
-                <ul className="mt-3 space-y-3">
-                  {PAPERS.map(({ icon: Icon, label }) => (
-                    <li key={label} className="flex items-start gap-3 text-[13px] text-ink-700">
-                      <Icon size={18} className="mt-0.5 shrink-0 text-brand-600" />
-                      {label}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-[13px] leading-snug text-ink-400">
-                  None of it is needed to send the form.
-                </p>
-              </div>
             </div>
 
-            <div className="mt-6 lg:col-span-8 lg:mt-0">
-              <PartnerWizard />
+            <div className="card mt-5 p-5 lg:mt-0 lg:w-[320px] lg:shrink-0">
+              <h3 className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-400">
+                Handy to have ready
+              </h3>
+              <ul className="mt-3 space-y-3">
+                {PAPERS.map(({ icon: Icon, label }) => (
+                  <li key={label} className="flex items-start gap-3 text-[13px] text-ink-700">
+                    <Icon size={18} className="mt-0.5 shrink-0 text-brand-600" />
+                    {label}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-[13px] leading-snug text-ink-400">
+                None of it is needed to send the form.
+              </p>
             </div>
+          </div>
+
+          <div className="mt-7">
+            <PartnerWizard />
           </div>
         </section>
 

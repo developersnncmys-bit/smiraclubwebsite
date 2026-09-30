@@ -10,6 +10,10 @@ import {
   gameAbout, gameFacilities, gameHighlights, gameIdealFor, gameSafety, gameTickets, gameZones, parkNearby,
 } from '@/lib/content';
 import { image } from '@/lib/images';
+import { deskItem, deskService, iconForAmenity } from '@/lib/desk';
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return gameZones.map((g) => ({ id: g.id }));
@@ -17,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const zone = gameZones.find((g) => g.id === id);
+  const zone = gameZones.find((g) => g.id === id) || (await deskItem(id));
   return { title: zone ? `${zone.name} — Games Zone` : 'Game zone not found' };
 }
 
@@ -36,11 +40,21 @@ const TABS = [
  */
 export default async function Page({ params }) {
   const { id } = await params;
-  const zone = gameZones.find((g) => g.id === id);
+  // A partner games zone draws this page too.
+  const own = gameZones.find((g) => g.id === id);
+  const zone = own || (await deskService(id, 'games'));
   if (!zone) notFound();
 
-  const photos = zone.images.map((slot) => image(slot));
-  const tickets = gameTickets(zone);
+  // Bundled zones name an image slot; a partner's are already URLs.
+  const photos = own ? zone.images.map((slot) => image(slot)) : zone.photos;
+
+  // The passes the partner listed, or the standard set scaled to their rate.
+  const tickets = !own && zone.tickets?.length ? zone.tickets : gameTickets(zone);
+  const facilities = !own && zone.amenities?.length
+    ? zone.amenities.map((a) => ({ label: a, icon: iconForAmenity(a) }))
+    : gameFacilities;
+  const safety = !own && zone.guidelines?.length ? zone.guidelines : gameSafety;
+  const nearby = !own && zone.nearby?.length ? zone.nearby : parkNearby;
 
   return (
     <div className="pb-28 lg:pb-16">
@@ -79,7 +93,7 @@ export default async function Page({ params }) {
         {/* -- About ------------------------------------------------------ */}
         <section id="overview" className="card scroll-mt-32 p-4 sm:p-5">
           <h2 className="text-[16px] font-bold text-ink-900">About This Place</h2>
-          <p className="mt-2 text-[14px] leading-relaxed text-ink-700">{gameAbout}</p>
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-700">{zone.about || gameAbout}</p>
 
           <h3 className="mt-5 text-[15px] font-bold text-ink-900">Ideal For</h3>
           <ul className="mt-3 flex flex-wrap gap-2">
@@ -106,7 +120,7 @@ export default async function Page({ params }) {
         {/* -- Facilities ------------------------------------------------- */}
         <DetailCard id="facilities" title="Facilities at the venue">
           <ul className="mt-5 grid grid-cols-3 gap-y-6 sm:grid-cols-6">
-            {gameFacilities.map((f) => (
+            {facilities.map((f) => (
               <li key={f.label} className="flex flex-col items-center gap-2 px-1 text-center">
                 <Icon name={f.icon} size={24} className="text-action-500" strokeWidth={1.7} />
                 <span className="text-[12px] font-medium leading-tight text-action-500">{f.label}</span>
@@ -117,13 +131,13 @@ export default async function Page({ params }) {
 
         <ReviewsCard rating={zone.rating} reviews={zone.reviews} />
 
-        <LocationCard address={zone.address} nearby={parkNearby} />
+        <LocationCard address={zone.address} nearby={nearby} />
 
         {/* -- Before you play ------------------------------------------- */}
         <section className="card p-4 sm:p-5">
           <h2 className="text-[16px] font-bold text-ink-900">Good To Know</h2>
           <div className="mt-4 space-y-4">
-            {gameSafety.map((s) => (
+            {safety.map((s) => (
               <div key={s.title}>
                 <h3 className="text-[15px] font-bold text-ink-900 underline">{s.title}</h3>
                 {s.lines.map((line) => (

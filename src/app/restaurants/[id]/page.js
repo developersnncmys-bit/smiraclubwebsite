@@ -13,6 +13,12 @@ import {
   parkNearby, restaurantFacilities, restaurantHours, restaurantMenu, restaurantPerks, restaurants,
 } from '@/lib/content';
 import { image } from '@/lib/images';
+import { deskItem, deskService, iconForAmenity } from '@/lib/desk';
+
+// The site's own restaurants are built ahead; a partner's is drawn on
+// demand the first time someone opens it.
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return restaurants.map((r) => ({ id: r.id }));
@@ -20,9 +26,11 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const r = restaurants.find((x) => x.id === id);
+  const r = restaurants.find((x) => x.id === id) || (await deskItem(id));
   return { title: r ? `${r.name} — Offer Details` : 'Restaurant not found' };
 }
+
+const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const TABS = [
   { key: 'offers', label: 'Offers' },
@@ -39,10 +47,25 @@ const TABS = [
  */
 export default async function Page({ params }) {
   const { id } = await params;
-  const r = restaurants.find((x) => x.id === id);
+  // A partner restaurant the desk has signed draws this same page.
+  const own = restaurants.find((x) => x.id === id);
+  const r = own || (await deskService(id, 'restaurant'));
   if (!r) notFound();
 
-  const photos = [image(r.image), image('rest-garden-night'), image('menu-food')];
+  // Bundled restaurants name an image slot; a partner's are already URLs.
+  const photos = own
+    ? [image(r.image), image('rest-garden-night'), image('menu-food')]
+    : r.photos;
+
+  // What the partner filled in where they filled it in, and the house copy
+  // everywhere else.
+  const hours = !own && r.hours ? WEEK.map((day) => ({ day, hours: r.hours })) : restaurantHours;
+  const perks = !own && r.amenities?.length ? r.amenities : restaurantPerks;
+  const facilities = !own && r.amenities?.length
+    ? r.amenities.map((a) => ({ label: a, icon: iconForAmenity(a) }))
+    : restaurantFacilities;
+  const nearby = !own && r.nearby?.length ? r.nearby : parkNearby;
+
   const similar = restaurants
     .filter((x) => x.id !== r.id)
     .slice(0, 2)
@@ -63,7 +86,7 @@ export default async function Page({ params }) {
             {r.place}
             <ChevronRight size={15} />
           </a>
-          <OpenHours hours={restaurantHours} />
+          <OpenHours hours={hours} />
 
           <div className="mt-4 flex items-center gap-3 rounded-2xl border border-green-600/25 bg-gradient-to-br from-[#f0f9ef] to-[#dff0e4] p-3.5">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-600">
@@ -80,7 +103,9 @@ export default async function Page({ params }) {
           <div className="card p-5">
             <p className="text-[16px] font-bold text-ink-900">{r.name}</p>
             <MemberStrip percent={r.offer} className="mt-3" />
-            <p className="mt-3 text-[14px] text-ink-700">Bookings available from {r.opensAt}, Today</p>
+            <p className="mt-3 text-[14px] text-ink-700">
+              Bookings available {r.opensAt ? `from ${r.opensAt}, ` : ''}Today
+            </p>
             <div className="mt-4">
               <BookTable restaurant={{ id: r.id, name: r.name }} />
             </div>
@@ -99,11 +124,16 @@ export default async function Page({ params }) {
 
           <DetailCard id="overview" title="About This Place">
             <p className="mt-2 text-[14px] leading-relaxed text-ink-700">
-              Overlooking the Arabian Sea, <span className="font-semibold text-ink-900">{r.name}</span> offers relaxed
-              seating and world-class dining.
+              {r.about || (
+                <>
+                  Overlooking the Arabian Sea,{' '}
+                  <span className="font-semibold text-ink-900">{r.name}</span> offers relaxed seating
+                  and world-class dining.
+                </>
+              )}
             </p>
             <ul className="mt-4 space-y-2">
-              {restaurantPerks.map((p) => (
+              {perks.map((p) => (
                 <li key={p} className="flex items-center gap-2.5 text-[14px] text-ink-700">
                   <CircleCheck size={17} className="shrink-0 text-ink-500" />
                   {p}
@@ -132,7 +162,7 @@ export default async function Page({ params }) {
 
           <DetailCard id="facilities" title="Facilities">
             <ul className="mt-4 grid grid-cols-4 gap-2 rounded-xl bg-brand-50/60 p-3">
-              {restaurantFacilities.map((f) => (
+              {facilities.map((f) => (
                 <li key={f.label} className="flex flex-col items-center gap-1.5 text-center">
                   <Icon name={f.icon} size={22} className="text-action-500" strokeWidth={1.7} />
                   <span className="text-[12px] font-medium leading-tight text-ink-900">{f.label}</span>
@@ -142,7 +172,7 @@ export default async function Page({ params }) {
           </DetailCard>
 
           <ReviewsCard rating={r.rating} reviews={r.reviews} />
-          <LocationCard address={r.address} nearby={parkNearby} />
+          <LocationCard address={r.address} nearby={nearby} />
 
           {similar.length > 0 && (
             <section className="pt-2">

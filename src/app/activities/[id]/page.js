@@ -9,10 +9,14 @@ import { DetailCard, ReviewsCard } from '@/components/hotels/DetailSections';
 import { activities, activityDates, activityFrom } from '@/lib/content';
 import { image } from '@/lib/images';
 import { clock, shortDate } from '@/lib/format';
+import { deskItem, deskService, iconForAmenity } from '@/lib/desk';
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const a = activities.find((x) => x.id === id);
+  const a = activities.find((x) => x.id === id) || (await deskItem(id));
   return { title: a ? a.name : 'Activity not found' };
 }
 
@@ -28,10 +32,20 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   // Read so the page renders per request: its dates run from tomorrow.
   await searchParams;
-  const a = activities.find((x) => x.id === id);
+  // A partner activity the desk has signed draws this same page.
+  const own = activities.find((x) => x.id === id);
+  const a = own || (await deskService(id, 'activity'));
   if (!a) notFound();
 
-  const photos = [image(a.image), ...a.gallery.slice(0, 2).map((g) => image(g))];
+  // Bundled activities name an image slot; a partner's are already URLs.
+  const pic = (g) => (own ? image(g) : g);
+  const photos = [pic(a.image), ...a.gallery.slice(0, 2).map(pic)];
+
+  // The partner's own amenities, drawn with an icon each.
+  const facilities = own
+    ? a.facilities
+    : (a.amenities || []).map((x) => ({ label: x, icon: iconForAmenity(x) }));
+
   const dates = activityDates(a);
   const first = dates[0];
   const firstSlot = a.sessions.slots[0];
@@ -113,7 +127,7 @@ export default async function Page({ params, searchParams }) {
 
           <DetailCard id="facilities" title="Facilities">
             <ul className="mt-5 grid grid-cols-4 gap-y-6">
-              {a.facilities.map((f) => (
+              {facilities.map((f) => (
                 <li key={f.label} className="flex flex-col items-center gap-1.5 px-1 text-center">
                   <Icon name={f.icon} size={24} className="text-action-500" strokeWidth={1.7} />
                   <span className="text-[12px] font-medium leading-tight text-ink-900">{f.label}</span>
@@ -127,7 +141,7 @@ export default async function Page({ params, searchParams }) {
             <ul className="mt-4 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
               {a.gallery.map((g, i) => (
                 <li key={g} className="relative aspect-[5/4] overflow-hidden rounded-xl">
-                  <Image src={image(g)} alt="" fill sizes="(min-width: 1024px) 18vw, 45vw" className="object-cover" />
+                  <Image src={pic(g)} alt="" fill sizes="(min-width: 1024px) 18vw, 45vw" className="object-cover" />
                   {i === a.gallery.length - 1 && a.moreGallery > 0 && (
                     <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[12px] font-semibold text-white">
                       <Images size={13} />+{a.moreGallery} More
