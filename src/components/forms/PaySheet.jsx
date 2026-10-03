@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import QRCode from 'qrcode';
 import { Check, Copy, Loader2, QrCode, Smartphone, X } from 'lucide-react';
 import Portal from '@/components/ui/Portal';
 import { inr } from '@/lib/format';
@@ -33,9 +32,18 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
   // Drawn in the browser because the amount is only known here — it moves
   // with the plan, the coupon and whether they are sharing.
   useEffect(() => {
-    if (!open) return;
+    if (!open) return undefined;
     let dropped = false;
-    QRCode.toDataURL(link, { width: 480, margin: 1, errorCorrectionLevel: 'M' })
+    // Fetched when the sheet opens rather than imported at the top.
+    //
+    // The encoder is only ever needed in a browser, and importing it up
+    // there puts it in the server bundle as well — where it reaches for
+    // node's own modules and is twenty kilobytes nobody asked for on a
+    // page that mostly never opens this sheet.
+    import('qrcode')
+      .then(({ default: QRCode }) =>
+        QRCode.toDataURL(link, { width: 480, margin: 1, errorCorrectionLevel: 'M' }),
+      )
       .then((url) => !dropped && setQr(url))
       .catch(() => !dropped && setQr(''));
     return () => { dropped = true; };
