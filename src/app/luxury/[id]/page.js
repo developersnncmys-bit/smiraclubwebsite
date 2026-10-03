@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ChevronRight, Crown, Images, Star } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import SpaBooking from '@/components/offers/SpaBooking';
 import { DetailCard, ReviewsCard } from '@/components/hotels/DetailSections';
@@ -42,7 +43,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-28 lg:pb-16">
-      <DetailGallery photos={l.photos.map(pic)} name={l.name} rating={l.rating} reviews={l.reviews} />
+      <DetailGallery galleries={serviceGalleries()} photos={l.photos.map(pic)} name={l.name} rating={l.rating} reviews={l.reviews} />
 
       <div className="shell py-4 lg:py-8">
         <section className="lg:max-w-3xl">

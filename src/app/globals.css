@@ -23,6 +23,23 @@
     }
   }
 
+  /*
+   * An inner screen carries its own bar — a way back and the screen's
+   * name — and on a phone that used to sit under the site header: two
+   * rows of chrome before any content. The header steps aside there and
+   * the page's own bar takes the top, which is what the height below is
+   * saying. A desktop has room for both, so nothing changes at lg.
+   */
+  body[data-inner-screen] {
+    --header-h: 0px;
+  }
+
+  @media (max-width: 1023px) {
+    body[data-inner-screen] > header {
+      display: none;
+    }
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
   }

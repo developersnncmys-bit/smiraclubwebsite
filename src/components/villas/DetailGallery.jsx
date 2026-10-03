@@ -4,7 +4,9 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useWishlist } from '@/lib/wishlist';
-import { ArrowLeft, Heart, Images, Share2, Star } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowLeft, Bell, Heart, Images, Share2, Star } from 'lucide-react';
+import InnerScreen from '@/components/layout/InnerScreen';
 import GalleryViewer from '@/components/ui/GalleryViewer';
 
 /**
@@ -18,7 +20,7 @@ import GalleryViewer from '@/components/ui/GalleryViewer';
  * Share uses the Web Share sheet where the browser has one and falls back to
  * copying the link, so the button always does something.
  */
-export default function DetailGallery({ photos, name, rating, reviews }) {
+export default function DetailGallery({ photos, name, rating, reviews, galleries = [] }) {
   const router = useRouter();
   const [at, setAt] = useState(0);
   // The heart saves to the same wishlist as the cards' ⋮ menus.
@@ -60,7 +62,9 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
 
   return (
     <>
-    <div className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white">
+    {/* The header stands down for this on a phone — see InnerScreen. */}
+    <InnerScreen />
+    <div className="sticky top-[var(--header-h)] z-40 border-b border-surface-line bg-white pt-safe lg:pt-0">
       <div className="shell flex h-12 items-center gap-2">
         <button
           type="button"
@@ -71,6 +75,15 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
           <ArrowLeft size={21} />
         </button>
         <p className="truncate text-[16px] font-semibold text-ink-900">{name}</p>
+
+        {/* The header's bell, kept within reach on a phone. */}
+        <Link
+          href="/notifications"
+          aria-label="Notifications"
+          className="-mr-2 ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink-700 transition hover:bg-surface-soft lg:hidden"
+        >
+          <Bell size={20} />
+        </Link>
       </div>
     </div>
 
@@ -176,6 +189,7 @@ export default function DetailGallery({ photos, name, rating, reviews }) {
       open={gallery}
       at={-1}
       onClose={() => setGallery(false)}
+      galleries={galleries}
     />
     </>
   );

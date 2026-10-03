@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import BookingBar from '@/components/villas/BookingBar';
 import {
@@ -137,8 +138,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-28 lg:pb-36">
-      <DetailGallery
-        photos={photos}
+      <DetailGallery galleries={serviceGalleries()}         photos={photos}
         name={villa.name}
         rating={villa.rating}
         reviews={villa.reviews}

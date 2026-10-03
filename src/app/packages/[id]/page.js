@@ -4,6 +4,7 @@ import {
   BadgeCheck, Calendar, ChevronRight, CircleCheck, Clock, Compass, Crown, MapPin, Users,
 } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import {
   packageMemberBenefit, packagePolicies, packageTabs, packages,
@@ -39,8 +40,7 @@ export default async function Page({ params }) {
 
   return (
     <div className="pb-28 lg:pb-12">
-      <DetailGallery
-        photos={photos}
+      <DetailGallery galleries={serviceGalleries()}         photos={photos}
         name={pkg.name}
         rating={pkg.rating}
         reviews={pkg.reviews}

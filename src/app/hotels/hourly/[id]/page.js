@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { BadgeCheck, ChevronRight, Images, Sparkles, UtensilsCrossed } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import HourlySlotPicker from '@/components/hotels/HourlySlotPicker';
 import {
   DetailCard, GuidelinesSection, LocationCard, ReviewsCard, RulesCard,
@@ -51,7 +52,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-32 lg:pb-16">
-      <DetailGallery photos={photos} name={hotel.name} rating={hotel.rating} reviews={hotel.reviews} />
+      <DetailGallery galleries={serviceGalleries()} photos={photos} name={hotel.name} rating={hotel.rating} reviews={hotel.reviews} />
 
       {/*
         grid-cols-1 is minmax(0, 1fr): without it the one implicit column

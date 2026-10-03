@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BadgeCheck, MapPin } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import RoomPicker from '@/components/hotels/RoomPicker';
 import PackageCard from '@/components/hotels/PackageCard';
@@ -94,8 +95,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-32 lg:pb-36">
-      <DetailGallery
-        photos={photos}
+      <DetailGallery galleries={serviceGalleries()}         photos={photos}
         name={hotel.name}
         rating={hotel.rating}
         reviews={hotel.reviews}

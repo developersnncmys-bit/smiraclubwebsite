@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { BadgeCheck, Calendar, MapPin, User } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import FreeStayCard from '@/components/hotels/FreeStayCard';
 import FreeStayPicker from '@/components/hotels/FreeStayPicker';
@@ -79,7 +80,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-32 lg:pb-16">
-      <DetailGallery photos={photos} name={hotel.name} rating={hotel.rating} reviews={hotel.reviews} />
+      <DetailGallery galleries={serviceGalleries()} photos={photos} name={hotel.name} rating={hotel.rating} reviews={hotel.reviews} />
 
       <div className="shell py-4 lg:py-8">
         <FreeStayPicker

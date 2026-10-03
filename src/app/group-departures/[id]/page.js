@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { CircleCheck, CircleX, Clock, Crown, MapPin, PlaneTakeoff, Star, UserRound, Users } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import DepartureChooser from '@/components/packages/DepartureChooser';
 import {
@@ -57,7 +58,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-28 lg:pb-16">
-      <DetailGallery photos={trip.photos.map((p) => image(p))} name={trip.name} rating={trip.rating} reviews={trip.reviews} />
+      <DetailGallery galleries={serviceGalleries()} photos={trip.photos.map((p) => image(p))} name={trip.name} rating={trip.rating} reviews={trip.reviews} />
 
       <div className="shell space-y-4 py-4 lg:max-w-5xl lg:py-8 xl:mx-0">
         <section>

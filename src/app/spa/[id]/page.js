@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { ChevronRight, Crown, Sparkle } from 'lucide-react';
 import DetailGallery from '@/components/villas/DetailGallery';
+import { serviceGalleries } from '@/lib/serviceGallery';
 import DetailTabs from '@/components/villas/DetailTabs';
 import OpenHours from '@/components/offers/OpenHours';
 import SpaBooking from '@/components/offers/SpaBooking';
@@ -45,7 +46,7 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <div className="pb-28 lg:pb-16">
-      <DetailGallery photos={photos} name={s.name} rating={s.rating} reviews={s.reviews} />
+      <DetailGallery galleries={serviceGalleries()} photos={photos} name={s.name} rating={s.rating} reviews={s.reviews} />
 
       <div className="shell py-4 lg:py-8">
         <section className="lg:max-w-3xl">

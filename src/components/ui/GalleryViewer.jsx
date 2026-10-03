@@ -5,26 +5,42 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 /**
- * Every photo of a place, full screen.
+ * Every photo of a place, full screen — and then the rest of the site.
  *
  * The hero shows one picture at a time and swipes; this is the other way to
- * look — all of them at once, then one of them large. It is the same list of
- * photos either way, so a service only has to hand over what it already has.
+ * look — all of them at once, then one of them large.
+ *
+ * The strip across the top is what makes it more than this one place.
+ * Opening the gallery on a hotel showed that hotel's three pictures and
+ * nothing else: reasonable for deciding, a dead end for looking. So the
+ * place you opened comes first and every other service follows, and
+ * tapping one swaps the grid for that service's photographs without
+ * leaving the page underneath.
  *
  * Arrow keys and Escape work, because a gallery you can only leave with a
  * mouse is a trap on a laptop.
  */
-export default function GalleryViewer({ photos, name, open, at = 0, onClose }) {
+export default function GalleryViewer({ photos, name, open, at = 0, onClose, galleries = [] }) {
   // -1 is the grid; anything else is that photo, large.
   const [shown, setShown] = useState(at);
+  // '' is the place you opened; anything else is one of the services.
+  const [service, setService] = useState('');
 
   useEffect(() => {
-    if (open) setShown(at);
+    if (open) {
+      setShown(at);
+      setService('');
+    }
   }, [open, at]);
 
+  // Which photos the grid is showing: this place's, or a service's.
+  const here = galleries.find((g) => g.key === service);
+  const shownPhotos = here ? here.photos : photos;
+  const shownName = here ? here.label : name;
+
   const step = useCallback(
-    (by) => setShown((n) => (n < 0 ? n : (n + by + photos.length) % photos.length)),
-    [photos.length],
+    (by) => setShown((n) => (n < 0 ? n : (n + by + shownPhotos.length) % shownPhotos.length)),
+    [shownPhotos.length],
   );
 
   useEffect(() => {
@@ -66,9 +82,11 @@ export default function GalleryViewer({ photos, name, open, at = 0, onClose }) {
           {shown >= 0 ? <ChevronLeft size={21} /> : <X size={21} />}
         </button>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[15px] font-bold text-white">{name}</p>
+          <p className="truncate text-[15px] font-bold text-white">{shownName}</p>
           <p className="text-[12px] text-white/70">
-            {shown >= 0 ? `Photo ${shown + 1} of ${photos.length}` : `${photos.length} photos`}
+            {shown >= 0
+              ? `Photo ${shown + 1} of ${shownPhotos.length}`
+              : `${shownPhotos.length} photos`}
           </p>
         </div>
         {shown >= 0 && (
@@ -83,10 +101,35 @@ export default function GalleryViewer({ photos, name, open, at = 0, onClose }) {
         )}
       </div>
 
+      {/* This place first, then everything else Smira sells. Only on the
+          grid: in the middle of one photograph it is in the way. */}
+      {shown < 0 && galleries.length > 0 && (
+        <div className="no-scrollbar shrink-0 overflow-x-auto px-4 pb-3">
+          <div className="flex gap-2">
+            {[{ key: '', label: 'This place' }, ...galleries].map((g) => {
+              const on = g.key === service;
+              return (
+                <button
+                  key={g.key || 'here'}
+                  type="button"
+                  onClick={() => { setService(g.key); setShown(-1); }}
+                  aria-pressed={on}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-[13px] font-bold transition ${
+                    on ? 'bg-white text-ink-900' : 'bg-white/15 text-white hover:bg-white/25'
+                  }`}
+                >
+                  {g.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {shown < 0 ? (
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-            {photos.map((src, i) => (
+            {shownPhotos.map((src, i) => (
               <button
                 key={src}
                 type="button"
@@ -102,13 +145,13 @@ export default function GalleryViewer({ photos, name, open, at = 0, onClose }) {
       ) : (
         <div className="relative min-h-0 flex-1">
           <Image
-            src={photos[shown]}
-            alt={`${name} — photo ${shown + 1}`}
+            src={shownPhotos[shown]}
+            alt={`${shownName} — photo ${shown + 1}`}
             fill
             sizes="100vw"
             className="object-contain"
           />
-          {photos.length > 1 && (
+          {shownPhotos.length > 1 && (
             <>
               <button
                 type="button"
