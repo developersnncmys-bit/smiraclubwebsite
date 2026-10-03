@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
@@ -25,6 +24,17 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
   const router = useRouter();
   const stay = defaultStay();
 
+  /**
+   * What is being searched for.
+   *
+   * The four tabs were links to the category screens, so picking one left
+   * this panel behind — the tab you chose could not change what the
+   * search did, because by the time you typed anything you were on
+   * another page. They are a choice now, and the search goes where the
+   * choice says.
+   */
+  const [kind, setKind] = useState(active);
+
   const [destination, setDestination] = useState('');
   const [from, setFrom] = useState(stay.from.toISOString().slice(0, 10));
   const [to, setTo] = useState(stay.to.toISOString().slice(0, 10));
@@ -45,10 +55,26 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
     .join(', ')
     .concat(`/ ${plural(rooms, 'Room')}`);
 
+  /**
+   * Where a search lands, by the tab it was made under.
+   *
+   * Every search went to /results, which lists hotels and villas. So
+   * searching under Free Stay returned nightly rooms with prices on them,
+   * and searching under Package returned no packages at all — the tab was
+   * lit, read, and then ignored. Each tab has a screen of its own and the
+   * search goes to it.
+   */
+  const RESULTS = {
+    'free-stay': '/free-stay/results',
+    hotel: '/results',
+    villa: '/villas/search',
+    package: '/packages',
+  };
+
   const submit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams({
-      kind: active,
+      kind,
       destination,
       from,
       to,
@@ -59,7 +85,15 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
     // A hotel prices a nine-year-old differently from a two-year-old, so the
     // ages travel with the search rather than just the count.
     if (childAges.length) params.set('ages', childAges.join(','));
-    router.push(`/results?${params.toString()}`);
+
+    // Packages are not booked by the night, so dates and guests mean
+    // nothing to that screen; it is given what was typed and no more.
+    const to_ = RESULTS[kind] || '/results';
+    router.push(
+      kind === 'package'
+        ? `/packages${destination.trim() ? `?destination=${encodeURIComponent(destination.trim())}` : ''}`
+        : `${to_}?${params.toString()}`,
+    );
   };
 
   return (
@@ -71,12 +105,13 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
           className="grid grid-cols-4 overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
         >
           {searchTabs.map((t) => {
-            const on = t.key === active;
+            const on = t.key === kind;
             return (
-              <Link
+              <button
                 key={t.key}
-                href={t.href}
-                aria-current={on ? 'page' : undefined}
+                type="button"
+                onClick={() => setKind(t.key)}
+                aria-pressed={on}
                 className={`flex flex-col items-center gap-0.5 px-2 py-2 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
                   on
                     ? 'bg-white text-ink-900 shadow-card lg:bg-brand-50 lg:text-brand-700 lg:shadow-none'
@@ -100,7 +135,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                   />
                 )}
                 {t.label}
-              </Link>
+              </button>
             );
           })}
 

@@ -31,9 +31,11 @@ const WAYS = [
  * Each card's View Details goes to the package, and Book Now on that page to
  * Review Booking, which sends the booking to the desk.
  */
-export default function PackagesScreen({ packages }) {
+export default function PackagesScreen({ packages, initialQuery = '' }) {
   const [tab, setTab] = useState('all');
-  const [q, setQ] = useState('');
+  // Opens on whatever was searched for on the home screen, in the box, so
+  // it is obvious why the list is short and easy to clear.
+  const [q, setQ] = useState(initialQuery);
 
   const shown = useMemo(() => {
     const test = TABS.find((t) => t.key === tab).test;

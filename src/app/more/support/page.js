@@ -1,5 +1,6 @@
 import ScreenBar from '@/components/ui/ScreenBar';
 import GetHelp from '@/components/profile/GetHelp';
+import RaiseComplaint from '@/components/profile/RaiseComplaint';
 import { helpDesk } from '@/lib/content';
 import { image } from '@/lib/images';
 
@@ -14,6 +15,11 @@ export default function Page() {
     <>
       <ScreenBar title="Get Help" backHref="/profile" />
       <GetHelp art={image(helpDesk.image)} />
+      {/* Looking a booking up is one thing; telling us it went wrong is
+          another, and that one has to reach the desk. */}
+      <div className="shell pb-10">
+        <RaiseComplaint />
+      </div>
     </>
   );
 }
