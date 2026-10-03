@@ -438,3 +438,20 @@ export async function deskFlashOffers() {
     return [];
   }
 }
+
+/**
+ * The hotels a partner has put up as a free stay.
+ *
+ * A free stay is an ordinary hotel room with the price moved onto the
+ * food, so these sit in the Hotels category like any other and are told
+ * apart by the mark their property type sets. Filtering here rather than
+ * asking the API for a category of its own keeps one hotel one listing,
+ * whichever way it is sold.
+ */
+export async function deskFreeStays(limit = 12) {
+  const all = await deskItems('Hotels', { limit: 48 });
+  return all
+    .filter((item) => item.details?.freeStay)
+    .slice(0, limit)
+    .map((item) => ({ ...item, href: `/free-stay/${item.id}` }));
+}

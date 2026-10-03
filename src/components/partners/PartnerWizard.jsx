@@ -28,13 +28,19 @@ const STEPS = [
   'Ownership and legal',
 ];
 
-// One entry for every service this site sells, so an operator who runs
-// tours, flights or coaches has somewhere to put themselves.
+/*
+ * One entry for every service this site sells, in the order it lists them.
+ * Two of the site's own names cover two kinds of place each — "Waterpark &
+ * Themepark" and "Camping & Adventure" — so those are two entries here,
+ * because a partner runs one or the other and the form asks them
+ * different things.
+ */
 const PROPERTY_TYPES = [
-  'Hotel', 'Resort', 'Homestay', 'Villa', 'Camp',
-  'Restaurant', 'Spa & Salon', 'Games Zone', 'Theme Park', 'Water Park',
-  'Activity', 'Package', 'Group Departure',
-  'Flight', 'Train & Bus', 'Transport', 'Lifestyle',
+  'Hotel', 'Resort', 'Villa', 'Homestay', 'Free Stay',
+  'International Trip', 'Group Departure', 'Package',
+  'Restaurant', 'Water Park', 'Theme Park', 'Games Zone', 'Spa & Salon',
+  'Luxury Experience', 'Camp', 'Activity',
+  'Flight', 'Train & Bus', 'Transport',
 ];
 
 /**
@@ -62,7 +68,11 @@ const PROFILES = {
   'Theme Park': { ...VISIT, unit: 'Ticket', units: 'Tickets', eg: 'Day pass', egType: 'Day pass', occupancyLabel: 'People covered' },
   Activity: { ...VISIT, unit: 'Activity', units: 'Activities', eg: 'Sunrise trek', egType: 'Half day', occupancyLabel: 'People per slot' },
   Transport: { ...VISIT, unit: 'Vehicle', units: 'Vehicles', eg: 'Innova Crysta', egType: 'SUV', occupancyLabel: 'Seats', times: 'none' },
+  'Luxury Experience': { ...VISIT, unit: 'Experience', units: 'Experiences', eg: 'Private yacht evening', egType: 'Evening', occupancyLabel: 'Guests' },
+  // What Luxury Experience used to be called; some partners still carry it.
   Lifestyle: { ...VISIT, unit: 'Experience', units: 'Experiences', eg: 'Private yacht evening', egType: 'Evening', occupancyLabel: 'Guests' },
+  'Free Stay': { ...STAY, unit: 'Room', units: 'Rooms', eg: 'Deluxe Room', egType: 'Deluxe' },
+  'International Trip': { ...VISIT, unit: 'Departure', units: 'Departures', eg: '5 nights Bali, twin sharing', egType: 'Twin sharing', occupancyLabel: 'Travellers', times: 'none' },
   'Water Park': { ...VISIT, unit: 'Ticket', units: 'Tickets', eg: 'Day pass with locker', egType: 'Day pass', occupancyLabel: 'People covered' },
   Package: { ...VISIT, unit: 'Departure', units: 'Departures', eg: '5 nights Kerala, twin sharing', egType: 'Twin sharing', occupancyLabel: 'Travellers', times: 'none' },
   'Group Departure': { ...VISIT, unit: 'Departure', units: 'Departures', eg: '12 Nov, 20 seats', egType: 'Fixed departure', occupancyLabel: 'Seats', times: 'none' },

@@ -10,7 +10,13 @@ import {
 } from '@/components/hotels/DetailSections';
 import { freeStayGuideline, hotels, villaStay as stayTimes } from '@/lib/content';
 import { image } from '@/lib/images';
+import { asProperty, deskItem } from '@/lib/desk';
 import { defaultStay, nightsBetween, shortDate } from '@/lib/format';
+
+// A partner's free stay is not known at build time, so the page is drawn
+// on demand and then held for a minute.
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -18,7 +24,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const hotel = hotels.find((h) => h.id === id);
+  const hotel = hotels.find((h) => h.id === id) || (await deskItem(id));
   return { title: hotel ? `${hotel.name} — Free Stay` : 'Hotel not found' };
 }
 
@@ -37,8 +43,12 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
 
-  const hotel = hotels.find((h) => h.id === id);
-  if (!hotel) notFound();
+  // One of the site's own hotels, or a partner the desk has put live —
+  // the same page either way, as on the nightly screen.
+  const own = hotels.find((h) => h.id === id);
+  const listed = own || (await deskItem(id).then((i) => (i ? asProperty(i) : null)));
+  if (!listed) notFound();
+  const hotel = listed;
 
   const fallback = defaultStay();
   const from = valid(query.from) ? query.from : isoDay(fallback.from);
