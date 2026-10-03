@@ -16,6 +16,8 @@ import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
+import PaySheet from '@/components/forms/PaySheet';
+import { MERCHANT } from '@/lib/payment';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 
@@ -309,7 +311,29 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
   const { profile } = useProfile();
   const [joining, setJoining] = useState(false);
   const [failed, setFailed] = useState('');
-  const join = async () => {
+  const [paying, setPaying] = useState(false);
+
+  /**
+   * Pay now opens the payment sheet rather than sending the membership.
+   *
+   * It used to send it straight off and tell the member their membership
+   * was pending, without ever asking them for money — so "Pay now" was the
+   * one thing the button did not do. The sheet shows the QR and the UPI
+   * id; the membership is raised when they come back and say they have
+   * paid, with their reference on it for the desk to match.
+   *
+   * The profile is still checked first: there is no point taking somebody
+   * to a payment screen when we cannot tell them who it was for.
+   */
+  const payNow = () => {
+    if (joining || !agreed) return;
+    const current = profile || loadProfile();
+    if (!isComplete(current)) return router.push(completeProfileHref());
+    setFailed('');
+    return setPaying(true);
+  };
+
+  const join = async (paymentRef = '') => {
     if (joining || !agreed) return;
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
@@ -328,6 +352,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
         privileges,
         sharing,
         coupon: applied || undefined,
+        paymentRef: paymentRef || undefined,
+        paidTo: MERCHANT.upi,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
@@ -816,7 +842,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
 
                 <button
                   type="button"
-                  onClick={join}
+                  onClick={payNow}
                   disabled={!agreed || joining}
                   title={agreed ? undefined : 'Agree to the terms first'}
                   style={{ backgroundImage: plan.gradientAcross }}
@@ -866,7 +892,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
 
             <button
               type="button"
-              onClick={join}
+              onClick={payNow}
               disabled={!agreed || joining}
               title={agreed ? undefined : 'Agree to the terms first'}
               style={{ backgroundImage: plan.gradientAcross }}
@@ -878,6 +904,17 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
         </div>
       </div>
       )}
+
+      {/* The QR and the UPI id, over whatever they were reading. */}
+      <PaySheet
+        open={paying}
+        onClose={() => setPaying(false)}
+        amount={total}
+        note={`Smira ${plan.label} membership`}
+        busy={joining}
+        error={failed}
+        onPaid={(reference) => join(reference)}
+      />
     </div>
   );
 }
