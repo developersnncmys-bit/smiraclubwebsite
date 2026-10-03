@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Check, Crown, Gift, Info, ShieldCheck } from 'lucide-react';
 import {
-  membershipCoupon, membershipGiftConditions, membershipGifts, membershipIncluded,
+  membershipCoupon, membershipGiftConditions,
   membershipCompareHero, membershipOffer, membershipPlans, membershipPrivileges,
   membershipSharing, membershipTabs,
 } from '@/lib/content';
@@ -18,7 +18,6 @@ import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
-import UpiField, { upiLooksWrong } from '@/components/forms/UpiField';
 
 /** A ticked square in the chosen plan's own colour, as the Figma's grid draws them. */
 function Tick({ on, colour = '#b8860b' }) {
@@ -175,17 +174,18 @@ function fromDesk(p, d) {
  * sharing the benefits, and the coupon. The bar at the bottom reads that
  * same total rather than keeping its own copy.
  */
-export default function MembershipScreen({ hero, helper, compare, gifts: giftArt = {}, desk = [] }) {
+export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
   // Nothing is chosen until they choose: the card below falls back to the
   // highlighted plan, which survives the desk renaming or hiding any of them.
   const [planKey, setPlanKey] = useState('');
   const [privileges, setPrivileges] = useState([]);
-  const [gifts, setGifts] = useState(['jewellery']);
+  // The gifts and the benefits are the plan's, read from whatever the desk
+  // has typed against it rather than held as a choice the member makes.
   const [sharing, setSharing] = useState(true);
   const [agreed, setAgreed] = useState(true);
-  const [upiId, setUpiId] = useState('');
+
   const [coupon, setCoupon] = useState('');
   const [applied, setApplied] = useState(membershipCoupon.code);
   const [note, setNote] = useState('');
@@ -236,6 +236,25 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const plan =
     plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
   const versus = tab === 'versus';
+
+  /** The gifts the desk has put on this plan. Not a choice the member makes. */
+  const gifts = useMemo(() => (plan.gifts || []).filter(Boolean), [plan]);
+
+  /**
+   * What's Included, from the features the desk typed against the plan.
+   *
+   * Written as "Title — the detail" it draws as a heading with a sentence
+   * under it, which is how the section was laid out when the three lines
+   * were written into the site. A plain line is just the heading.
+   */
+  const included = useMemo(
+    () =>
+      (plan.features || []).filter(Boolean).map((f) => {
+        const [title, ...rest] = String(f).split(/s+[—–-]s+/);
+        return { title: title.trim(), body: rest.join(' — ').trim() };
+      }),
+    [plan],
+  );
 
   /**
    * The tab is addressable — /membership?view=match opens the questionnaire.
@@ -292,10 +311,6 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
   const [failed, setFailed] = useState('');
   const join = async () => {
     if (joining || !agreed) return;
-    if (upiLooksWrong(upiId)) {
-      setFailed('A UPI ID looks like yourname@okhdfcbank — or leave it blank.');
-      return;
-    }
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
     if (!isComplete(current)) return router.push(completeProfileHref());
@@ -313,7 +328,6 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
         privileges,
         sharing,
         coupon: applied || undefined,
-        upiId: upiId.trim() || undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
@@ -523,25 +537,38 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             </div>
           </section>
 
-          {/* -- What's Included ------------------------------------ */}
-          <section>
-            <h2 className="text-lg font-bold text-ink-900">What&rsquo;s Included</h2>
-            <ul className="card mt-3 divide-y divide-surface-line">
-              {membershipIncluded.map((item) => (
-                <li key={item.title} className="flex gap-3 p-4 sm:p-5">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-white" style={{ background: plan.accent }}>
-                    <Check size={13} strokeWidth={3} />
-                  </span>
-                  <span>
-                    <span className="block text-[15px] font-bold text-ink-900">{item.title}</span>
-                    <span className="mt-1 block text-[14px] leading-relaxed text-ink-600">
-                      {item.body}
+          {/*
+            What's Included — whatever the desk has put on this plan.
+
+            It used to be three lines written into the site, the same three
+            on every tier, which meant the desk could add a benefit on the
+            panel and nobody reading this page would ever learn about it.
+            Each line is now a feature typed against the plan, so what is
+            listed here is what the desk says the plan gives. A plan with
+            none listed simply has no section.
+          */}
+          {included.length > 0 && (
+            <section>
+              <h2 className="text-lg font-bold text-ink-900">What&rsquo;s Included</h2>
+              <ul className="card mt-3 divide-y divide-surface-line">
+                {included.map((item) => (
+                  <li key={item.title} className="flex gap-3 p-4 sm:p-5">
+                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-white" style={{ background: plan.accent }}>
+                      <Check size={13} strokeWidth={3} />
                     </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
+                    <span>
+                      <span className="block text-[15px] font-bold text-ink-900">{item.title}</span>
+                      {item.body && (
+                        <span className="mt-1 block text-[14px] leading-relaxed text-ink-600">
+                          {item.body}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {/* -- Pick your privileges ------------------------------- */}
           <section>
@@ -603,47 +630,40 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             </div>
           </section>
 
-          {/* -- Gifts ---------------------------------------------- */}
-          <section className="card p-4 sm:p-5">
-            <h2 className="text-lg font-bold text-action-500">Exclusive Gifts</h2>
-            <p className="mt-1 text-[14px] leading-snug text-ink-700">
-              Enjoy your premium gifts with your {plan.label} membership
-            </p>
+          {/*
+            Exclusive Gifts — whatever the desk has put on this plan.
 
-            <div className="mt-4 space-y-3">
-              {membershipGifts.map((g) => {
-                const on = gifts.includes(g.key);
-                return (
-                  <label
-                    key={g.key}
-                    className="flex cursor-pointer items-center gap-3.5 overflow-hidden rounded-xl bg-[#fdf9ef]"
-                  >
-                    <span className="relative h-[74px] w-[86px] shrink-0 overflow-hidden">
-                      <Image src={toSrc(giftArt[g.key] || g.image)} alt="" fill sizes="86px" className="object-cover" />
-                    </span>
-                    <span className="min-w-0 flex-1 py-2">
-                      <span className="block text-[15px] font-bold leading-snug text-ink-900">
-                        {g.label}
+            There were four fixed ones here with tick boxes beside them, as
+            if the member were choosing which gifts to take. They were not
+            choosing: the list was the same on every tier, nothing was
+            priced, and the Gift value line below always read "-". What a
+            plan comes with is the desk's to say, so these are the gifts
+            typed against this plan on the panel, listed rather than
+            offered.
+          */}
+          <section className="card p-4 sm:p-5">
+            {gifts.length > 0 && (
+              <>
+                <h2 className="text-lg font-bold text-action-500">Exclusive Gifts</h2>
+                <p className="mt-1 text-[14px] leading-snug text-ink-700">
+                  Enjoy your premium gifts with your {plan.label} membership
+                </p>
+
+                <ul className="mt-4 space-y-3">
+                  {gifts.map((g) => (
+                    <li key={g} className="flex items-center gap-3.5 rounded-xl bg-[#fdf9ef] p-3.5">
+                      <span
+                        className="grid h-12 w-12 shrink-0 place-items-center rounded-xl"
+                        style={{ background: plan.soft, color: plan.accent }}
+                      >
+                        <Gift size={21} />
                       </span>
-                      {g.note && <span className="block text-[13px] text-ink-500">{g.note}</span>}
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={on}
-                      onChange={() =>
-                        setGifts((list) =>
-                          list.includes(g.key) ? list.filter((k) => k !== g.key) : [...list, g.key],
-                        )
-                      }
-                      className="sr-only"
-                    />
-                    <span className="pr-4">
-                      <Tick on={on} colour={plan.accent} />
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
+                      <span className="min-w-0 text-[15px] font-bold leading-snug text-ink-900">{g}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
 
             {/* The coupon sits with the gifts, above their conditions. */}
             <h3 className="mt-6 text-[15px] font-bold text-ink-900">Have a Coupon Code?</h3>
@@ -675,15 +695,19 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
               </p>
             )}
 
-            <h3 className="mt-6 text-[15px] font-bold text-action-500">Gift Conditions</h3>
-            <ul className="mt-2 space-y-2">
-              {membershipGiftConditions.map((c) => (
-                <li key={c} className="flex gap-2.5 text-[14px] leading-snug text-ink-600">
-                  <Info size={17} className="mt-0.5 shrink-0 text-action-500" />
-                  {c.replace('Gold', plan.label)}
-                </li>
-              ))}
-            </ul>
+            {gifts.length > 0 && (
+              <>
+                <h3 className="mt-6 text-[15px] font-bold text-action-500">Gift Conditions</h3>
+                <ul className="mt-2 space-y-2">
+                  {membershipGiftConditions.map((c) => (
+                    <li key={c} className="flex gap-2.5 text-[14px] leading-snug text-ink-600">
+                      <Info size={17} className="mt-0.5 shrink-0 text-action-500" />
+                      {c.replace('Gold', plan.label)}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </section>
 
           {/* -- Sharing, and the terms ----------------------------- */}
@@ -705,12 +729,6 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
             </p>
             <p className="text-[14px] text-ink-500">{membershipSharing.label}</p>
           </section>
-
-          <UpiField
-            value={upiId}
-            onChange={setUpiId}
-            note="Nothing is charged now. Leave your UPI ID and our desk sends the request — your membership starts once it is paid."
-          />
 
           <section className="card p-4 sm:p-5">
             <label className="flex cursor-pointer gap-3">
@@ -752,16 +770,11 @@ export default function MembershipScreen({ hero, helper, compare, gifts: giftArt
                 </div>
               )}
 
-              <div className="flex items-center justify-between gap-4 py-2.5">
+              <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-2.5">
                 <dt className="text-ink-900">Membership Sharing Price</dt>
                 <dd className="font-semibold text-ink-900">
                   {sharing ? inr(membershipSharing.price) : '-'}
                 </dd>
-              </div>
-
-              <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-2.5">
-                <dt className="text-ink-900">Gift value</dt>
-                <dd className="font-semibold text-ink-900">-</dd>
               </div>
 
               <div className="flex items-center justify-between gap-4 pt-3">

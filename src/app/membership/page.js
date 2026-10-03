@@ -1,6 +1,5 @@
 import ScreenBar from '@/components/ui/ScreenBar';
 import MembershipScreen from '@/components/membership/MembershipScreen';
-import { membershipGifts } from '@/lib/content';
 import { deskPlans } from '@/lib/desk';
 import { image } from '@/lib/images';
 
@@ -21,10 +20,6 @@ export const metadata = {
  * and the checkout for a plan.
  */
 export default async function Page() {
-  // Resolved here because image() reads the filesystem, which the interactive
-  // screen below cannot do — otherwise every slot falls back to its SVG.
-  const gifts = Object.fromEntries(membershipGifts.map((g) => [g.key, image(g.image)]));
-
   /**
    * The plans, read here rather than in the browser.
    *
@@ -42,7 +37,6 @@ export default async function Page() {
         hero={image('villa-hero-luxury')}
         helper={image('plan-helper')}
         compare={image('compare-landmarks')}
-        gifts={gifts}
         desk={desk}
       />
     </>
