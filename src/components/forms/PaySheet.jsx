@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Check, Copy, Loader2, QrCode, Smartphone, X } from 'lucide-react';
 import Portal from '@/components/ui/Portal';
 import { inr } from '@/lib/format';
-import { MERCHANT, referenceLooksWrong, upiLink } from '@/lib/payment';
+import { MERCHANT, upiLink } from '@/lib/payment';
 
 /**
  * Paying Smira, in the two ways anybody actually pays.
@@ -15,17 +15,15 @@ import { MERCHANT, referenceLooksWrong, upiLink } from '@/lib/payment';
  *
  * Nothing here can tell whether the money arrived — there is no gateway
  * listening, and a page has no way to ask a bank. So the sheet does not
- * pretend to: the member pays, hands back the reference their app shows
- * them, and the desk matches it against the account before the membership
- * is switched on. Saying "payment received" on the strength of somebody
- * having tapped a button would be a lie the desk later has to undo.
+ * pretend to: "I have paid" tells the desk to go and look, and the
+ * membership is switched on when they have found it in the account.
+ * Saying "payment received" on the strength of somebody having tapped a
+ * button would be a lie the desk later has to undo.
  */
 export default function PaySheet({ open, onClose, amount, note, busy, error, onPaid }) {
   const [how, setHow] = useState('qr');
   const [qr, setQr] = useState('');
   const [copied, setCopied] = useState(false);
-  const [reference, setReference] = useState('');
-  const [wrong, setWrong] = useState('');
 
   const link = upiLink({ amount, note });
 
@@ -72,15 +70,6 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
     } catch {
       // Clipboard blocked — the id is on the screen to read either way.
     }
-  };
-
-  const confirm = () => {
-    if (referenceLooksWrong(reference)) {
-      setWrong('That does not look like a UPI reference — it is usually 12 digits.');
-      return;
-    }
-    setWrong('');
-    onPaid(reference.trim());
   };
 
   return (
@@ -173,37 +162,18 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
                 </a>
 
                 <p className="mt-3 text-[13px] leading-snug text-ink-500">
-                  Send {inr(amount)} to {MERCHANT.name}, then come back and enter the
-                  reference below.
+                  Send {inr(amount)} to {MERCHANT.name}, then come back and tell us.
                 </p>
               </div>
             )}
 
             {/* -- Telling us it is done --------------------------------- */}
             <div className="mt-5 border-t border-surface-line pt-4">
-              <label className="block">
-                <span className="text-[14px] font-semibold text-ink-900">
-                  UPI reference number <span className="font-normal text-ink-500">(optional)</span>
-                </span>
-                <input
-                  value={reference}
-                  onChange={(e) => setReference(e.target.value)}
-                  placeholder="12-digit number from your UPI app"
-                  inputMode="numeric"
-                  className="mt-2 w-full rounded-xl border border-surface-line px-4 py-3.5 text-[15px] outline-none placeholder:text-ink-400 focus:border-action-500"
-                />
-              </label>
-              {wrong && <p className="mt-2 text-[13px] font-semibold text-rose-600">{wrong}</p>}
-              <p className="mt-2 text-[13px] leading-snug text-ink-500">
-                It helps our desk find your payment straight away. Without it they
-                will call you to check.
-              </p>
-
-              {error && <p className="mt-3 text-[13px] font-semibold text-rose-600">{error}</p>}
+              {error && <p className="mb-3 text-[13px] font-semibold text-rose-600">{error}</p>}
 
               <button
                 type="button"
-                onClick={confirm}
+                onClick={() => onPaid('')}
                 disabled={busy}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-700 py-4 text-[15px] font-bold uppercase tracking-wide text-white transition hover:brightness-110 disabled:opacity-60"
               >

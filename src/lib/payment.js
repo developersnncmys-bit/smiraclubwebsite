@@ -36,17 +36,3 @@ export function upiLink({ amount, note } = {}) {
   // same way by all of them.
   return `upi://pay?${q.toString().split('+').join('%20')}`;
 }
-
-/**
- * Whether a UPI reference looks like one.
- *
- * Banks hand back a twelve-digit UTR for a UPI transfer, though some apps
- * show a longer alphanumeric id instead. Anything shorter than eight
- * characters is somebody typing in the wrong box, and refusing that is
- * worth it — a payment the desk cannot find is a payment the member has to
- * be rung about.
- */
-export const referenceLooksWrong = (v) => {
-  const s = String(v || '').trim();
-  return s.length > 0 && !/^[A-Za-z0-9]{8,24}$/.test(s);
-};
