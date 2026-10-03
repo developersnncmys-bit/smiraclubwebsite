@@ -43,10 +43,14 @@ export default function RootLayout({ children }) {
           body before React hydrates; that mismatch is theirs, not ours. */}
       <body suppressHydrationWarning>
         <Header />
-        {/* The bottom bar takes its room back on a phone only. */}
         <Attribution />
         <AuthPopup />
-        <main className="pb-nav lg:pb-0">{children}</main>
+        {/* No room is set aside for the tab bar here any more. It was set
+            aside on every page, including the ones that hide the tab bar to
+            pin their own price bar — so those ended with the height of a bar
+            that was not there, under the padding they had already added for
+            the one that was. The bar now carries its own space. */}
+        <main>{children}</main>
         <Footer />
         <BottomNav />
       </body>

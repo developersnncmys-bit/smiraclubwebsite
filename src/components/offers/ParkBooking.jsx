@@ -7,6 +7,7 @@ import GuidelinesSheet from '@/components/offers/GuidelinesSheet';
 import { INPUT } from '@/components/forms/RequestFields';
 import { fullDate, inr, weekday } from '@/lib/format';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { profileForBooking, useProfile } from '@/lib/profile';
 
@@ -116,6 +117,7 @@ export default function ParkBooking({ park, tickets, children, kind = 'park' }) 
         pax,
         checkIn: date,
         profile: profileForBooking(profile),
+        account: hasAccount(),
         attribution: readAttribution(),
       });
       ref = res.data?.reference;

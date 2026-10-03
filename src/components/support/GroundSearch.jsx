@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Calendar, Minus, Plus, User } from 'lucide-react';
 import { CaptionField, ContactFields, RequestSent, Segmented } from '@/components/forms/RequestFields';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { profileForBooking, useProfile } from '@/lib/profile';
 import { groundModes } from '@/lib/content';
 import { fullDate, weekday } from '@/lib/format';
@@ -78,6 +79,7 @@ export default function GroundSearch() {
         total: 0,
         checkIn: date,
         profile: profileForBooking(profile),
+        account: hasAccount(),
       });
     } catch (err) {
       setBusy(false);

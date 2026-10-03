@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CalendarDays, Star } from 'lucide-react';
 import BookingForm from '@/components/villas/BookingForm';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { fullDate, inr, weekday } from '@/lib/format';
 
@@ -104,6 +105,7 @@ export default function PackageBooking({
       total,
       upiId,
       profile,
+      account: hasAccount(),
       attribution: readAttribution(),
     });
     return { reference: res.data?.reference, status: res.data?.status };

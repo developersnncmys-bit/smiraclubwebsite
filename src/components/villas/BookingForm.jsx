@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Info, Mail, User } from 'lucide-react';
 import { inr } from '@/lib/format';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { profileForBooking, useProfile } from '@/lib/profile';
 import UpiField, { upiLooksWrong } from '@/components/forms/UpiField';
@@ -142,6 +143,7 @@ export default function BookingForm({
           upiId: p.upiId,
           pax: confirm.pax || p.guests.length,
           profile: p.profile,
+          account: hasAccount(),
           attribution: readAttribution(),
         });
         return { reference: res.data?.reference, status: res.data?.status };

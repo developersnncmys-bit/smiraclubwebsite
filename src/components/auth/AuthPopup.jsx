@@ -67,6 +67,10 @@ export default function AuthPopup() {
       if (done) return;
       done = true;
       window.removeEventListener('scroll', onScroll);
+      // Asked again here, not only on mount: ten seconds is long enough to
+      // sign in somewhere else on the page, and being handed the sign-in
+      // sheet straight afterwards is the rudest possible greeting.
+      if (hasAccount()) return;
       setOpen(true);
     };
     // Past the hero is a real look, not a stray wheel nudge on arrival.
@@ -127,10 +131,6 @@ export default function AuthPopup() {
           <div className="overflow-y-auto px-5 pb-6 pt-1">
             <AuthFlow
               onDone={() => window.location.reload()}
-              onRegister={() => {
-                close();
-                window.location.assign('/profile/edit');
-              }}
               footer={
                 <p className="mt-3 text-center text-[13px] text-ink-500">
                   Browsing for now?{' '}

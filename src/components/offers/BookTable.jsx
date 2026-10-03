@@ -7,6 +7,7 @@ import { tableSittings } from '@/lib/content';
 import { clock, fullDate, shortDate, weekday } from '@/lib/format';
 import Portal from '@/components/ui/Portal';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { profileForBooking, useProfile } from '@/lib/profile';
 
@@ -115,6 +116,7 @@ export default function BookTable({ restaurant }) {
         checkIn: d,
         email: profile?.details?.email,
         profile: profileForBooking(profile),
+        account: hasAccount(),
         attribution: readAttribution(),
       });
       ref = res.data?.reference;

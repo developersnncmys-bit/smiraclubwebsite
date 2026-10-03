@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CalendarDays, Mail, Phone, User } from 'lucide-react';
 import { FormField, INPUT } from '@/components/forms/RequestFields';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { profileForBooking, useProfile } from '@/lib/profile';
 import { inr } from '@/lib/format';
@@ -90,6 +91,7 @@ export default function DeskBooking({ item }) {
         pax,
         notes: `${item.category} · ${item.id}`,
         profile: profileForBooking(profile),
+        account: hasAccount(),
         attribution: readAttribution(),
       });
       const outcome = res.data?.status === 'Confirmed' ? 'confirmed' : 'requested';

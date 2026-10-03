@@ -52,6 +52,9 @@ export const api = {
 
   /** The offers the desk has put live on the panel's Offers page. */
   deskOffers: () => request('/website/offers', { next: { revalidate: 60 } }),
+  /** The short ones, with the listing and the clock on them. Kept fresher
+      than the rest: an offer with an hour left is worth half a minute. */
+  deskFlashOffers: () => request('/website/offers/flash', { next: { revalidate: 30 } }),
 
   /**
    * Any other service asked for on the site — a trip planned, a visa,

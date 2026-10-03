@@ -82,7 +82,7 @@ function Tick({ on, onChange, children }) {
 const INPUT =
   'w-full rounded-xl border border-surface-line bg-white py-3.5 pl-11 pr-4 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-action-500';
 
-export default function AuthFlow({ onDone, onRegister, footer, autoFocus = false }) {
+export default function AuthFlow({ onDone, footer, autoFocus = false }) {
   const [step, setStep] = useState('who');
   const [form, setForm] = useState({ name: '', phone: '' });
   const [wants, setWants] = useState({ whatsapp: true, gift: true });
@@ -183,23 +183,15 @@ export default function AuthFlow({ onDone, onRegister, footer, autoFocus = false
       <h2 className="text-center text-[22px] font-bold text-ink-900">{heading}</h2>
       <p className="mt-1.5 text-center text-[15px] text-ink-500">{under}</p>
 
-      {/* Log in happens here in a number and a code; Register opens the full
-          profile screen, which is a longer sit-down than a sheet is for. */}
-      {step === 'who' && onRegister && (
-        <div className="mt-4 grid grid-cols-2 gap-1 rounded-xl bg-surface-soft p-1">
-          <span className="rounded-lg bg-white py-2.5 text-center text-[15px] font-bold text-action-500 shadow-card">
-            Login
-          </span>
-          <button
-            type="button"
-            onClick={onRegister}
-            className="rounded-lg py-2.5 text-[15px] font-bold text-ink-600 transition hover:text-ink-900"
-          >
-            Register
-          </button>
-        </div>
-      )}
-
+      {/*
+        There were two tabs here, Login and Register, and Register left the
+        sheet for the profile screen — away from the one form that would
+        have registered anybody. So somebody who pressed it filled in a
+        profile, was never signed in, and got the sheet again on their next
+        visit. There is nothing to choose between: the number is the
+        account, this form opens a new one and signs an old one in, and a
+        number we have not seen is asked for its special days at the end.
+      */}
       <form onSubmit={step === 'who' ? askForCode : step === 'code' ? verify : finish} className="mt-5 space-y-4">
         {step === 'who' && (
           <>

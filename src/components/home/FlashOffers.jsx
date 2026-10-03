@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Countdown from '@/components/ui/Countdown';
 import { flashOffers } from '@/lib/content';
+import { deskFlashOffers } from '@/lib/desk';
 
 /**
  * Flash Offers.
@@ -8,8 +9,20 @@ import { flashOffers } from '@/lib/content';
  * Each card carries its own clock, because the whole point of the section is
  * that these expire — a deal with no deadline on it is just an offer, and the
  * design puts the timer above the brand for that reason.
+ *
+ * A partner raises their own in the portal — a hotel with rooms left
+ * tonight, a spa with a quiet afternoon — and it arrives here the moment
+ * they do. Those come first, because they are the ones that are real; the
+ * bundled three fill the row behind them so the section is never a heading
+ * over nothing, and drop out once there are enough live ones to fill it.
  */
-export default function FlashOffers() {
+export default async function FlashOffers() {
+  const live = await deskFlashOffers();
+  const cards = [...live, ...flashOffers].slice(0, Math.max(3, live.length));
+
+  // A heading over an empty rail is worse than no heading.
+  if (!cards.length) return null;
+
   return (
     <section className="bg-white py-7 lg:bg-transparent lg:py-10">
       <div className="shell">
@@ -23,7 +36,7 @@ export default function FlashOffers() {
         </div>
 
         <div className="rail mt-5 lg:grid lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-          {flashOffers.map((offer) => (
+          {cards.map((offer) => (
             <article
               key={offer.id}
               className={`w-[91%] shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br sm:w-[24rem] lg:w-auto ${offer.tone}`}

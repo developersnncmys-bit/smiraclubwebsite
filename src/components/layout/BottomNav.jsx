@@ -51,7 +51,11 @@ export default function BottomNav() {
     .sort((a, b) => b.href.length - a.href.length)[0]?.key;
 
   return (
-    <nav
+    <>
+      {/* The bar is fixed, so the page needs its height back at the foot —
+          but only on the pages that actually show it. */}
+      <div className="pb-nav lg:hidden" aria-hidden="true" />
+      <nav
       className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-line bg-white shadow-nav lg:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Main"
@@ -99,6 +103,7 @@ export default function BottomNav() {
           );
         })}
       </ul>
-    </nav>
+      </nav>
+    </>
   );
 }

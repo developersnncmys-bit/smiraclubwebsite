@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ChevronDown, Minus, Plus, User, X } from 'lucide-react';
 import { CaptionField, ContactFields, RequestSent, Segmented } from '@/components/forms/RequestFields';
 import { api } from '@/lib/api';
+import { hasAccount } from '@/lib/account';
 import { profileForBooking, useProfile } from '@/lib/profile';
 import { cabinClasses, flightOffers, flightTrips } from '@/lib/content';
 import { fullDate, weekday } from '@/lib/format';
@@ -127,6 +128,7 @@ export default function FlightSearch() {
         total: 0,
         checkIn: route[0].date,
         profile: profileForBooking(profile),
+        account: hasAccount(),
       });
     } catch (err) {
       setBusy(false);

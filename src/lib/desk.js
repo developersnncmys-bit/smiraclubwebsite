@@ -393,3 +393,48 @@ export async function deskService(id, kind) {
   const item = await deskItem(id);
   return item ? asService(item, kind) : null;
 }
+
+/**
+ * The flash offers the desk and its partners have running, as the home
+ * page's own cards want them.
+ *
+ * A flash offer is only worth showing while it is running, so these are
+ * never cached for long and one that has ended simply is not returned. The
+ * gradient is not the partner's to choose — it cycles through the three the
+ * design uses, so a row of them still reads as one row.
+ */
+const FLASH_TONES = [
+  'from-[#10284a] to-[#1b4b7e]',
+  'from-[#1b1560] to-[#3b2f9c]',
+  'from-[#3d1f4a] to-[#6d3b6f]',
+];
+
+export async function deskFlashOffers() {
+  if (!api.isConfigured) return [];
+  try {
+    const res = await api.deskFlashOffers();
+    return (res.data || []).map((o, i) => {
+      const l = o.listing || {};
+      const saving = l.was && l.price ? l.was - l.price : 0;
+      return {
+        id: o.id,
+        desk: true,
+        // The partner's own line if they wrote one, because "Tonight only"
+        // says more than "Hotels" does; the category otherwise.
+        badge: o.description || l.category || 'Flash offer',
+        brand: l.name || o.name,
+        place: l.place || '',
+        // What they save, in the words the card has room for.
+        deal: saving > 0
+          ? `${o.percent}% OFF — save ₹${saving.toLocaleString('en-IN')}`
+          : `${o.percent}% OFF`,
+        endsInHours: Math.max(0, (new Date(o.endsOn).getTime() - Date.now()) / 3600000),
+        tone: FLASH_TONES[i % FLASH_TONES.length],
+        href: `${DESK_ROUTE[l.category] || '/listing'}/${l.id}`,
+      };
+    });
+  } catch {
+    // The desk being unreachable is not the member's problem.
+    return [];
+  }
+}
