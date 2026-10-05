@@ -580,7 +580,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
             none listed simply has no section.
           */}
           {included.length > 0 && (
-            <section>
+            /* The footer's Member benefits link lands here. */
+            <section id="benefits" className="scroll-mt-24">
               <h2 className="text-lg font-bold text-ink-900">What&rsquo;s Included</h2>
               <ul className="card mt-3 divide-y divide-surface-line">
                 {included.map((item) => (
