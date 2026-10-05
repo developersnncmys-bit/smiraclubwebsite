@@ -53,6 +53,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
 
   const [mode, setMode] = useState('night');
   const [destination, setDestination] = useState('');
+  const [needsWhere, setNeedsWhere] = useState(false);
   const [from, setFrom] = useState(isoDay(stay.from));
   const [to, setTo] = useState(isoDay(stay.to));
   const [day, setDay] = useState(isoDay(today));
@@ -78,6 +79,14 @@ export default function HotelsScreen({ variant = 'hotel' }) {
 
   const submit = (e) => {
     e.preventDefault();
+
+    // Nothing typed is not a search — see SearchPanel for the rest of it.
+    if (!destination.trim()) {
+      setNeedsWhere(true);
+      return;
+    }
+    setNeedsWhere(false);
+
     const shared = {
       destination,
       adults: String(adults),
@@ -186,12 +195,18 @@ export default function HotelsScreen({ variant = 'hotel' }) {
           <Field icon={MapPin} className={hourly ? 'lg:col-span-3' : 'lg:col-span-6'}>
             <input
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              onChange={(e) => { setDestination(e.target.value); setNeedsWhere(false); }}
               placeholder="Search Destination"
               aria-label="Destination"
               className="w-full min-w-0 border-0 p-0 text-[14px] font-medium text-ink-900 outline-none placeholder:text-ink-900"
             />
           </Field>
+
+          {needsWhere && (
+            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:col-span-12">
+              Tell us where you are going first.
+            </p>
+          )}
 
           {hourly ? (
             <>

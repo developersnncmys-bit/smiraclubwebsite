@@ -2,6 +2,7 @@ import ResultsScreen from '@/components/results/ResultsScreen';
 import { searchResults } from '@/lib/content';
 import { asResult, deskItems } from '@/lib/desk';
 import { image } from '@/lib/images';
+import { inPlace, placeLabel } from '@/lib/search';
 import { shortDate } from '@/lib/format';
 
 export const metadata = {
@@ -37,7 +38,9 @@ function guestLabel(adults, children) {
 export default async function Page({ searchParams }) {
   const params = (await searchParams) || {};
 
-  const where = (params.destination || '').trim() || 'Goa';
+  // What they actually typed. It used to fall back to Goa, so a search
+  // with nothing in it opened a Goa page nobody had asked for.
+  const where = (params.destination || '').trim();
   // An hourly stay is one day, so its line reads the time and length instead.
   const when =
     params.mode === 'hourly' && params.checkin
@@ -63,14 +66,14 @@ export default async function Page({ searchParams }) {
   const results = [
     ...fromDesk,
     ...searchResults.map((r) => ({ ...r, image: image(r.image) })),
-  ];
+  ].filter((r) => inPlace(r, where));
 
   // Arriving from Hotels & Resorts brings that screen's chips and back arrow.
   const fromHotels = params.kind === 'hotel';
 
   return (
     <ResultsScreen
-      where={where}
+      where={placeLabel(where)}
       when={when}
       guests={guests}
       results={results}

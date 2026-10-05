@@ -1,6 +1,7 @@
 import VillaResults from '@/components/villas/VillaResults';
 import { villaCollections, villaResults } from '@/lib/content';
 import { image } from '@/lib/images';
+import { inPlace, placeLabel } from '@/lib/search';
 import { shortDate } from '@/lib/format';
 
 export const metadata = { title: 'Villas & Home Stays' };
@@ -35,17 +36,20 @@ function guestLabel(adults, children) {
 export default async function Page({ searchParams }) {
   const params = await searchParams;
 
-  const where = (params?.destination || '').trim() || 'Goa';
+  // What they actually typed, not a Goa nobody asked for.
+  const where = (params?.destination || '').trim();
   const when = stayLabel(params?.from, params?.to);
   const guests = guestLabel(params?.adults, params?.children);
 
-  const villas = villaResults.map((v) => ({ ...v, image: image(v.image) }));
+  const villas = villaResults
+    .filter((v) => inPlace(v, where))
+    .map((v) => ({ ...v, image: image(v.image) }));
   const collections = villaCollections.map((c) => ({ ...c, image: image(c.image) }));
 
   return (
     <>
       <VillaResults
-        where={where}
+        where={placeLabel(where)}
         when={when}
         guests={guests}
         villas={villas}

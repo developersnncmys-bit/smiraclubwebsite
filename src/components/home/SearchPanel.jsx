@@ -70,8 +70,20 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
     package: '/packages',
   };
 
+  const [needsWhere, setNeedsWhere] = useState(false);
+
   const submit = (e) => {
     e.preventDefault();
+
+    // A search with nothing in it is not a search. It used to go through
+    // and the results screen filled the gap with Goa, so somebody who
+    // pressed Search by accident got a page of Goa hotels and no idea why.
+    if (!destination.trim()) {
+      setNeedsWhere(true);
+      return;
+    }
+    setNeedsWhere(false);
+
     const params = new URLSearchParams({
       kind,
       destination,
@@ -160,12 +172,18 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
               <input
                 id="home-destination"
                 value={destination}
-                onChange={(e) => setDestination(e.target.value)}
+                onChange={(e) => { setDestination(e.target.value); setNeedsWhere(false); }}
                 placeholder="Where are you going?"
                 className="w-full border-0 p-0 text-[15px] font-bold text-ink-900 outline-none placeholder:text-ink-500"
               />
             </span>
           </label>
+
+          {needsWhere && (
+            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:absolute lg:-bottom-6">
+              Tell us where you are going first.
+            </p>
+          )}
 
           <div className="grid grid-cols-2 gap-3 lg:flex lg:shrink-0 lg:gap-3">
             <button

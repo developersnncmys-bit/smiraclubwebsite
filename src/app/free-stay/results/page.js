@@ -1,6 +1,7 @@
 import FreeStayResults from '@/components/hotels/FreeStayResults';
 import { hotels } from '@/lib/content';
 import { image } from '@/lib/images';
+import { inPlace, placeLabel } from '@/lib/search';
 import { defaultStay, shortDate } from '@/lib/format';
 
 export const metadata = {
@@ -23,7 +24,8 @@ export default async function Page({ searchParams }) {
   const params = (await searchParams) || {};
   const fallback = defaultStay();
 
-  const where = (params.destination || '').trim() || 'Goa';
+  // What they actually typed, not a Goa nobody asked for.
+  const where = (params.destination || '').trim();
   const from = valid(params.from) ? params.from : isoDay(fallback.from);
   const to = valid(params.to) && params.to > from ? params.to : isoDay(fallback.to);
   const adults = Number(params.adults) || 2;
@@ -36,7 +38,9 @@ export default async function Page({ searchParams }) {
     from, to, adults: String(adults), children: String(children), rooms: String(rooms),
   }).toString();
 
-  const list = hotels.map((h) => ({ ...h, image: image(h.image) }));
+  const list = hotels
+    .filter((h) => inPlace(h, where))
+    .map((h) => ({ ...h, image: image(h.image) }));
 
-  return <FreeStayResults where={where} summary={summary} hotels={list} carry={carry} />;
+  return <FreeStayResults where={placeLabel(where)} summary={summary} hotels={list} carry={carry} />;
 }

@@ -21,7 +21,7 @@ export default async function Page({ searchParams }) {
   const params = (await searchParams) || {};
 
   const search = {
-    destination: (params.destination || '').trim() || 'Goa',
+    destination: (params.destination || '').trim(),
     date: /^\d{4}-\d{2}-\d{2}$/.test(params.date || '') ? params.date : isoDay(new Date()),
     time: /^\d{2}:\d{2}$/.test(params.time || '') ? params.time : '14:00',
     adults: Number(params.adults) || 2,
