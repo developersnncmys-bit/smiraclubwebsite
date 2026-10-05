@@ -22,8 +22,11 @@ import { MERCHANT, upiLink } from '@/lib/payment';
  * what the desk already sends.
  *
  * Nothing here can tell whether money arrived — there is no gateway
- * listening. So the sheet does not pretend to: it tells the desk to go
- * and look, and the membership is switched on when they have found it.
+ * listening. So nothing here says it did. There was an "I have paid"
+ * button, and a button is not a receipt: whoever pressed it, paid or
+ * not, the desk still had to go and look. Continue says the true thing
+ * — which plan they want and how they are paying for it — and the
+ * membership is switched on when the money is found.
  */
 
 const WAYS = [
@@ -180,12 +183,12 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-700 py-4 text-[15px] font-bold uppercase tracking-wide text-white transition hover:brightness-110 disabled:opacity-60"
               >
                 {busy && <Loader2 size={17} className="animate-spin" />}
-                {busy ? 'Sending…' : upi ? 'I have paid' : 'Send me the payment link'}
+                {busy ? 'Sending…' : upi ? 'Continue' : 'Send me the payment link'}
               </button>
 
               <p className="mt-3 text-center text-[12px] leading-snug text-ink-400">
                 {upi
-                  ? 'Your membership starts once our desk sees the payment in the account.'
+                  ? 'We tell the desk which plan you want. Your membership starts once they see the payment in the account.'
                   : 'Your membership starts once the link is paid.'}
               </p>
             </div>
