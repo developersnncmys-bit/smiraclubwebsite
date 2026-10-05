@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2, MessageSquareWarning } from 'lucide-react';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import { loadProfile, profileForBooking, useProfile } from '@/lib/profile';
+import { getSessionToken } from '@/lib/session';
+import { shortDate } from '@/lib/format';
 
 /**
  * Telling the desk something has gone wrong.
@@ -39,6 +41,24 @@ export default function RaiseComplaint() {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState('');
   const [done, setDone] = useState(null);
+
+  /**
+   * The member's own bookings, so the one this is about can be chosen
+   * rather than copied off a confirmation page. Signed out, or the desk
+   * unreachable, and the box below is typed in as before — a complaint
+   * is never worth blocking over the reference.
+   */
+  const [mine, setMine] = useState([]);
+  useEffect(() => {
+    const token = getSessionToken();
+    if (!token) return undefined;
+    let dropped = false;
+    api
+      .memberMe(token)
+      .then((res) => !dropped && setMine(res.data?.bookings || []))
+      .catch(() => !dropped && setMine([]));
+    return () => { dropped = true; };
+  }, []);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
   const setMe = (key) => (e) => setWho((w) => ({ ...w, [key]: e.target.value }));
@@ -118,14 +138,28 @@ export default function RaiseComplaint() {
 
       <label className="mt-4 block">
         <span className="text-[15px] font-bold text-ink-900">
-          Booking ID <span className="font-normal text-ink-500">(if it is about one)</span>
+          Which booking? <span className="font-normal text-ink-500">(if it is about one)</span>
         </span>
-        <input
-          value={form.reference}
-          onChange={set('reference')}
-          placeholder="BKG-8889"
-          className={FIELD}
-        />
+
+        {mine.length > 0 ? (
+          <select value={form.reference} onChange={set('reference')} className={FIELD}>
+            <option value="">Not about a booking</option>
+            {mine.map((b) => (
+              <option key={b.reference} value={b.reference}>
+                {[b.reference, b.name, b.checkIn ? shortDate(b.checkIn) : '']
+                  .filter(Boolean)
+                  .join(' · ')}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            value={form.reference}
+            onChange={set('reference')}
+            placeholder="BKG-8889"
+            className={FIELD}
+          />
+        )}
       </label>
 
       <label className="mt-4 block">
