@@ -7,7 +7,7 @@ import {
   ArrowUpDown, Calendar, Check, CircleCheck, Clock, MapPin, Search, Send, XCircle,
 } from 'lucide-react';
 import NeedHelp from '@/components/ui/NeedHelp';
-import { bookingStages, bookingTabs, myBookings } from '@/lib/content';
+import { bookingStages, bookingTabs } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 import { nightsBetween } from '@/lib/format';
 import { api } from '@/lib/api';
@@ -66,9 +66,13 @@ export default function MyBookings({ art = {} }) {
   const [newestFirst, setNewestFirst] = useState(true);
 
   /**
-   * A signed-in member sees their own bookings, fetched with their token and
-   * carrying where each one has got to between the desk and the property.
-   * Signed out, the screen shows the sample bookings it always has.
+   * A member's own bookings, fetched with their token and carrying where
+   * each one has got to between the desk and the property.
+   *
+   * Signed out, this used to show a sample booking at La Calypso with a
+   * made-up reference — a stay somebody had never made, on the screen
+   * that is supposed to list theirs. Nothing is shown now until there is
+   * something of theirs to show.
    */
   const [mine, setMine] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
@@ -88,7 +92,7 @@ export default function MyBookings({ art = {} }) {
   }, []);
 
   const shown = useMemo(() => {
-    let list = mine || (signedIn ? [] : myBookings);
+    let list = mine || [];
 
     if (tab !== 'All Bookings') {
       const want = tab.toLowerCase().replace('ed', '');
@@ -164,9 +168,20 @@ export default function MyBookings({ art = {} }) {
       {/* -- What is booked --------------------------------------- */}
       <div className="shell mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
         {shown.length === 0 ? (
-          <p className="card p-10 text-center text-[14px] text-ink-500">
-            {query ? 'Nothing matches that search.' : `No ${tab.toLowerCase()} yet.`}
-          </p>
+          <div className="card p-10 text-center">
+            <p className="text-[14px] text-ink-500">
+              {query
+                ? 'Nothing matches that search.'
+                : signedIn
+                  ? `No ${tab.toLowerCase()} yet.`
+                  : 'Sign in and your bookings will be here.'}
+            </p>
+            {!signedIn && !query && (
+              <Link href="/profile" className="mt-4 inline-block text-[14px] font-bold text-action-500">
+                Go to your account
+              </Link>
+            )}
+          </div>
         ) : (
           shown.map((booking) => {
             const status = STATUS[booking.status];

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Info } from 'lucide-react';
 import NeedHelp from '@/components/ui/NeedHelp';
-import { helpDesk, myBookings } from '@/lib/content';
+import { helpDesk } from '@/lib/content';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
 import { toSrc } from '@/lib/imageSlot';
 
 /**
@@ -18,10 +20,31 @@ export default function GetHelp({ art }) {
   const [id, setId] = useState('');
   const [sent, setSent] = useState(null);
 
+  /**
+   * The member's own bookings, to look one up against.
+   *
+   * This used to check what was typed against the screen's sample
+   * bookings, so a real reference came back "no booking here matches
+   * that" and a made-up one could come back found. Signed out there is
+   * nothing to check against, and it says so rather than guessing.
+   */
+  const [mine, setMine] = useState(null);
+  useEffect(() => {
+    const token = getSessionToken();
+    if (!token) return undefined;
+    let live = true;
+    api.memberMe(token)
+      .then((res) => live && setMine(res.data?.bookings || []))
+      .catch(() => live && setMine([]));
+    return () => { live = false; };
+  }, []);
+
   const submit = (e) => {
     e.preventDefault();
     const code = id.trim().toUpperCase();
-    const known = myBookings.some((b) => b.id.toUpperCase() === code);
+    const known = mine
+      ? mine.some((b) => String(b.reference).toUpperCase() === code)
+      : null;
     setSent({ code, known });
   };
 
@@ -75,14 +98,19 @@ export default function GetHelp({ art }) {
         {sent && (
           <p
             className={`mt-4 rounded-xl px-4 py-3.5 text-[14px] leading-relaxed ${
-              sent.known
+              sent.known === true
                 ? 'bg-[#e8f6ec] font-semibold text-green-700'
                 : 'bg-[#fdf3dd] text-[#8a6410]'
             }`}
           >
-            {sent.known
+            {/* Not finding it and not being able to look are different
+                answers, and saying the first when we mean the second
+                sends somebody off to check an id that was right. */}
+            {sent.known === true
               ? `We found ${sent.code}. Once the OTP service is connected, a code will go to the number used for that booking.`
-              : `No booking here matches ${sent.code}. Check the ID on your confirmation, or talk to the desk below.`}
+              : sent.known === false
+                ? `No booking of yours matches ${sent.code}. Check the ID on your confirmation, or talk to the desk below.`
+                : `Sign in and we can look ${sent.code} up for you. The desk below can find it either way.`}
           </p>
         )}
 
