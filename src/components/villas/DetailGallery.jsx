@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useWishlist } from '@/lib/wishlist';
 import { ArrowLeft, Heart, Images, Share2, Star } from 'lucide-react';
+import SetInnerScreen from '@/components/layout/InnerScreen';
 import GalleryViewer from '@/components/ui/GalleryViewer';
 
 /**
@@ -60,8 +61,10 @@ export default function DetailGallery({ photos, name, rating, reviews, galleries
 
   return (
     <>
-    {/* Under the header, never over it: the header is z-40. */}
-    <div className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white pt-safe lg:pt-0">
+    {/* A phone shows this in the site header instead, which saves it a
+        second row; see InnerScreen. */}
+    <SetInnerScreen title={name} />
+    <div className="sticky top-[var(--header-h)] z-30 hidden border-b border-surface-line bg-white lg:block">
       <div className="shell flex h-12 items-center gap-2">
         <button
           type="button"

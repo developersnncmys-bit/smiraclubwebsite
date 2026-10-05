@@ -1,5 +1,6 @@
 import { Montserrat } from 'next/font/google';
 import Header from '@/components/layout/Header';
+import { InnerScreenProvider } from '@/components/layout/InnerScreen';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
 import Attribution from '@/components/layout/Attribution';
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
       {/* Extensions (ColorZilla, Grammarly and friends) add attributes to the
           body before React hydrates; that mismatch is theirs, not ours. */}
       <body suppressHydrationWarning>
+        <InnerScreenProvider>
         <Header />
         <Attribution />
         <AuthPopup />
@@ -53,6 +55,7 @@ export default function RootLayout({ children }) {
         <main>{children}</main>
         <Footer />
         <BottomNav />
+        </InnerScreenProvider>
       </body>
     </html>
   );

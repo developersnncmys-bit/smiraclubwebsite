@@ -13,13 +13,18 @@
      * came to show a sliver of itself sliding through the seam.
      */
     --header-h: calc(3rem + 1px + env(safe-area-inset-top));
-    /* The title bar that sticks directly under the header, at every size. */
-    --title-h: calc(3rem + 1px);
+    /*
+     * The detail bar that sticks under the header. A phone does not
+     * draw one — its title goes in the header itself — so anything
+     * offsetting by this must find nothing there.
+     */
+    --title-h: 0px;
   }
 
   @screen lg {
     :root {
       --header-h: calc(3.5rem + 1px + env(safe-area-inset-top));
+      --title-h: calc(3rem + 1px);
     }
   }
 
