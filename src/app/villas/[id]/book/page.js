@@ -7,6 +7,7 @@ import {
   villaBooking, villaDetails, villaHost, villaResults, villaRules, villaStay, villas,
 } from '@/lib/content';
 import { image } from '@/lib/images';
+import { asProperty, deskItem } from '@/lib/desk';
 import { defaultStay, fullDate, nightsBetween, ymd } from '@/lib/format';
 
 const ALL = [...villaResults, ...villas];
@@ -30,10 +31,20 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
 
-  const villa = ALL.find((v) => v.id === id);
+  const own = ALL.find((v) => v.id === id);
+  const villa = own || (await deskItem(id).then((i) => (i ? asProperty(i) : null)));
   if (!villa) notFound();
 
-  const detail = villaDetails[villa.id];
+  /**
+   * The layout line. The site keeps its own villas detail here; a
+   * partner carries theirs on the listing, and reading the first
+   * without the second threw the moment a partner got this far.
+   */
+  const detail = villaDetails[villa.id] || {
+    bedrooms: villa.bedrooms,
+    baths: villa.baths,
+    beds: villa.beds,
+  };
   const fallback = defaultStay();
   const from = query.from ? new Date(query.from) : fallback.from;
   const to = query.to ? new Date(query.to) : fallback.to;
@@ -131,7 +142,11 @@ export default async function Page({ params, searchParams }) {
             <div className="border-t border-surface-line p-4 sm:p-5">
               <p className="text-[15px] font-bold text-ink-900">{villa.layout}</p>
               <p className="mt-1 text-[14px] text-ink-600">
-                {detail.bedrooms} Bedrooms, {detail.baths} Bathrooms, {detail.beds}
+                {[
+                  detail.bedrooms ? `${detail.bedrooms} Bedrooms` : '',
+                  detail.baths ? `${detail.baths} Bathrooms` : '',
+                  detail.beds,
+                ].filter(Boolean).join(', ')}
               </p>
             </div>
           </section>

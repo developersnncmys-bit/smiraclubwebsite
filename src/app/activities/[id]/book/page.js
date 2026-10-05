@@ -4,8 +4,14 @@ import { Star } from 'lucide-react';
 import ScreenBar from '@/components/ui/ScreenBar';
 import BookingForm from '@/components/villas/BookingForm';
 import { activities, activityDates, activityTaxRate } from '@/lib/content';
+import { deskService } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { clock, fullDate, inr } from '@/lib/format';
+
+// A partner is not known at build time, so this is drawn on demand and
+// then held for a minute — the same as the page that linked here.
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return activities.map((a) => ({ id: a.id }));
@@ -27,7 +33,7 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
-  const a = activities.find((x) => x.id === id);
+  const a = activities.find((x) => x.id === id) || (await deskService(id, 'activity'));
   if (!a) notFound();
 
   const dates = activityDates(a);

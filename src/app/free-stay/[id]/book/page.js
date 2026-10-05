@@ -6,7 +6,14 @@ import BookingForm from '@/components/villas/BookingForm';
 import { RulesCard } from '@/components/hotels/DetailSections';
 import { freeStayFood, hotels, mealPreferences } from '@/lib/content';
 import { image } from '@/lib/images';
+import { asProperty, deskItem } from '@/lib/desk';
 import { defaultStay, inr, nightsBetween, shortDate } from '@/lib/format';
+
+
+// A partner is not known at build time, so this is drawn on demand and
+// then held for a minute — the same as the page that linked here.
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return hotels.map((h) => ({ id: h.id }));
@@ -34,7 +41,8 @@ export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const query = (await searchParams) || {};
 
-  const hotel = hotels.find((h) => h.id === id);
+  const own = hotels.find((h) => h.id === id);
+  const hotel = own || (await deskItem(id).then((i) => (i ? asProperty(i) : null)));
   if (!hotel) notFound();
 
   const fallback = defaultStay();

@@ -4,6 +4,7 @@ import { Star } from 'lucide-react';
 import ScreenBar from '@/components/ui/ScreenBar';
 import BookingForm from '@/components/villas/BookingForm';
 import { luxuries, luxuryTaxRate, spaDates } from '@/lib/content';
+import { deskService } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { clock, fullDate, inr } from '@/lib/format';
 
@@ -24,7 +25,7 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 export default async function Page({ params, searchParams }) {
   const { id } = await params;
   const q = (await searchParams) || {};
-  const s = luxuries.find((x) => x.id === id);
+  const s = luxuries.find((x) => x.id === id) || (await deskService(id, 'luxury'));
   if (!s) notFound();
 
   const service = s.tickets.find((t) => t.id === q.service) ?? s.tickets[0];
