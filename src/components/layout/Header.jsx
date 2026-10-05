@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
-import { isMember, useMembership } from '@/lib/membership';
+import { isMember, membershipPending, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import ProfileDot from '@/components/layout/ProfileDot';
 
@@ -17,11 +17,18 @@ import ProfileDot from '@/components/layout/ProfileDot';
  * twice.
  */
 export default function Header() {
-  // The badge is the member's own tier, or the way to become one.
+  /**
+   * The badge: the member's own tier, where they hold one; where they
+   * have asked for one and not paid, that, said plainly; otherwise the
+   * way to become one. It used to read "<Plan> Member" the moment the
+   * payment sheet had been opened, which is not the same thing at all.
+   */
   const { membership } = useMembership();
   const memberBadge = isMember(membership)
     ? { label: `${membership.plan} Member`, href: '/membership' }
-    : { label: 'Become a Member', href: '/membership' };
+    : membershipPending(membership)
+      ? { label: 'Payment pending', href: '/membership' }
+      : { label: 'Become a Member', href: '/membership' };
   const { profile } = useProfile();
 
   return (

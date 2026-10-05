@@ -29,7 +29,38 @@ export function saveMembership(m) {
   }
 }
 
-export const isMember = (m) => Boolean(m?.plan && m?.reference);
+/**
+ * The statuses that mean somebody actually holds a membership.
+ *
+ * The desk's own list runs Quoted, New, Active, Pending activation,
+ * Expiring soon, Expired, Suspended, Cancelled. Only two of those are a
+ * membership you can use.
+ */
+const LIVE = ['Active', 'Expiring soon'];
+
+/**
+ * Whether this visitor holds a membership.
+ *
+ * It used to ask only whether one had been saved here, and one is saved
+ * the moment somebody presses Pay Now — on Payment pending, before any
+ * money has moved. So the header called them a Platinum Member for
+ * having opened the payment sheet, and members-only pages let them
+ * straight through. The desk had the same bug on its side and now
+ * counts a membership once it is paid; this is the browser's half.
+ */
+export const isMember = (m) => Boolean(m?.plan && m?.reference && LIVE.includes(m.status));
+
+/** A membership that is over rather than on its way. */
+const DEAD = ['Cancelled', 'Expired', 'Suspended'];
+
+/**
+ * Asked for, not yet paid for. Worth saying out loud rather than
+ * showing "Become a Member" to somebody who is halfway through doing
+ * exactly that — but a membership that was cancelled or has run out is
+ * not pending anything, and they are back to being a visitor.
+ */
+export const membershipPending = (m) =>
+  Boolean(m?.plan && m?.reference && !isMember(m) && !DEAD.includes(m.status));
 
 /** Where to send a visitor to join, coming back here after. */
 export function joinHref() {
