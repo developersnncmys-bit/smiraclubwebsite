@@ -8,7 +8,6 @@ import { api } from '@/lib/api';
 import { hasAccount } from '@/lib/account';
 import { readAttribution } from '@/components/layout/Attribution';
 import { profileForBooking, useProfile } from '@/lib/profile';
-import UpiField, { upiLooksWrong } from '@/components/forms/UpiField';
 
 const BLANK = { name: '', email: '', phone: '' };
 
@@ -68,7 +67,6 @@ export default function BookingForm({
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState('');
   const [coupon, setCoupon] = useState('');
-  const [upiId, setUpiId] = useState('');
   const [couponNote, setCouponNote] = useState('');
   const [who, setWho] = useState('myself');
   const [guests, setGuests] = useState([{ ...BLANK }]);
@@ -114,11 +112,6 @@ export default function BookingForm({
     setErrors(found);
     setFailed('');
     if (Object.keys(found).length !== 0) return;
-    if (upiLooksWrong(upiId)) {
-      setFailed('A UPI ID looks like yourname@okhdfcbank — or leave it blank.');
-      return;
-    }
-
     // Every booking goes to the Smira desk, and has to land before we say so.
     // A screen with its own details to send passes `send`; the rest send what
     // the confirmation screen is about to show.
@@ -140,7 +133,6 @@ export default function BookingForm({
           location: confirm.location,
           checkIn: p.checkIn,
           checkOut: p.checkOut,
-          upiId: p.upiId,
           pax: confirm.pax || p.guests.length,
           profile: p.profile,
           account: hasAccount(),
@@ -157,7 +149,6 @@ export default function BookingForm({
         const res = await deliver({
           guests: guests.filter((g) => g.name.trim() || g.email.trim() || g.phone.trim()),
           coupon: coupon.trim(),
-          upiId: upiId.trim(),
           total,
           checkIn: confirm.checkIn,
           checkOut: confirm.checkOut,
@@ -288,8 +279,6 @@ export default function BookingForm({
           View Coupons
         </button>
       </section>
-
-      <UpiField value={upiId} onChange={setUpiId} />
 
       {/* -- Who is this for ------------------------------------------ */}
       <section className="card p-4 sm:p-5">

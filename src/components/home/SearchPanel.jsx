@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
@@ -27,13 +28,11 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
   /**
    * What is being searched for.
    *
-   * The four tabs were links to the category screens, so picking one left
-   * this panel behind — the tab you chose could not change what the
-   * search did, because by the time you typed anything you were on
-   * another page. They are a choice now, and the search goes where the
-   * choice says.
+   * The tab the panel was opened under. Each tab is a link to its own
+   * screen, and every one of those carries a search of its own, so this
+   * is the kind for whichever screen you are on.
    */
-  const [kind, setKind] = useState(active);
+  const kind = active;
 
   const [destination, setDestination] = useState('');
   const [from, setFrom] = useState(stay.from.toISOString().slice(0, 10));
@@ -107,11 +106,10 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
           {searchTabs.map((t) => {
             const on = t.key === kind;
             return (
-              <button
+              <Link
                 key={t.key}
-                type="button"
-                onClick={() => setKind(t.key)}
-                aria-pressed={on}
+                href={t.href}
+                aria-current={on ? 'page' : undefined}
                 className={`flex flex-col items-center gap-0.5 px-2 py-2 text-[12px] font-semibold transition lg:flex-row lg:gap-2 lg:rounded-lg lg:px-4 lg:py-2.5 lg:text-sm ${
                   on
                     ? 'bg-white text-ink-900 shadow-card lg:bg-brand-50 lg:text-brand-700 lg:shadow-none'
@@ -135,7 +133,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                   />
                 )}
                 {t.label}
-              </button>
+              </Link>
             );
           })}
 
