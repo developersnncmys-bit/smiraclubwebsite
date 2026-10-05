@@ -30,11 +30,17 @@
    * the page's own bar takes the top, which is what the height below is
    * saying. A desktop has room for both, so nothing changes at lg.
    */
-  body[data-inner-screen] {
-    --header-h: 0px;
-  }
-
+  /*
+   * Both halves of that belong to the phone. The height was being set to
+   * nought at every width while only a phone hid the header, so on a
+   * desktop the page bar stuck to the very top and painted over a header
+   * that was still there.
+   */
   @media (max-width: 1023px) {
+    body[data-inner-screen] {
+      --header-h: 0px;
+    }
+
     body[data-inner-screen] > header {
       display: none;
     }

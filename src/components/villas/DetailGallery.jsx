@@ -64,7 +64,8 @@ export default function DetailGallery({ photos, name, rating, reviews, galleries
     <>
     {/* The header stands down for this on a phone — see InnerScreen. */}
     <InnerScreen />
-    <div className="sticky top-[var(--header-h)] z-40 border-b border-surface-line bg-white pt-safe lg:pt-0">
+    {/* Under the header, never over it: the header is z-40. */}
+    <div className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white pt-safe lg:pt-0">
       <div className="shell flex h-12 items-center gap-2">
         <button
           type="button"
