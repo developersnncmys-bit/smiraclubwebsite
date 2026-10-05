@@ -2287,8 +2287,6 @@ export const membershipGiftConditions = [
 
 /** Sharing your benefits is a paid add-on, and the coupon the design shows. */
 export const membershipSharing = { price: 4999, label: 'To share your member benefits' };
-export const membershipCoupon = { code: 'SMIRA500', off: 500 };
-
 /* -- Find Your Perfect Membership --------------------------------------- */
 
 export const membershipQuizIntro = {

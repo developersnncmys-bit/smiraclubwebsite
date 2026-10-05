@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Check, Crown, Gift, Info, ShieldCheck } from 'lucide-react';
 import {
-  membershipCoupon, membershipGiftConditions,
+  membershipGiftConditions,
   membershipCompareHero, membershipOffer, membershipPlans, membershipPrivileges,
   membershipSharing, membershipTabs,
 } from '@/lib/content';
@@ -200,8 +200,19 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
   const [sharing, setSharing] = useState(true);
   const [agreed, setAgreed] = useState(true);
 
+  /**
+   * The coupon, as the desk has it on the Offers page.
+   *
+   * It used to be one code written into this file and applied before
+   * anybody typed anything, so everybody got five hundred rupees off a
+   * code they had never been given, and the desk could not add a second
+   * one or retire that one. Nothing is applied until it is typed and the
+   * desk has agreed it holds.
+   */
   const [coupon, setCoupon] = useState('');
-  const [applied, setApplied] = useState(membershipCoupon.code);
+  /** What the desk said: { code, off, name, gives } — or nothing yet. */
+  const [applied, setApplied] = useState(null);
+  const [checking, setChecking] = useState(false);
   const [note, setNote] = useState('');
   /** Sent here from a details page they could not open yet. */
   const [returning, setReturning] = useState(false);
@@ -308,14 +319,13 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
       return [...list, key];
     });
 
-  const discount = applied ? membershipCoupon.off : 0;
   // Only offered where the desk has put a price on it.
   const canShare = plan.sharing?.price > 0;
   const sharingPrice = sharing && canShare ? plan.sharing.price : 0;
-  const total = useMemo(
-    () => plan.fee - discount + sharingPrice,
-    [plan.fee, discount, sharingPrice],
-  );
+  /** What the coupon comes off: the fee and the sharing, before any code. */
+  const gross = plan.fee + sharingPrice;
+  const discount = Math.min(applied?.off || 0, gross);
+  const total = useMemo(() => gross - discount, [gross, discount]);
 
   /**
    * Pay now: the profile has to be there (the desk needs to know who to call),
@@ -365,7 +375,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
         gifts,
         privileges,
         sharing,
-        coupon: applied || undefined,
+        coupon: applied?.code || undefined,
         paidVia,
         // Only a UPI payment goes to the account directly; the other two
         // are a link the desk raises, so there is no account to name.
@@ -388,15 +398,68 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
     }
   };
 
-  const applyCoupon = () => {
+  /**
+   * Apply: ask the desk, and say what it says.
+   *
+   * The desk decides — whether the code exists, whether it is running,
+   * whether this spend reaches its minimum and what it is worth. Working
+   * any of that out here would only be a guess the server has to check
+   * again anyway.
+   */
+  const applyCoupon = async () => {
     const code = coupon.trim().toUpperCase();
-    if (code === membershipCoupon.code) {
-      setApplied(code);
-      setNote('');
-    } else {
-      setNote(code ? `We could not find "${code}".` : 'Enter a code first.');
+    if (!code) return setNote('Enter a code first.');
+    if (checking) return;
+    setChecking(true);
+    setNote('');
+    try {
+      const res = await api.checkCoupon(code, gross, 'Membership');
+      const c = res.data || {};
+      if (c.valid) {
+        setApplied({ code: c.code, off: c.off || 0, name: c.name || '', gives: c.gives || '' });
+        setCoupon('');
+        setNote('');
+      } else {
+        setApplied(null);
+        setNote(c.reason || `We could not find "${code}".`);
+      }
+    } catch {
+      setNote('We could not check that code just now. Please try again in a moment.');
+    } finally {
+      setChecking(false);
     }
   };
+
+  const dropCoupon = () => {
+    setApplied(null);
+    setNote('');
+  };
+
+  /**
+   * A percentage is worth a different amount on a different plan, and a
+   * code with a minimum spend may not reach it any more. Changing tier or
+   * dropping the sharing re-asks rather than quietly keeping the old sum.
+   */
+  const appliedCode = applied?.code;
+  useEffect(() => {
+    if (!appliedCode) return undefined;
+    let dropped = false;
+    api
+      .checkCoupon(appliedCode, gross, 'Membership')
+      .then((res) => {
+        if (dropped) return;
+        const c = res.data || {};
+        if (c.valid) setApplied({ code: c.code, off: c.off || 0, name: c.name || '', gives: c.gives || '' });
+        else {
+          setApplied(null);
+          setNote(c.reason || 'That code no longer applies.');
+        }
+      })
+      .catch(() => {});
+    return () => {
+      dropped = true;
+    };
+  }, [appliedCode, gross]);
 
   return (
     <div className="pb-40 lg:pb-12">
@@ -523,19 +586,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
                 ))}
               </dl>
 
-              {plan.features?.length > 0 && (
-                <>
-                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">Included in this plan</h3>
-                  <ul className="mt-2.5 space-y-2">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-[14px] leading-snug text-ink-700">
-                        <Check size={16} className="mt-0.5 shrink-0" style={{ color: plan.accent }} />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+              {/*
+                What's Included is not listed here as well. The section
+                directly below this card draws the same features from the
+                same plan, so the card was printing the list twice down one
+                screen.
+              */}
 
               {plan.gifts?.length > 0 && (
                 <>
@@ -700,33 +756,56 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
 
             {/* The coupon sits with the gifts, above their conditions. */}
             <h3 className="mt-6 text-[15px] font-bold text-ink-900">Have a Coupon Code?</h3>
-            <div className="mt-2 flex gap-2">
-              <input
-                value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
-                placeholder="Have a Coupon Code"
-                aria-label="Coupon code"
-                className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[14px] outline-none placeholder:text-ink-400 focus:border-action-500"
-              />
-              <button
-                type="button"
-                onClick={applyCoupon}
-                className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f]"
-              >
-                Apply
-              </button>
-            </div>
 
-            {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
-
-            {discount > 0 && (
-              <p className="mt-4 flex items-center gap-2.5 rounded-lg bg-[#e8f6ec] px-3.5 py-3 text-[14px] font-semibold text-green-700">
+            {applied ? (
+              <div className="mt-2 flex items-center gap-3 rounded-xl border border-dashed border-green-600/40 bg-[#e8f6ec] px-3.5 py-3">
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-green-600 text-white">
                   <Check size={14} strokeWidth={3} />
                 </span>
-                You saved {inr(discount)} on this purchase
-              </p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[14px] font-bold text-green-700">{applied.code} applied</p>
+                  <p className="truncate text-[13px] text-ink-600">
+                    {applied.off > 0
+                      ? `You saved ${inr(applied.off)} on this purchase`
+                      : applied.gives || applied.name}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={dropCoupon}
+                  className="shrink-0 text-[13px] font-semibold text-ink-500 underline underline-offset-2 transition hover:text-ink-900"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  applyCoupon();
+                }}
+                className="mt-2 flex gap-2"
+              >
+                <input
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value.toUpperCase())}
+                  placeholder="Have a Coupon Code"
+                  aria-label="Coupon code"
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                  className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[14px] uppercase outline-none placeholder:normal-case placeholder:text-ink-400 focus:border-action-500"
+                />
+                <button
+                  type="submit"
+                  disabled={checking}
+                  className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f] disabled:opacity-60"
+                >
+                  {checking ? 'Checking…' : 'Apply'}
+                </button>
+              </form>
             )}
+
+            {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
 
             {gifts.length > 0 && (
               <>
@@ -800,8 +879,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
 
               {discount > 0 && (
                 <div className="flex items-center justify-between gap-4 py-2.5">
-                  <dt className="text-green-600">Coupon Discount ({applied})</dt>
-                  <dd className="font-semibold text-green-600">-{discount}</dd>
+                  <dt className="text-green-600">Coupon Discount ({applied?.code})</dt>
+                  <dd className="font-semibold text-green-600">-{inr(discount)}</dd>
                 </div>
               )}
 

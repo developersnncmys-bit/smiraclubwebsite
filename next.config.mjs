@@ -33,6 +33,14 @@ function apiPatterns() {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  /**
+   * Where a build is written.
+   *
+   * A check build while somebody has the dev server up used to overwrite
+   * the running .next underneath them, which shows up as a chunk that
+   * cannot be loaded. NEXT_DIST_DIR puts a check somewhere else.
+   */
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   images: {
     /**
      * Where a photograph is allowed to come from.

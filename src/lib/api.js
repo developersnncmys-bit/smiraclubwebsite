@@ -50,6 +50,19 @@ export const api = {
   catalog: (query = '') => request(`/website/catalog${query}`, { next: { revalidate: 60 } }),
   catalogItem: (id) => request(`/website/catalog/${encodeURIComponent(id)}`, { next: { revalidate: 60 } }),
 
+  /**
+   * Is this coupon any good, and what is it worth on this spend?
+   *
+   * Never cached: a code can run out between one person typing it and the
+   * next, and the answer carries a price.
+   */
+  checkCoupon: (code, spend, forWhat = 'Membership') =>
+    request(
+      `/website/coupon/${encodeURIComponent(String(code).trim().toUpperCase())}` +
+        `?spend=${Math.round(spend || 0)}&for=${forWhat}`,
+      { next: { revalidate: 0 } },
+    ),
+
   /** The offers the desk has put live on the panel's Offers page. */
   deskOffers: () => request('/website/offers', { next: { revalidate: 60 } }),
   /** A complaint from Get Help; it opens a ticket on the support desk. */
