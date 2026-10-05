@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Check, Crown, Gift, Info, ShieldCheck } from 'lucide-react';
+import { Check, Crown, Gift, Info, ShieldCheck, Ticket } from 'lucide-react';
 import {
   membershipGiftConditions,
   membershipCompareHero, membershipOffer, membershipPlans, membershipPrivileges,
@@ -13,7 +13,7 @@ import Countdown from '@/components/ui/Countdown';
 import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
 import { toSrc } from '@/lib/imageSlot';
-import { inr } from '@/lib/format';
+import { inr, shortDate } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import PaySheet from '@/components/forms/PaySheet';
@@ -188,7 +188,7 @@ function fromDesk(p, d) {
  * sharing the benefits, and the coupon. The bar at the bottom reads that
  * same total rather than keeping its own copy.
  */
-export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
+export default function MembershipScreen({ hero, helper, compare, desk = [], offers = [] }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
   // Nothing is chosen until they choose: the card below falls back to the
@@ -406,8 +406,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
    * any of that out here would only be a guess the server has to check
    * again anyway.
    */
-  const applyCoupon = async () => {
-    const code = coupon.trim().toUpperCase();
+  const applyCoupon = async (picked) => {
+    const code = String(picked || coupon).trim().toUpperCase();
     if (!code) return setNote('Enter a code first.');
     if (checking) return;
     setChecking(true);
@@ -428,6 +428,25 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
     } finally {
       setChecking(false);
     }
+  };
+
+  /**
+   * An offer in a line: what it takes off, and anything that has to be
+   * true before it will. The desk's own description is used where the
+   * offer is not money off, because a gift has no percentage to show.
+   */
+  const offerLine = (o) => {
+    const parts = [];
+    if (o.kind === 'Percent off') {
+      parts.push(`${o.value}% off`);
+      if (o.maxDiscount) parts.push(`up to ${inr(o.maxDiscount)}`);
+    } else if (o.kind === 'Flat off') {
+      parts.push(`${inr(o.value)} off`);
+    } else {
+      parts.push(o.description || o.name || o.kind);
+    }
+    if (o.minSpend) parts.push(`on ${inr(o.minSpend)} and over`);
+    return parts.join(', ');
   };
 
   const dropCoupon = () => {
@@ -806,6 +825,49 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
             )}
 
             {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
+
+            {/*
+              The codes the desk has running, rather than a box you have to
+              already know the answer to. Tapping one applies it, which is
+              the same check as typing it — nothing here decides what an
+              offer is worth.
+            */}
+            {!applied && offers.length > 0 && (
+              <div className="mt-4">
+                <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
+                  Offers for you
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {offers.map((o) => (
+                    <li
+                      key={o.id || o.coupon}
+                      className="flex items-center gap-3 rounded-xl border border-dashed border-action-500/40 bg-action-500/[0.04] px-3.5 py-3"
+                    >
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-action-500/10 text-action-500">
+                        <Ticket size={18} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[14px] font-bold tracking-wide text-ink-900">
+                          {o.coupon}
+                        </p>
+                        <p className="truncate text-[13px] text-ink-600">{offerLine(o)}</p>
+                        {o.endsOn && (
+                          <p className="text-[12px] text-ink-400">Ends {shortDate(o.endsOn)}</p>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => applyCoupon(o.coupon)}
+                        disabled={checking}
+                        className="shrink-0 rounded-lg border border-action-500 px-3.5 py-1.5 text-[13px] font-bold text-action-500 transition hover:bg-action-500 hover:text-white disabled:opacity-60"
+                      >
+                        Apply
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {gifts.length > 0 && (
               <>

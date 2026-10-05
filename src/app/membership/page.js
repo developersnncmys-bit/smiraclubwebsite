@@ -1,6 +1,6 @@
 import ScreenBar from '@/components/ui/ScreenBar';
 import MembershipScreen from '@/components/membership/MembershipScreen';
-import { deskPlans } from '@/lib/desk';
+import { deskOffers, deskPlans } from '@/lib/desk';
 import { image } from '@/lib/images';
 
 /** The desk's plans are re-read a minute at a time, like the rest of the site. */
@@ -30,6 +30,18 @@ export default async function Page() {
    */
   const desk = await deskPlans();
 
+  /**
+   * The coupon codes the desk has live, so the box below is not a guess.
+   *
+   * Only the ones with a code to type and only the ones a membership may
+   * use. Read here with the plans rather than in the browser, so the
+   * offers are on the page when it paints.
+   */
+  const all = await deskOffers();
+  const offers = all.filter(
+    (o) => o.coupon && (!o.appliesTo?.length || o.appliesTo.includes('Membership')),
+  );
+
   return (
     <>
       <ScreenBar title="Smira Club Membership" backHref="/profile" />
@@ -38,6 +50,7 @@ export default async function Page() {
         helper={image('plan-helper')}
         compare={image('compare-landmarks')}
         desk={desk}
+        offers={offers}
       />
     </>
   );
