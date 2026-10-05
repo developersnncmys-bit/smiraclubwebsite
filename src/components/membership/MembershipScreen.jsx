@@ -160,6 +160,18 @@ function fromDesk(p, d) {
     blurb: d.blurb?.trim() || p.blurb,
     fee: Number(d.price) || p.fee,
     discount: Number(d.discount) || 0,
+    /**
+     * Sharing this plan with family, and what it costs.
+     *
+     * It used to be one price written into this file and charged on every
+     * tier, so Silver and Crown cost the same to share quite different
+     * benefits and the desk could not change either. Nought means this
+     * plan is not shared, and the question is left off the page.
+     */
+    sharing: {
+      price: Number(d.sharing?.price) || 0,
+      label: d.sharing?.label?.trim() || membershipSharing.label,
+    },
     popular: Boolean(d.popular),
     privileges: Number(d.privileges) || p.privileges,
     features: Array.isArray(d.features) ? d.features.filter(Boolean) : [],
@@ -297,7 +309,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
     });
 
   const discount = applied ? membershipCoupon.off : 0;
-  const sharingPrice = sharing ? membershipSharing.price : 0;
+  // Only offered where the desk has put a price on it.
+  const canShare = plan.sharing?.price > 0;
+  const sharingPrice = sharing && canShare ? plan.sharing.price : 0;
   const total = useMemo(
     () => plan.fee - discount + sharingPrice,
     [plan.fee, discount, sharingPrice],
@@ -508,16 +522,6 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
                   </div>
                 ))}
               </dl>
-
-              {/* What the desk put on this plan. Nothing added, nothing shown. */}
-              {plan.discount > 0 && (
-                <p
-                  className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px] font-bold"
-                  style={{ background: plan.soft, color: plan.accent }}
-                >
-                  {plan.discount}% off every package, for as long as you are a member
-                </p>
-              )}
 
               {plan.features?.length > 0 && (
                 <>
@@ -738,25 +742,27 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
             )}
           </section>
 
-          {/* -- Sharing, and the terms ----------------------------- */}
-          <section className="card p-4 sm:p-5">
-            <label className="flex cursor-pointer gap-3">
-              <input
-                type="checkbox"
-                checked={sharing}
-                onChange={(e) => setSharing(e.target.checked)}
-                className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
-              />
-              <span className="text-[15px] font-bold leading-snug text-ink-900">
-                Share Your Membership Benefits With Your Relatives &amp; Friends
-              </span>
-            </label>
+          {/* -- Sharing, where this plan is shared at all ---------- */}
+          {canShare && (
+            <section className="card p-4 sm:p-5">
+              <label className="flex cursor-pointer gap-3">
+                <input
+                  type="checkbox"
+                  checked={sharing}
+                  onChange={(e) => setSharing(e.target.checked)}
+                  className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
+                />
+                <span className="text-[15px] font-bold leading-snug text-ink-900">
+                  Share Your Membership Benefits With Your Relatives &amp; Friends
+                </span>
+              </label>
 
-            <p className="mt-4 text-[15px] text-ink-900">
-              Pay <span className="font-extrabold">{inr(membershipSharing.price)}</span>
-            </p>
-            <p className="text-[14px] text-ink-500">{membershipSharing.label}</p>
-          </section>
+              <p className="mt-4 text-[15px] text-ink-900">
+                Pay <span className="font-extrabold">{inr(plan.sharing.price)}</span>
+              </p>
+              <p className="text-[14px] text-ink-500">{plan.sharing.label}</p>
+            </section>
+          )}
 
           <section className="card p-4 sm:p-5">
             <label className="flex cursor-pointer gap-3">
@@ -798,12 +804,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
                 </div>
               )}
 
-              <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-2.5">
-                <dt className="text-ink-900">Membership Sharing Price</dt>
-                <dd className="font-semibold text-ink-900">
-                  {sharing ? inr(membershipSharing.price) : '-'}
-                </dd>
-              </div>
+                {canShare && (
+                <div className="flex items-center justify-between gap-4 border-b border-dashed border-surface-line py-2.5">
+                  <dt className="text-ink-900">Membership Sharing Price</dt>
+                  <dd className="font-semibold text-ink-900">
+                    {sharing ? inr(plan.sharing.price) : '-'}
+                  </dd>
+                </div>
+                )}
 
               <div className="flex items-center justify-between gap-4 pt-3">
                 <dt className="text-[15px] font-bold text-[#c0392b]">You Saved</dt>
