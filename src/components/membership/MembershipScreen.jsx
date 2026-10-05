@@ -333,7 +333,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
     return setPaying(true);
   };
 
-  const join = async (paymentRef = '') => {
+  const join = async (paidVia = 'UPI') => {
     if (joining || !agreed) return;
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
@@ -352,8 +352,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
         privileges,
         sharing,
         coupon: applied || undefined,
-        paymentRef: paymentRef || undefined,
-        paidTo: MERCHANT.upi,
+        paidVia,
+        // Only a UPI payment goes to the account directly; the other two
+        // are a link the desk raises, so there is no account to name.
+        paidTo: paidVia === 'UPI' ? MERCHANT.upi : undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
@@ -913,7 +915,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [] }) {
         note={`Smira ${plan.label} membership`}
         busy={joining}
         error={failed}
-        onPaid={(reference) => join(reference)}
+        onPaid={(paidVia) => join(paidVia)}
       />
     </div>
   );
