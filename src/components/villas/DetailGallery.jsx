@@ -2,10 +2,9 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useWishlist } from '@/lib/wishlist';
-import { Heart, Images, Share2, Star } from 'lucide-react';
-import SetInnerScreen from '@/components/layout/InnerScreen';
+import { ArrowLeft, Heart, Images, Share2, Star } from 'lucide-react';
 import GalleryViewer from '@/components/ui/GalleryViewer';
 
 /**
@@ -20,6 +19,7 @@ import GalleryViewer from '@/components/ui/GalleryViewer';
  * copying the link, so the button always does something.
  */
 export default function DetailGallery({ photos, name, rating, reviews, galleries = [] }) {
+  const router = useRouter();
   const [at, setAt] = useState(0);
   // The heart saves to the same wishlist as the cards' ⋮ menus.
   const pathname = usePathname();
@@ -60,16 +60,20 @@ export default function DetailGallery({ photos, name, rating, reviews, galleries
 
   return (
     <>
-    {/*
-      The name goes in the site header, which is the only bar there is.
-
-      This page used to carry a second one of its own underneath it — a
-      back arrow and the name again — which is a strip of chrome saying
-      what the heading directly under the photograph already says. A
-      phone had both until the header took the title over; a desktop had
-      both the whole time.
-    */}
-    <SetInnerScreen title={name} />
+    {/* Under the header, never over it: the header is z-40. */}
+    <div className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white pt-safe lg:pt-0">
+      <div className="shell flex h-12 items-center gap-2">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          aria-label="Go back"
+          className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
+        >
+          <ArrowLeft size={21} />
+        </button>
+        <p className="truncate text-[16px] font-semibold text-ink-900">{name}</p>
+      </div>
+    </div>
 
     <section className="relative">
       <div

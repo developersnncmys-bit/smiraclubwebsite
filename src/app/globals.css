@@ -13,6 +13,8 @@
      * came to show a sliver of itself sliding through the seam.
      */
     --header-h: calc(3rem + 1px + env(safe-area-inset-top));
+    /* The title bar that sticks directly under the header, at every size. */
+    --title-h: calc(3rem + 1px);
   }
 
   @screen lg {

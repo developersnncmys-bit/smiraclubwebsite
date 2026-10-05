@@ -1,13 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Bell } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, membershipPending, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import ProfileDot from '@/components/layout/ProfileDot';
-import { useInnerScreen } from '@/components/layout/InnerScreen';
 
 /**
  * One header, two shapes.
@@ -33,49 +31,16 @@ export default function Header() {
       : { label: 'Become a Member', href: '/membership' };
   const { profile } = useProfile();
 
-  /**
-   * On an inner screen a phone gets one bar, not two.
-   *
-   * The page's own bar — a way back and a title — used to sit under this
-   * one, which is ninety-eight pixels of chrome before any content.
-   * Hiding one of them loses something: without the header there is no
-   * badge and no way to the account, without the page bar there is no way
-   * back. So on a phone they are the same row, and on a desktop, where
-   * there is room, both stay as they were.
-   */
-  const inner = useInnerScreen();
-  const router = useRouter();
-  const goBack = () => {
-    if (inner?.backHref) router.push(inner.backHref);
-    else router.back();
-  };
-
   return (
     <header className="sticky top-0 z-40 border-b border-surface-line bg-white/95 backdrop-blur pt-safe">
       {/* A slim bar: the mark sits nearer the edge and the row is shorter,
           so the page underneath starts higher up. */}
       <div className="shell px-3 lg:px-5">
         {/* -- Phone ------------------------------------------------------ */}
-        <div className="relative flex h-12 items-center justify-between gap-2 lg:hidden">
-          {inner ? (
-            <>
-              <button
-                type="button"
-                onClick={goBack}
-                aria-label="Go back"
-                className="-ml-2 grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-900 transition hover:bg-surface-soft"
-              >
-                <ArrowLeft size={21} />
-              </button>
-              <h1 className="min-w-0 flex-1 truncate text-[15px] font-bold text-ink-900">
-                {inner.title}
-              </h1>
-            </>
-          ) : (
-            <Logo compact />
-          )}
+        <div className="relative flex h-12 items-center justify-between lg:hidden">
+          <Logo compact />
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex items-center gap-2">
             <Link
               href={memberBadge.href}
               className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-2 py-0.5 text-[10px] font-bold text-white transition hover:brightness-105"

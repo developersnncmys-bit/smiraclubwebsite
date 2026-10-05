@@ -81,7 +81,7 @@ export default function DetailTabs({ tabs = villaDetailTabs }) {
     <nav
       ref={bar}
       aria-label="On this page"
-      className="sticky top-[var(--header-h)] z-30 border-b border-surface-line bg-white"
+      className="sticky top-[calc(var(--header-h)+var(--title-h))] z-30 border-b border-surface-line bg-white"
     >
       <div className="shell">
         <div ref={rail} className="rail gap-6 sm:gap-8">
