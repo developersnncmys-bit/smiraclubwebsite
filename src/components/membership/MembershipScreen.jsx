@@ -931,9 +931,21 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     <h2 className="mt-1 text-lg font-bold text-ink-900">
                       Become a Member &amp; Claim Your Exclusive Gifts!
                     </h2>
-                    <p className="mt-1 text-[14px] leading-snug text-ink-700">
+                    {/*
+                      The instruction, in the client's capitals, where
+                      there is a choice to make. Where the plan hands
+                      every gift over there is nothing to choose, so it
+                      says what they get instead.
+                    */}
+                    <p
+                      className={
+                        picksGifts
+                          ? 'mt-1 text-[14px] font-bold uppercase tracking-wide text-action-500'
+                          : 'mt-1 text-[14px] leading-snug text-ink-700'
+                      }
+                    >
                       {picksGifts
-                        ? `Choose any ${giftLimit} of these with your ${plan.label} membership.`
+                        ? `Choose any ${giftLimit} gift${giftLimit > 1 ? 's' : ''}`
                         : `Enjoy your premium gifts with your ${plan.label} membership`}
                     </p>
                   </div>
