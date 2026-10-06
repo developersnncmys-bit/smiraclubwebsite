@@ -708,7 +708,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
               {plan.gifts?.length > 0 && (
                 <>
-                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">
+                  {/*
+                    The client's wording, in their capitals. Where a plan
+                    hands every gift over there is nothing to choose, so
+                    it says what it is instead of promising a choice.
+                  */}
+                  <h3 className="mt-6 text-[15px] font-bold uppercase tracking-wide text-ink-900">
                     {Number(plan.giftChoices) > 0
                       ? `Choose any ${plan.giftChoices} gift${plan.giftChoices > 1 ? 's' : ''}`
                       : 'Gifts for members'}
