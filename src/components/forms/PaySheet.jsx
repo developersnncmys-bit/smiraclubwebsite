@@ -92,37 +92,34 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
                 the amount already filled in, so there is nothing to
                 read off and nothing to mistype.
               */}
+              {/*
+                One button, which both opens the app and tells the desk.
+                There were two — this, and a Continue underneath that sent
+                the membership — and the second was the one that mattered:
+                somebody who tapped only the first paid into an account
+                nobody was expecting money in. The desk is told as the app
+                opens, so a payment always has a membership waiting for it.
+              */}
               <a
                 href={upiLink({ amount, note })}
+                onClick={() => onPaid('UPI')}
                 className="flex items-center justify-center gap-2 rounded-xl bg-action-500 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105"
               >
                 <Smartphone size={17} /> Open my UPI app
               </a>
+              {error && <p className="mt-3 text-[13px] font-semibold text-rose-600">{error}</p>}
               <p className="mt-3 text-[13px] leading-snug text-ink-500">
-                {inr(amount)} is already filled in. Approve it in your app, then
-                come back and tell us.
+                {inr(amount)} is already filled in. Approve it in your app. We
+                have told the desk which plan you want — your membership starts
+                once they see the payment in the account.
               </p>
             </div>
 
-            {/* -- Telling us it is done ------------------------------- */}
-            <div className="mt-5 border-t border-surface-line pt-4">
-              {error && <p className="mb-3 text-[13px] font-semibold text-rose-600">{error}</p>}
-
-              <button
-                type="button"
-                onClick={() => onPaid('UPI')}
-                disabled={busy}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-700 py-4 text-[15px] font-bold uppercase tracking-wide text-white transition hover:brightness-110 disabled:opacity-60"
-              >
-                {busy && <Loader2 size={17} className="animate-spin" />}
-                {busy ? 'Sending…' : 'Continue'}
-              </button>
-
-              <p className="mt-3 text-center text-[12px] leading-snug text-ink-400">
-                We tell the desk which plan you want. Your membership starts once
-                they see the payment in the account.
+            {busy && (
+              <p className="mt-4 flex items-center justify-center gap-2 border-t border-surface-line pt-4 text-[13px] text-ink-500">
+                <Loader2 size={15} className="animate-spin" /> Telling the desk…
               </p>
-            </div>
+            )}
           </div>
         </div>
       </div>

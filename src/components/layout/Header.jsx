@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
-import { isMember, membershipPending, useMembership } from '@/lib/membership';
+import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import ProfileDot from '@/components/layout/ProfileDot';
 
@@ -24,11 +24,18 @@ export default function Header() {
    * payment sheet had been opened, which is not the same thing at all.
    */
   const { membership } = useMembership();
+  /**
+   * Two states, not three.
+   *
+   * There was a Payment pending badge between them, which is the desk's
+   * word for a membership it has not been paid for — true, and not what
+   * a member wants read back to them at the top of every page. Until the
+   * money is in they are not a member yet, so the badge says the thing
+   * that is both accurate and worth tapping.
+   */
   const memberBadge = isMember(membership)
     ? { label: `${membership.plan} Member`, href: '/membership' }
-    : membershipPending(membership)
-      ? { label: 'Payment pending', href: '/membership' }
-      : { label: 'Become a Member', href: '/membership' };
+    : { label: 'Become a Member', href: '/membership' };
   const { profile } = useProfile();
 
   return (
