@@ -51,6 +51,15 @@ export const api = {
   catalogItem: (id) => request(`/website/catalog/${encodeURIComponent(id)}`, { next: { revalidate: 60 } }),
 
   /**
+   * What somebody told the membership quiz.
+   *
+   * Sent once they have finished it, so the desk has the answers whether
+   * or not they go on to buy. It never blocks the page: a failure here
+   * costs the desk a lead, not the member their result.
+   */
+  tellQuiz: (body) => request('/website/quiz', { method: 'POST', body }),
+
+  /**
    * Is this coupon any good, and what is it worth on this spend?
    *
    * Never cached: a code can run out between one person typing it and the

@@ -209,6 +209,18 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    * one or retire that one. Nothing is applied until it is typed and the
    * desk has agreed it holds.
    */
+  /**
+   * What the quiz was told, so it is not thrown away.
+   *
+   * The questions — how often they travel, who with, what they spend —
+   * are most of a sales call, and the page used to discard every answer
+   * the moment somebody navigated away. They ride along on the
+   * membership, and are sent to the desk on their own as well, because
+   * the person who takes the quiz and does not buy is the one worth
+   * ringing.
+   */
+  const [quiz, setQuiz] = useState([]);
+
   const [coupon, setCoupon] = useState('');
   /** What the desk said: { code, off, name, gives } — or nothing yet. */
   const [applied, setApplied] = useState(null);
@@ -376,6 +388,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         privileges,
         sharing,
         coupon: applied?.code || undefined,
+        quiz: quiz.length ? quiz : undefined,
         paidVia,
         // Only a UPI payment goes to the account directly; the other two
         // are a link the desk raises, so there is no account to name.
@@ -406,6 +419,32 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    * any of that out here would only be a guess the server has to check
    * again anyway.
    */
+  /**
+   * Keep the answers, and tell the desk once.
+   *
+   * Only with a name and a number against them: a lead nobody can ring
+   * is noise on somebody's queue, and the desk's own endpoint drops it
+   * anyway. Nothing here waits on the request or shows its failure —
+   * the member came for a recommendation, not to file a form.
+   */
+  const keepQuiz = (pairs, suggested) => {
+    setQuiz(pairs);
+    const current = profile || loadProfile();
+    if (!isComplete(current)) return;
+    const d = current.details;
+    api
+      .tellQuiz({
+        name: d.name,
+        phone: d.phone,
+        email: d.email,
+        quiz: pairs,
+        recommended: suggested,
+        profile: profileForBooking(current),
+        attribution: readAttribution(),
+      })
+      .catch(() => {});
+  };
+
   const applyCoupon = async (picked) => {
     const code = String(picked || coupon).trim().toUpperCase();
     if (!code) return setNote('Enter a code first.');
@@ -545,6 +584,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
       {tab === 'match' ? (
         <MembershipQuiz
+          onAnswers={keepQuiz}
           helper={helper}
           onPick={(key) => {
             if (key) setPlanKey(key);

@@ -46,7 +46,7 @@ const SELECT =
  * desk wants to know them, not because they move the answer, which is why
  * only some questions carry a weight.
  */
-export default function MembershipQuiz({ helper, onPick }) {
+export default function MembershipQuiz({ helper, onPick, onAnswers }) {
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
 
@@ -82,7 +82,23 @@ export default function MembershipQuiz({ helper, onPick }) {
     const key =
       share >= 0.85 ? 'crown' : share >= 0.65 ? 'diamond' : share >= 0.45 ? 'platinum' : share >= 0.25 ? 'gold' : 'silver';
 
-    setResult(membershipPlans.find((p) => p.key === key));
+    const plan = membershipPlans.find((p) => p.key === key);
+    setResult(plan);
+
+    /**
+     * Hand the answers up, worded the way they were asked.
+     *
+     * Every question, not only the ones that carried a weight: the rest
+     * are asked because the desk wants to know them, and they were
+     * being discarded the moment the page closed.
+     */
+    if (onAnswers) {
+      const pairs = membershipQuiz
+        .map((q) => ({ q: q.label, a: answers[q.key] }))
+        .filter((row) => (Array.isArray(row.a) ? row.a.length : row.a));
+      onAnswers(pairs, plan?.label || '');
+    }
+
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   };
 
