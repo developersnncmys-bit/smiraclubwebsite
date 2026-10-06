@@ -5,7 +5,15 @@ import { useEffect, useState } from 'react';
 const UNITS = ['Days', 'Hrs', 'Mins', 'Sec'];
 
 /**
- * A ticking countdown to a deadline `hours` from when the page opened.
+ * A ticking countdown, either to a date or to `hours` from now.
+ *
+ * `endsOn` is a real deadline: the same instant for everybody, and the
+ * same instant tomorrow. `hours` restarts every time the page opens,
+ * which is fine for a standing promotion and wrong for anything the
+ * desk has actually put an end date on.
+ *
+ * With an `endsOn` already past it renders nothing, so an offer does
+ * not sit there at zero.
  *
  * It renders dashes until the effect runs, so the server and the client agree
  * on the first paint — a clock rendered on the server is wrong by the time it
@@ -15,11 +23,18 @@ const UNITS = ['Days', 'Hrs', 'Mins', 'Sec'];
  * split by colons, which is how the flash offers read inside the white panel
  * in their corner, where there is nothing for a chip to sit against.
  */
-export default function Countdown({ hours, tone = 'light', className = '' }) {
+export default function Countdown({ hours, endsOn, tone = 'light', className = '' }) {
   const [left, setLeft] = useState(null);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const ends = Date.now() + hours * 3600 * 1000;
+    const at = endsOn ? new Date(endsOn).getTime() : NaN;
+    const ends = Number.isNaN(at) ? Date.now() + (hours || 0) * 3600 * 1000 : at;
+    if (ends <= Date.now()) {
+      setDone(true);
+      return undefined;
+    }
+    setDone(false);
 
     const tick = () => {
       const ms = Math.max(0, ends - Date.now());
@@ -34,7 +49,9 @@ export default function Countdown({ hours, tone = 'light', className = '' }) {
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [hours]);
+  }, [hours, endsOn]);
+
+  if (done) return null;
 
   if (tone === 'plain') {
     return (

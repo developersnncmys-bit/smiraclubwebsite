@@ -10,6 +10,7 @@ import {
   membershipSharing, membershipTabs,
 } from '@/lib/content';
 import Countdown from '@/components/ui/Countdown';
+import Portal from '@/components/ui/Portal';
 import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
 import { toSrc } from '@/lib/imageSlot';
@@ -176,6 +177,8 @@ function fromDesk(p, d) {
     privileges: Number(d.privileges) || p.privileges,
     features: Array.isArray(d.features) ? d.features.filter(Boolean) : [],
     gifts: Array.isArray(d.gifts) ? d.gifts.filter(Boolean) : [],
+    // When the desk says the gifts stop. Empty means they stand.
+    giftsEndOn: d.giftsEndOn || null,
     stats: p.stats.map((s) => ({ ...s, figure: figures[s.note] || s.figure })),
   };
 }
@@ -320,11 +323,21 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     setPrivileges((list) => list.slice(0, plan.privileges));
   }, [plan.privileges]);
 
+  /**
+   * One too many.
+   *
+   * The limit was enforced quietly — the box simply did not tick, and a
+   * line of grey text appeared somewhere below — so it read as a broken
+   * checkbox rather than a rule. The ones left over are disabled once
+   * the allowance is used up, and pressing one says why.
+   */
+  const [full, setFull] = useState(false);
+
   const togglePrivilege = (key) =>
     setPrivileges((list) => {
       if (list.includes(key)) return list.filter((k) => k !== key);
       if (list.length >= plan.privileges) {
-        setNote(`${plan.label} members choose up to ${plan.privileges}.`);
+        setFull(true);
         return list;
       }
       setNote('');
@@ -720,7 +733,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
           {/* -- Pick your privileges ------------------------------- */}
           <section>
-            <h2 className="text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
+              <p className="text-[14px] font-semibold text-action-500">
+                {privileges.length} of {plan.privileges} chosen
+              </p>
+            </div>
             <p className="mt-0.5 text-[14px] text-ink-500">
               {plan.label} members choose up to {plan.privileges} of {membershipPrivileges.length}.
             </p>
@@ -728,11 +746,18 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             <div className="card mt-3 space-y-3 p-3 sm:p-4">
               {membershipPrivileges.map((p) => {
                 const on = privileges.includes(p.key);
+                // Spent the allowance: the rest are not yours to take.
+                const locked = !on && privileges.length >= plan.privileges;
                 return (
                   <label
                     key={p.key}
-                    className={`flex cursor-pointer gap-3 rounded-xl p-3.5 transition ${
-                      on ? 'bg-[#fdf3dd]' : 'bg-[#fdf9ef] hover:bg-[#fdf3dd]'
+                    aria-disabled={locked}
+                    className={`flex gap-3 rounded-xl p-3.5 transition ${
+                      on
+                        ? 'cursor-pointer bg-[#fdf3dd]'
+                        : locked
+                          ? 'cursor-not-allowed bg-surface-soft opacity-55'
+                          : 'cursor-pointer bg-[#fdf9ef] hover:bg-[#fdf3dd]'
                     }`}
                   >
                     <input
@@ -752,6 +777,63 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                 );
               })}
             </div>
+
+            {/*
+              Saying no, where the member can see it.
+              A box that simply refuses to tick reads as a fault.
+            */}
+            {full && (
+              <Portal>
+                <div
+                  className="fixed inset-0 z-[70] flex items-end justify-center bg-ink-900/55 sm:items-center sm:p-6"
+                  onMouseDown={(e) => e.target === e.currentTarget && setFull(false)}
+                >
+                  <div
+                    role="alertdialog"
+                    aria-modal="true"
+                    aria-label="Privilege limit reached"
+                    className="w-full max-w-phone rounded-t-2xl bg-white p-5 shadow-lift sm:rounded-2xl"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#fdf3dd] text-action-500">
+                        <Info size={21} />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[16px] font-bold text-ink-900">
+                          {plan.label} includes {plan.privileges}{' '}
+                          {plan.privileges === 1 ? 'privilege' : 'privileges'}
+                        </p>
+                        <p className="mt-1 text-[14px] leading-snug text-ink-600">
+                          You have chosen {privileges.length}. Take one off to swap it for another, or
+                          move up a plan for more.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setFull(false)}
+                        className="btn-primary flex-1 rounded-xl py-3 text-[14px]"
+                      >
+                        Got it
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFull(false);
+                          goTo('plans');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="btn-quiet flex-1 rounded-xl py-3 text-[14px]"
+                      >
+                        See the plans
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Portal>
+            )}
           </section>
 
           {/* -- The offer on the clock ----------------------------- */}
@@ -792,10 +874,26 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           <section className="card p-4 sm:p-5">
             {gifts.length > 0 && (
               <>
-                <h2 className="text-lg font-bold text-action-500">Exclusive Gifts</h2>
-                <p className="mt-1 text-[14px] leading-snug text-ink-700">
-                  Enjoy your premium gifts with your {plan.label} membership
-                </p>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-lg font-bold text-action-500">Exclusive Gifts</h2>
+                    <p className="mt-1 text-[14px] leading-snug text-ink-700">
+                      Enjoy your premium gifts with your {plan.label} membership
+                    </p>
+                  </div>
+
+                  {/*
+                    Only where the desk has put an end date on this
+                    plan's gifts. Counting down to nothing would be a
+                    deadline the agency never set.
+                  */}
+                  {plan.giftsEndOn && (
+                    <div className="shrink-0 text-right">
+                      <p className="text-[13px] text-ink-500">Gifts end in</p>
+                      <Countdown endsOn={plan.giftsEndOn} className="mt-1" />
+                    </div>
+                  )}
+                </div>
 
                 <ul className="mt-4 space-y-3">
                   {gifts.map((g) => (
