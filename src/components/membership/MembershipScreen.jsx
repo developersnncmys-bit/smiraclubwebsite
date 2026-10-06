@@ -179,6 +179,8 @@ function fromDesk(p, d) {
     gifts: Array.isArray(d.gifts) ? d.gifts.filter(Boolean) : [],
     // When the desk says the gifts stop. Empty means they stand.
     giftsEndOn: d.giftsEndOn || null,
+    // How many of them the member picks. Nought means they get them all.
+    giftChoices: Number(d.giftChoices || 0),
     stats: p.stats.map((s) => ({ ...s, figure: figures[s.note] || s.figure })),
   };
 }
@@ -331,18 +333,57 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    * checkbox rather than a rule. The ones left over are disabled once
    * the allowance is used up, and pressing one says why.
    */
-  const [full, setFull] = useState(false);
+  /** What the member has run out of, or null. */
+  const [full, setFull] = useState(null);
 
   const togglePrivilege = (key) =>
     setPrivileges((list) => {
       if (list.includes(key)) return list.filter((k) => k !== key);
       if (list.length >= plan.privileges) {
-        setFull(true);
+        setFull({
+          what: plan.privileges === 1 ? 'privilege' : 'privileges',
+          allowed: plan.privileges,
+          taken: list.length,
+        });
         return list;
       }
       setNote('');
       return [...list, key];
     });
+
+  /**
+   * Gifts the member picks, where the plan lets them pick.
+   *
+   * A plan with giftChoices at nought hands over everything listed, and
+   * the list stays a list. Where the desk has said "choose any one",
+   * they choose — and the one they chose is what goes to the desk,
+   * rather than all three with nobody knowing which they wanted.
+   */
+  const [chosenGifts, setChosenGifts] = useState([]);
+  const giftLimit = Math.min(Number(plan.giftChoices || 0), gifts.length);
+  const picksGifts = giftLimit > 0;
+
+  // A different plan is a different shelf of gifts.
+  useEffect(() => {
+    setChosenGifts([]);
+  }, [plan.key]);
+
+  const toggleGift = (gift) =>
+    setChosenGifts((list) => {
+      if (list.includes(gift)) return list.filter((g) => g !== gift);
+      if (list.length >= giftLimit) {
+        setFull({
+          what: giftLimit === 1 ? 'gift' : 'gifts',
+          allowed: giftLimit,
+          taken: list.length,
+        });
+        return list;
+      }
+      return [...list, gift];
+    });
+
+  /** What actually goes on the membership. */
+  const giftsTaken = picksGifts ? chosenGifts : gifts;
 
   // Only offered where the desk has put a price on it.
   const canShare = plan.sharing?.price > 0;
@@ -397,7 +438,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         email: d.email,
         plan: plan.label,
         total,
-        gifts,
+        gifts: giftsTaken,
         privileges,
         sharing,
         coupon: applied?.code || undefined,
@@ -667,7 +708,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
               {plan.gifts?.length > 0 && (
                 <>
-                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">Gifts for members</h3>
+                  <h3 className="mt-6 text-[15px] font-bold text-ink-900">
+                    {Number(plan.giftChoices) > 0
+                      ? `Choose any ${plan.giftChoices} gift${plan.giftChoices > 1 ? 's' : ''}`
+                      : 'Gifts for members'}
+                  </h3>
                   <ul className="mt-2.5 flex flex-wrap gap-2">
                     {plan.gifts.map((g) => (
                       <li
@@ -786,12 +831,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               <Portal>
                 <div
                   className="fixed inset-0 z-[70] flex items-end justify-center bg-ink-900/55 sm:items-center sm:p-6"
-                  onMouseDown={(e) => e.target === e.currentTarget && setFull(false)}
+                  onMouseDown={(e) => e.target === e.currentTarget && setFull(null)}
                 >
                   <div
                     role="alertdialog"
                     aria-modal="true"
-                    aria-label="Privilege limit reached"
+                    aria-label={`${full.what} limit reached`}
                     className="w-full max-w-phone rounded-t-2xl bg-white p-5 shadow-lift sm:rounded-2xl"
                   >
                     <div className="flex items-start gap-3">
@@ -800,12 +845,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       </span>
                       <div className="min-w-0">
                         <p className="text-[16px] font-bold text-ink-900">
-                          {plan.label} includes {plan.privileges}{' '}
-                          {plan.privileges === 1 ? 'privilege' : 'privileges'}
+                          {plan.label} includes {full.allowed} {full.what}
                         </p>
                         <p className="mt-1 text-[14px] leading-snug text-ink-600">
-                          You have chosen {privileges.length}. Take one off to swap it for another, or
-                          move up a plan for more.
+                          You have chosen {full.taken}. Take one off to swap it for another, or move up
+                          a plan for more.
                         </p>
                       </div>
                     </div>
@@ -813,7 +857,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     <div className="mt-5 flex flex-wrap gap-2">
                       <button
                         type="button"
-                        onClick={() => setFull(false)}
+                        onClick={() => setFull(null)}
                         className="btn-primary flex-1 rounded-xl py-3 text-[14px]"
                       >
                         Got it
@@ -821,7 +865,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       <button
                         type="button"
                         onClick={() => {
-                          setFull(false);
+                          setFull(null);
                           goTo('plans');
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
@@ -876,9 +920,16 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               <>
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h2 className="text-lg font-bold text-action-500">Exclusive Gifts</h2>
+                    <p className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-action-500">
+                      Join. Unlock. Experience.
+                    </p>
+                    <h2 className="mt-1 text-lg font-bold text-ink-900">
+                      Become a Member &amp; Claim Your Exclusive Gifts!
+                    </h2>
                     <p className="mt-1 text-[14px] leading-snug text-ink-700">
-                      Enjoy your premium gifts with your {plan.label} membership
+                      {picksGifts
+                        ? `Choose any ${giftLimit} of these with your ${plan.label} membership.`
+                        : `Enjoy your premium gifts with your ${plan.label} membership`}
                     </p>
                   </div>
 
@@ -895,18 +946,65 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   )}
                 </div>
 
+                {picksGifts && (
+                  <p className="mt-3 text-[14px] font-semibold text-action-500">
+                    {chosenGifts.length} of {giftLimit} chosen
+                  </p>
+                )}
+
                 <ul className="mt-4 space-y-3">
-                  {gifts.map((g) => (
-                    <li key={g} className="flex items-center gap-3.5 rounded-xl bg-[#fdf9ef] p-3.5">
-                      <span
-                        className="grid h-12 w-12 shrink-0 place-items-center rounded-xl"
-                        style={{ background: plan.soft, color: plan.accent }}
-                      >
-                        <Gift size={21} />
-                      </span>
-                      <span className="min-w-0 text-[15px] font-bold leading-snug text-ink-900">{g}</span>
-                    </li>
-                  ))}
+                  {gifts.map((g) => {
+                    const on = chosenGifts.includes(g);
+                    // Spent the allowance: the rest are not theirs to take.
+                    const locked = picksGifts && !on && chosenGifts.length >= giftLimit;
+
+                    const inside = (
+                      <>
+                        <span
+                          className="grid h-12 w-12 shrink-0 place-items-center rounded-xl"
+                          style={{ background: plan.soft, color: plan.accent }}
+                        >
+                          <Gift size={21} />
+                        </span>
+                        <span className="min-w-0 flex-1 text-[15px] font-bold leading-snug text-ink-900">{g}</span>
+                        {picksGifts && <Tick on={on} colour={plan.accent} />}
+                      </>
+                    );
+
+                    // Where the plan hands everything over, a gift is not a
+                    // choice, and a tick box beside it would say it was.
+                    if (!picksGifts) {
+                      return (
+                        <li key={g} className="flex items-center gap-3.5 rounded-xl bg-[#fdf9ef] p-3.5">
+                          {inside}
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={g}>
+                        <label
+                          aria-disabled={locked}
+                          className={`flex w-full items-center gap-3.5 rounded-xl p-3.5 transition ${
+                            on
+                              ? 'cursor-pointer bg-[#fdf3dd] ring-1 ring-inset'
+                              : locked
+                                ? 'cursor-not-allowed bg-surface-soft opacity-55'
+                                : 'cursor-pointer bg-[#fdf9ef] hover:bg-[#fdf3dd]'
+                          }`}
+                          style={on ? { boxShadow: `inset 0 0 0 1px ${plan.accent}` } : undefined}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={on}
+                            onChange={() => toggleGift(g)}
+                            className="sr-only"
+                          />
+                          {inside}
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </>
             )}
