@@ -100,12 +100,18 @@ export default function PaySheet({ open, onClose, amount, note, busy, error, onP
                 nobody was expecting money in. The desk is told as the app
                 opens, so a payment always has a membership waiting for it.
               */}
+              {/*
+                btn-primary, so this is the same blue as Book Room and
+                every other thing the site asks you to press. It was the
+                brighter action blue, which belongs to nothing else on
+                the page and read as a different site's button.
+              */}
               <a
                 href={upiLink({ amount, note })}
                 onClick={() => onPaid('UPI')}
-                className="flex items-center justify-center gap-2 rounded-xl bg-action-500 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105"
+                className="btn-primary w-full py-3.5 text-[15px] font-bold"
               >
-                <Smartphone size={17} /> Open my UPI app
+                <Smartphone size={17} /> Pay using UPI
               </a>
               {error && <p className="mt-3 text-[13px] font-semibold text-rose-600">{error}</p>}
               <p className="mt-3 text-[13px] leading-snug text-ink-500">
