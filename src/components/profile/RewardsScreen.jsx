@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check, Crown, Info, Lock, LockOpen } from 'lucide-react';
 import NeedHelp from '@/components/ui/NeedHelp';
 import { member, rewards, rewardsHero, rewardsNote } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
+import { inr } from '@/lib/format';
 
 /** How each state announces itself, and in what colour. */
 const STATES = {
@@ -23,11 +26,45 @@ const STATES = {
  * requirement and which button appears — so a gift is described in one place
  * rather than four branches scattered through the markup.
  *
- * Claiming is local for now: there is no rewards API, so the card marks
- * itself claimed and says the desk will be in touch, which is true.
+ * A signed-in member sees the gifts actually on their account, and
+ * claiming one tells the desk. The ladder below — what each milestone
+ * unlocks — is what the agency offers, so it stands whether or not
+ * anybody is signed in; what it no longer does is show somebody a
+ * made-up "2 of 3 completed" against their own name.
  */
 export default function RewardsScreen({ hero, art = {} }) {
-  const [claimed, setClaimed] = useState([]);
+  /** The gifts on this member's account, or null until we know. */
+  const [mine, setMine] = useState(null);
+  const [busy, setBusy] = useState('');
+  const [failed, setFailed] = useState('');
+
+  useEffect(() => {
+    const token = getSessionToken();
+    if (!token) return undefined;
+    let live = true;
+    api
+      .memberRewards(token)
+      .then((res) => live && setMine(res.data || []))
+      .catch(() => live && setMine([]));
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const claim = async (id) => {
+    const token = getSessionToken();
+    if (!token || busy) return;
+    setBusy(id);
+    setFailed('');
+    try {
+      await api.claimReward(token, id);
+      setMine((list) => (list || []).map((g) => (g.id === id ? { ...g, claimed: true } : g)));
+    } catch (err) {
+      setFailed(err?.message || 'We could not claim that just now. Please try again.');
+    } finally {
+      setBusy('');
+    }
+  };
 
   return (
     <div className="pb-10">
@@ -75,12 +112,63 @@ export default function RewardsScreen({ hero, art = {} }) {
         </div>
       </section>
 
-      {/* -- The gifts --------------------------------------------- */}
+      {/* -- What is actually on this account ---------------------- */}
+      {mine !== null && (
+        <div className="shell pt-6">
+          <h2 className="text-lg font-bold text-ink-900">Your gifts</h2>
+          {mine.length === 0 ? (
+            <p className="mt-2 flex gap-2.5 rounded-xl bg-surface-soft px-4 py-3.5 text-[14px] leading-snug text-ink-600">
+              <Info size={18} className="mt-0.5 shrink-0 text-ink-400" />
+              Nothing on your account yet. The gifts below unlock as you book.
+            </p>
+          ) : (
+            <ul className="mt-3 space-y-3">
+              {mine.map((g) => (
+                <li key={g.id} className="card flex flex-wrap items-center gap-3 p-4">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[15px] font-bold text-ink-900">{g.gift}</p>
+                    <p className="text-[13px] text-ink-600">
+                      {g.kind}
+                      {g.value > 0 && <> · worth {inr(g.value)}</>}
+                      {g.eligibility && <> · {g.eligibility}</>}
+                    </p>
+                  </div>
+
+                  {g.stage === 'Delivered' ? (
+                    <span className="shrink-0 rounded-full bg-[#e8f6ec] px-3.5 py-1.5 text-[13px] font-bold text-green-700">
+                      Delivered
+                    </span>
+                  ) : g.stage === 'Cancelled' ? (
+                    <span className="shrink-0 rounded-full bg-[#fdecea] px-3.5 py-1.5 text-[13px] font-bold text-red-600">
+                      No longer available
+                    </span>
+                  ) : g.claimed ? (
+                    <span className="shrink-0 rounded-full bg-[#e8f6ec] px-3.5 py-1.5 text-[13px] font-bold text-green-700">
+                      {g.stage === 'Out for delivery' ? 'On its way' : 'Claimed'}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => claim(g.id)}
+                      disabled={busy === g.id}
+                      className="btn-primary shrink-0 rounded-xl px-5 py-2.5 text-[14px] disabled:opacity-60"
+                    >
+                      {busy === g.id ? 'Claiming…' : 'Claim'}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          {failed && <p className="mt-3 text-[13px] font-semibold text-rose-600">{failed}</p>}
+        </div>
+      )}
+
+      {/* -- What the agency offers, and how each is unlocked ------ */}
       <div className="shell space-y-5 py-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
         {rewards.map((gift) => {
           const state = STATES[gift.state];
           const Glyph = state.icon;
-          const isClaimed = claimed.includes(gift.key);
           const pct = gift.progress
             ? Math.round((gift.progress.done / gift.progress.of) * 100)
             : 0;
@@ -150,25 +238,20 @@ export default function RewardsScreen({ hero, art = {} }) {
               </div>
 
               {/* The way on, whatever that is for this gift. */}
-              {isClaimed ? (
-                <p className="mt-5 rounded-xl bg-[#e8f6ec] px-4 py-3.5 text-center text-[14px] font-semibold text-green-700">
-                  Claimed — the desk will be in touch about delivery.
-                </p>
-              ) : gift.cta.href ? (
+              {/*
+                A link where there is somewhere to go. There was a Claim
+                button here too, which added the gift to a list in the
+                browser and told the member the desk would be in touch —
+                and the desk was never told anything. Claiming happens
+                above, against a gift that exists on the account.
+              */}
+              {gift.cta.href && (
                 <Link
                   href={gift.cta.href}
                   className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[14px] uppercase tracking-wide"
                 >
                   {gift.cta.label}
                 </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setClaimed((list) => [...list, gift.key])}
-                  className="btn-primary mt-5 w-full rounded-xl py-3.5 text-[14px] uppercase tracking-wide"
-                >
-                  {gift.cta.label}
-                </button>
               )}
             </article>
           );

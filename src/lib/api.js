@@ -153,6 +153,19 @@ export const api = {
    * browser. `merge` carries whatever they saved before signing in.
    */
   wishlistRead: (token) => request('/website/member/wishlist', { token, next: { revalidate: 0 } }),
+
+  /**
+   * The member's own gifts and referrals.
+   *
+   * Both screens drew a list written into the site and claimed gifts in
+   * the browser, so the desk never heard about either. These are the
+   * member's actual rows, read from their token.
+   */
+  memberRewards: (token) => request('/website/member/rewards', { token, next: { revalidate: 0 } }),
+  claimReward: (token, id) =>
+    request(`/website/member/rewards/${encodeURIComponent(id)}/claim`, { method: 'POST', token }),
+  memberReferrals: (token) => request('/website/member/referrals', { token, next: { revalidate: 0 } }),
+  referSomeone: (token, body) => request('/website/member/refer', { method: 'POST', token, body }),
   wishlistWrite: (token, body) =>
     request('/website/member/wishlist', { method: 'POST', token, body, next: { revalidate: 0 } }),
 
