@@ -480,13 +480,25 @@ export async function deskBlogs() {
   }
 }
 
-/** One post by its slug, or `null` when the desk has no such article. */
+/**
+ * One post by its slug, or `null` when the desk has no such article.
+ *
+ * The distinction matters here in a way it does not on a list. A list
+ * that cannot reach the API shows the site's own articles and nobody is
+ * any the wiser. An article page that cannot reach the API would call
+ * notFound() — and Next caches that, so a minute of backend trouble turns
+ * a published piece into a permanent 404 for everybody who asks next.
+ *
+ * So only the API's own 404 means the post is not there. Anything else is
+ * our problem, and is raised rather than answered with a wrong page.
+ */
 export async function deskBlog(slug) {
   if (!api.isConfigured) return null;
   try {
     const res = await api.blogPost(slug);
     return res.data || null;
-  } catch {
-    return null;
+  } catch (err) {
+    if (err?.status === 404) return null;
+    throw err;
   }
 }
