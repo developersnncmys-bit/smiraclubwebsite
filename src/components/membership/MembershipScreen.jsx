@@ -178,7 +178,6 @@ function fromDesk(p, d) {
     features: Array.isArray(d.features) ? d.features.filter(Boolean) : [],
     gifts: Array.isArray(d.gifts) ? d.gifts.filter(Boolean) : [],
     // When the desk says the gifts stop. Empty means they stand.
-    giftsEndOn: d.giftsEndOn || null,
     // How many of them the member picks. Nought means they get them all.
     giftChoices: Number(d.giftChoices || 0),
     stats: p.stats.map((s) => ({ ...s, figure: figures[s.note] || s.figure })),
@@ -193,6 +192,13 @@ function fromDesk(p, d) {
  * sharing the benefits, and the coupon. The bar at the bottom reads that
  * same total rather than keeping its own copy.
  */
+/**
+ * How long a member has to claim the gifts their plan comes with,
+ * counted from the day they join. The same six days for everybody and a
+ * different date for each of them, which is why there is no countdown
+ * here: nobody reading this page has started theirs yet.
+ */
+const GIFT_DAYS = 6;
 export default function MembershipScreen({ hero, helper, compare, desk = [], offers = [] }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
@@ -951,16 +957,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   </div>
 
                   {/*
-                    Only where the desk has put an end date on this
-                    plan's gifts. Counting down to nothing would be a
-                    deadline the agency never set.
+                    The window runs from the day a member joins, so there
+                    is nothing to count down to while they are still
+                    reading about it. It said what it is instead.
                   */}
-                  {plan.giftsEndOn && (
-                    <div className="shrink-0 text-right">
-                      <p className="text-[13px] text-ink-500">Gifts end in</p>
-                      <Countdown endsOn={plan.giftsEndOn} className="mt-1" />
-                    </div>
-                  )}
+                  <p className="shrink-0 text-right text-[13px] text-ink-500">
+                    Claim within
+                    <span className="block font-bold text-ink-800">{GIFT_DAYS} days of joining</span>
+                  </p>
                 </div>
 
                 {picksGifts && (
