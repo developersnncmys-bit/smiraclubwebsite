@@ -170,6 +170,9 @@ export const api = {
    * bookings, membership, gifts and offers each time, so they are never
    * cached.
    */
+  /** What the membership and our offers have taken off their bookings. */
+  memberSavings: (token) => request('/website/member/savings', { token, next: { revalidate: 0 } }),
+
   memberNotifications: (token) =>
     request('/website/member/notifications', { token, next: { revalidate: 0 } }),
   readNotifications: (token) =>
