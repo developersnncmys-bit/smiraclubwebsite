@@ -1041,7 +1041,11 @@ export const stories = [
     title: 'Dandeli Adventures Trip',
     author: '@Smira Club',
     video: true,
-    videoUrl: '',
+    // A stand-in so the player can be seen working — Big Buck Bunny,
+    // Blender Foundation, CC-BY, served from our own /public rather
+    // than somebody else's host. Replace it with the real film;
+    // nothing else has to change.
+    videoUrl: '/media/sample-film.mp4',
     image: 'story-dandeli',
     place: 'Dandeli',
     blurb: 'White water, forest trails and a river that does the rest.',
@@ -1051,7 +1055,7 @@ export const stories = [
     title: 'Must see wonders of Sri Lanka',
     author: '@Smira Club',
     video: true,
-    videoUrl: '',
+    videoUrl: '/media/sample-film.mp4',
     image: 'story-srilanka',
     place: 'Sri Lanka',
     blurb: 'Hill country by rail, and the coast at the end of it.',
