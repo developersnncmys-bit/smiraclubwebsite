@@ -2699,8 +2699,8 @@ export const travelYears = {
     },
     {
       id: 'maldives',
-      title: 'Madives Escape',
-      origin: 'Banglore',
+      title: 'Maldives Escape',
+      origin: 'Bangalore',
       destination: 'Maldives',
       start: '2026-11-04',
       end: '2026-11-12',

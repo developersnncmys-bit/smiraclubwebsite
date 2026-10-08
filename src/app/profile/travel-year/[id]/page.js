@@ -40,8 +40,15 @@ export default async function Page({ params }) {
 
   return (
     <div className="pb-10">
-      {/* -- The way out, as the design floats it ------------------- */}
-      <div className="flex justify-center bg-ink-900/5 py-5">
+      {/*
+        The way out.
+
+        On a phone this is a sheet over the year, and the design floats a
+        ✕ above it. On a desktop a lone ✕ in a full-width grey band reads
+        as broken window chrome, so it becomes an ordinary back control
+        sitting where a back control belongs.
+      */}
+      <div className="flex justify-center bg-ink-900/5 py-5 lg:hidden">
         <Link
           href="/profile/travel-year"
           aria-label="Close"
@@ -51,119 +58,131 @@ export default async function Page({ params }) {
         </Link>
       </div>
 
-      <div className="shell lg:grid lg:grid-cols-12 lg:items-start lg:gap-10">
-        {/* -- What the trip is --------------------------------- */}
-        <div className="lg:col-span-5">
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
-            <Image
-              src={image(trip.image)}
-              alt=""
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
-            />
+      <div className="shell">
+        <Link
+          href="/profile/travel-year"
+          className="mb-6 hidden items-center gap-2 pt-8 text-[14px] font-semibold text-ink-500 transition hover:text-ink-900 lg:inline-flex"
+        >
+          <X size={16} />
+          Close
+        </Link>
+
+        {/*
+          What the trip is.
+
+          Beside the photograph rather than under it on a desktop: the
+          title used to sit below a 600px image with the activities
+          already well under way to its right, so the two halves of the
+          page were about different things at the same height.
+        */}
+        <div className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div className="lg:col-span-7">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl lg:aspect-auto lg:h-[340px]">
+              <Image
+                src={image(trip.image)}
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 56vw"
+                className="object-cover"
+              />
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-5">
-            <h1 className="text-2xl font-bold text-ink-900">{trip.title}</h1>
-            <span
-              className={`shrink-0 rounded-full px-4 py-1.5 text-[14px] font-semibold ${
-                upcoming ? 'bg-[#e8f6ec] text-green-700' : 'bg-surface-soft text-ink-600'
-              }`}
-            >
-              {upcoming ? 'Upcoming' : 'Completed'}
-            </span>
+          <div className="lg:col-span-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-5 lg:pt-0">
+              <h1 className="text-2xl font-bold text-ink-900 lg:text-3xl">{trip.title}</h1>
+              <span
+                className={`shrink-0 rounded-full px-4 py-1.5 text-[14px] font-semibold ${
+                  upcoming ? 'bg-[#e8f6ec] text-green-700' : 'bg-surface-soft text-ink-600'
+                }`}
+              >
+                {upcoming ? 'Upcoming' : 'Completed'}
+              </span>
+            </div>
+
+            <p className="mt-2 flex items-center gap-2 text-[15px] text-ink-600 lg:mt-4 lg:text-[17px]">
+              {trip.origin}
+              <ArrowRight size={16} className="shrink-0 text-ink-500" />
+              {trip.destination}
+            </p>
+
+            <p className="mt-2 text-[15px] text-ink-700 lg:text-[16px]">
+              {day(trip.start)} - {day(trip.end)} {new Date(trip.end).getFullYear()}
+              <span className="px-2 text-ink-400">&bull;</span>
+              {nights + 1} Days/{nights} Night{nights === 1 ? '' : 's'}
+            </p>
+
+            <p className="mt-2 text-[15px] text-ink-700 lg:text-[16px]">No of Guests: {trip.guests ?? 2}</p>
           </div>
-
-          <p className="mt-2 flex items-center gap-2 text-[15px] text-ink-600">
-            {trip.origin}
-            <ArrowRight size={16} className="shrink-0 text-ink-500" />
-            {trip.destination}
-          </p>
-
-          <p className="mt-2 text-[15px] text-ink-700">
-            {day(trip.start)} - {day(trip.end)} {new Date(trip.end).getFullYear()}
-            <span className="px-2 text-ink-400">&bull;</span>
-            {nights + 1} Days/{nights} Night{nights === 1 ? '' : 's'}
-          </p>
-
-          <p className="mt-2 text-[15px] text-ink-700">No of Guests: {trip.guests ?? 2}</p>
         </div>
 
-        {/* -- What is worth knowing about it ------------------- */}
-        <div className="lg:col-span-7">
-          {trip.specialDays?.length > 0 && (
-            <section className="pt-8 lg:pt-0">
-              <h2 className="text-xl font-bold text-ink-900">Special Days During Your Trip</h2>
+        {/*
+          And what is worth knowing about it, across the width.
 
-              <div className="mt-4 space-y-4">
-                {trip.specialDays.map((d) => (
-                  <article
-                    key={d.id}
-                    className="flex gap-4 rounded-2xl bg-[#f4f7fe] p-3.5 ring-1 ring-brand-100"
-                  >
-                    <span className="relative h-[92px] w-[104px] shrink-0 overflow-hidden rounded-xl">
-                      <Image
-                        src={image(d.image)}
-                        alt=""
-                        fill
-                        sizes="104px"
-                        className="object-cover"
-                      />
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-[15px] font-bold text-ink-900">{d.label}</h3>
-                      <p className="text-[14px] text-ink-600">{d.date}</p>
-                      <p className="mt-1.5 text-[14px] leading-snug text-ink-700">{d.note}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
+          These were in a 7-column rail beside the photograph, which left
+          most of a desktop screen empty whenever a trip had one or two
+          things to do — which is most trips.
+        */}
+        {trip.specialDays?.length > 0 && (
+          <section className="pt-8 lg:pt-12">
+            <h2 className="text-xl font-bold text-ink-900 lg:text-2xl">Special Days During Your Trip</h2>
 
-          {trip.activities?.length > 0 && (
-            <section className="pt-8">
-              <h2 className="text-xl font-bold text-ink-900">
-                Things You Can Do In {trip.destination}
-              </h2>
+            <div className="mt-4 space-y-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:space-y-0">
+              {trip.specialDays.map((d) => (
+                <article
+                  key={d.id}
+                  className="flex gap-4 rounded-2xl bg-[#f4f7fe] p-3.5 ring-1 ring-brand-100"
+                >
+                  <span className="relative h-[92px] w-[104px] shrink-0 overflow-hidden rounded-xl">
+                    <Image src={image(d.image)} alt="" fill sizes="104px" className="object-cover" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-[15px] font-bold text-ink-900">{d.label}</h3>
+                    <p className="text-[14px] text-ink-600">{d.date}</p>
+                    <p className="mt-1.5 text-[14px] leading-snug text-ink-700">{d.note}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
-              <div className="mt-4 grid grid-cols-2 gap-4 lg:gap-6">
-                {trip.activities.map((a) => (
-                  <article key={a.id} className="card overflow-hidden">
-                    <span className="relative block aspect-[4/3] w-full">
-                      <Image
-                        src={image(a.image)}
-                        alt=""
-                        fill
-                        sizes="(max-width: 1024px) 50vw, 25vw"
-                        className="object-cover"
-                      />
-                    </span>
+        {trip.activities?.length > 0 && (
+          <section className="pt-8 lg:pt-12">
+            <h2 className="text-xl font-bold text-ink-900 lg:text-2xl">
+              Things You Can Do In {trip.destination}
+            </h2>
 
-                    <div className="p-3.5">
-                      <h3 className="text-[15px] font-bold leading-snug text-ink-900">
-                        {a.title}
-                      </h3>
-                      <p className="mt-1 text-[13px] leading-snug text-ink-500">{a.note}</p>
+            <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+              {trip.activities.map((a) => (
+                <article key={a.id} className="card overflow-hidden">
+                  <span className="relative block aspect-[4/3] w-full">
+                    <Image
+                      src={image(a.image)}
+                      alt=""
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 30vw"
+                      className="object-cover"
+                    />
+                  </span>
 
-                      <p className="mt-3 flex flex-wrap items-baseline gap-2">
-                        <span className="text-[13px] text-ink-700">From</span>
-                        <span className="text-[15px] font-extrabold text-ink-900">
-                          {inr(a.price)}
-                        </span>
-                        <span className="text-[13px] font-semibold text-red-500 line-through">
-                          {inr(a.was)}
-                        </span>
-                      </p>
-                      <p className="text-[13px] text-ink-500">{a.unit}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
+                  <div className="p-3.5">
+                    <h3 className="text-[15px] font-bold leading-snug text-ink-900">{a.title}</h3>
+                    <p className="mt-1 text-[13px] leading-snug text-ink-500">{a.note}</p>
+
+                    <p className="mt-3 flex flex-wrap items-baseline gap-2">
+                      <span className="text-[13px] text-ink-700">From</span>
+                      <span className="text-[15px] font-extrabold text-ink-900">{inr(a.price)}</span>
+                      <span className="text-[13px] font-semibold text-red-500 line-through">{inr(a.was)}</span>
+                    </p>
+                    <p className="text-[13px] text-ink-500">{a.unit}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
