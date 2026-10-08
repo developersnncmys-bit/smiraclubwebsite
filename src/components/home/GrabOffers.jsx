@@ -7,14 +7,37 @@ import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import { offerTabs, offers as fallbackOffers } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 
+/**
+ * The colours a card can be.
+ *
+ * A card from the desk carries the name of one of these rather than a
+ * gradient, because these classes have to be in the stylesheet when it
+ * is built — a hex somebody typed in the panel last Tuesday is not, and
+ * compiles to nothing at all.
+ */
+const TONES = {
+  indigo: 'from-[#2b1e63] to-[#3d2a86]',
+  blue: 'from-[#0f3f77] to-[#1c62b0]',
+  plum: 'from-[#5b2333] to-[#8c3b52]',
+  forest: 'from-[#14532d] to-[#1f7a43]',
+  ember: 'from-[#7c2d12] to-[#b45309]',
+  slate: 'from-[#1f2937] to-[#475569]',
+};
+
+/** Either a name from the set above, or a gradient a bundled card gave. */
+const toneOf = (tone) => TONES[tone] || tone || TONES.indigo;
+
 /** Grab Offers, with the four tabs the design puts above the cards. */
 export default function GrabOffers({ offers }) {
   const [tab, setTab] = useState('All');
 
   // Same guard as the hero: never hand next/image a bare slot name.
+  // The desk’s strip when it has arranged one, the bundled cards when
+  // it has not. Never both: a half-curated strip reads as a mistake.
   const cards = (offers?.length ? offers : fallbackOffers).map((o) => ({
     ...o,
     image: toSrc(o.image),
+    tone: toneOf(o.tone),
   }));
   const shown = tab === 'All' ? cards : cards.filter((o) => o.tab === tab);
 

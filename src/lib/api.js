@@ -82,6 +82,9 @@ export const api = {
    * it, and five minutes of an empty page is read as it not having worked.
    */
   blogs: () => request('/website/blogs', { next: { revalidate: 30 } }),
+
+  /** The Grab Offers strip the desk arranges in the panel. */
+  homeOffers: () => request('/website/home-offers', { next: { revalidate: 30 } }),
   blogPost: (slug) =>
     request(`/website/blogs/${encodeURIComponent(slug)}`, { next: { revalidate: 30 } }),
   /** A complaint from Get Help; it opens a ticket on the support desk. */

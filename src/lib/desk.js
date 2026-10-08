@@ -502,3 +502,19 @@ export async function deskBlog(slug) {
     throw err;
   }
 }
+
+/**
+ * The Grab Offers strip, as the desk has arranged it.
+ *
+ * `[]` when the desk has not set one up, which is the signal the home page
+ * uses to fall back to the cards the site ships with.
+ */
+export async function deskHomeOffers() {
+  if (!api.isConfigured) return [];
+  try {
+    const res = await api.homeOffers();
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
