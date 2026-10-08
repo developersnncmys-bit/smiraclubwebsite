@@ -1016,35 +1016,55 @@ export const offers = [
   },
 ];
 
-/** Watch & Explore — stories and clips from members and the desk. */
+/**
+ * Watch & Explore — stories and clips from members and the desk.
+ *
+ * The place is what the desk's catalogue is searched for underneath the
+ * story, so the page offers something real to book rather than simply
+ * ending. The video URL is empty until somebody supplies the film: a
+ * card marked as a clip with nothing behind it shows its still, which
+ * is the honest thing to do.
+ */
 export const stories = [
   {
     id: 'bali',
     title: 'Uncover the hidden gems of the Bali',
     author: '@Siya Sharma',
     video: false,
+    videoUrl: '',
     image: 'story-bali',
+    place: 'Bali',
+    blurb: 'Temples, terraces and the quiet corners of the island.',
   },
   {
     id: 'dandeli',
     title: 'Dandeli Adventures Trip',
     author: '@Smira Club',
     video: true,
+    videoUrl: '',
     image: 'story-dandeli',
+    place: 'Dandeli',
+    blurb: 'White water, forest trails and a river that does the rest.',
   },
   {
     id: 'srilanka',
     title: 'Must see wonders of Sri Lanka',
     author: '@Smira Club',
     video: true,
+    videoUrl: '',
     image: 'story-srilanka',
+    place: 'Sri Lanka',
+    blurb: 'Hill country by rail, and the coast at the end of it.',
   },
   {
     id: 'kerala',
     title: 'A Charming Port City in Kerala',
     author: '@Kushal Gowda',
     video: false,
+    videoUrl: '',
     image: 'story-kerala',
+    place: 'Kerala',
+    blurb: 'Backwaters, a houseboat, and nowhere to be.',
   },
 ];
 
