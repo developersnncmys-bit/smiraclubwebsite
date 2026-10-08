@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Check, Loader2, Plus, ShieldCheck, Trash2 } from
 import { api } from '@/lib/api';
 import FileField from '@/components/partners/FileField';
 import ImagesField from '@/components/partners/ImagesField';
+import { checkPartnerForm, flatten, firstBadStep } from '@/lib/partnerForm';
 
 /**
  * Becoming a partner, in the client's five steps.
@@ -208,21 +209,39 @@ export default function PartnerWizard() {
 
   const input = 'field';
 
-  /** Only what we genuinely cannot file without, and only on the last step. */
-  const check = () => {
-    const found = {};
-    if (!property.name.trim()) found.name = 'Tell us the property name.';
-    const digits = String(account.phone || property.contactPhone || '').replace(/\D/g, '');
-    if (!/^\d{10}$/.test(digits.slice(-10))) found.phone = 'A 10-digit mobile number, please.';
-    if (!agreed) found.agreed = 'Please accept the partner agreement.';
+/**
+   * Everything the form asks is something the desk needs.
+   *
+   * It used to insist on three answers — a name, a number and a ticked
+   * box — so applications arrived with no address, no tariff and no
+   * bank account, and somebody had to ring the partner for all of it.
+   */
+  const everything = () =>
+    checkPartnerForm(
+      {
+        account, property, location, rooms, propertyPhotos, amenities, facilities,
+        rules, pricing, inventory, policies, ownership, bank, agreed,
+      },
+      kind,
+    );
+
+  /** Can we leave this step? Shows what is missing on it, and nothing else. */
+  const checkStep = (n) => {
+    const found = everything()[n] || {};
     setErrors(found);
     return Object.keys(found).length === 0;
+  };
+
+  const check = () => {
+    const steps = everything();
+    setErrors(flatten(steps));
+    return firstBadStep(steps) === null;
   };
 
   const submit = async () => {
     if (busy) return;
     if (!check()) {
-      setStep(errors.agreed && property.name.trim() ? 5 : 1);
+      setStep(firstBadStep(everything()) || 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -349,28 +368,28 @@ export default function PartnerWizard() {
           <>
             <Group title="Account registration" note="Who runs the account with us.">
               {/* What kind of account this is comes first. */}
-              <Field label="Account type" optional>
+              <Field label="Account type" required error={errors.accountType}>
                 <select className={input} value={account.accountType} onChange={(e) => setAccount({ ...account, accountType: e.target.value })}>
                   <option value="">Select</option>
                   {ACCOUNT_TYPES.map((o) => <option key={o}>{o}</option>)}
                 </select>
               </Field>
-              <Field label="Full name">
+              <Field label="Full name" required error={errors.fullName}>
                 <input className={input} value={account.fullName} onChange={(e) => setAccount({ ...account, fullName: e.target.value })} autoComplete="name" />
               </Field>
-              <Field label="Email address" optional>
+              <Field label="Email address" required error={errors.email}>
                 <input className={input} type="email" value={account.email} onChange={(e) => setAccount({ ...account, email: e.target.value })} />
               </Field>
               <Field label="Mobile number" required error={errors.phone} hint="We send your sign-in code here.">
                 <input className={input} inputMode="numeric" value={account.phone} onChange={(e) => setAccount({ ...account, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })} />
               </Field>
-              <Field label="Alternate number" optional>
+              <Field label="Alternate number" required error={errors.alternatePhone}>
                 <input className={input} inputMode="numeric" value={account.alternatePhone} onChange={(e) => setAccount({ ...account, alternatePhone: e.target.value })} />
               </Field>
             </Group>
 
             <Group title="Basic property information" note="What you are listing.">
-              <Field label="Property type" optional>
+              <Field label="Property type" required error={errors.type}>
                 <select className={input} value={property.type} onChange={(e) => setProperty({ ...property, type: e.target.value })}>
                   <option value="">Select</option>
                   {PROPERTY_TYPES.map((o) => <option key={o}>{o}</option>)}
@@ -380,50 +399,50 @@ export default function PartnerWizard() {
                 <input className={input} value={property.name} onChange={(e) => setProperty({ ...property, name: e.target.value })} placeholder="Sunrise Beach Resort" />
               </Field>
               {kind.star && (
-                <Field label="Star category" optional>
+                <Field label="Star category" required error={errors.starCategory}>
                   <input className={input} value={property.starCategory} onChange={(e) => setProperty({ ...property, starCategory: e.target.value })} placeholder="3 star" />
                 </Field>
               )}
-              <Field label="Property contact name" optional>
+              <Field label="Property contact name" required error={errors.contactName}>
                 <input className={input} value={property.contactName} onChange={(e) => setProperty({ ...property, contactName: e.target.value })} />
               </Field>
-              <Field label="Property mobile" optional>
+              <Field label="Property mobile" required error={errors.contactPhone}>
                 <input className={input} inputMode="numeric" value={property.contactPhone} onChange={(e) => setProperty({ ...property, contactPhone: e.target.value })} />
               </Field>
-              <Field label="Property email" optional>
+              <Field label="Property email" required error={errors.contactEmail}>
                 <input className={input} type="email" value={property.contactEmail} onChange={(e) => setProperty({ ...property, contactEmail: e.target.value })} />
               </Field>
-              <Field label="Booking start date" optional>
+              <Field label="Booking start date" required error={errors.bookingStartDate}>
                 <input className={input} type="date" value={property.bookingStartDate} onChange={(e) => setProperty({ ...property, bookingStartDate: e.target.value })} />
               </Field>
-              <Field label="Description and stay guideline" optional className="sm:col-span-2">
+              <Field label="Description and stay guideline" required error={errors.description} className="sm:col-span-2">
                 <textarea className={`${input} min-h-[96px] resize-y`} value={property.description} onChange={(e) => setProperty({ ...property, description: e.target.value })} placeholder="What makes the property worth a stay, and anything a guest should know." />
               </Field>
             </Group>
 
             <Group title="Property location" note="Where a guest is actually going.">
-              <Field label="Address line 1" optional>
+              <Field label="Address line 1" required error={errors.line1}>
                 <input className={input} value={location.line1} onChange={(e) => setLocation({ ...location, line1: e.target.value })} />
               </Field>
-              <Field label="Address line 2" optional>
+              <Field label="Address line 2" required error={errors.line2}>
                 <input className={input} value={location.line2} onChange={(e) => setLocation({ ...location, line2: e.target.value })} />
               </Field>
-              <Field label="Landmark" optional>
+              <Field label="Landmark" required error={errors.landmark}>
                 <input className={input} value={location.landmark} onChange={(e) => setLocation({ ...location, landmark: e.target.value })} />
               </Field>
-              <Field label="City" optional>
+              <Field label="City" required error={errors.city}>
                 <input className={input} value={location.city} onChange={(e) => setLocation({ ...location, city: e.target.value })} />
               </Field>
-              <Field label="State" optional>
+              <Field label="State" required error={errors.state}>
                 <input className={input} value={location.state} onChange={(e) => setLocation({ ...location, state: e.target.value })} />
               </Field>
-              <Field label="Country" optional>
+              <Field label="Country" required error={errors.country}>
                 <input className={input} value={location.country} onChange={(e) => setLocation({ ...location, country: e.target.value })} />
               </Field>
-              <Field label="PIN code" optional>
+              <Field label="PIN code" required error={errors.pin}>
                 <input className={input} value={location.pin} onChange={(e) => setLocation({ ...location, pin: e.target.value })} />
               </Field>
-              <Field label="Google Maps link" optional className="sm:col-span-2">
+              <Field label="Google Maps link" required error={errors.mapsUrl} className="sm:col-span-2">
                 <input className={input} value={location.mapsUrl} onChange={(e) => setLocation({ ...location, mapsUrl: e.target.value })} placeholder="https://maps.google.com/…" />
               </Field>
             </Group>
@@ -435,36 +454,36 @@ export default function PartnerWizard() {
           <>
             {rooms.map((room, i) => (
               <Group key={`room-${i}`} title={`${kind.unit} ${i + 1}`} note={kind.nightly ? 'A room type and what it sleeps.' : `One ${kind.unit.toLowerCase()} you take bookings for.`}>
-                <Field label={`${kind.unit} name`} optional>
+                <Field label={`${kind.unit} name`} required error={errors[`room-${i}-name`]}>
                   <input className={input} value={room.name} onChange={(e) => setRoom(i, 'name', e.target.value)} placeholder={kind.eg} />
                 </Field>
-                <Field label={`${kind.unit} type`} optional>
+                <Field label={`${kind.unit} type`} required error={errors[`room-${i}-type`]}>
                   <input className={input} value={room.type} onChange={(e) => setRoom(i, 'type', e.target.value)} placeholder={kind.egType} />
                 </Field>
-                <Field label={`How many ${kind.units.toLowerCase()}`} optional>
+                <Field label={`How many ${kind.units.toLowerCase()}`} required error={errors[`room-${i}-count`]}>
                   <input className={input} inputMode="numeric" value={room.count} onChange={(e) => setRoom(i, 'count', e.target.value)} placeholder="10" />
                 </Field>
-                <Field label={kind.nightly ? `${kind.unit} size` : 'Size or duration'} optional>
+                <Field label={kind.nightly ? `${kind.unit} size` : 'Size or duration'} required error={errors[`room-${i}-size`]}>
                   <input className={input} value={room.size} onChange={(e) => setRoom(i, 'size', e.target.value)} placeholder={kind.nightly ? '320 sq ft' : '60 minutes'} />
                 </Field>
                 {kind.bed && (
-                  <Field label="Bed type" optional>
+                  <Field label="Bed type" required error={errors[`room-${i}-bedType`]}>
                     <input className={input} value={room.bedType} onChange={(e) => setRoom(i, 'bedType', e.target.value)} placeholder="1 King Bed" />
                   </Field>
                 )}
-                <Field label={kind.occupancyLabel || 'Maximum occupancy'} optional>
+                <Field label={kind.occupancyLabel || 'Maximum occupancy'} required error={errors[`room-${i}-maxOccupancy`]}>
                   <input className={input} inputMode="numeric" value={room.maxOccupancy} onChange={(e) => setRoom(i, 'maxOccupancy', e.target.value)} placeholder="3" />
                 </Field>
-                <Field label="Adults" optional>
+                <Field label="Adults" required error={errors[`room-${i}-adults`]}>
                   <input className={input} inputMode="numeric" value={room.adults} onChange={(e) => setRoom(i, 'adults', e.target.value)} placeholder="2" />
                 </Field>
-                <Field label="Children" optional>
+                <Field label="Children" required error={errors[`room-${i}-children`]}>
                   <input className={input} inputMode="numeric" value={room.children} onChange={(e) => setRoom(i, 'children', e.target.value)} placeholder="1" />
                 </Field>
-                <Field label={`${kind.unit} amenities`} optional className="sm:col-span-2">
+                <Field label={`${kind.unit} amenities`} required error={errors[`room-${i}-amenities`]} className="sm:col-span-2">
                   <input className={input} value={room.amenities} onChange={(e) => setRoom(i, 'amenities', e.target.value)} placeholder="AC, TV, balcony…" />
                 </Field>
-                <Field label={`${kind.unit} description`} optional className="sm:col-span-2">
+                <Field label={`${kind.unit} description`} required error={errors[`room-${i}-description`]} className="sm:col-span-2">
                   <textarea className={`${input} min-h-[80px] resize-y`} value={room.description} onChange={(e) => setRoom(i, 'description', e.target.value)} />
                 </Field>
 
@@ -501,7 +520,7 @@ export default function PartnerWizard() {
               which is the one thing a member decides on.
             */}
             <Group title="Photographs" note="These are what a member sees first. The first one leads the listing.">
-              <Field label="Property photos" optional className="sm:col-span-2">
+              <Field label="Property photos" required error={errors.propertyPhotos} className="sm:col-span-2">
                 <ImagesField
                   label="Property photo"
                   value={propertyPhotos}
@@ -510,7 +529,7 @@ export default function PartnerWizard() {
                   hint="Exterior, lobby, reception, restaurant, pool, other areas"
                 />
               </Field>
-              <Field label={`${kind.unit} photos`} optional className="sm:col-span-2">
+              <Field label={`${kind.unit} photos`} required error={errors.roomPhotos} className="sm:col-span-2">
                 <ImagesField
                   label={`${kind.unit} photo`}
                   value={roomPhotos}
@@ -556,22 +575,22 @@ export default function PartnerWizard() {
         {step === 4 && (
           <>
             <Group title="Rates" note="What a room costs, and what Smira pays.">
-              <Field label="Standard tariff (₹)" optional>
+              <Field label="Standard tariff (₹)" required error={errors.standardTariff}>
                 <input className={input} inputMode="numeric" value={pricing.standardTariff} onChange={(e) => setPricing({ ...pricing, standardTariff: e.target.value })} />
               </Field>
-              <Field label="Smira partner rate (₹)" optional>
+              <Field label="Smira partner rate (₹)" required error={errors.partnerRate}>
                 <input className={input} inputMode="numeric" value={pricing.partnerRate} onChange={(e) => setPricing({ ...pricing, partnerRate: e.target.value })} />
               </Field>
-              <Field label="Weekday rate (₹)" optional>
+              <Field label="Weekday rate (₹)" required error={errors.weekdayRate}>
                 <input className={input} inputMode="numeric" value={pricing.weekdayRate} onChange={(e) => setPricing({ ...pricing, weekdayRate: e.target.value })} />
               </Field>
-              <Field label="Weekend rate (₹)" optional>
+              <Field label="Weekend rate (₹)" required error={errors.weekendRate}>
                 <input className={input} inputMode="numeric" value={pricing.weekendRate} onChange={(e) => setPricing({ ...pricing, weekendRate: e.target.value })} />
               </Field>
-              <Field label="Extra adult rate (₹)" optional>
+              <Field label="Extra adult rate (₹)" required error={errors.extraAdultRate}>
                 <input className={input} inputMode="numeric" value={pricing.extraAdultRate} onChange={(e) => setPricing({ ...pricing, extraAdultRate: e.target.value })} />
               </Field>
-              <Field label="Child rate (₹)" optional>
+              <Field label="Child rate (₹)" required error={errors.childRate}>
                 <input className={input} inputMode="numeric" value={pricing.childRate} onChange={(e) => setPricing({ ...pricing, childRate: e.target.value })} />
               </Field>
               <div className="sm:col-span-2">
@@ -596,34 +615,34 @@ export default function PartnerWizard() {
             </Group>
 
             <Group title="Inventory" note="How many rooms Smira may sell.">
-              <Field label={`Total ${kind.units.toLowerCase()}`} optional>
+              <Field label={`Total ${kind.units.toLowerCase()}`} required error={errors.totalRooms}>
                 <input className={input} inputMode="numeric" value={inventory.totalRooms} onChange={(e) => setInventory({ ...inventory, totalRooms: e.target.value })} />
               </Field>
-              <Field label="Available rooms" optional>
+              <Field label="Available rooms" required error={errors.availableRooms}>
                 <input className={input} inputMode="numeric" value={inventory.availableRooms} onChange={(e) => setInventory({ ...inventory, availableRooms: e.target.value })} />
               </Field>
-              <Field label="Closed dates" optional>
+              <Field label="Closed dates" required error={errors.closedDates}>
                 <input className={input} value={inventory.closedDates} onChange={(e) => setInventory({ ...inventory, closedDates: e.target.value })} placeholder="15–20 Dec" />
               </Field>
-              <Field label="Blackout dates" optional>
+              <Field label="Blackout dates" required error={errors.blackoutDates}>
                 <input className={input} value={inventory.blackoutDates} onChange={(e) => setInventory({ ...inventory, blackoutDates: e.target.value })} placeholder="31 Dec" />
               </Field>
             </Group>
 
             <Group title="Policies" note="Check-in, check-out and cancellation.">
-              <Field label={kind.times === 'stay' ? 'Check-in time' : 'Opens at'} optional>
+              <Field label={kind.times === 'stay' ? 'Check-in time' : 'Opens at'} required error={errors.checkIn}>
                 <input className={input} value={policies.checkIn} onChange={(e) => setPolicies({ ...policies, checkIn: e.target.value })} placeholder="2 PM" />
               </Field>
-              <Field label="Check-out time" optional>
+              <Field label="Check-out time" required error={errors.checkOut}>
                 <input className={input} value={policies.checkOut} onChange={(e) => setPolicies({ ...policies, checkOut: e.target.value })} placeholder="11 AM" />
               </Field>
-              <Field label="Free cancellation until" optional>
+              <Field label="Free cancellation until" required error={errors.freeCancellationUntil}>
                 <input className={input} value={policies.freeCancellationUntil} onChange={(e) => setPolicies({ ...policies, freeCancellationUntil: e.target.value })} placeholder="48 hours before" />
               </Field>
-              <Field label="Cancellation charge" optional>
+              <Field label="Cancellation charge" required error={errors.cancellationCharge}>
                 <input className={input} value={policies.cancellationCharge} onChange={(e) => setPolicies({ ...policies, cancellationCharge: e.target.value })} placeholder="One night" />
               </Field>
-              <Field label="No-show policy" optional className="sm:col-span-2">
+              <Field label="No-show policy" required error={errors.noShowPolicy} className="sm:col-span-2">
                 <input className={input} value={policies.noShowPolicy} onChange={(e) => setPolicies({ ...policies, noShowPolicy: e.target.value })} />
               </Field>
             </Group>
@@ -634,22 +653,22 @@ export default function PartnerWizard() {
         {step === 5 && (
           <>
             <Group title="Ownership" note="Who owns the property, and the papers that say so.">
-              <Field label="Ownership type" optional>
+              <Field label="Ownership type" required error={errors.ownershipType}>
                 <select className={input} value={ownership.type} onChange={(e) => setOwnership({ ...ownership, type: e.target.value })}>
                   <option value="">Select</option>
                   {OWNERSHIP.map((o) => <option key={o}>{o}</option>)}
                 </select>
               </Field>
-              <Field label="PAN" optional>
+              <Field label="PAN" required error={errors.pan}>
                 <input className={input} value={ownership.pan} onChange={(e) => setOwnership({ ...ownership, pan: e.target.value.toUpperCase() })} placeholder="ABCDE1234F" />
               </Field>
-              <Field label="GST number" optional>
+              <Field label="GST number" required error={errors.gst}>
                 <input className={input} value={ownership.gst} onChange={(e) => setOwnership({ ...ownership, gst: e.target.value.toUpperCase() })} placeholder="29ABCDE1234F1Z5" />
               </Field>
-              <Field label="TAN" optional>
+              <Field label="TAN" required error={errors.tan}>
                 <input className={input} value={ownership.tan} onChange={(e) => setOwnership({ ...ownership, tan: e.target.value.toUpperCase() })} />
               </Field>
-              <Field label="Ownership proof" optional>
+              <Field label="Ownership proof" required error={errors.ownershipProof}>
                 <FileField
                   label="Ownership proof"
                   value={ownership.documentLinks.ownershipProof}
@@ -657,7 +676,7 @@ export default function PartnerWizard() {
                   onChange={(url) => setOwnership({ ...ownership, documentLinks: { ...ownership.documentLinks, ownershipProof: url } })}
                 />
               </Field>
-              <Field label="Lease agreement" optional>
+              <Field label="Lease agreement" required error={errors.leaseAgreement}>
                 <FileField
                   label="Lease agreement"
                   value={ownership.documentLinks.leaseAgreement}
@@ -670,22 +689,22 @@ export default function PartnerWizard() {
             {/* Two ways to be paid, asked as two things — see the desk's
                 own listing form for why they were split. */}
             <Group title="Account information" note="Where Smira settles your payouts by bank transfer.">
-              <Field label="Account holder name" optional>
+              <Field label="Account holder name" required error={errors.holder}>
                 <input className={input} value={bank.holder} onChange={(e) => setBank({ ...bank, holder: e.target.value })} />
               </Field>
-              <Field label="Bank name" optional>
+              <Field label="Bank name" required error={errors.bankName}>
                 <input className={input} value={bank.bankName} onChange={(e) => setBank({ ...bank, bankName: e.target.value })} />
               </Field>
-              <Field label="Account number" optional>
+              <Field label="Account number" required error={errors.accountNumber}>
                 <input className={input} value={bank.accountNumber} onChange={(e) => setBank({ ...bank, accountNumber: e.target.value })} />
               </Field>
-              <Field label="IFSC" optional>
+              <Field label="IFSC" required error={errors.ifsc}>
                 <input className={input} value={bank.ifsc} onChange={(e) => setBank({ ...bank, ifsc: e.target.value.toUpperCase() })} />
               </Field>
-              <Field label="Branch" optional>
+              <Field label="Branch" required error={errors.branch}>
                 <input className={input} value={bank.branch} onChange={(e) => setBank({ ...bank, branch: e.target.value })} />
               </Field>
-              <Field label="Cancelled cheque or bank proof" optional>
+              <Field label="Cancelled cheque or bank proof" required error={errors.proofLink}>
                 <FileField
                   label="Bank proof"
                   value={bank.proofLink}
@@ -696,7 +715,7 @@ export default function PartnerWizard() {
             </Group>
 
             <Group title="UPI" note="Quicker for small settlements. Either this or the account above, or both.">
-              <Field label="UPI ID" optional>
+              <Field label="UPI ID" required error={errors.upiId}>
                 <input
                   className={input}
                   value={bank.upiId}
@@ -706,10 +725,10 @@ export default function PartnerWizard() {
                   spellCheck={false}
                 />
               </Field>
-              <Field label="Name on the UPI account" optional>
+              <Field label="Name on the UPI account" required error={errors.upiName}>
                 <input className={input} value={bank.upiName} onChange={(e) => setBank({ ...bank, upiName: e.target.value })} />
               </Field>
-              <Field label="How you would rather be paid" optional>
+              <Field label="How you would rather be paid" required error={errors.preferred}>
                 <select className={input} value={bank.preferred} onChange={(e) => setBank({ ...bank, preferred: e.target.value })}>
                   <option value="">No preference</option>
                   <option>Bank transfer</option>
@@ -761,7 +780,18 @@ export default function PartnerWizard() {
           {step < 5 ? (
             <button
               type="button"
-              onClick={() => { setStep(step + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              onClick={() => {
+                // Stop here rather than at the end: a form that collects
+                // five steps of answers and then objects to the first one
+                // is a form nobody finishes.
+                if (!checkStep(step)) {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  return;
+                }
+                setErrors({});
+                setStep(step + 1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               className="btn-primary gap-2 rounded-xl px-6 py-3 text-[14px] normal-case tracking-normal"
             >
               Continue <ArrowRight size={16} />
