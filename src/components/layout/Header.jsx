@@ -1,11 +1,14 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import ProfileDot from '@/components/layout/ProfileDot';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
 
 /**
  * One header, two shapes.
@@ -17,6 +20,26 @@ import ProfileDot from '@/components/layout/ProfileDot';
  * twice.
  */
 export default function Header() {
+
+  /**
+   * How many notifications they have not seen.
+   *
+   * The badge said 1, to everybody, for ever — including people with
+   * nothing waiting and people with six things waiting. Nought hides it.
+   */
+  const [unread, setUnread] = useState(0);
+  useEffect(() => {
+    const token = getSessionToken();
+    if (!token) return undefined;
+    let live = true;
+    api
+      .memberNotifications(token)
+      .then((res) => live && setUnread(Number(res.unread || 0)))
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
   /**
    * The badge: the member's own tier, where they hold one; where they
    * have asked for one and not paid, that, said plainly; otherwise the
@@ -60,9 +83,11 @@ export default function Header() {
 
             <Link href="/notifications" className="relative -mr-2 p-2" aria-label="Notifications">
               <Bell size={21} className="text-ink-700" />
-              <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-                1
-              </span>
+              {unread > 0 && (
+                <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {unread > 9 ? '9+' : unread}
+                </span>
+              )}
             </Link>
           </div>
         </div>

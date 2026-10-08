@@ -86,3 +86,32 @@ export function ymd(date) {
   if (Number.isNaN(d.getTime())) return '';
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
+
+/**
+ * "30m ago", "2d ago" — how long since something happened.
+ *
+ * Notifications used to carry their own wording ("30m ago") written
+ * into the file, which stayed thirty minutes ago for ever. This reads
+ * the time the thing actually happened.
+ */
+export function ago(when) {
+  const at = new Date(when).getTime();
+  if (Number.isNaN(at)) return '';
+
+  const seconds = Math.max(0, Math.round((Date.now() - at) / 1000));
+  if (seconds < 60) return 'just now';
+
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.round(hours / 24);
+  if (days < 7) return `${days}d ago`;
+
+  const weeks = Math.round(days / 7);
+  if (weeks < 5) return `${weeks}w ago`;
+
+  return fullDate(when);
+}

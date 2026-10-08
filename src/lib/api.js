@@ -162,6 +162,18 @@ export const api = {
    * member's actual rows, read from their token.
    */
   memberRewards: (token) => request('/website/member/rewards', { token, next: { revalidate: 0 } }),
+
+  /**
+   * What is happening on this member's account.
+   *
+   * Nothing stores a notification: the server works them out from the
+   * bookings, membership, gifts and offers each time, so they are never
+   * cached.
+   */
+  memberNotifications: (token) =>
+    request('/website/member/notifications', { token, next: { revalidate: 0 } }),
+  readNotifications: (token) =>
+    request('/website/member/notifications/read', { method: 'POST', token }),
   claimReward: (token, id) =>
     request(`/website/member/rewards/${encodeURIComponent(id)}/claim`, { method: 'POST', token }),
   memberReferrals: (token) => request('/website/member/referrals', { token, next: { revalidate: 0 } }),

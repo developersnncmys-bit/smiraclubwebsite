@@ -1,27 +1,94 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
-import { notificationTones, notifications } from '@/lib/content';
+import { notificationTones } from '@/lib/content';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
+import { ago } from '@/lib/format';
 
 /**
  * Notifications.
  *
- * The link at the top flips between marking everything read and unread,
- * rather than being a one-way control that goes dead the moment you use it —
- * which is what "Mark as Unread" alone would be once nothing is read.
+ * There were three written into the site, so every member was told the
+ * same thing: a trip to Goa in thirty days, an offer, and somebody
+ * else's booking confirmation. These are the member's own — their
+ * bookings, their membership, their gifts, and the offers running now —
+ * worked out by the server each time rather than stored anywhere.
  */
 export default function NotificationsScreen() {
-  const [read, setRead] = useState(() =>
-    Object.fromEntries(notifications.map((n) => [n.id, !n.unread])),
-  );
+  const [notifications, setNotifications] = useState(null);
+  const [read, setRead] = useState({});
+  const [signedIn, setSignedIn] = useState(true);
 
-  const allRead = notifications.every((n) => read[n.id]);
+  useEffect(() => {
+    const token = getSessionToken();
+    if (!token) {
+      setSignedIn(false);
+      setNotifications([]);
+      return undefined;
+    }
+    let live = true;
+    api
+      .memberNotifications(token)
+      .then((res) => {
+        if (!live) return;
+        const list = res.data || [];
+        setNotifications(list);
+        setRead(Object.fromEntries(list.map((n) => [n.id, !n.unread])));
+      })
+      .catch(() => live && setNotifications([]));
+    return () => {
+      live = false;
+    };
+  }, []);
 
-  const markAll = () =>
-    setRead(Object.fromEntries(notifications.map((n) => [n.id, !allRead])));
+  const list = notifications || [];
+  const allRead = list.length > 0 && list.every((n) => read[n.id]);
+
+  /**
+   * Read is a line in time, not a flag on each one.
+   *
+   * The server keeps when this member last looked, and anything older
+   * than that is read — so marking them read here has to tell it, or
+   * the bell lights up again on the next page load.
+   */
+  const markAll = () => {
+    const next = !allRead;
+    setRead(Object.fromEntries(list.map((n) => [n.id, next])));
+    const token = getSessionToken();
+    if (next && token) api.readNotifications(token).catch(() => {});
+  };
+
+  if (notifications === null) {
+    return (
+      <div className="shell flex items-center justify-center gap-2 py-16 text-[15px] text-ink-500">
+        <Loader2 size={17} className="animate-spin" /> Loading…
+      </div>
+    );
+  }
+
+  if (!signedIn) {
+    return (
+      <div className="shell py-10">
+        <p className="card p-6 text-center text-[15px] text-ink-600">
+          Sign in to see what is happening on your bookings and membership.
+        </p>
+      </div>
+    );
+  }
+
+  if (!list.length) {
+    return (
+      <div className="shell py-10">
+        <p className="card p-6 text-center text-[15px] text-ink-600">
+          Nothing to tell you just now. Trip reminders, booking updates and offers appear here.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="shell py-4 pb-10">
@@ -36,7 +103,7 @@ export default function NotificationsScreen() {
       </div>
 
       <ul className="mt-3 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
-        {notifications.map((n) => {
+        {list.map((n) => {
           const tone = notificationTones[n.tone];
           const unread = !read[n.id];
 
@@ -57,7 +124,7 @@ export default function NotificationsScreen() {
                       {n.kind}
                     </span>
                     <span className="flex shrink-0 items-center gap-2.5">
-                      <span className="text-[13px] text-ink-500">{n.when}</span>
+                      <span className="text-[13px] text-ink-500">{ago(n.at)}</span>
                     </span>
                   </span>
 
