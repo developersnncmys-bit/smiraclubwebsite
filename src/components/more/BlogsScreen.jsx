@@ -78,16 +78,21 @@ function Rail({ title, items }) {
  * a reader who picks Hotel Stays does not want Popular still showing them
  * travel guides.
  */
-export default function BlogsScreen({ hero, art = {} }) {
+/*
+ * `items` is every post the screen should draw — the desk’s, from the
+ * panel, and the site's own. The page above works out which, because
+ * fetching belongs on the server and this runs in the browser.
+ */
+export default function BlogsScreen({ hero, art = {}, items = blogs }) {
   const [category, setCategory] = useState('all');
 
   const shown = useMemo(
     () =>
-      (category === 'all' ? blogs : blogs.filter((b) => b.category === category)).map((b) => ({
+      (category === 'all' ? items : items.filter((b) => b.category === category)).map((b) => ({
         ...b,
         image: art[b.id] || b.image,
       })),
-    [category, art],
+    [category, items, art],
   );
 
   return (

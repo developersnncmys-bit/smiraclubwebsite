@@ -128,7 +128,7 @@ export default async function Page({ params, searchParams }) {
             </button>
           </DetailCard>
 
-          <LocationCard address={hotel.address} nearby={hotel.nearby} />
+          <LocationCard address={hotel.address} nearby={hotel.nearby} gps={hotel.gps} name={hotel.name} />
           <RulesCard />
           <GuidelinesSection />
         </div>

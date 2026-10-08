@@ -189,7 +189,7 @@ export default async function Page({ params, searchParams }) {
 
         {/* -- Reviews, location, guidelines ------------------------- */}
         <ReviewsCard rating={hotel.rating} reviews={hotel.reviews} href={`/hotels/${hotel.id}/reviews`} />
-        <LocationCard address={hotel.address} nearby={hotel.nearby} />
+        <LocationCard address={hotel.address} nearby={hotel.nearby} gps={hotel.gps} name={hotel.name} />
         <GuidelinesSection
           extra={{
             title: 'Check-in and check-out',

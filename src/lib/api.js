@@ -74,6 +74,16 @@ export const api = {
 
   /** The offers the desk has put live on the panel's Offers page. */
   deskOffers: () => request('/website/offers', { next: { revalidate: 60 } }),
+
+  /**
+   * The blog the desk writes in the admin panel.
+   *
+   * Short revalidate: somebody publishes a post and then goes to look at
+   * it, and five minutes of an empty page is read as it not having worked.
+   */
+  blogs: () => request('/website/blogs', { next: { revalidate: 30 } }),
+  blogPost: (slug) =>
+    request(`/website/blogs/${encodeURIComponent(slug)}`, { next: { revalidate: 30 } }),
   /** A complaint from Get Help; it opens a ticket on the support desk. */
   raiseComplaint: (form) =>
     request('/website/support', { method: 'POST', body: form, next: { revalidate: 0 } }),

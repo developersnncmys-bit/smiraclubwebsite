@@ -173,7 +173,7 @@ export default async function Page({ params }) {
           </DetailCard>
 
           <ReviewsCard rating={r.rating} reviews={r.reviews} />
-          <LocationCard address={r.address} nearby={nearby} />
+          <LocationCard address={r.address} nearby={nearby} gps={r.gps} name={r.name} />
 
           {similar.length > 0 && (
             <section className="pt-2">

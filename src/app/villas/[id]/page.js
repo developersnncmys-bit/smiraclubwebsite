@@ -18,6 +18,7 @@ import { image } from '@/lib/images';
 import { StayDates } from '@/components/hotels/StayChooser';
 import { defaultStay, ymd } from '@/lib/format';
 import { asProperty, deskItem, iconForAmenity } from '@/lib/desk';
+import { mapLinks } from '@/lib/maps';
 
 /** Every villa the site knows about, from both lists. */
 const ALL = [...villaResults, ...villas];
@@ -81,7 +82,7 @@ export default async function Page({ params, searchParams }) {
     : {
         bedrooms: villa.bedrooms, beds: villa.beds, baths: villa.baths,
         sleeps: villa.sleeps, extra: villa.extra, unit: villa.unit,
-        about: villa.about, address: villa.address, nearby: villa.nearby || [],
+        about: villa.about, address: villa.address, gps: villa.gps || '', nearby: villa.nearby || [],
         rooms: (villa.spaces || []).map((sp, i) => ({
           id: `sp-${i}`,
           name: sp.name,
@@ -132,7 +133,9 @@ export default async function Page({ params, searchParams }) {
     .filter(Boolean)
     .map((a) => Number(a))
     .filter((a) => Number.isInteger(a) && a >= 0 && a <= 17);
-  const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(detail.address)}`;
+  // The listing’s own coordinates when it has them, so the pin is the
+  // property and not whatever Google makes of a typed address.
+  const place = mapLinks({ gps: detail.gps, address: detail.address, name: villa.name });
   /** The search that led here rides along, so Review Booking reads the same stay. */
   const carry = new URLSearchParams(query).toString();
 
@@ -343,9 +346,9 @@ export default async function Page({ params, searchParams }) {
             <span className="font-semibold text-ink-900">Address:</span> {detail.address}
           </p>
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className={`mt-4 grid gap-3 ${place.pano ? 'grid-cols-2' : 'grid-cols-1'}`}>
             <a
-              href={mapHref}
+              href={place.map}
               target="_blank"
               rel="noreferrer"
               className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
@@ -353,15 +356,17 @@ export default async function Page({ params, searchParams }) {
               <Expand size={17} />
               Expand Map
             </a>
-            <a
-              href={mapHref}
-              target="_blank"
-              rel="noreferrer"
-              className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
-            >
-              <Navigation size={17} />
-              Street View
-            </a>
+            {place.pano && (
+              <a
+                href={place.pano}
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
+              >
+                <Navigation size={17} />
+                Street View
+              </a>
+            )}
           </div>
 
           <h3 className="mt-5 text-[15px] font-bold text-ink-900">What&rsquo;s Nearby</h3>

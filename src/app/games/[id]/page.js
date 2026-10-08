@@ -132,7 +132,7 @@ export default async function Page({ params }) {
 
         <ReviewsCard rating={zone.rating} reviews={zone.reviews} />
 
-        <LocationCard address={zone.address} nearby={nearby} />
+        <LocationCard address={zone.address} nearby={nearby} gps={zone.gps} name={zone.name} />
 
         {/* -- Before you play ------------------------------------------- */}
         <section className="card p-4 sm:p-5">

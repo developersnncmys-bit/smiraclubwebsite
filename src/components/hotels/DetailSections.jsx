@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Check, Crown, Expand, Info, Navigation, ShieldCheck } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
+import { mapLinks } from '@/lib/maps';
 import AllAmenities from '@/components/hotels/AllAmenities';
 import {
   hotelAmenities,
@@ -148,8 +149,8 @@ export function ReviewsCard({ rating, reviews, href, id = 'reviews' }) {
   );
 }
 
-export function LocationCard({ address, nearby, id = 'location' }) {
-  const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+export function LocationCard({ address, nearby, gps = '', name = '', id = 'location' }) {
+  const place = mapLinks({ gps, address, name });
 
   return (
     <DetailCard id={id} title="Location">
@@ -157,9 +158,9 @@ export function LocationCard({ address, nearby, id = 'location' }) {
         <span className="font-semibold text-ink-900">Address:</span> {address}
       </p>
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
+      <div className={`mt-4 grid gap-3 ${place.pano ? 'grid-cols-2' : 'grid-cols-1'}`}>
         <a
-          href={mapHref}
+          href={place.map}
           target="_blank"
           rel="noreferrer"
           className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#dfeae2] to-[#c9dcd2] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
@@ -167,15 +168,17 @@ export function LocationCard({ address, nearby, id = 'location' }) {
           <Expand size={17} />
           Expand Map
         </a>
-        <a
-          href={mapHref}
-          target="_blank"
-          rel="noreferrer"
-          className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
-        >
-          <Navigation size={17} />
-          Street View
-        </a>
+        {place.pano && (
+          <a
+            href={place.pano}
+            target="_blank"
+            rel="noreferrer"
+            className="flex h-24 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#e3e7ee] to-[#cfd7e4] text-[13px] font-semibold text-ink-800 transition hover:brightness-95"
+          >
+            <Navigation size={17} />
+            Street View
+          </a>
+        )}
       </div>
 
       <h3 className="mt-5 text-[15px] font-bold text-ink-900">What&rsquo;s Nearby</h3>

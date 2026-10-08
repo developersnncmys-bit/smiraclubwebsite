@@ -145,7 +145,7 @@ export default async function Page({ params }) {
           <button type="button" className="mt-3 text-[14px] font-bold text-ink-900 underline">View Details</button>
         </DetailCard>
 
-        <LocationCard address={park.address} nearby={nearby} />
+        <LocationCard address={park.address} nearby={nearby} gps={park.gps} name={park.name} />
 
         {/* -- Safety ----------------------------------------------------- */}
         <section className="card p-4 sm:p-5">

@@ -233,6 +233,9 @@ export function asProperty(item) {
     photos,
     about: item.description || '',
     address: item.address || '',
+    // Collected on every listing, required on both forms, and until now
+    // dropped here — so the map searched a typed address instead.
+    gps: item.gps || '',
     nearby: d.nearby || [],
     amenities: item.amenities || [],
     checkIn: item.checkIn || '',
@@ -327,6 +330,7 @@ export function asService(item, kind = 'spa') {
     place: item.place || '',
     subtitle: item.place || '',
     address: item.address || '',
+    gps: item.gps || '',
     label: d.tag || '',
     tag: d.tag || '',
 
@@ -454,4 +458,35 @@ export async function deskFreeStays(limit = 12) {
     .filter((item) => item.details?.freeStay)
     .slice(0, limit)
     .map((item) => ({ ...item, href: `/free-stay/${item.id}` }));
+}
+
+/* -- The blog ------------------------------------------------------------- */
+
+/**
+ * The posts the desk has published, newest first.
+ *
+ * Same contract as everything else here: no API, a failure or an empty
+ * blog gives back `[]`, and the site's own bundled articles carry the
+ * screen on their own. A post arrives already shaped the way those are,
+ * so nothing downstream has to tell the two apart.
+ */
+export async function deskBlogs() {
+  if (!api.isConfigured) return [];
+  try {
+    const res = await api.blogs();
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+/** One post by its slug, or `null` when the desk has no such article. */
+export async function deskBlog(slug) {
+  if (!api.isConfigured) return null;
+  try {
+    const res = await api.blogPost(slug);
+    return res.data || null;
+  } catch {
+    return null;
+  }
 }

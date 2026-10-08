@@ -6,15 +6,26 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import ShareButton from '@/components/more/ShareButton';
 import { BlogCard } from '@/components/more/BlogsScreen';
 import { blogs } from '@/lib/content';
+import { deskBlog, deskBlogs } from '@/lib/desk';
 import { image } from '@/lib/images';
 
+/*
+ * The bundled articles are built ahead of time. A post the desk writes
+ * in the panel is not known at build, so it renders when it is asked
+ * for — which is what makes publishing immediate rather than a deploy.
+ */
 export function generateStaticParams() {
   return blogs.map((b) => ({ id: b.id }));
 }
 
+/** The bundled article, or the one the desk published at that address. */
+async function postFor(id) {
+  return blogs.find((b) => b.id === id) || (await deskBlog(id));
+}
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const blog = blogs.find((b) => b.id === id);
+  const blog = await postFor(id);
   return blog ? { title: blog.title, description: blog.excerpt } : { title: 'Blog not found' };
 }
 
@@ -25,13 +36,19 @@ export async function generateMetadata({ params }) {
  */
 export default async function Page({ params }) {
   const { id } = await params;
-  const blog = blogs.find((b) => b.id === id);
+  const blog = await postFor(id);
   if (!blog) notFound();
+
+  // What else there is to read. The desk’s posts count too, and one that
+  // has taken over a bundled address must not be offered twice.
+  const desk = await deskBlogs();
+  const taken = new Set(desk.map((b) => b.id));
+  const all = [...desk, ...blogs.filter((b) => !taken.has(b.id))];
 
   // Same category first, then the rest, never the article itself.
   const related = [
-    ...blogs.filter((b) => b.id !== blog.id && b.category === blog.category),
-    ...blogs.filter((b) => b.id !== blog.id && b.category !== blog.category),
+    ...all.filter((b) => b.id !== blog.id && b.category === blog.category),
+    ...all.filter((b) => b.id !== blog.id && b.category !== blog.category),
   ]
     .slice(0, 3)
     .map((b) => ({ ...b, image: image(b.image) }));
@@ -65,7 +82,7 @@ export default async function Page({ params }) {
                 </p>
 
                 <div className="mt-6 space-y-6">
-                  {blog.body.map((block, i) => (
+                  {(blog.body || []).map((block, i) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <section key={i}>
                       {block.h && <h2 className="text-lg font-bold text-ink-900 lg:text-xl">{block.h}</h2>}
