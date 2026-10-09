@@ -2,6 +2,8 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import MembershipScreen from '@/components/membership/MembershipScreen';
 import { deskOffers, deskPlans } from '@/lib/desk';
 import { image } from '@/lib/images';
+import { serviceArt } from '@/lib/serviceArt';
+import { membershipPrivileges } from '@/lib/content';
 
 /** The desk's plans are re-read a minute at a time, like the rest of the site. */
 export const revalidate = 60;
@@ -51,6 +53,13 @@ export default async function Page() {
         compare={image('compare-landmarks')}
         desk={desk}
         offers={offers}
+        /*
+         * The illustrations the All Services tiles use, resolved here
+         * because serviceArt reads the filesystem and the screen runs
+         * in the browser. A privilege is the same service seen from
+         * the membership, so it is drawn the same way.
+         */
+        privilegeArt={serviceArt(membershipPrivileges.map((x) => x.art))}
       />
     </>
   );

@@ -200,7 +200,7 @@ function fromDesk(p, d) {
  * here: nobody reading this page has started theirs yet.
  */
 const GIFT_DAYS = 6;
-export default function MembershipScreen({ hero, helper, compare, desk = [], offers = [] }) {
+export default function MembershipScreen({ hero, helper, compare, desk = [], offers = [], privilegeArt = {} }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
   // Nothing is chosen until they choose: the card below falls back to the
@@ -828,14 +828,29 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       className="sr-only"
                     />
 
-                    {/* The service it is, before the words saying so. */}
+                    {/*
+                      The service it is, before the words saying so, drawn
+                      with the same illustration its tile carries in All
+                      Services. A line icon stands in for any key whose
+                      artwork is not in the set yet.
+                    */}
                     <span
                       aria-hidden="true"
-                      className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition ${
+                      className={`relative grid h-12 w-12 shrink-0 place-items-center rounded-xl transition ${
                         on ? 'bg-white text-ink-900' : 'bg-white/70 text-ink-500'
                       }`}
                     >
-                      <Icon name={p.icon} size={21} strokeWidth={1.8} />
+                      {privilegeArt[p.art] ? (
+                        <Image
+                          src={privilegeArt[p.art]}
+                          alt=""
+                          fill
+                          sizes="48px"
+                          className="object-contain p-1.5"
+                        />
+                      ) : (
+                        <Icon name={p.icon} size={21} strokeWidth={1.8} />
+                      )}
                     </span>
 
                     <span className="min-w-0 flex-1">
