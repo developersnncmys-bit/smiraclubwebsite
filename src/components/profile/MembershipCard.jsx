@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { ChevronRight, Crown } from 'lucide-react';
 import { isMember, useMembership } from '@/lib/membership';
+import { privilegeInfo } from '@/lib/privileges';
+import Icon from '@/components/ui/Icon';
 
 const validTill = (iso) =>
   iso ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
@@ -15,6 +17,16 @@ const validTill = (iso) =>
 export default function MembershipCard() {
   const { membership } = useMembership();
   const member = isMember(membership);
+
+  /*
+   * The services this membership actually bought.
+   *
+   * A plan sells a number and the member picks which, and until now the
+   * choice went to the desk and was never shown back to them. Somebody
+   * on Silver could not find out what their one privilege was.
+   */
+  const held = (member && membership.privileges) || [];
+  const allowed = membership?.privilegesAllowed ?? held.length;
 
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2c3e4c] via-[#63798a] to-[#a9bcc7] px-5 pb-5 pt-12 text-white shadow-card sm:px-6 sm:pb-6 sm:pt-14">
@@ -38,6 +50,33 @@ export default function MembershipCard() {
           </p>
         </div>
       </div>
+
+      {held.length > 0 && (
+        <div className="mt-4 rounded-xl bg-ink-900/20 p-3.5">
+          <p className="text-[12px] font-bold uppercase tracking-wide text-white/70">
+            Your privileges · {held.length} of {allowed}
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {held.map((key) => {
+              const info = privilegeInfo(key);
+              return (
+                <li
+                  key={key}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-white/15 px-2.5 py-1.5 text-[13px] font-semibold"
+                >
+                  <Icon name={info?.icon || 'Check'} size={14} strokeWidth={2} />
+                  {info?.label || key}
+                </li>
+              );
+            })}
+          </ul>
+          {allowed > held.length && (
+            <p className="mt-2 text-[12px] text-white/70">
+              {allowed - held.length} still to choose.
+            </p>
+          )}
+        </div>
+      )}
 
       <Link
         href="/membership"

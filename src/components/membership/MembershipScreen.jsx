@@ -10,6 +10,7 @@ import {
   membershipSharing, membershipTabs,
 } from '@/lib/content';
 import Countdown from '@/components/ui/Countdown';
+import Icon from '@/components/ui/Icon';
 import Portal from '@/components/ui/Portal';
 import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
@@ -462,6 +463,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         since: new Date().toISOString(),
         expiresOn: res.data?.expiresOn,
         status: 'Payment pending',
+        // What they chose, so a booking page can tell straight away
+        // whether the service in front of them is one they hold.
+        privileges,
+        privilegesAllowed: plan.privileges,
       });
       const next = new URLSearchParams(window.location.search).get('next') || '';
       router.push(next.startsWith('/') && !next.startsWith('//') ? next : '/profile');
@@ -808,7 +813,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   <label
                     key={p.key}
                     aria-disabled={locked}
-                    className={`flex gap-3 rounded-xl p-3.5 transition ${
+                    className={`flex items-center gap-3 rounded-xl p-3.5 transition ${
                       on
                         ? 'cursor-pointer bg-[#fdf3dd]'
                         : locked
@@ -822,13 +827,25 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       onChange={() => togglePrivilege(p.key)}
                       className="sr-only"
                     />
-                    <Tick on={on} colour={plan.accent} />
-                    <span className="min-w-0">
+
+                    {/* The service it is, before the words saying so. */}
+                    <span
+                      aria-hidden="true"
+                      className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition ${
+                        on ? 'bg-white text-ink-900' : 'bg-white/70 text-ink-500'
+                      }`}
+                    >
+                      <Icon name={p.icon} size={21} strokeWidth={1.8} />
+                    </span>
+
+                    <span className="min-w-0 flex-1">
                       <span className="block text-[15px] font-bold text-ink-900">{p.label}</span>
                       <span className="mt-0.5 block text-[14px] leading-snug text-ink-600">
                         {p.body}
                       </span>
                     </span>
+
+                    <Tick on={on} colour={plan.accent} />
                   </label>
                 );
               })}

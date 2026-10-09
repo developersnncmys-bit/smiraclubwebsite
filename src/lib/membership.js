@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
 
 /**
  * Whether this visitor is a Smira Club member, kept in this browser.
@@ -68,9 +70,37 @@ export function joinHref() {
   return `/membership?next=${encodeURIComponent(here)}`;
 }
 
-/** The saved membership, read after mount. `ready` is false until then. */
+/**
+ * The saved membership, read after mount. `ready` is false until then.
+ *
+ * The browser's copy is written when somebody joins and can be months
+ * old, so where there is a token the desk's answer replaces it — a plan
+ * the desk upgraded, or privileges changed on the phone, show up here
+ * without the member having to join again.
+ */
 export function useMembership() {
   const [state, setState] = useState({ ready: false, membership: null });
-  useEffect(() => setState({ ready: true, membership: loadMembership() }), []);
+
+  useEffect(() => {
+    const saved = loadMembership();
+    setState({ ready: true, membership: saved });
+
+    const token = getSessionToken();
+    if (!token) return;
+
+    api
+      .memberMe(token)
+      .then((res) => {
+        const live = res?.data?.membership;
+        if (!live) return;
+        const merged = { ...saved, ...live };
+        saveMembership(merged);
+        setState({ ready: true, membership: merged });
+      })
+      .catch(() => {
+        /* offline or signed out — the saved copy still stands */
+      });
+  }, []);
+
   return state;
 }

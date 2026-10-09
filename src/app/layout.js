@@ -2,6 +2,7 @@ import { Montserrat } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
+import UpgradeGate from '@/components/membership/UpgradeGate';
 import Attribution from '@/components/layout/Attribution';
 import AuthPopup from '@/components/auth/AuthPopup';
 import { site } from '@/lib/content';
@@ -51,6 +52,8 @@ export default function RootLayout({ children }) {
             that was not there, under the padding they had already added for
             the one that was. The bar now carries its own space. */}
         <main>{children}</main>
+        {/* Says so where a member has opened a service their plan does not cover. */}
+        <UpgradeGate />
         <Footer />
         <BottomNav />
       </body>
