@@ -840,9 +840,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                         on ? 'bg-white text-ink-900' : 'bg-white/70 text-ink-500'
                       }`}
                     >
-                      {privilegeArt[p.art] ? (
+                      {privilegeArt[p.key] ? (
                         <Image
-                          src={privilegeArt[p.art]}
+                          src={privilegeArt[p.key]}
                           alt=""
                           fill
                           sizes="48px"

@@ -2285,16 +2285,16 @@ export const membershipIncluded = [
  * page checks itself against.
  */
 export const membershipPrivileges = [
-  { key: 'villa', art: 'villa', icon: 'Palmtree', label: 'Villa Booking', body: 'Enjoy special member benefits on premium villa stays.' },
-  { key: 'homestay', art: 'homestay', icon: 'Home', label: 'Home Stay', body: 'Access comfortable homestays for your travel needs.' },
-  { key: 'hotel', art: 'hotel', icon: 'BedDouble', label: 'Hotel Booking', body: 'Get exclusive member rates on eligible hotel bookings' },
-  { key: 'tour', art: 'package', icon: 'Luggage', label: 'Tour Package', body: 'Explore curated travel packages at member benefits.' },
-  { key: 'international', art: 'international', icon: 'Compass', label: 'International Trip', body: 'Plan International journeys with exclusive member support.' },
-  { key: 'group', art: 'group', icon: 'UsersRound', label: 'Group Departure', body: 'Join specially planned group trips and departures.' },
-  { key: 'support', art: 'support', icon: 'Headset', label: 'Travel Support', body: 'Reach the desk for help before, during and after a trip.' },
-  { key: 'luxury', art: 'luxury', icon: 'Sparkles', label: 'Luxury Experiences', body: 'Enjoy access to Yacht rides, helicopter & other exclusive premium experiences.' },
-  { key: 'flight', art: 'flight', icon: 'PlaneTakeoff', label: 'Flight Booking', body: 'Access flight booking support and applicable member benefits.' },
-  { key: 'train', art: 'train', icon: 'Train', label: 'Train & Bus', body: 'Get convenient support for train and bus bookings.' },
+  { key: 'villa', icon: 'Palmtree', label: 'Villa Booking', body: 'Enjoy special member benefits on premium villa stays.' },
+  { key: 'homestay', icon: 'Home', label: 'Home Stay', body: 'Access comfortable homestays for your travel needs.' },
+  { key: 'hotel', icon: 'BedDouble', label: 'Hotel Booking', body: 'Get exclusive member rates on eligible hotel bookings' },
+  { key: 'tour', icon: 'Luggage', label: 'Tour Package', body: 'Explore curated travel packages at member benefits.' },
+  { key: 'international', icon: 'Compass', label: 'International Trip', body: 'Plan International journeys with exclusive member support.' },
+  { key: 'group', icon: 'UsersRound', label: 'Group Departure', body: 'Join specially planned group trips and departures.' },
+  { key: 'support', icon: 'Headset', label: 'Travel Support', body: 'Reach the desk for help before, during and after a trip.' },
+  { key: 'luxury', icon: 'Sparkles', label: 'Luxury Experiences', body: 'Enjoy access to Yacht rides, helicopter & other exclusive premium experiences.' },
+  { key: 'flight', icon: 'PlaneTakeoff', label: 'Flight Booking', body: 'Access flight booking support and applicable member benefits.' },
+  { key: 'train', icon: 'Train', label: 'Train & Bus', body: 'Get convenient support for train and bus bookings.' },
 ];
 
 /** The purple countdown card. `endsInHours` is measured from page load. */

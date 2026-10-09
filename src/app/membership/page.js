@@ -2,7 +2,7 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import MembershipScreen from '@/components/membership/MembershipScreen';
 import { deskOffers, deskPlans } from '@/lib/desk';
 import { image } from '@/lib/images';
-import { serviceArt } from '@/lib/serviceArt';
+import { privilegeArt } from '@/lib/privilegeArt';
 import { membershipPrivileges } from '@/lib/content';
 
 /** The desk's plans are re-read a minute at a time, like the rest of the site. */
@@ -54,12 +54,11 @@ export default async function Page() {
         desk={desk}
         offers={offers}
         /*
-         * The illustrations the All Services tiles use, resolved here
-         * because serviceArt reads the filesystem and the screen runs
-         * in the browser. A privilege is the same service seen from
-         * the membership, so it is drawn the same way.
+         * The privileges’ own illustrations, resolved here because
+         * reading the filesystem is a server job and this screen runs
+         * in the browser.
          */
-        privilegeArt={serviceArt(membershipPrivileges.map((x) => x.art))}
+        privilegeArt={privilegeArt(membershipPrivileges.map((x) => x.key))}
       />
     </>
   );
