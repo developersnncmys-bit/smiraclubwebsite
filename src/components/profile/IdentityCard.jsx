@@ -20,21 +20,21 @@ export default function IdentityCard() {
   const photo = profile?.photo;
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6 lg:p-4">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-4 text-white shadow-card sm:p-5 lg:p-4">
       {isMember(membership) && (
-        <span className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1.5 text-[13px] font-semibold backdrop-blur">
+        <span className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-[12px] font-semibold backdrop-blur">
           <span className="h-2 w-2 rounded-full bg-white" />
           Active
         </span>
       )}
 
-      <div className="flex items-center gap-4">
-        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-white/85 sm:h-[72px] sm:w-[72px] lg:h-14 lg:w-14">
+      <div className="flex items-center gap-3.5">
+        <span className="grid h-[52px] w-[52px] shrink-0 place-items-center overflow-hidden rounded-full bg-white/85 sm:h-16 sm:w-16 lg:h-14 lg:w-14">
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photo} alt="" className="h-full w-full object-cover" />
           ) : (
-            <User size={34} className="text-brand-500" fill="currentColor" strokeWidth={0} />
+            <User size={30} className="text-brand-500" fill="currentColor" strokeWidth={0} />
           )}
         </span>
 
@@ -42,11 +42,11 @@ export default function IdentityCard() {
           {/* The name, and only the name. "Hey " ate the width a long name
               needed, so anybody called more than a few letters was cut off
               mid-word by the Edit Profile button. */}
-          <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl lg:text-[17px]">
+          <h1 className="truncate pr-16 text-[16px] font-bold leading-tight sm:pr-20 sm:text-lg lg:text-[16px]">
             {name}
           </h1>
 
-          <p className="mt-2 flex items-center gap-2 text-[14px] font-medium text-white/95">
+          <p className="mt-1.5 flex items-center gap-2 text-[13px] font-medium text-white/95">
             <Phone size={15} fill="currentColor" strokeWidth={0} />
             {phone}
           </p>
@@ -54,18 +54,18 @@ export default function IdentityCard() {
           {signedIn ? (
             <Link
               href="/profile/edit"
-              className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-semibold transition hover:text-white/80"
+              className="mt-1 inline-flex items-center gap-2 text-[13px] font-semibold transition hover:text-white/80"
             >
               <Pencil size={15} />
               Edit Profile
             </Link>
           ) : (
             // Both ways in, side by side — each opens the sheet on its own tab.
-            <span className="mt-2.5 flex flex-wrap gap-2">
+            <span className="mt-2 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[14px] font-bold text-action-500 transition hover:bg-surface-soft"
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-[13px] font-bold text-action-500 transition hover:bg-surface-soft"
               >
                 <LogIn size={16} />
                 Log in
@@ -73,7 +73,7 @@ export default function IdentityCard() {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/70 px-4 py-2.5 text-[14px] font-bold text-white transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/70 px-3.5 py-2 text-[13px] font-bold text-white transition hover:bg-white/10"
               >
                 <UserPlus size={16} />
                 Register

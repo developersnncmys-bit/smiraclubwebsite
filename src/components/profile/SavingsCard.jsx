@@ -35,8 +35,8 @@ export default function SavingsCard() {
   const across = Number(saved?.across || 0);
 
   return (
-    <section className="flex h-full flex-col rounded-2xl bg-gradient-to-br from-[#eaf1fe] via-[#dde9fc] to-[#c6dbfa] p-5 shadow-card sm:p-6 lg:p-4">
-      <h2 className="flex items-center gap-2 text-[15px] font-bold text-ink-900 lg:text-[13.5px]">
+    <section className="flex h-full flex-col rounded-2xl bg-gradient-to-br from-[#eaf1fe] via-[#dde9fc] to-[#c6dbfa] p-4 shadow-card sm:p-5 lg:p-4">
+      <h2 className="flex items-center gap-2 text-[13.5px] font-bold text-ink-900 lg:text-[13px]">
         Your Smira Club Savings
         <span
           title="The difference between what members pay and the public rate, added up across your bookings."
@@ -46,9 +46,9 @@ export default function SavingsCard() {
         </span>
       </h2>
 
-      <p className="mt-2 text-2xl font-extrabold text-action-500 lg:mt-1 lg:text-xl">{inr(total)}</p>
+      <p className="mt-0.5 text-[19px] font-extrabold text-action-500 lg:text-xl">{inr(total)}</p>
 
-      <p className="mt-1 text-[14px] leading-relaxed text-ink-700">
+      <p className="mt-1 text-[12.5px] leading-snug text-ink-700">
         {across > 0
           ? `Saved on your bookings across ${across} ${across === 1 ? 'booking' : 'bookings'}`
           : 'Book as a member and what you save will show here'}
@@ -58,7 +58,7 @@ export default function SavingsCard() {
       {across > 0 && (
         <Link
           href="/profile/savings"
-          className="mt-auto inline-flex items-center gap-1 pt-4 text-[14px] font-bold text-action-500 transition hover:text-action-600"
+          className="mt-auto inline-flex items-center gap-1 pt-3 text-[12.5px] font-bold text-action-500 transition hover:text-action-600"
         >
           View Savings Details
           <ChevronRight size={17} />

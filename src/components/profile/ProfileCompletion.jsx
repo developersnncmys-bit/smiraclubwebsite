@@ -24,17 +24,17 @@ export default function ProfileCompletion() {
   const pct = Math.min(100, Math.max(0, profileCompletion(profile)));
 
   return (
-    <section className="card p-5 sm:p-6 lg:p-4">
+    <section className="card p-4 sm:p-5 lg:p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-[15px] font-bold text-ink-900 lg:text-[13.5px]">Profile Completion</h2>
-          <p className="mt-1.5 text-[19px] font-bold text-action-500 lg:text-[16px]">{pct}% Completed</p>
+          <h2 className="text-[13.5px] font-bold text-ink-900 lg:text-[13px]">Profile Completion</h2>
+          <p className="mt-0.5 text-[16px] font-bold text-action-500 lg:text-[15px]">{pct}% Completed</p>
         </div>
 
         <div className="relative shrink-0">
           <svg
-            width="64"
-            height="64"
+            width="54"
+            height="54"
             viewBox="0 0 64 64"
             className="-rotate-90"
             role="img"
@@ -62,17 +62,17 @@ export default function ProfileCompletion() {
         </div>
       </div>
 
-      <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-surface-line">
+      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-line">
         <div className="h-full rounded-full bg-action-500" style={{ width: `${pct}%` }} />
       </div>
 
-      <p className="mt-4 text-[14px] leading-relaxed text-ink-700">
+      <p className="mt-2 text-[12.5px] leading-snug text-ink-700">
         {nudge(pct)}
       </p>
 
       <Link
         href="/profile/edit"
-        className="mt-3 inline-flex items-center gap-2 text-[14px] font-bold text-action-500 transition hover:text-action-600"
+        className="mt-2 inline-flex items-center gap-2 text-[12.5px] font-bold text-action-500 transition hover:text-action-600"
       >
         <Pencil size={16} />
         {pct === 100 ? 'Edit Profile' : 'Complete Profile'}

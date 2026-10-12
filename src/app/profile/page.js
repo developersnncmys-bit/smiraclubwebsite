@@ -24,30 +24,30 @@ export default function Page() {
   const [account, support] = profileMenu;
 
   return (
-    <div className="shell py-4 lg:py-8">
+    <div className="shell py-2 lg:py-8">
       <div className="mx-auto max-w-phone lg:grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:gap-8">
         {/* -- The account rail: who you are, and what you hold ----------- */}
-        <div className="space-y-4 lg:sticky lg:top-24 lg:col-span-5 lg:space-y-5 xl:col-span-4">
+        <div className="space-y-2.5 lg:sticky lg:top-24 lg:col-span-5 lg:space-y-5 xl:col-span-4">
           <IdentityCard />
           <MembershipCard />
           <ProfileCompletion />
         </div>
 
         {/* -- Everything you can do with it ------------------------------ */}
-        <div className="mt-4 space-y-4 lg:col-span-7 lg:mt-0 lg:space-y-5 xl:col-span-8">
-          <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:space-y-0">
+        <div className="mt-2.5 space-y-2.5 lg:col-span-7 lg:mt-0 lg:space-y-5 xl:col-span-8">
+          <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-5 lg:space-y-0">
             <PlanMyTrip />
             <SavingsCard />
           </div>
 
           <PartnerCard />
 
-          <section className="pt-2">
-            <h2 className="px-1 pb-3 text-[13px] font-bold uppercase tracking-[0.12em] text-ink-400 lg:pb-2 lg:text-[11px]">
+          <section className="pt-1">
+            <h2 className="px-1 pb-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-ink-400 lg:pb-2 lg:text-[11px]">
               Your Information
             </h2>
 
-            <div className="space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-5 lg:space-y-0">
+            <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-5 lg:space-y-0">
               <InfoList items={account.items} />
               <InfoList items={support.items} />
             </div>
