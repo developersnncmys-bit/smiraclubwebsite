@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/admin/Desktop/Dhanalakshmi/smirawebsite/src/app/not-found.js"],"sourcesContent":["import Link from 'next/link';\r\n\r\nexport default function NotFound() {\r\n  return (\r\n    <div className=\"shell flex min-h-[60vh] flex-col items-center justify-center py-20 text-center\">\r\n      <p className=\"text-6xl font-extrabold text-brand-600\">404</p>\r\n      <h1 className=\"mt-4 text-2xl font-bold text-ink-900\">That page has moved on</h1>\r\n      <p className=\"mt-2 max-w-sm text-ink-500\">\r\n        Whatever you were after is not here. The trips are still where you left them.\r\n      </p>\r\n      <Link href=\"/\" className=\"btn-primary mt-6\">\r\n        Back to the start\r\n      </Link>\r\n    </div>\r\n  );\r\n}\r\n"],"names":["NotFound","className","href"],"mappings":";;;;;AAAA;;;AAEe,SAASA;IACtB,qBACE,8OAAC;QAAIC,WAAU;;0BACb,8OAAC;gBAAEA,WAAU;0BAAyC;;;;;;0BACtD,8OAAC;gBAAGA,WAAU;0BAAuC;;;;;;0BACrD,8OAAC;gBAAEA,WAAU;0BAA6B;;;;;;0BAG1C,8OAAC,0LAAI;gBAACC,MAAK;gBAAID,WAAU;0BAAmB;;;;;;;;;;;;AAKlD"}}]
-}
