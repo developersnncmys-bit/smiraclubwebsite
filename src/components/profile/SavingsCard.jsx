@@ -35,8 +35,8 @@ export default function SavingsCard() {
   const across = Number(saved?.across || 0);
 
   return (
-    <section className="flex h-full flex-col rounded-2xl bg-gradient-to-br from-[#eaf1fe] via-[#dde9fc] to-[#c6dbfa] p-5 shadow-card sm:p-6">
-      <h2 className="flex items-center gap-2 text-[15px] font-bold text-ink-900">
+    <section className="flex h-full flex-col rounded-2xl bg-gradient-to-br from-[#eaf1fe] via-[#dde9fc] to-[#c6dbfa] p-5 shadow-card sm:p-6 lg:p-4">
+      <h2 className="flex items-center gap-2 text-[15px] font-bold text-ink-900 lg:text-[13.5px]">
         Your Smira Club Savings
         <span
           title="The difference between what members pay and the public rate, added up across your bookings."
@@ -46,7 +46,7 @@ export default function SavingsCard() {
         </span>
       </h2>
 
-      <p className="mt-2 text-2xl font-extrabold text-action-500">{inr(total)}</p>
+      <p className="mt-2 text-2xl font-extrabold text-action-500 lg:mt-1 lg:text-xl">{inr(total)}</p>
 
       <p className="mt-1 text-[14px] leading-relaxed text-ink-700">
         {across > 0

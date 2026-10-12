@@ -43,7 +43,7 @@ export default function Page() {
           <PartnerCard />
 
           <section className="pt-2">
-            <h2 className="px-1 pb-3 text-[13px] font-bold uppercase tracking-[0.12em] text-ink-400">
+            <h2 className="px-1 pb-3 text-[13px] font-bold uppercase tracking-[0.12em] text-ink-400 lg:pb-2 lg:text-[11px]">
               Your Information
             </h2>
 

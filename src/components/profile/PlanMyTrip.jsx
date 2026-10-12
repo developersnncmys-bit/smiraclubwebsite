@@ -4,8 +4,8 @@ import { ChevronRight } from 'lucide-react';
 /** The nudge to put a trip on the calendar before the reminders can help. */
 export default function PlanMyTrip() {
   return (
-    <section className="card flex h-full flex-col p-5 sm:p-6">
-      <h2 className="text-xl font-bold text-brand-700">Plan My Trip</h2>
+    <section className="card flex h-full flex-col p-5 sm:p-6 lg:p-4">
+      <h2 className="text-xl font-bold text-brand-700 lg:text-[15px]">Plan My Trip</h2>
 
       <p className="mt-2 text-[14px] leading-relaxed text-ink-600">
         Plan your trips in advance. We&rsquo;ll remind you about your special days, offers &amp;

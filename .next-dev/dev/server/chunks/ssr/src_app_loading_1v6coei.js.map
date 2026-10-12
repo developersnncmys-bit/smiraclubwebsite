@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/admin/Desktop/Dhanalakshmi/smirawebsite/src/app/loading.js"],"sourcesContent":["/** The skeleton the app router shows while a page is on its way. */\r\nexport default function Loading() {\r\n  return (\r\n    <div className=\"shell py-10\">\r\n      <div className=\"h-64 animate-pulse rounded-3xl bg-white/70\" />\r\n      <div className=\"mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4\">\r\n        {Array.from({ length: 4 }).map((_, i) => (\r\n          <div key={i} className=\"h-40 animate-pulse rounded-2xl bg-white/70\" />\r\n        ))}\r\n      </div>\r\n    </div>\r\n  );\r\n}\r\n"],"names":["Loading","className","Array","from","length","map","_","i"],"mappings":"AAAA,kEAAkE;;;;;;AACnD,SAASA;IACtB,qBACE,8OAAC;QAAIC,WAAU;;0BACb,8OAAC;gBAAIA,WAAU;;;;;;0BACf,8OAAC;gBAAIA,WAAU;0BACZC,MAAMC,IAAI,CAAC;oBAAEC,QAAQ;gBAAE,GAAGC,GAAG,CAAC,CAACC,GAAGC,kBACjC,8OAAC;wBAAYN,WAAU;uBAAbM;;;;;;;;;;;;;;;;AAKpB"}}]
+}

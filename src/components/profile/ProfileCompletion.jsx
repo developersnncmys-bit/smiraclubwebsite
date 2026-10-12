@@ -24,11 +24,11 @@ export default function ProfileCompletion() {
   const pct = Math.min(100, Math.max(0, profileCompletion(profile)));
 
   return (
-    <section className="card p-5 sm:p-6">
+    <section className="card p-5 sm:p-6 lg:p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-[15px] font-bold text-ink-900">Profile Completion</h2>
-          <p className="mt-1.5 text-[19px] font-bold text-action-500">{pct}% Completed</p>
+          <h2 className="text-[15px] font-bold text-ink-900 lg:text-[13.5px]">Profile Completion</h2>
+          <p className="mt-1.5 text-[19px] font-bold text-action-500 lg:text-[16px]">{pct}% Completed</p>
         </div>
 
         <div className="relative shrink-0">

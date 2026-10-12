@@ -20,7 +20,7 @@ export default function IdentityCard() {
   const photo = profile?.photo;
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2b8ce4] via-[#1a7ddd] to-[#1273e6] p-5 text-white shadow-card sm:p-6 lg:p-4">
       {isMember(membership) && (
         <span className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1.5 text-[13px] font-semibold backdrop-blur">
           <span className="h-2 w-2 rounded-full bg-white" />
@@ -29,7 +29,7 @@ export default function IdentityCard() {
       )}
 
       <div className="flex items-center gap-4">
-        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-white/85 sm:h-[72px] sm:w-[72px]">
+        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-white/85 sm:h-[72px] sm:w-[72px] lg:h-14 lg:w-14">
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photo} alt="" className="h-full w-full object-cover" />
@@ -42,7 +42,7 @@ export default function IdentityCard() {
           {/* The name, and only the name. "Hey " ate the width a long name
               needed, so anybody called more than a few letters was cut off
               mid-word by the Edit Profile button. */}
-          <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl">
+          <h1 className="truncate pr-16 text-[19px] font-bold leading-tight sm:pr-20 sm:text-2xl lg:text-[17px]">
             {name}
           </h1>
 
