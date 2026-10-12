@@ -13,7 +13,7 @@ import { toSrc } from '@/lib/imageSlot';
 function Box({ on }) {
   return (
     <span
-      className={`grid h-[18px] w-[18px] shrink-0 place-items-center rounded-[3px] border-2 transition ${
+      className={`grid h-[15px] w-[15px] shrink-0 place-items-center rounded-[3px] border-2 transition ${
         on ? 'border-action-500 bg-action-500 text-white' : 'border-ink-900 bg-white'
       }`}
     >
@@ -25,17 +25,17 @@ function Box({ on }) {
 /** The heading over each question. */
 function Ask({ icon, label }) {
   return (
-    <div className="flex items-start gap-3">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-surface-soft">
+    <div className="flex items-start gap-2.5">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-surface-soft">
         <Icon name={icon} size={19} className="text-ink-700" strokeWidth={1.8} />
       </span>
-      <h3 className="text-[15px] font-bold leading-snug text-ink-900">{label}</h3>
+      <h3 className="text-[13.5px] font-bold leading-snug text-ink-900">{label}</h3>
     </div>
   );
 }
 
 const SELECT =
-  'w-full cursor-pointer rounded-xl border border-surface-line bg-white px-4 py-3.5 text-[15px] text-ink-900 outline-none focus:border-action-500';
+  'w-full cursor-pointer rounded-xl border border-surface-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink-900 outline-none focus:border-action-500';
 
 /**
  * Find Your Perfect Membership.
@@ -103,25 +103,25 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
   };
 
   return (
-    <div className="shell space-y-4 py-5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
-      <section className="card p-4 sm:p-5">
+    <div className="shell space-y-3 py-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
+      <section className="card p-3.5 sm:p-4">
         <h2 className="text-xl font-bold text-action-500">{membershipQuizIntro.title}</h2>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-600">{membershipQuizIntro.body}</p>
+        <p className="mt-1.5 text-[13px] leading-snug text-ink-600">{membershipQuizIntro.body}</p>
       </section>
 
       {membershipQuiz.map((q) => (
-        <section key={q.key} className="card p-4 sm:p-5">
+        <section key={q.key} className="card p-3.5 sm:p-4">
           <Ask icon={q.icon} label={q.label} />
 
           <div className="mt-4">
             {q.type === 'chips' && (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {q.options.map((o) => {
                   const on = (answers[q.key] || []).includes(o);
                   return (
                     <label
                       key={o}
-                      className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-4 py-3.5 text-[14px] transition ${
+                      className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-[13px] transition ${
                         on ? 'border-action-500 bg-brand-50' : 'border-surface-line hover:bg-surface-soft'
                       }`}
                     >
@@ -153,7 +153,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             )}
 
             {q.type === 'pills' && (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {q.options.map((o) => {
                   const on = (answers[q.key] || []).includes(o);
                   return (
@@ -162,7 +162,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
                       type="button"
                       onClick={() => toggle(q.key, o)}
                       aria-pressed={on}
-                      className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-3 text-[14px] transition ${
+                      className={`inline-flex items-center gap-2.5 rounded-full border px-3.5 py-2 text-[13px] transition ${
                         on
                           ? 'border-action-500 text-action-500'
                           : 'border-surface-line text-ink-900 hover:bg-surface-soft'
@@ -187,7 +187,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
                   onChange={(e) => set(q.key, e.target.value)}
                   placeholder={q.placeholder}
                   aria-label={q.label}
-                  className="w-full resize-none rounded-xl border border-surface-line bg-white px-4 py-3.5 pb-8 text-[14px] text-ink-900 outline-none placeholder:text-ink-400 focus:border-action-500"
+                  className="w-full resize-none rounded-xl border border-surface-line bg-white px-3.5 py-2.5 pb-7 text-[13px] text-ink-900 outline-none placeholder:text-ink-400 focus:border-action-500"
                 />
                 <span className="pointer-events-none absolute bottom-3 right-4 text-[13px] text-ink-400">
                   {(answers[q.key] || '').length}/{q.max}
@@ -201,7 +201,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             <button
               type="button"
               onClick={recommend}
-              className="btn-primary mt-6 w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
+              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
             >
               Find My Best Membership
               <ArrowRight size={19} />
@@ -226,7 +226,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             </p>
           </section>
 
-          <section className="card p-4 sm:p-5">
+          <section className="card p-3.5 sm:p-4">
             <h2 className="text-lg font-bold text-ink-900">Why this is right fit for you?</h2>
 
             <ul className="mt-4 space-y-3.5">
@@ -243,7 +243,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             <button
               type="button"
               onClick={() => onPick(result.key)}
-              className="btn-primary mt-6 w-full gap-3 rounded-xl py-4 text-[15px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
+              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
             >
               Continue with {result.label} Membership
               <ArrowRight size={19} />

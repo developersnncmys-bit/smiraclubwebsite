@@ -19,10 +19,10 @@ const isoDay = (d) =>
 function Field({ icon: Glyph, className = '', children }) {
   return (
     <div
-      className={`relative flex min-w-0 items-center gap-2.5 rounded-xl border border-surface-line bg-white p-2.5 text-left ${className}`}
+      className={`relative flex min-w-0 items-center gap-2.5 rounded-xl border border-surface-line bg-white p-2.5 text-left max-lg:rounded-none max-lg:border-0 ${className}`}
     >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50">
-        <Glyph size={17} className="text-action-500" />
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 lg:h-9 lg:w-9">
+        <Glyph size={16} className="text-action-500" />
       </span>
       {children}
     </div>
@@ -153,7 +153,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
                   role="tab"
                   aria-selected={on}
                   onClick={() => setMode(m.key)}
-                  className={`rounded-xl py-3 text-[14px] font-semibold transition ${
+                  className={`rounded-xl py-2 text-[13px] font-semibold transition lg:py-2.5 ${
                     on
                       ? 'border border-brand-700 bg-brand-50 text-brand-700'
                       : 'border border-transparent text-ink-500 hover:text-ink-900'
@@ -192,6 +192,13 @@ export default function HotelsScreen({ variant = 'hotel' }) {
           onSubmit={submit}
           className="shell space-y-3 py-6 lg:grid lg:grid-cols-12 lg:gap-3 lg:space-y-0 lg:py-8"
         >
+          {/*
+            One box on a phone. The three fields were three frames stacked
+            down the screen for one question; hairlines between them say
+            the same thing. `contents` at lg hands the grid back its own
+            children, so the desktop row is unchanged.
+          */}
+          <div className="overflow-hidden rounded-xl border border-surface-line bg-white max-lg:divide-y max-lg:divide-surface-line lg:col-span-10 lg:contents">
           <Field icon={MapPin} className={hourly ? 'lg:col-span-3' : 'lg:col-span-6'}>
             <input
               value={destination}
@@ -201,12 +208,6 @@ export default function HotelsScreen({ variant = 'hotel' }) {
               className="w-full min-w-0 border-0 p-0 text-[14px] font-medium text-ink-900 outline-none placeholder:text-ink-900"
             />
           </Field>
-
-          {needsWhere && (
-            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:col-span-12">
-              Tell us where you are going first.
-            </p>
-          )}
 
           {hourly ? (
             <>
@@ -247,7 +248,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
                 </span>
               </Field>
 
-              <div className="grid grid-cols-2 gap-3 lg:col-span-4">
+              <div className="grid grid-cols-2 lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
                 <Field icon={Clock}>
                   <label className="relative min-w-0 flex-1 cursor-pointer">
                     <span className="block truncate text-[13px] font-bold text-ink-900">
@@ -271,7 +272,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
               </div>
             </>
           ) : (
-            <div className="grid grid-cols-2 gap-3 lg:col-span-4">
+            <div className="grid grid-cols-2 lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
               <Field icon={Calendar}>
                 <button
                   type="button"
@@ -285,10 +286,17 @@ export default function HotelsScreen({ variant = 'hotel' }) {
               {guestsField}
             </div>
           )}
+          </div>
+
+          {needsWhere && (
+            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:col-span-12">
+              Tell us where you are going first.
+            </p>
+          )}
 
           <button
             type="submit"
-            className="btn-primary w-full gap-2 py-3.5 text-[15px] lg:col-span-2 lg:py-0"
+            className="btn-primary w-full gap-2 py-3 text-[14px] lg:col-span-2 lg:py-0"
           >
             <Search size={18} />
             Search

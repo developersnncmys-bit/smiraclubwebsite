@@ -161,7 +161,13 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             someone types; dates and guests always hold a value, and the frame
             shows that value on its own line with no label over it.
           */}
-          <label className="flex items-center gap-3 rounded-xl border border-surface-line bg-white p-2.5 lg:min-w-0 lg:flex-1 lg:p-3">
+          {/*
+            One box on a phone, three in a row on a desktop. `contents`
+            takes the wrapper out of the layout at lg so the row below is
+            exactly what it was.
+          */}
+          <div className="overflow-hidden rounded-xl border border-surface-line bg-white max-lg:divide-y max-lg:divide-surface-line lg:contents">
+          <label className="flex items-center gap-3 p-2.5 max-lg:rounded-none max-lg:border-0 lg:min-w-0 lg:flex-1 lg:rounded-xl lg:border lg:border-surface-line lg:bg-white lg:p-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-50">
               <MapPin size={18} className="text-action-500" />
             </span>
@@ -179,18 +185,12 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             </span>
           </label>
 
-          {needsWhere && (
-            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:absolute lg:-bottom-6">
-              Tell us where you are going first.
-            </p>
-          )}
-
-          <div className="grid grid-cols-2 gap-3 lg:flex lg:shrink-0 lg:gap-3">
+          <div className="grid grid-cols-2 lg:flex lg:shrink-0 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
             <button
               type="button"
               onClick={() => setDatesOpen(true)}
               aria-expanded={datesOpen}
-              className="flex items-center gap-2 rounded-xl border border-surface-line bg-white p-2.5 text-left lg:w-[14rem]"
+              className="flex items-center gap-2 p-2.5 text-left max-lg:rounded-none max-lg:border-0 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
             >
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
                 <Calendar size={16} className="text-action-500" />
@@ -205,7 +205,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 type="button"
                 onClick={() => setGuestsOpen(true)}
                 aria-expanded={guestsOpen}
-                className="flex h-full w-full items-center gap-2 rounded-xl border border-surface-line bg-white p-2.5 text-left lg:w-[14rem]"
+                className="flex h-full w-full items-center gap-2 p-2.5 text-left max-lg:rounded-none max-lg:border-0 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
               >
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
                   <User size={16} className="text-action-500" />
@@ -236,8 +236,15 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
               setTo={setTo}
             />
           </div>
+          </div>
 
-          <button type="submit" className="btn-primary w-full gap-2.5 py-3.5 text-[17px] font-bold lg:w-auto lg:py-4 lg:shrink-0 lg:px-9">
+          {needsWhere && (
+            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:absolute lg:-bottom-6">
+              Tell us where you are going first.
+            </p>
+          )}
+
+          <button type="submit" className="btn-primary w-full gap-2.5 py-3 text-[15px] font-bold lg:w-auto lg:py-4 lg:shrink-0 lg:px-9">
             <Search size={18} />
             Search
           </button>
