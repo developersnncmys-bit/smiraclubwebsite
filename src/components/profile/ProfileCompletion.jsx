@@ -28,13 +28,13 @@ export default function ProfileCompletion() {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h2 className="text-[13.5px] font-bold text-ink-900 lg:text-[13px]">Profile Completion</h2>
-          <p className="mt-0.5 text-[16px] font-bold text-action-500 lg:text-[15px]">{pct}% Completed</p>
+          <p className="mt-0.5 text-[12px] leading-snug text-ink-500">{nudge(pct)}</p>
         </div>
 
         <div className="relative shrink-0">
           <svg
-            width="54"
-            height="54"
+            width="46"
+            height="46"
             viewBox="0 0 64 64"
             className="-rotate-90"
             role="img"
@@ -62,17 +62,13 @@ export default function ProfileCompletion() {
         </div>
       </div>
 
-      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-line">
+      <div className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-surface-line">
         <div className="h-full rounded-full bg-action-500" style={{ width: `${pct}%` }} />
       </div>
 
-      <p className="mt-2 text-[12.5px] leading-snug text-ink-700">
-        {nudge(pct)}
-      </p>
-
       <Link
         href="/profile/edit"
-        className="mt-2 inline-flex items-center gap-2 text-[12.5px] font-bold text-action-500 transition hover:text-action-600"
+        className="mt-2.5 inline-flex items-center gap-2 text-[12.5px] font-bold text-action-500 transition hover:text-action-600"
       >
         <Pencil size={16} />
         {pct === 100 ? 'Edit Profile' : 'Complete Profile'}

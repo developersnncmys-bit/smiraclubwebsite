@@ -46,12 +46,12 @@ module.exports = {
        * uses, the six heading steps interpolate between the two themselves.
        */
       fontSize: {
-        lg: ['clamp(0.9375rem, 0.829rem + 0.46vw, 1.125rem)', { lineHeight: '1.5' }],
-        xl: ['clamp(1rem, 0.856rem + 0.62vw, 1.25rem)', { lineHeight: '1.45' }],
-        '2xl': ['clamp(1.125rem, 0.908rem + 0.92vw, 1.5rem)', { lineHeight: '1.35' }],
-        '3xl': ['clamp(1.25rem, 0.889rem + 1.54vw, 1.875rem)', { lineHeight: '1.25' }],
-        '4xl': ['clamp(1.5rem, 1.067rem + 1.85vw, 2.25rem)', { lineHeight: '1.2' }],
-        '5xl': ['clamp(1.8125rem, 1.126rem + 2.93vw, 3rem)', { lineHeight: '1.12' }],
+        lg: ['clamp(0.875rem, 0.792rem + 0.35vw, 1.0625rem)', { lineHeight: '1.5' }],
+        xl: ['clamp(0.9375rem, 0.82rem + 0.49vw, 1.1875rem)', { lineHeight: '1.45' }],
+        '2xl': ['clamp(1.0625rem, 0.87rem + 0.82vw, 1.375rem)', { lineHeight: '1.35' }],
+        '3xl': ['clamp(1.125rem, 0.835rem + 1.23vw, 1.625rem)', { lineHeight: '1.25' }],
+        '4xl': ['clamp(1.3125rem, 0.964rem + 1.48vw, 1.9375rem)', { lineHeight: '1.2' }],
+        '5xl': ['clamp(1.5625rem, 1.015rem + 2.34vw, 2.5rem)', { lineHeight: '1.12' }],
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'Montserrat', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
