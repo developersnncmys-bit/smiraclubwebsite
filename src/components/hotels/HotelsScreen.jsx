@@ -19,10 +19,10 @@ const isoDay = (d) =>
 function Field({ icon: Glyph, className = '', children }) {
   return (
     <div
-      className={`relative flex min-w-0 items-center gap-2.5 rounded-xl border border-surface-line bg-white p-2.5 text-left max-lg:rounded-none max-lg:border-0 ${className}`}
+      className={`relative flex min-w-0 items-center rounded-xl border border-surface-line bg-white p-2.5 text-left max-lg:gap-1.5 max-lg:rounded-none max-lg:border-0 lg:gap-2.5 ${className}`}
     >
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 lg:h-9 lg:w-9">
-        <Glyph size={16} className="text-action-500" />
+      <span className="grid shrink-0 place-items-center rounded-lg text-action-500 max-lg:h-4 max-lg:w-4 lg:h-9 lg:w-9 lg:bg-brand-50">
+        <Glyph size={15} />
       </span>
       {children}
     </div>
@@ -113,7 +113,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
           type="button"
           onClick={() => setGuestsOpen(true)}
           aria-expanded={guestsOpen}
-          className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-ink-900 after:absolute after:inset-0"
+          className="min-w-0 flex-1 truncate text-left text-[12px] font-medium text-ink-900 after:absolute after:inset-0 lg:text-[13px]"
         >
           {summary}
         </button>
@@ -248,7 +248,7 @@ export default function HotelsScreen({ variant = 'hotel' }) {
                 </span>
               </Field>
 
-              <div className="grid grid-cols-2 lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
+              <div className="grid grid-cols-[1fr_1.2fr] lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
                 <Field icon={Clock}>
                   <label className="relative min-w-0 flex-1 cursor-pointer">
                     <span className="block truncate text-[13px] font-bold text-ink-900">
@@ -272,13 +272,13 @@ export default function HotelsScreen({ variant = 'hotel' }) {
               </div>
             </>
           ) : (
-            <div className="grid grid-cols-2 lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
+            <div className="grid grid-cols-[1fr_1.2fr] lg:col-span-4 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
               <Field icon={Calendar}>
                 <button
                   type="button"
                   onClick={() => setDatesOpen(true)}
                   aria-expanded={datesOpen}
-                  className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-ink-900 after:absolute after:inset-0"
+                  className="min-w-0 flex-1 truncate text-left text-[12px] font-medium text-ink-900 after:absolute after:inset-0 lg:text-[13px]"
                 >
                   {shortDate(from)} - {shortDate(to)}
                 </button>

@@ -185,17 +185,17 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             </span>
           </label>
 
-          <div className="grid grid-cols-2 lg:flex lg:shrink-0 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
+          <div className="grid grid-cols-[1fr_1.2fr] lg:flex lg:shrink-0 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
             <button
               type="button"
               onClick={() => setDatesOpen(true)}
               aria-expanded={datesOpen}
-              className="flex items-center gap-2 p-2.5 text-left max-lg:rounded-none max-lg:border-0 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
+              className="flex items-center p-2.5 text-left max-lg:gap-1.5 max-lg:rounded-none max-lg:border-0 lg:gap-2 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
             >
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
-                <Calendar size={16} className="text-action-500" />
+              <span className="grid shrink-0 place-items-center rounded-lg text-action-500 max-lg:h-4 max-lg:w-4 lg:h-8 lg:w-8 lg:bg-brand-50">
+                <Calendar size={15} />
               </span>
-              <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
+              <span className="min-w-0 truncate text-[12px] font-semibold text-ink-900 lg:text-[13px]">
                 {shortDate(from)} - {shortDate(to)}
               </span>
             </button>
@@ -205,12 +205,12 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 type="button"
                 onClick={() => setGuestsOpen(true)}
                 aria-expanded={guestsOpen}
-                className="flex h-full w-full items-center gap-2 p-2.5 text-left max-lg:rounded-none max-lg:border-0 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
+                className="flex h-full w-full items-center p-2.5 text-left max-lg:gap-1.5 max-lg:rounded-none max-lg:border-0 lg:gap-2 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
               >
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50">
-                  <User size={16} className="text-action-500" />
+                <span className="grid shrink-0 place-items-center rounded-lg text-action-500 max-lg:h-4 max-lg:w-4 lg:h-8 lg:w-8 lg:bg-brand-50">
+                  <User size={15} />
                 </span>
-                <span className="min-w-0 truncate text-[13px] font-semibold text-ink-900">
+                <span className="min-w-0 truncate text-[12px] font-semibold text-ink-900 lg:text-[13px]">
                   {summary}
                 </span>
               </button>
