@@ -48,7 +48,17 @@ export const api = {
    * Anything the desk adds there reaches the site without a deploy.
    */
   catalog: (query = '') => request(`/website/catalog${query}`, { next: { revalidate: 60 } }),
-  catalogItem: (id) => request(`/website/catalog/${encodeURIComponent(id)}`, { next: { revalidate: 60 } }),
+  /**
+   * One thing the desk sells. Pass the stay and the reply carries what
+   * the property charges for those nights, from its own calendar.
+   */
+  catalogItem: (id, stay) => {
+    const q = new URLSearchParams();
+    if (stay?.from) q.set('from', stay.from);
+    if (stay?.to) q.set('to', stay.to);
+    const tail = q.toString() ? `?${q}` : '';
+    return request(`/website/catalog/${encodeURIComponent(id)}${tail}`, { next: { revalidate: 60 } });
+  },
 
   /**
    * What somebody told the membership quiz.

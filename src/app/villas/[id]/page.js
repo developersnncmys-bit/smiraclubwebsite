@@ -72,8 +72,20 @@ export default async function Page({ params, searchParams }) {
    * into the same shape it draws this one, and whatever the partner left
    * empty falls back to the site's own copy rather than to a blank.
    */
+  /**
+   * The stay the search carried here. Without one we still need dates to
+   * show a picker around, so a sensible pair stands in — but `hasStay` says
+   * they were never chosen, and Book Now asks before it will go anywhere.
+   */
+  const hasStay = Boolean(query.from && query.to);
+  const fallback = defaultStay();
+  const stayFrom = ymd(query.from ? new Date(query.from) : fallback.from);
+  const stayTo = ymd(query.to ? new Date(query.to) : fallback.to);
+
   const own = ALL.find((v) => v.id === id);
-  const fromDesk = own ? null : await deskItem(id).then((i) => (i ? asProperty(i) : null));
+  const fromDesk = own
+    ? null
+    : await deskItem(id, { from: stayFrom, to: stayTo }).then((i) => (i ? asProperty(i) : null));
   const villa = own || fromDesk;
   if (!villa) notFound();
 
@@ -117,15 +129,6 @@ export default async function Page({ params, searchParams }) {
         ...(villa.amenities || []).slice(0, 8).map((a) => ({ key: a, label: a, icon: iconForAmenity(a) })),
       ];
 
-  /**
-   * The stay the search carried here. Without one we still need dates to
-   * show a picker around, so a sensible pair stands in — but `hasStay` says
-   * they were never chosen, and Book Now asks before it will go anywhere.
-   */
-  const hasStay = Boolean(query.from && query.to);
-  const fallback = defaultStay();
-  const stayFrom = ymd(query.from ? new Date(query.from) : fallback.from);
-  const stayTo = ymd(query.to ? new Date(query.to) : fallback.to);
   const adults = Number(query.adults) || 2;
   const rooms = Number(query.rooms) || 1;
   const childAges = String(query.ages || '')

@@ -92,10 +92,10 @@ export async function deskItems(category, { destination, q, limit = 24 } = {}) {
 }
 
 /** One thing the desk sells, or null if it is not theirs to sell. */
-export async function deskItem(id) {
+export async function deskItem(id, stay) {
   if (!api.isConfigured) return null;
   try {
-    const res = await api.catalogItem(id);
+    const res = await api.catalogItem(id, stay);
     const item = res.data;
     return item ? { ...item, photo: deskPhoto(item), photos: (item.images || []).filter(Boolean) } : null;
   } catch {
@@ -236,6 +236,14 @@ export function asProperty(item) {
     // Collected on every listing, required on both forms, and until now
     // dropped here — so the map searched a typed address instead.
     gps: item.gps || '',
+
+    /*
+     * What the property charges for the nights asked for, and the
+     * calendar behind it. Both are the partner’s own numbers — the
+     * member picks dates, never a price.
+     */
+    quote: item.quote || null,
+    calendar: item.calendar || [],
     nearby: d.nearby || [],
     amenities: item.amenities || [],
     checkIn: item.checkIn || '',
