@@ -72,7 +72,7 @@ export function deskPhoto(item) {
  * Everything the desk has on offer in one category, already shaped the way
  * a card wants it. `[]` when there is nothing, the API is unset, or it fails.
  */
-export async function deskItems(category, { destination, q, limit = 24 } = {}) {
+export async function deskItems(category, { destination, q, limit = 0 } = {}) {
   if (!api.isConfigured) return [];
   const query = new URLSearchParams({ category });
   if (destination) query.set('destination', destination);
@@ -80,7 +80,8 @@ export async function deskItems(category, { destination, q, limit = 24 } = {}) {
 
   try {
     const res = await api.catalog(`?${query.toString()}`);
-    return (res.data || []).slice(0, limit).map((item) => ({
+    const rows = res.data || [];
+    return (limit ? rows.slice(0, limit) : rows).map((item) => ({
       ...item,
       href: deskHref(item),
       photo: deskPhoto(item),
@@ -460,12 +461,13 @@ export async function deskFlashOffers() {
  * asking the API for a category of its own keeps one hotel one listing,
  * whichever way it is sold.
  */
-export async function deskFreeStays(limit = 12) {
-  const all = await deskItems('Hotels', { limit: 48 });
-  return all
-    .filter((item) => item.details?.freeStay)
-    .slice(0, limit)
-    .map((item) => ({ ...item, href: `/free-stay/${item.id}` }));
+export async function deskFreeStays(limit = 0) {
+  const all = await deskItems('Hotels');
+  const free = all.filter((item) => item.details?.freeStay);
+  return (limit ? free.slice(0, limit) : free).map((item) => ({
+    ...item,
+    href: `/free-stay/${item.id}`,
+  }));
 }
 
 /* -- The blog ------------------------------------------------------------- */
