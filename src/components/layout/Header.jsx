@@ -79,6 +79,9 @@ export default function Header() {
               {memberBadge.label}
             </Link>
 
+            {/* The page's own search, on the pages that have one. */}
+            <HeaderSearch />
+
             {/* Who you are, and how much of that this site knows. */}
             <ProfileDot profile={profile} />
 
@@ -105,6 +108,8 @@ export default function Header() {
               {memberBadge.label}
             </Link>
 
+            <HeaderSearch desktop />
+
             <ProfileDot profile={profile} size={36} />
 
             <Link
@@ -128,8 +133,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* The search, once the page has scrolled past the panel itself. */}
-        <HeaderSearch />
       </div>
     </header>
   );
