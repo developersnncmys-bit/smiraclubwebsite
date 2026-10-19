@@ -11,6 +11,7 @@ import WatchExplore from '@/components/home/WatchExplore';
 import ClosingLine from '@/components/home/ClosingLine';
 import PlanTripReminder from '@/components/home/PlanTripReminder';
 import AiSearchFab from '@/components/home/AiSearchFab';
+import ContactFab from '@/components/layout/ContactFab';
 import { heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
 import { deskHomeBanners, deskHomeOffers } from '@/lib/desk';
 import { image } from '@/lib/images';
@@ -70,6 +71,8 @@ export default async function HomePage() {
       <WatchExplore />
       <ClosingLine />
       <AiSearchFab />
+      {/* WhatsApp and the telephone, above the tab bar and the pill. */}
+      <ContactFab />
     </>
   );
 }

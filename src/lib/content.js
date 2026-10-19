@@ -18,6 +18,15 @@ export const site = {
   name: 'Smira Club',
   tagline: 'Sweet memories is really affordable',
   city: 'Bengaluru',
+
+  /*
+   * The desk, as a reader reaches it. The same number was written into
+   * the membership help card and nowhere else, so every other place
+   * that wanted it either did without or invented one.
+   */
+  phone: '+919833733477',
+  phoneLabel: '+91 98337 33477',
+  whatsapp: 'https://wa.me/919833733477',
 };
 
 /** The hero carousel — three slides, as the 1/3 counter in the design says. */
