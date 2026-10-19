@@ -46,12 +46,13 @@ export default function Services({ art = {} }) {
               href={service.href}
               className={`group flex-col items-center gap-2 text-center ${i >= 8 && !open ? 'hidden' : 'flex'}`}
             >
-              <span className="grid h-16 w-16 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-100 group-active:scale-95 lg:h-[72px] lg:w-[72px]">
-                <span className="relative block h-11 w-11 lg:h-12 lg:w-12">
+              {/* The same box and the same artwork size as a search tab. */}
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-100 group-active:scale-95 lg:h-14 lg:w-14">
+                <span className="relative block h-9 w-9 lg:h-11 lg:w-11">
                   {art[service.key] ? (
-                    <Image src={art[service.key]} alt="" fill sizes="48px" className="object-contain" />
+                    <Image src={art[service.key]} alt="" fill sizes="44px" className="object-contain" />
                   ) : (
-                    <Icon name={service.icon} size={28} strokeWidth={1.6} className="absolute inset-0 m-auto" />
+                    <Icon name={service.icon} size={22} strokeWidth={1.7} className="absolute inset-0 m-auto" />
                   )}
                 </span>
               </span>
