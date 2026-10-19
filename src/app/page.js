@@ -3,6 +3,7 @@ import SearchPanel from '@/components/home/SearchPanel';
 import Services from '@/components/home/Services';
 import RecentSearches from '@/components/home/RecentSearches';
 import MemberBenefits from '@/components/home/MemberBenefits';
+import ForNonMembers from '@/components/membership/ForNonMembers';
 import FlashOffers from '@/components/home/FlashOffers';
 import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
@@ -55,7 +56,14 @@ export default async function HomePage() {
       <Services art={serviceArt(services.map((s) => s.key))} />
       <PlanTripReminder trips={trips} />
       <RecentSearches />
-      <MemberBenefits />
+      {/*
+        What membership gives, for somebody who has not got one. A
+        member scrolling past four cards selling them a membership
+        they already hold is being asked to buy it twice.
+      */}
+      <ForNonMembers>
+        <MemberBenefits />
+      </ForNonMembers>
       <FlashOffers />
       <ClubBanner />
       <GrabOffers offers={offerCards} />

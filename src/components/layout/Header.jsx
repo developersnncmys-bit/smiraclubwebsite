@@ -59,7 +59,7 @@ export default function Header() {
    */
   const memberBadge = isMember(membership)
     ? { label: `${membership.plan} Member`, href: '/membership' }
-    : { label: 'Become a Member', href: '/membership' };
+    : { label: 'Join a Member', href: '/membership' };
   const { profile } = useProfile();
 
   return (
