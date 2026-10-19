@@ -1,91 +1,54 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { MapPin, Calendar, User, Search } from 'lucide-react';
 import Icon from '@/components/ui/Icon';
-import DatesPicker from '@/components/home/DatesPicker';
-import GuestsPicker from '@/components/home/GuestsPicker';
 import { searchTabs } from '@/lib/content';
 import { publishSearch } from '@/lib/headerSearch';
-import { searchHref } from '@/lib/searchRoute';
-import { defaultStay, shortDate } from '@/lib/format';
+import { defaultStay } from '@/lib/format';
 
 /**
- * The four tabs and the search form. Stacked on a phone exactly as drawn; on
- * a desktop the three fields and the button sit on one line, which is what
- * anyone booking on a laptop expects.
+ * The four tabs, and nothing else.
  *
- * The tabs are links, not a filter: each opens that category's own screen,
- * the way the prototype moves between them. `active` is which of the four is
- * lit and the kind a search is submitted under, so a category page can render
- * this same panel with its own tab already chosen.
+ * The form used to sit under them — destination, dates, guests and a
+ * button — and it is in the header now, a tap away from anywhere on the
+ * page rather than only from the top of it. Two of them would be the
+ * same question asked twice, so this keeps the tabs and hands the
+ * header the rest.
+ *
+ * The tabs are links, not a filter: each opens that category's own
+ * screen, the way the prototype moves between them. `active` is which
+ * of the four is lit, and the kind the header searches under.
  */
 export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
-  const router = useRouter();
   const stay = defaultStay();
-
-  /**
-   * What is being searched for.
-   *
-   * The tab the panel was opened under. Each tab is a link to its own
-   * screen, and every one of those carries a search of its own, so this
-   * is the kind for whichever screen you are on.
-   */
   const kind = active;
 
-  const [destination, setDestination] = useState('');
-  const [from, setFrom] = useState(stay.from.toISOString().slice(0, 10));
-  const [to, setTo] = useState(stay.to.toISOString().slice(0, 10));
-  const [adults, setAdults] = useState(2);
-  const [rooms, setRooms] = useState(1);
-  /** One entry per child, holding that child's age — the design asks for both. */
-  const [childAges, setChildAges] = useState([]);
-  const [guestsOpen, setGuestsOpen] = useState(false);
-  const [datesOpen, setDatesOpen] = useState(false);
-
-  /** 'Adults/ Room' when nobody brings a child, and says so when they do. */
-  const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
-  const summary = [
-    plural(adults, 'Adult'),
-    childAges.length ? plural(childAges.length, 'Child').replace('Childs', 'Children') : null,
-  ]
-    .filter(Boolean)
-    .join(', ')
-    .concat(`/ ${plural(rooms, 'Room')}`);
-
-  const [needsWhere, setNeedsWhere] = useState(false);
-
   /*
-   * Hand the header what is in the form, so the compact bar it shows
-   * once this has scrolled away is this search and not another one.
+   * Tell the header there is a search to be made here, and what it
+   * starts from. Without this the header shows no icon at all — which
+   * is right on a page with nothing to search, and wrong on this one.
    */
+  const from = stay.from.toISOString().slice(0, 10);
+  const to = stay.to.toISOString().slice(0, 10);
   useEffect(() => {
-    publishSearch({ kind, destination, from, to, adults, rooms, childAges, guests: summary });
+    publishSearch({
+      kind,
+      destination: '',
+      from,
+      to,
+      adults: 2,
+      rooms: 1,
+      childAges: [],
+      guests: '2 Adults/ 1 Room',
+    });
     return () => publishSearch(null);
-  }, [kind, destination, from, to, adults, rooms, childAges, summary]);
-
-  const submit = (e) => {
-    e.preventDefault();
-
-    // A search with nothing in it is not a search. It used to go through
-    // and the results screen filled the gap with Goa, so somebody who
-    // pressed Search by accident got a page of Goa hotels and no idea why.
-    if (!destination.trim()) {
-      setNeedsWhere(true);
-      return;
-    }
-    setNeedsWhere(false);
-
-    router.push(searchHref({ kind, destination, from, to, adults, rooms, childAges }));
-  };
+  }, [kind, from, to]);
 
   return (
     <div id="home-search" className="shell scroll-mt-20 pt-3 lg:pt-0">
       <div className="lg:card lg:relative lg:z-10 lg:-mt-20 lg:p-7">
-        {/* -- The four tabs -------------------------------------------- */}
         <nav
           aria-label="What are you looking for"
           className="grid grid-cols-4 overflow-hidden rounded-2xl bg-surface-soft lg:inline-flex lg:gap-1 lg:rounded-xl lg:bg-transparent lg:p-0"
@@ -123,119 +86,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
               </Link>
             );
           })}
-
         </nav>
-
-        {/* -- The form -------------------------------------------------- */}
-        <form
-          onSubmit={submit}
-          className="mt-3 space-y-2.5 lg:mt-5 lg:flex lg:items-stretch lg:gap-3 lg:space-y-0"
-        >
-          {/*
-            Destination carries its caption because the field is empty until
-            someone types; dates and guests always hold a value, and the frame
-            shows that value on its own line with no label over it.
-          */}
-          {/*
-            One box on a phone, three in a row on a desktop. `contents`
-            takes the wrapper out of the layout at lg so the row below is
-            exactly what it was.
-          */}
-          <div className="overflow-hidden rounded-xl border border-surface-line bg-white max-lg:divide-y max-lg:divide-surface-line lg:contents">
-          <label className="flex items-center gap-3 p-2.5 max-lg:rounded-none max-lg:border-0 lg:min-w-0 lg:flex-1 lg:rounded-xl lg:border lg:border-surface-line lg:bg-white lg:p-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-50">
-              <MapPin size={18} className="text-action-500" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[11px] font-bold uppercase tracking-[0.06em] text-ink-400">
-                Destination
-              </span>
-              <input
-                id="home-destination"
-                value={destination}
-                onChange={(e) => { setDestination(e.target.value); setNeedsWhere(false); }}
-                placeholder="Where are you going?"
-                className="w-full border-0 p-0 text-[15px] font-bold text-ink-900 outline-none placeholder:text-ink-500"
-              />
-            </span>
-
-            {/* The search itself, on the line it belongs to. */}
-            <button
-              type="submit"
-              aria-label="Search"
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-action-500 text-white transition active:scale-95 lg:hidden"
-            >
-              <Search size={17} />
-            </button>
-          </label>
-
-          <div className="grid grid-cols-[1fr_1.2fr] lg:flex lg:shrink-0 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
-            <button
-              type="button"
-              onClick={() => setDatesOpen(true)}
-              aria-expanded={datesOpen}
-              className="flex items-center p-2.5 text-left max-lg:gap-1.5 max-lg:rounded-none max-lg:border-0 lg:gap-2 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
-            >
-              <span className="grid shrink-0 place-items-center rounded-lg text-action-500 max-lg:h-4 max-lg:w-4 lg:h-8 lg:w-8 lg:bg-brand-50">
-                <Calendar size={15} />
-              </span>
-              <span className="min-w-0 truncate text-[12px] font-semibold text-ink-900 lg:text-[13px]">
-                {shortDate(from)} - {shortDate(to)}
-              </span>
-            </button>
-
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setGuestsOpen(true)}
-                aria-expanded={guestsOpen}
-                className="flex h-full w-full items-center p-2.5 text-left max-lg:gap-1.5 max-lg:rounded-none max-lg:border-0 lg:gap-2 lg:w-[14rem] lg:rounded-xl lg:border lg:border-surface-line lg:bg-white"
-              >
-                <span className="grid shrink-0 place-items-center rounded-lg text-action-500 max-lg:h-4 max-lg:w-4 lg:h-8 lg:w-8 lg:bg-brand-50">
-                  <User size={15} />
-                </span>
-                <span className="min-w-0 truncate text-[12px] font-semibold text-ink-900 lg:text-[13px]">
-                  {summary}
-                </span>
-              </button>
-
-              <GuestsPicker
-                open={guestsOpen}
-                onClose={() => setGuestsOpen(false)}
-                rooms={rooms}
-                setRooms={setRooms}
-                adults={adults}
-                setAdults={setAdults}
-                childAges={childAges}
-                setChildAges={setChildAges}
-              />
-            </div>
-
-            <DatesPicker
-              open={datesOpen}
-              onClose={() => setDatesOpen(false)}
-              from={from}
-              setFrom={setFrom}
-              to={to}
-              setTo={setTo}
-            />
-          </div>
-          </div>
-
-          {needsWhere && (
-            <p role="alert" className="text-[13px] font-semibold text-rose-600 lg:absolute lg:-bottom-6">
-              Tell us where you are going first.
-            </p>
-          )}
-
-          <button
-            type="submit"
-            className="btn-primary hidden w-full gap-2.5 py-3 text-[15px] font-bold lg:inline-flex lg:w-auto lg:shrink-0 lg:px-9 lg:py-4"
-          >
-            <Search size={18} />
-            Search
-          </button>
-        </form>
       </div>
     </div>
   );

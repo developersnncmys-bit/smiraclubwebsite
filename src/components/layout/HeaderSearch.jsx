@@ -67,9 +67,13 @@ export function HeaderSearchBox() {
   const [datesOpen, setDatesOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
 
-  /** Opening takes a copy of the panel's values; closing leaves them be. */
+  /**
+   * The first open takes the page's starting dates; later ones keep
+   * whatever was chosen last, because a member who set 25–27 October,
+   * closed the box and opened it again meant to keep those dates.
+   */
   useEffect(() => {
-    if (!open || !search) return;
+    if (!open || !search || from) return;
     setDestination(search.destination || '');
     setFrom(search.from);
     setTo(search.to);
