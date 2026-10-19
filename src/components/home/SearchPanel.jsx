@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,8 @@ import Icon from '@/components/ui/Icon';
 import DatesPicker from '@/components/home/DatesPicker';
 import GuestsPicker from '@/components/home/GuestsPicker';
 import { searchTabs } from '@/lib/content';
+import { publishSearch } from '@/lib/headerSearch';
+import { searchHref } from '@/lib/searchRoute';
 import { defaultStay, shortDate } from '@/lib/format';
 
 /**
@@ -54,23 +56,16 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
     .join(', ')
     .concat(`/ ${plural(rooms, 'Room')}`);
 
-  /**
-   * Where a search lands, by the tab it was made under.
-   *
-   * Every search went to /results, which lists hotels and villas. So
-   * searching under Free Stay returned nightly rooms with prices on them,
-   * and searching under Package returned no packages at all — the tab was
-   * lit, read, and then ignored. Each tab has a screen of its own and the
-   * search goes to it.
-   */
-  const RESULTS = {
-    'free-stay': '/free-stay/results',
-    hotel: '/results',
-    villa: '/villas/search',
-    package: '/packages',
-  };
-
   const [needsWhere, setNeedsWhere] = useState(false);
+
+  /*
+   * Hand the header what is in the form, so the compact bar it shows
+   * once this has scrolled away is this search and not another one.
+   */
+  useEffect(() => {
+    publishSearch({ kind, destination, from, to, adults, rooms, childAges, guests: summary });
+    return () => publishSearch(null);
+  }, [kind, destination, from, to, adults, rooms, childAges, summary]);
 
   const submit = (e) => {
     e.preventDefault();
@@ -84,27 +79,7 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
     }
     setNeedsWhere(false);
 
-    const params = new URLSearchParams({
-      kind,
-      destination,
-      from,
-      to,
-      adults: String(adults),
-      rooms: String(rooms),
-      children: String(childAges.length),
-    });
-    // A hotel prices a nine-year-old differently from a two-year-old, so the
-    // ages travel with the search rather than just the count.
-    if (childAges.length) params.set('ages', childAges.join(','));
-
-    // Packages are not booked by the night, so dates and guests mean
-    // nothing to that screen; it is given what was typed and no more.
-    const to_ = RESULTS[kind] || '/results';
-    router.push(
-      kind === 'package'
-        ? `/packages${destination.trim() ? `?destination=${encodeURIComponent(destination.trim())}` : ''}`
-        : `${to_}?${params.toString()}`,
-    );
+    router.push(searchHref({ kind, destination, from, to, adults, rooms, childAges }));
   };
 
   return (

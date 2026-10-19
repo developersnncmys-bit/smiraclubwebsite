@@ -7,6 +7,7 @@ import Logo from '@/components/ui/Logo';
 import { isMember, useMembership } from '@/lib/membership';
 import { useProfile } from '@/lib/profile';
 import ProfileDot from '@/components/layout/ProfileDot';
+import HeaderSearch from '@/components/layout/HeaderSearch';
 import { api } from '@/lib/api';
 import { getSessionToken } from '@/lib/session';
 
@@ -126,6 +127,9 @@ export default function Header() {
             </Link>
           </div>
         </div>
+
+        {/* The search, once the page has scrolled past the panel itself. */}
+        <HeaderSearch />
       </div>
     </header>
   );
