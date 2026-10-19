@@ -158,6 +158,15 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
                 className="w-full border-0 p-0 text-[15px] font-bold text-ink-900 outline-none placeholder:text-ink-500"
               />
             </span>
+
+            {/* The search itself, on the line it belongs to. */}
+            <button
+              type="submit"
+              aria-label="Search"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-action-500 text-white transition active:scale-95 lg:hidden"
+            >
+              <Search size={17} />
+            </button>
           </label>
 
           <div className="grid grid-cols-[1fr_1.2fr] lg:flex lg:shrink-0 lg:gap-3 max-lg:divide-x max-lg:divide-surface-line">
@@ -219,7 +228,10 @@ export default function SearchPanel({ active = searchTabs[0].key, art = {} }) {
             </p>
           )}
 
-          <button type="submit" className="btn-primary w-full gap-2.5 py-3 text-[15px] font-bold lg:w-auto lg:py-4 lg:shrink-0 lg:px-9">
+          <button
+            type="submit"
+            className="btn-primary hidden w-full gap-2.5 py-3 text-[15px] font-bold lg:inline-flex lg:w-auto lg:shrink-0 lg:px-9 lg:py-4"
+          >
             <Search size={18} />
             Search
           </button>
