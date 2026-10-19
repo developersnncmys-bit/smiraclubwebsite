@@ -519,6 +519,22 @@ export async function deskBlog(slug) {
  * `[]` when the desk has not set one up, which is the signal the home page
  * uses to fall back to the cards the site ships with.
  */
+/**
+ * The banners the desk has put live, newest arrangement first.
+ *
+ * `[]` when the desk has written none, which is the home page's cue
+ * to rotate the three the site ships with.
+ */
+export async function deskHomeBanners() {
+  if (!api.isConfigured) return [];
+  try {
+    const res = await api.homeBanners();
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
 export async function deskHomeOffers() {
   if (!api.isConfigured) return [];
   try {

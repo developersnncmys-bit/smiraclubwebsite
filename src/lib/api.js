@@ -95,6 +95,9 @@ export const api = {
 
   /** The Grab Offers strip the desk arranges in the panel. */
   homeOffers: () => request('/website/home-offers', { next: { revalidate: 30 } }),
+
+  /** The banner carousel the desk writes in the panel. */
+  homeBanners: () => request('/website/home-banners', { next: { revalidate: 30 } }),
   blogPost: (slug) =>
     request(`/website/blogs/${encodeURIComponent(slug)}`, { next: { revalidate: 30 } }),
   /** A complaint from Get Help; it opens a ticket on the support desk. */

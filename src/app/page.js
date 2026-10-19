@@ -11,15 +11,27 @@ import ClosingLine from '@/components/home/ClosingLine';
 import PlanTripReminder from '@/components/home/PlanTripReminder';
 import AiSearchFab from '@/components/home/AiSearchFab';
 import { heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
-import { deskHomeOffers } from '@/lib/desk';
+import { deskHomeBanners, deskHomeOffers } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { serviceArt } from '@/lib/serviceArt';
 
 /** The home screen, in the order the design scrolls. */
 export default async function HomePage() {
-  // Resolved here: the hero and the offers strip are interactive, so they
-  // cannot read the filesystem themselves.
-  const slides = heroSlides.map((slide) => ({ ...slide, image: image(slide.image) }));
+  /*
+   * Resolved here: the hero and the offers strip are interactive, so they
+   * cannot read the filesystem themselves.
+   *
+   * The banners are the desk's where it has written any, and the three
+   * the site ships with where it has not — a home page with no banner at
+   * all is worse than a stale one. A desk banner carries a full address
+   * for its photograph, which image() passes through untouched, so both
+   * kinds go through the same line.
+   */
+  const written = await deskHomeBanners();
+  const slides = (written.length ? written : heroSlides).map((slide) => ({
+    ...slide,
+    image: image(slide.image),
+  }));
 
   /*
    * Grab Offers: the strip the desk has arranged in the panel, or the
