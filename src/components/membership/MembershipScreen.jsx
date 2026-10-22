@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Check, Crown, Gift, Info, ShieldCheck, Ticket } from 'lucide-react';
@@ -285,6 +285,18 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   const plan =
     plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
   const versus = tab === 'versus';
+
+  /*
+   * Bring the chosen tier into view along its rail.
+   *
+   * Platinum is the one the page opens on and it sits fourth, so on a
+   * phone the tab that is marked was off the right-hand edge and the
+   * rail looked as though nothing had been chosen at all.
+   */
+  const chosenTab = useRef(null);
+  useEffect(() => {
+    chosenTab.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }, [plan.key, tab]);
 
   /** How many privileges are still theirs to pick. */
   const left = Math.max(0, plan.privileges - privileges.length);
@@ -603,7 +615,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         The pitch. The comparison makes a different argument from the plans,
         so it gets its own banner rather than being sold the same way twice.
       */}
-      <section className="relative overflow-hidden bg-[#123a63]">
+      <section className="relative overflow-hidden rounded-b-3xl bg-[#123a63] lg:rounded-b-[2rem]">
         <div className="absolute inset-y-0 right-0 w-1/2">
           <Image
             src={toSrc(versus ? compare || 'compare-landmarks' : hero || 'villa-hero-luxury')}
@@ -675,19 +687,37 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
       ) : (
         <div className="shell py-5 lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
           <div className="space-y-4 lg:col-span-8">
-          {/* -- Pick a tier --------------------------------------- */}
-          <div className="rail items-end gap-3 pt-4">
+          {/*
+            Pick a tier.
+
+            The chosen one is a tab rather than a pill: square at the
+            foot, sitting on a band of its own colour that the panel
+            below hangs from. The colour runs from the word pressed
+            into the panel it opened, which is how the design marks
+            what is selected — a pill that is merely taller does not.
+          */}
+          <div>
+          <div className="rail items-end gap-2 pt-4">
             {plans.map((p) => {
-              const on = p.key === planKey;
+              /*
+               * Marked against the plan on show, not the key last
+               * pressed. Nothing is pressed when the page opens, so the
+               * panel showed one plan while every tab above it looked
+               * unchosen.
+               */
+              const on = p.key === plan.key;
               return (
                 <button
                   key={p.key}
+                  ref={on ? chosenTab : undefined}
                   type="button"
                   onClick={() => setPlanKey(p.key)}
                   aria-pressed={on}
                   style={{ backgroundImage: p.gradient }}
-                  className={`relative w-[8.5rem] shrink-0 rounded-2xl px-3 text-white transition ${
-                    on ? 'py-9 shadow-lift' : 'py-6 opacity-90 hover:opacity-100'
+                  className={`relative w-[8.5rem] shrink-0 rounded-t-2xl px-3 text-white transition ${
+                    on
+                      ? 'z-10 py-9 shadow-[0_-6px_18px_rgba(17,24,32,0.14)]'
+                      : 'py-4 opacity-80 hover:opacity-100'
                   }`}
                 >
                   {p.popular && (
@@ -705,12 +735,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             })}
           </div>
 
-          {/* -- What that tier is ---------------------------------- */}
+          {/* -- What that tier is, hanging from the tab ------------ */}
           <section
             style={{ backgroundImage: plan.gradient }}
-            className="overflow-hidden rounded-2xl p-1.5 pt-3"
+            className="-mt-1 overflow-hidden rounded-b-2xl rounded-tr-2xl p-1.5 pt-5"
           >
-            <div className="rounded-2xl bg-white p-4 sm:p-5">
+            <div className="rounded-xl rounded-t-2xl bg-white p-4 sm:p-5">
               <h2 className="text-[17px] lg:text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
               <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
@@ -770,6 +800,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               </button>
             </div>
           </section>
+          </div>
 
           {/*
             What's Included — whatever the desk has put on this plan.
