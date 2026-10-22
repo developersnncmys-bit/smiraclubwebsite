@@ -525,6 +525,32 @@ export async function deskBlog(slug) {
  * `[]` when the desk has written none, which is the home page's cue
  * to rotate the three the site ships with.
  */
+/**
+ * A spread of what the desk sells, across every kind of thing.
+ *
+ * Taken one category at a time and dealt out round-robin, so a desk
+ * with forty hotels and two spas does not hand back a page of
+ * hotels. `[]` when the desk has nothing, which is the screen’s cue
+ * to show the suggestions the site ships with.
+ */
+export async function deskSpread(limit = 8) {
+  if (!api.isConfigured) return [];
+
+  const kinds = ['Hotels', 'Villas', 'Packages', 'Activities', 'Attractions', 'Restaurants', 'Spa and salon', 'Experiences', 'Games'];
+  const lists = await Promise.all(kinds.map((kind) => deskItems(kind)));
+
+  const out = [];
+  for (let round = 0; out.length < limit; round += 1) {
+    const before = out.length;
+    lists.forEach((list) => {
+      if (list[round] && out.length < limit) out.push(list[round]);
+    });
+    // Every category exhausted: stop rather than loop for ever.
+    if (out.length === before) break;
+  }
+  return out;
+}
+
 export async function deskHomeBanners() {
   if (!api.isConfigured) return [];
   try {

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AiSearchBar from '@/components/search/AiSearchBar';
 import { aiPrompts, aiRecommendations, aiSearchPlaceholder } from '@/lib/content';
+import { deskSpread } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { inr } from '@/lib/format';
 
@@ -9,6 +10,9 @@ export const metadata = {
   title: 'AI Search',
   description: 'Describe the trip you want and Smira Club will find it.',
 };
+
+/** The desk is re-read a minute at a time, like the rest of the site. */
+export const revalidate = 60;
 
 /**
  * AI Search.
@@ -18,11 +22,41 @@ export const metadata = {
  * doing work — it marks off the part of the screen you type into from the
  * part you browse, which is the difference between the two halves of the page.
  *
+ * What it suggests is what the desk has listed — a spread across hotels,
+ * villas, packages, activities and the rest — rather than the four
+ * written into the site, which recommended the same four things to
+ * everybody and sent two of them to properties nobody sells any more.
+ * Where the desk has listed nothing, the built-in four still carry the
+ * screen rather than leaving it empty.
+ *
  * The images resolve on the server, so the screen stays a static render and
  * only the search box itself ships as script.
  */
-export default function Page() {
+export default async function Page() {
   const prompts = aiPrompts.map((p) => ({ ...p, src: image(p.image) }));
+
+  const listed = await deskSpread(8);
+  const picks = listed.length
+    ? listed.map((item) => ({
+        key: item.id,
+        title: item.name,
+        blurb: item.place || item.category,
+        src: item.photo,
+        price: item.price,
+        was: item.was,
+        unit: item.category === 'Packages' ? 'per person' : 'per night',
+        href: item.href,
+      }))
+    : aiRecommendations.map((r) => ({
+        key: r.key,
+        title: r.title,
+        blurb: r.blurb,
+        src: image(r.image),
+        price: r.price,
+        was: r.was,
+        unit: r.unit,
+        href: r.href,
+      }));
 
   return (
     <>
@@ -41,14 +75,16 @@ export default function Page() {
           <h2 className="text-[18px] font-bold text-ink-900 lg:text-2xl">
             AI Recommendations For You
           </h2>
-          <p className="mt-1 text-[14px] text-ink-500">Based on your Interest</p>
+          <p className="mt-1 text-[14px] text-ink-500">
+            {listed.length ? 'Across everything Smira Club has listed' : 'Based on your Interest'}
+          </p>
 
           <ul className="mt-5 grid grid-cols-2 gap-4 lg:mt-7 lg:grid-cols-4 lg:gap-6">
-            {aiRecommendations.map((r, i) => (
+            {picks.map((r, i) => (
               <li key={r.key} className="card flex flex-col overflow-hidden">
                 <span className="relative block aspect-[4/3] w-full">
                   <Image
-                    src={image(r.image)}
+                    src={r.src}
                     alt=""
                     fill
                     sizes="(min-width: 1024px) 22vw, 45vw"
@@ -62,8 +98,12 @@ export default function Page() {
                 </span>
 
                 <div className="flex flex-1 flex-col p-4">
-                  <h3 className="text-[15px] font-bold leading-tight text-ink-900">{r.title}</h3>
-                  <p className="mt-1.5 text-[13px] leading-snug text-ink-500">{r.blurb}</p>
+                  <h3 className="line-clamp-2 text-[15px] font-bold leading-tight text-ink-900">
+                    {r.title}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-ink-500">
+                    {r.blurb}
+                  </p>
 
                   <p className="mt-4 text-[13px] text-ink-700">
                     From{' '}
@@ -76,7 +116,7 @@ export default function Page() {
 
                   <Link
                     href={r.href}
-                    className="mt-4 block rounded-xl border border-brand-200 py-3 text-center text-[13px] font-bold uppercase tracking-[0.06em] text-action-500 transition hover:bg-brand-50"
+                    className="mt-auto block rounded-xl border border-brand-200 py-3 text-center text-[13px] font-bold uppercase tracking-[0.06em] text-action-500 transition hover:bg-brand-50"
                   >
                     View Details
                   </Link>
