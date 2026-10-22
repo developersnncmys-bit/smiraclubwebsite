@@ -1219,37 +1219,44 @@ export const member = {
   savedAcross: 6,
 };
 
-/** Your Information — the two grouped lists, in the order the design runs. */
-export const profileMenu = [
-  {
-    id: 'account',
-    items: [
-      { label: 'Change Password', icon: 'Pencil', href: '/profile/password' },
-      { label: 'My Bookings', icon: 'Briefcase', href: '/profile/bookings' },
-      { label: 'My Wishlist', icon: 'Heart', href: '/wishlist' },
-      { label: 'My Membership', icon: 'Ticket', href: '/membership' },
-      { label: 'My Travel Year', icon: 'PlaneTakeoff', href: '/profile/travel-year' },
-      { label: 'Refer & Earn', icon: 'Wallet', href: '/profile/referrals' },
-      { label: 'Claim Your Gifts', icon: 'Gift', href: '/profile/rewards' },
-      { label: 'My Reviews', icon: 'Star', href: '/profile/reviews' },
-      { label: 'Saved Address', icon: 'MapPin', href: '/profile/addresses' },
-      { label: 'Saved Payments', icon: 'CreditCard', href: '/profile/payments' },
-    ],
-  },
-  {
-    id: 'support',
-    items: [
-      { label: 'More from Smira Club', icon: 'MoreHorizontal', href: '/more' },
-      { label: 'Get Help', icon: 'Headset', href: '/more/support' },
-      { label: 'Account Settings', icon: 'Settings', href: '/profile/settings' },
-      { label: 'Language Settings', icon: 'Languages', href: '/profile/language' },
-      { label: 'Privacy Policy', icon: 'FileText', href: '/more/privacy' },
-      { label: 'Terms & Conditions', icon: 'ScrollText', href: '/more/terms' },
-      { label: 'Refund Policy', icon: 'HandCoins', href: '/more/refunds' },
-      { label: 'Cancellation Policy', icon: 'FileX2', href: '/more/cancellation' },
-      { label: 'Delete Account', icon: 'Trash2', href: '/profile/delete' },
-    ],
-  },
+/**
+ * The profile screen, in the three groups the design draws: what you
+ * hold, what you have earned, and what you manage.
+ */
+export const profileTiles = [
+  [
+    { label: 'Bookings', icon: 'Briefcase', href: '/profile/bookings' },
+    { label: 'Wishlist', icon: 'Heart', href: '/wishlist' },
+    { label: 'Membership', icon: 'Ticket', href: '/membership' },
+    { label: 'Travel Year', icon: 'PlaneTakeoff', href: '/profile/travel-year' },
+  ],
+  [
+    { label: 'Refer & Earn', icon: 'Wallet', href: '/profile/referrals' },
+    { label: 'Claim Your Gifts', icon: 'Gift', href: '/profile/rewards' },
+    { label: 'My Reviews', icon: 'Star', href: '/profile/reviews' },
+    { label: 'Saved Address', icon: 'MapPin', href: '/profile/addresses' },
+  ],
+  [
+    { label: 'Saved Payments', icon: 'CreditCard', href: '/profile/payments' },
+    { label: 'Change Password', icon: 'Pencil', href: '/profile/password' },
+    { label: 'More from Smira Club', icon: 'MoreHorizontal', href: '/more' },
+    { label: 'Get Help', icon: 'Headset', href: '/more/support' },
+  ],
+];
+
+/**
+ * The rest: settings and the paperwork.
+ *
+ * Not tiles, because nobody is looking for the refund policy at a
+ * glance — but they cannot only live under More either, since three
+ * of them have no other home.
+ */
+export const profileSettings = [
+  { label: 'Account Settings', icon: 'Settings', href: '/profile/settings' },
+  { label: 'Language Settings', icon: 'Languages', href: '/profile/language' },
+  { label: 'Terms & Conditions', icon: 'ScrollText', href: '/more/terms' },
+  { label: 'Privacy Policy', icon: 'FileText', href: '/more/privacy' },
+  { label: 'Delete Account', icon: 'Trash2', href: '/profile/delete' },
 ];
 
 /** The starter prompts on the AI Search screen. */

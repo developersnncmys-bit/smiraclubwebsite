@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { ChevronRight, Crown } from 'lucide-react';
 import { isMember, useMembership } from '@/lib/membership';
+import { useSavings } from '@/lib/savings';
+import { inr } from '@/lib/format';
 import { privilegeInfo } from '@/lib/privileges';
 import Icon from '@/components/ui/Icon';
 
@@ -17,6 +19,7 @@ const validTill = (iso) =>
 export default function MembershipCard() {
   const { membership } = useMembership();
   const member = isMember(membership);
+  const { total, across } = useSavings();
 
   /*
    * The services this membership actually bought.
@@ -77,6 +80,23 @@ export default function MembershipCard() {
           )}
         </div>
       )}
+
+      {/*
+        What the membership has saved them, inside the card making the
+        case for it. On its own it was a pale blue box reading zero,
+        which is an odd thing to show somebody who has not joined.
+      */}
+      <div className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-ink-900/20 px-3.5 py-2.5">
+        <span className="min-w-0">
+          <span className="block text-[12px] font-bold">Your Smira Club savings</span>
+          <span className="mt-0.5 block text-[11px] leading-snug text-white/75">
+            {across > 0
+              ? `Across ${across} ${across === 1 ? 'booking' : 'bookings'}`
+              : 'Book as a member to start saving'}
+          </span>
+        </span>
+        <span className="num shrink-0 text-[17px] font-extrabold">{inr(total)}</span>
+      </div>
 
       <Link
         href="/membership"
