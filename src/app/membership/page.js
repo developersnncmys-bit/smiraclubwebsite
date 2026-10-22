@@ -2,7 +2,7 @@ import ScreenBar from '@/components/ui/ScreenBar';
 import MembershipScreen from '@/components/membership/MembershipScreen';
 import { deskOffers, deskPlans } from '@/lib/desk';
 import { image } from '@/lib/images';
-import { privilegeArt } from '@/lib/privilegeArt';
+import { serviceArt } from '@/lib/serviceArt';
 import { membershipPrivileges } from '@/lib/content';
 
 /** The desk's plans are re-read a minute at a time, like the rest of the site. */
@@ -54,11 +54,20 @@ export default async function Page() {
         desk={desk}
         offers={offers}
         /*
-         * The privileges’ own illustrations, resolved here because
-         * reading the filesystem is a server job and this screen runs
-         * in the browser.
+         * The artwork each privilege wears: the same illustration its
+         * service tile carries on the home page, so the ten things are
+         * recognisable in both places. Resolved here because reading
+         * the filesystem is a server job and this screen runs in the
+         * browser. A tour package is the package tile; the other nine
+         * keys name their artwork outright.
          */
-        privilegeArt={privilegeArt(membershipPrivileges.map((x) => x.key))}
+        privilegeArt={(() => {
+          const art = serviceArt([
+            ...membershipPrivileges.map((x) => x.key),
+            'package',
+          ]);
+          return { ...art, tour: art.tour || art.package };
+        })()}
       />
     </>
   );

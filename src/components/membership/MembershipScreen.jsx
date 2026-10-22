@@ -286,6 +286,19 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
   const versus = tab === 'versus';
 
+  /** How many privileges are still theirs to pick. */
+  const left = Math.max(0, plan.privileges - privileges.length);
+
+  /**
+   * The nearest plan that allows more than this one.
+   *
+   * Only worth offering where it exists: the top plan has nothing above
+   * it, and a plan that allows the same number is not an upgrade.
+   */
+  const above = plans
+    .filter((p) => (p.privileges || 0) > (plan.privileges || 0))
+    .sort((a, b) => a.privileges - b.privileges)[0];
+
   /** The gifts the desk has put on this plan. Not a choice the member makes. */
   const gifts = useMemo(() => (plan.gifts || []).filter(Boolean), [plan]);
 
@@ -794,17 +807,56 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
           {/* -- Pick your privileges ------------------------------- */}
           <section>
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
-              <p className="text-[12.5px] lg:text-[14px] font-semibold text-action-500">
-                {privileges.length} of {plan.privileges} chosen
-              </p>
-            </div>
-            <p className="mt-0.5 text-[12.5px] lg:text-[14px] text-ink-500">
-              {plan.label} members choose up to {plan.privileges} of {membershipPrivileges.length}.
-            </p>
+            <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
 
-            <div className="card mt-3 space-y-3 p-3 sm:p-4">
+            {/*
+              The count, drawn rather than described. "0 of 5 chosen" is
+              a fact; a bar with five lengths and one filled is the same
+              fact read at a glance, and it says how many are left.
+            */}
+            <div className="card mt-2 p-3.5 lg:p-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-[13px] lg:text-[14px] font-semibold text-ink-700">
+                  {plan.label} members choose
+                </p>
+                <p className="num shrink-0 text-[17px] lg:text-xl font-extrabold text-ink-900">
+                  {privileges.length} / {plan.privileges}
+                </p>
+              </div>
+
+              <div className="mt-2.5 flex gap-1" aria-hidden="true">
+                {Array.from({ length: plan.privileges }).map((_, i) => (
+                  <span
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={i}
+                    className="h-1.5 flex-1 rounded-full transition"
+                    style={{ background: i < privileges.length ? plan.accent : "#e6eaef" }}
+                  />
+                ))}
+              </div>
+
+              <p className="mt-2 text-[12px] lg:text-[13px] text-ink-500">
+                {left > 0
+                  ? `Choose ${left} more from the ${membershipPrivileges.length} privileges.`
+                  : `All ${plan.privileges} chosen. Take one off to swap it for another.`}
+              </p>
+
+              {/* The plan above this one, where there is one to move up to. */}
+              {above && (
+                <p className="mt-1.5 text-[12px] lg:text-[13px] text-ink-500">
+                  Want more?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setPlanKey(above.key)}
+                    className="font-bold text-action-500 transition hover:text-action-600"
+                  >
+                    Get {above.privileges - plan.privileges} more with {above.label} &rarr;
+                  </button>
+                </p>
+              )}
+            </div>
+
+            <div className="card mt-2.5 space-y-2 p-2.5 sm:p-3">
               {membershipPrivileges.map((p) => {
                 const on = privileges.includes(p.key);
                 // Spent the allowance: the rest are not yours to take.
@@ -813,7 +865,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   <label
                     key={p.key}
                     aria-disabled={locked}
-                    className={`flex items-center gap-3 rounded-xl p-3.5 transition ${
+                    className={`flex items-center gap-2.5 rounded-xl p-2.5 transition lg:gap-3 lg:p-3 ${
                       on
                         ? 'cursor-pointer bg-[#fdf3dd]'
                         : locked
@@ -836,7 +888,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     */}
                     <span
                       aria-hidden="true"
-                      className={`relative grid h-12 w-12 shrink-0 place-items-center rounded-xl transition ${
+                      className={`relative grid h-10 w-10 shrink-0 place-items-center rounded-xl transition lg:h-11 lg:w-11 ${
                         on ? 'bg-white text-ink-900' : 'bg-white/70 text-ink-500'
                       }`}
                     >
@@ -845,17 +897,17 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                           src={privilegeArt[p.key]}
                           alt=""
                           fill
-                          sizes="48px"
-                          className="object-contain p-1.5"
+                          sizes="44px"
+                          className="object-contain p-1"
                         />
                       ) : (
-                        <Icon name={p.icon} size={21} strokeWidth={1.8} />
+                        <Icon name={p.icon} size={19} strokeWidth={1.8} />
                       )}
                     </span>
 
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[13.5px] lg:text-[15px] font-bold text-ink-900">{p.label}</span>
-                      <span className="mt-0.5 block text-[12.5px] lg:text-[14px] leading-snug text-ink-600">
+                      <span className="block text-[12.5px] lg:text-[14px] font-bold text-ink-900">{p.label}</span>
+                      <span className="mt-0.5 block text-[11px] lg:text-[12.5px] leading-snug text-ink-600">
                         {p.body}
                       </span>
                     </span>
