@@ -716,7 +716,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   style={{ backgroundImage: p.gradient }}
                   className={`relative w-[8.5rem] shrink-0 rounded-t-2xl px-3 text-white transition ${
                     on
-                      ? 'z-10 py-9 shadow-[0_-6px_18px_rgba(17,24,32,0.14)]'
+                      ? 'z-10 py-7 shadow-[0_-6px_18px_rgba(17,24,32,0.14)]'
                       : 'py-4 opacity-80 hover:opacity-100'
                   }`}
                 >
@@ -738,9 +738,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           {/* -- What that tier is, hanging from the tab ------------ */}
           <section
             style={{ backgroundImage: plan.gradient }}
-            className="-mt-1 overflow-hidden rounded-b-2xl rounded-tr-2xl p-1.5 pt-5"
+            className="-mt-1 overflow-hidden rounded-b-3xl rounded-tr-2xl pt-4"
           >
-            <div className="rounded-xl rounded-t-2xl bg-white p-4 sm:p-5">
+            <div className="rounded-b-3xl rounded-t-[1.75rem] bg-white p-4 sm:p-5">
               <h2 className="text-[17px] lg:text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
               <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
