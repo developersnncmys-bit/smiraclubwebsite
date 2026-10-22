@@ -738,9 +738,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           {/* -- What that tier is, hanging from the tab ------------ */}
           <section
             style={{ backgroundImage: plan.gradient }}
-            className="-mt-1 overflow-hidden rounded-b-3xl rounded-tr-2xl pt-4"
+            className="-mt-1 overflow-hidden rounded-b-2xl rounded-tr-xl pt-2.5"
           >
-            <div className="rounded-b-3xl rounded-t-[1.75rem] bg-white p-4 sm:p-5">
+            <div className="rounded-b-2xl rounded-t-xl bg-white p-4 sm:p-5">
               <h2 className="text-[17px] lg:text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
               <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
