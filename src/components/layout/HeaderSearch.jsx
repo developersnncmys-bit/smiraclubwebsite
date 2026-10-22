@@ -7,7 +7,7 @@ import DatesPicker from '@/components/home/DatesPicker';
 import GuestsPicker from '@/components/home/GuestsPicker';
 import { useHeaderSearch, useSearchOpen, setSearchOpen } from '@/lib/headerSearch';
 import { searchHref } from '@/lib/searchRoute';
-import { shortDate } from '@/lib/format';
+import { defaultStay, shortDate } from '@/lib/format';
 
 /**
  * The search, where the member already is.
@@ -24,10 +24,7 @@ import { shortDate } from '@/lib/format';
 
 /** The icon in the header rows. Both tap the same box open. */
 export default function HeaderSearch({ desktop = false }) {
-  const search = useHeaderSearch();
   const open = useSearchOpen();
-
-  if (!search) return null;
 
   return (
     <button
@@ -71,15 +68,19 @@ export function HeaderSearchBox() {
    * The first open takes the page's starting dates; later ones keep
    * whatever was chosen last, because a member who set 25–27 October,
    * closed the box and opened it again meant to keep those dates.
+   *
+   * On a page with no panel of its own — Profile, Wishlist, a property —
+   * there is nothing to copy, so it opens on the next couple of nights.
    */
   useEffect(() => {
-    if (!open || !search || from) return;
-    setDestination(search.destination || '');
-    setFrom(search.from);
-    setTo(search.to);
-    setAdults(search.adults ?? 2);
-    setRooms(search.rooms ?? 1);
-    setChildAges(search.childAges || []);
+    if (!open || from) return;
+    const stay = defaultStay();
+    setDestination(search?.destination || '');
+    setFrom(search?.from || stay.from.toISOString().slice(0, 10));
+    setTo(search?.to || stay.to.toISOString().slice(0, 10));
+    setAdults(search?.adults ?? 2);
+    setRooms(search?.rooms ?? 1);
+    setChildAges(search?.childAges || []);
     // Only when it opens: re-copying on every keystroke would fight the typing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -102,7 +103,7 @@ export function HeaderSearchBox() {
     };
   }, [open]);
 
-  if (!search || !open) return null;
+  if (!open) return null;
 
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
   const guests = [
@@ -114,7 +115,7 @@ export function HeaderSearchBox() {
     .concat(`/ ${plural(rooms, 'Room')}`);
 
   const go = () => {
-    const href = searchHref({ kind: search.kind, destination, from, to, adults, rooms, childAges });
+    const href = searchHref({ kind: search?.kind || 'hotel', destination, from, to, adults, rooms, childAges });
     // Nothing typed is not a search; the cursor stays where the typing goes.
     if (!href) {
       box.current?.querySelector('input')?.focus();
