@@ -8,12 +8,13 @@ import FlashOffers from '@/components/home/FlashOffers';
 import ClubBanner from '@/components/home/ClubBanner';
 import GrabOffers from '@/components/home/GrabOffers';
 import WatchExplore from '@/components/home/WatchExplore';
+import HomeBlogs from '@/components/home/HomeBlogs';
 import ClosingLine from '@/components/home/ClosingLine';
 import PlanTripReminder from '@/components/home/PlanTripReminder';
 import AiSearchFab from '@/components/home/AiSearchFab';
 import ContactFab from '@/components/layout/ContactFab';
-import { heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
-import { deskHomeBanners, deskHomeOffers } from '@/lib/desk';
+import { blogs, heroSlides, offers, searchTabs, services, travelYears } from '@/lib/content';
+import { deskBlogs, deskHomeBanners, deskHomeOffers } from '@/lib/desk';
 import { image } from '@/lib/images';
 import { serviceArt } from '@/lib/serviceArt';
 
@@ -46,6 +47,19 @@ export default async function HomePage() {
     ...offer,
     image: image(offer.image),
   }));
+
+  /*
+   * The reading: what the desk has published, then the site's own,
+   * four of them. A post whose address matches a bundled one wins,
+   * so taking an article over at the desk leaves no duplicate — the
+   * same rule the blogs screen itself follows.
+   */
+  const posts = await deskBlogs();
+  const taken = new Set(posts.map((b) => b.id));
+  const reading = [...posts, ...blogs.filter((b) => !taken.has(b.id))]
+    .slice(0, 4)
+    .map((b) => ({ ...b, photo: image(b.image) }));
+
   const trips = Object.values(travelYears).flat().map((t) => ({
     id: t.id, title: t.title, start: t.start, end: t.end, guests: t.guests, image: image(t.image),
   }));
@@ -69,6 +83,8 @@ export default async function HomePage() {
       <ClubBanner />
       <GrabOffers offers={offerCards} />
       <WatchExplore />
+      {/* What the desk has written, where the rest of the reading is. */}
+      <HomeBlogs items={reading} />
       <ClosingLine />
       <AiSearchFab />
       {/* WhatsApp and the telephone, above the tab bar and the pill. */}
