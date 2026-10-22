@@ -105,8 +105,8 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
   return (
     <div className="shell space-y-3 py-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
       <section className="card p-3.5 sm:p-4">
-        <h2 className="text-xl font-bold text-action-500">{membershipQuizIntro.title}</h2>
-        <p className="mt-1.5 text-[13px] leading-snug text-ink-600">{membershipQuizIntro.body}</p>
+        <h2 className="text-[17px] lg:text-xl font-bold text-action-500">{membershipQuizIntro.title}</h2>
+        <p className="mt-1.5 text-[12px] lg:text-[13px] leading-snug text-ink-600">{membershipQuizIntro.body}</p>
       </section>
 
       {membershipQuiz.map((q) => (
@@ -121,7 +121,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
                   return (
                     <label
                       key={o}
-                      className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-[13px] transition ${
+                      className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-[12px] lg:text-[13px] transition ${
                         on ? 'border-action-500 bg-brand-50' : 'border-surface-line hover:bg-surface-soft'
                       }`}
                     >
@@ -162,7 +162,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
                       type="button"
                       onClick={() => toggle(q.key, o)}
                       aria-pressed={on}
-                      className={`inline-flex items-center gap-2.5 rounded-full border px-3.5 py-2 text-[13px] transition ${
+                      className={`inline-flex items-center gap-2.5 rounded-full border px-3.5 py-2 text-[12px] lg:text-[13px] transition ${
                         on
                           ? 'border-action-500 text-action-500'
                           : 'border-surface-line text-ink-900 hover:bg-surface-soft'
@@ -187,9 +187,9 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
                   onChange={(e) => set(q.key, e.target.value)}
                   placeholder={q.placeholder}
                   aria-label={q.label}
-                  className="w-full resize-none rounded-xl border border-surface-line bg-white px-3.5 py-2.5 pb-7 text-[13px] text-ink-900 outline-none placeholder:text-ink-400 focus:border-action-500"
+                  className="w-full resize-none rounded-xl border border-surface-line bg-white px-3.5 py-2.5 pb-7 text-[12px] lg:text-[13px] text-ink-900 outline-none placeholder:text-ink-400 focus:border-action-500"
                 />
-                <span className="pointer-events-none absolute bottom-3 right-4 text-[13px] text-ink-400">
+                <span className="pointer-events-none absolute bottom-3 right-4 text-[12px] lg:text-[13px] text-ink-400">
                   {(answers[q.key] || '').length}/{q.max}
                 </span>
               </div>
@@ -201,7 +201,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             <button
               type="button"
               onClick={recommend}
-              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
+              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[12.5px] lg:text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
             >
               Find My Best Membership
               <ArrowRight size={19} />
@@ -213,25 +213,25 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
       {result && (
         <>
           <section className={`rounded-2xl bg-gradient-to-br p-5 text-white ${result.tone}`}>
-            <p className="text-[15px]">Your Perfect Plan is</p>
-            <p className="mt-2 flex items-center gap-3 text-2xl font-bold">
+            <p className="text-[13.5px] lg:text-[15px]">Your Perfect Plan is</p>
+            <p className="mt-2 flex items-center gap-3 text-[20px] lg:text-2xl font-bold">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/25">
                 <Crown size={22} className="text-gold" fill="currentColor" strokeWidth={1.5} />
               </span>
               {result.label} Membership
             </p>
-            <p className="mt-3 text-[14px] leading-relaxed text-white/90">
+            <p className="mt-3 text-[12.5px] lg:text-[14px] leading-relaxed text-white/90">
               Based on your preferences we recommend you {result.label} Plan for the best travel
               experience.
             </p>
           </section>
 
           <section className="card p-3.5 sm:p-4">
-            <h2 className="text-lg font-bold text-ink-900">Why this is right fit for you?</h2>
+            <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Why this is right fit for you?</h2>
 
             <ul className="mt-4 space-y-3.5">
               {membershipReasons[result.key].map((reason) => (
-                <li key={reason} className="flex items-center gap-3 text-[15px] text-ink-900">
+                <li key={reason} className="flex items-center gap-3 text-[13.5px] lg:text-[15px] text-ink-900">
                   <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-action-500 text-white">
                     <Check size={13} strokeWidth={3} />
                   </span>
@@ -243,7 +243,7 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
             <button
               type="button"
               onClick={() => onPick(result.key)}
-              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
+              className="btn-primary mt-5 w-full gap-3 rounded-xl py-3 text-[12.5px] lg:text-[14px] normal-case tracking-normal lg:w-auto lg:px-10 lg:py-3.5"
             >
               Continue with {result.label} Membership
               <ArrowRight size={19} />
@@ -258,15 +258,15 @@ export default function MembershipQuiz({ helper, onPick, onAnswers }) {
               height={140}
               className="mx-auto h-auto w-[120px]"
             />
-            <h2 className="mt-4 text-xl font-bold text-ink-900">{membershipQuizOutro.title}</h2>
-            <p className="mx-auto mt-2 max-w-sm text-[14px] leading-relaxed text-ink-600">
+            <h2 className="mt-4 text-[17px] lg:text-xl font-bold text-ink-900">{membershipQuizOutro.title}</h2>
+            <p className="mx-auto mt-2 max-w-sm text-[12.5px] lg:text-[14px] leading-relaxed text-ink-600">
               {membershipQuizOutro.body}
             </p>
 
             <button
               type="button"
               onClick={() => onPick(null)}
-              className="mt-6 w-full rounded-xl border-2 border-action-500 px-5 py-4 text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
+              className="mt-6 w-full rounded-xl border-2 border-action-500 px-5 py-4 text-[13.5px] lg:text-[15px] font-bold text-action-500 transition hover:bg-brand-50"
             >
               {membershipQuizOutro.cta}
             </button>

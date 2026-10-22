@@ -5,10 +5,18 @@ import WishlistButton from '@/components/villas/WishlistButton';
 import { toSrc } from '@/lib/imageSlot';
 import { inr } from '@/lib/format';
 
-/** One recommended villa, in the order the design reads it. */
+/**
+ * One recommended villa, in the order the design reads it.
+ *
+ * The whole card opens the villa. Only the button did, which meant a
+ * tap on the photograph, the name or the price — the three things a
+ * thumb lands on — did nothing at all. The link is stretched over the
+ * card rather than wrapped around it, so the heart stays a button of
+ * its own instead of becoming part of the link.
+ */
 export default function VillaCard({ villa, query }) {
   return (
-    <article className="card flex h-full flex-col overflow-hidden">
+    <article className="card relative flex h-full flex-col overflow-hidden transition hover:shadow-lift">
       <div className="relative aspect-[16/10] w-full shrink-0">
         <Image
           src={toSrc(villa.image)}
@@ -84,7 +92,7 @@ export default function VillaCard({ villa, query }) {
 
           <Link
             href={query ? `/villas/${villa.id}?${query}` : `/villas/${villa.id}`}
-            className="btn-primary shrink-0 px-5 py-3"
+            className="btn-primary shrink-0 px-5 py-3 after:absolute after:inset-0 after:content-['']"
           >
             Select Villa
             <ArrowRight size={17} />

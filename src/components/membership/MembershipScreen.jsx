@@ -602,10 +602,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         </div>
         <div className="relative shell py-8 lg:py-14">
           <div className="max-w-[15rem] sm:max-w-sm lg:max-w-md">
-            <h1 className="text-[19px] font-bold leading-snug text-white lg:text-4xl">
+            <h1 className="text-[17px] font-bold leading-snug text-white lg:text-4xl">
               {versus ? membershipCompareHero.title : 'Explore Smira Club Membership plans'}
             </h1>
-            <p className="mt-3 text-[13px] leading-snug text-white/85 lg:text-lg">
+            <p className="mt-3 text-[12px] leading-snug text-white/85 lg:text-lg">
               {versus
                 ? membershipCompareHero.body
                 : 'Choose the plan that fits your travel style and enjoy exclusive benefits.'}
@@ -616,7 +616,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
       {returning && (
         <div className="shell pt-4">
-          <p role="status" className="rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[14px] font-medium text-brand-700">
+          <p role="status" className="rounded-xl border border-action-500/30 bg-brand-50 px-4 py-3 text-[12.5px] lg:text-[14px] font-medium text-brand-700">
             Details and bookings are for Smira Club members. Choose a plan below and we will take you straight back.{' '}
             <a href={`/login?next=${encodeURIComponent(nextTo || '/profile')}`} className="font-bold underline">Already a member? Log in</a>
           </p>
@@ -635,7 +635,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   type="button"
                   onClick={() => goTo(t.key)}
                   aria-pressed={on}
-                  className={`w-[7.5rem] shrink-0 border-b-2 py-4 text-left text-[14px] font-semibold leading-snug transition lg:w-auto ${
+                  className={`w-[7.5rem] shrink-0 border-b-2 py-4 text-left text-[12.5px] lg:text-[14px] font-semibold leading-snug transition lg:w-auto ${
                     on ? 'border-ink-900 text-ink-900' : 'border-transparent text-ink-500 hover:text-ink-700'
                   }`}
                 >
@@ -683,10 +683,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       Most Popular
                     </span>
                   )}
-                  <span className="block text-[15px] font-extrabold uppercase tracking-wide">
+                  <span className="block text-[13.5px] lg:text-[15px] font-extrabold uppercase tracking-wide">
                     {p.label}
                   </span>
-                  {!on && <span className="mt-1 block text-[13px] leading-tight">{p.audience}</span>}
+                  {!on && <span className="mt-1 block text-[12px] lg:text-[13px] leading-tight">{p.audience}</span>}
                 </button>
               );
             })}
@@ -698,14 +698,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             className="overflow-hidden rounded-2xl p-1.5 pt-3"
           >
             <div className="rounded-2xl bg-white p-4 sm:p-5">
-              <h2 className="text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
-              <p className="mt-1 text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
+              <h2 className="text-[17px] lg:text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
+              <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-700">{plan.blurb}</p>
 
               <dl className="mt-5 grid grid-cols-2 gap-3">
                 {plan.stats.map((s) => (
                   <div key={s.note} className="rounded-xl p-3.5" style={{ background: plan.soft }}>
-                    <dt className="text-[15px] font-bold" style={{ color: plan.accent }}>{s.figure}</dt>
-                    <dd className="text-[13px] leading-snug text-ink-700">{s.note}</dd>
+                    <dt className="text-[13.5px] lg:text-[15px] font-bold" style={{ color: plan.accent }}>{s.figure}</dt>
+                    <dd className="text-[12px] lg:text-[13px] leading-snug text-ink-700">{s.note}</dd>
                   </div>
                 ))}
               </dl>
@@ -724,7 +724,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     hands every gift over there is nothing to choose, so
                     it says what it is instead of promising a choice.
                   */}
-                  <h3 className="mt-6 text-[15px] font-bold uppercase tracking-wide text-ink-900">
+                  <h3 className="mt-6 text-[13.5px] lg:text-[15px] font-bold uppercase tracking-wide text-ink-900">
                     {Number(plan.giftChoices) > 0
                       ? `Choose any ${plan.giftChoices} gift${plan.giftChoices > 1 ? 's' : ''}`
                       : 'Gifts for members'}
@@ -733,7 +733,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     {plan.gifts.map((g) => (
                       <li
                         key={g}
-                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold"
+                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] lg:text-[13px] font-semibold"
                         style={{ background: plan.soft, color: plan.accent }}
                       >
                         <Gift size={14} /> {g}
@@ -744,14 +744,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               )}
 
               <div className="mt-6 flex items-center justify-between gap-4">
-                <span className="text-[15px] font-semibold text-ink-900">Membership fee</span>
-                <span className="text-xl font-extrabold text-ink-900">{inr(plan.fee)}</span>
+                <span className="text-[13.5px] lg:text-[15px] font-semibold text-ink-900">Membership fee</span>
+                <span className="text-[17px] lg:text-xl font-extrabold text-ink-900">{inr(plan.fee)}</span>
               </div>
 
               <button
                 type="button"
                 style={{ backgroundImage: plan.gradient }}
-                className="mt-4 w-full rounded-xl px-5 py-3.5 text-[15px] font-bold text-white transition hover:brightness-105"
+                className="mt-4 w-full rounded-xl px-5 py-3.5 text-[13.5px] lg:text-[15px] font-bold text-white transition hover:brightness-105"
               >
                 Select The Plan
               </button>
@@ -771,7 +771,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           {included.length > 0 && (
             /* The footer's Member benefits link lands here. */
             <section id="benefits" className="scroll-mt-24">
-              <h2 className="text-lg font-bold text-ink-900">What&rsquo;s Included</h2>
+              <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">What&rsquo;s Included</h2>
               <ul className="card mt-3 divide-y divide-surface-line">
                 {included.map((item) => (
                   <li key={item.title} className="flex gap-3 p-4 sm:p-5">
@@ -779,9 +779,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       <Check size={13} strokeWidth={3} />
                     </span>
                     <span>
-                      <span className="block text-[15px] font-bold text-ink-900">{item.title}</span>
+                      <span className="block text-[13.5px] lg:text-[15px] font-bold text-ink-900">{item.title}</span>
                       {item.body && (
-                        <span className="mt-1 block text-[14px] leading-relaxed text-ink-600">
+                        <span className="mt-1 block text-[12.5px] lg:text-[14px] leading-relaxed text-ink-600">
                           {item.body}
                         </span>
                       )}
@@ -795,12 +795,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           {/* -- Pick your privileges ------------------------------- */}
           <section>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
-              <p className="text-[14px] font-semibold text-action-500">
+              <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
+              <p className="text-[12.5px] lg:text-[14px] font-semibold text-action-500">
                 {privileges.length} of {plan.privileges} chosen
               </p>
             </div>
-            <p className="mt-0.5 text-[14px] text-ink-500">
+            <p className="mt-0.5 text-[12.5px] lg:text-[14px] text-ink-500">
               {plan.label} members choose up to {plan.privileges} of {membershipPrivileges.length}.
             </p>
 
@@ -854,8 +854,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     </span>
 
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[15px] font-bold text-ink-900">{p.label}</span>
-                      <span className="mt-0.5 block text-[14px] leading-snug text-ink-600">
+                      <span className="block text-[13.5px] lg:text-[15px] font-bold text-ink-900">{p.label}</span>
+                      <span className="mt-0.5 block text-[12.5px] lg:text-[14px] leading-snug text-ink-600">
                         {p.body}
                       </span>
                     </span>
@@ -887,10 +887,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                         <Info size={21} />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-[16px] font-bold text-ink-900">
+                        <p className="text-[14px] lg:text-[16px] font-bold text-ink-900">
                           {plan.label} includes {full.allowed} {full.what}
                         </p>
-                        <p className="mt-1 text-[14px] leading-snug text-ink-600">
+                        <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-600">
                           You have chosen {full.taken}. Take one off to swap it for another, or move up
                           a plan for more.
                         </p>
@@ -901,7 +901,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       <button
                         type="button"
                         onClick={() => setFull(null)}
-                        className="btn-primary flex-1 rounded-xl py-3 text-[14px]"
+                        className="btn-primary flex-1 rounded-xl py-3 text-[12.5px] lg:text-[14px]"
                       >
                         Got it
                       </button>
@@ -912,7 +912,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                           goTo('plans');
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
-                        className="btn-quiet flex-1 rounded-xl py-3 text-[14px]"
+                        className="btn-quiet flex-1 rounded-xl py-3 text-[12.5px] lg:text-[14px]"
                       >
                         See the plans
                       </button>
@@ -931,17 +931,17 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   <Gift size={20} className="text-[#6d4bd8]" />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-lg font-bold leading-tight text-[#6d4bd8]">
+                  <p className="text-[15px] lg:text-lg font-bold leading-tight text-[#6d4bd8]">
                     {membershipOffer.title}
                   </p>
-                  <p className="mt-1 text-[14px] leading-snug text-ink-800">
+                  <p className="mt-1 text-[12.5px] lg:text-[14px] leading-snug text-ink-800">
                     {membershipOffer.body}
                   </p>
                 </div>
               </div>
 
               <div className="shrink-0">
-                <p className="mb-1.5 text-right text-[13px] text-ink-600">{membershipOffer.note}</p>
+                <p className="mb-1.5 text-right text-[12px] lg:text-[13px] text-ink-600">{membershipOffer.note}</p>
                 <Countdown hours={membershipOffer.endsInHours} />
               </div>
             </div>
@@ -963,10 +963,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               <>
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-action-500">
+                    <p className="text-[12px] lg:text-[13px] font-extrabold uppercase tracking-[0.14em] text-action-500">
                       Join. Unlock. Experience.
                     </p>
-                    <h2 className="mt-1 text-lg font-bold text-ink-900">
+                    <h2 className="mt-1 text-[15px] lg:text-lg font-bold text-ink-900">
                       Become a Member &amp; Claim Your Exclusive Gifts!
                     </h2>
                     {/*
@@ -993,14 +993,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     is nothing to count down to while they are still
                     reading about it. It said what it is instead.
                   */}
-                  <p className="shrink-0 text-right text-[13px] text-ink-500">
+                  <p className="shrink-0 text-right text-[12px] lg:text-[13px] text-ink-500">
                     Claim within
                     <span className="block font-bold text-ink-800">{GIFT_DAYS} days of joining</span>
                   </p>
                 </div>
 
                 {picksGifts && (
-                  <p className="mt-3 text-[14px] font-semibold text-action-500">
+                  <p className="mt-3 text-[12.5px] lg:text-[14px] font-semibold text-action-500">
                     {chosenGifts.length} of {giftLimit} chosen
                   </p>
                 )}
@@ -1019,7 +1019,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                         >
                           <Gift size={21} />
                         </span>
-                        <span className="min-w-0 flex-1 text-[15px] font-bold leading-snug text-ink-900">{g}</span>
+                        <span className="min-w-0 flex-1 text-[13.5px] lg:text-[15px] font-bold leading-snug text-ink-900">{g}</span>
                         {picksGifts && <Tick on={on} colour={plan.accent} />}
                       </>
                     );
@@ -1063,7 +1063,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             )}
 
             {/* The coupon sits with the gifts, above their conditions. */}
-            <h3 className="mt-6 text-[15px] font-bold text-ink-900">Have a Coupon Code?</h3>
+            <h3 className="mt-6 text-[13.5px] lg:text-[15px] font-bold text-ink-900">Have a Coupon Code?</h3>
 
             {applied ? (
               <div className="mt-2 flex items-center gap-3 rounded-xl border border-dashed border-green-600/40 bg-[#e8f6ec] px-3.5 py-3">
@@ -1071,8 +1071,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   <Check size={14} strokeWidth={3} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[14px] font-bold text-green-700">{applied.code} applied</p>
-                  <p className="truncate text-[13px] text-ink-600">
+                  <p className="truncate text-[12.5px] lg:text-[14px] font-bold text-green-700">{applied.code} applied</p>
+                  <p className="truncate text-[12px] lg:text-[13px] text-ink-600">
                     {applied.off > 0
                       ? `You saved ${inr(applied.off)} on this purchase`
                       : applied.gives || applied.name}
@@ -1081,7 +1081,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                 <button
                   type="button"
                   onClick={dropCoupon}
-                  className="shrink-0 text-[13px] font-semibold text-ink-500 underline underline-offset-2 transition hover:text-ink-900"
+                  className="shrink-0 text-[12px] lg:text-[13px] font-semibold text-ink-500 underline underline-offset-2 transition hover:text-ink-900"
                 >
                   Remove
                 </button>
@@ -1101,19 +1101,19 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   aria-label="Coupon code"
                   autoCapitalize="characters"
                   spellCheck={false}
-                  className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[14px] uppercase outline-none placeholder:normal-case placeholder:text-ink-400 focus:border-action-500"
+                  className="w-full min-w-0 rounded-xl border border-surface-line px-4 py-3.5 text-[12.5px] lg:text-[14px] uppercase outline-none placeholder:normal-case placeholder:text-ink-400 focus:border-action-500"
                 />
                 <button
                   type="submit"
                   disabled={checking}
-                  className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[14px] font-bold text-white transition hover:bg-[#d3641f] disabled:opacity-60"
+                  className="shrink-0 rounded-xl bg-[#e8722a] px-6 text-[12.5px] lg:text-[14px] font-bold text-white transition hover:bg-[#d3641f] disabled:opacity-60"
                 >
                   {checking ? 'Checking…' : 'Apply'}
                 </button>
               </form>
             )}
 
-            {note && <p className="mt-2 text-[13px] text-ink-500">{note}</p>}
+            {note && <p className="mt-2 text-[12px] lg:text-[13px] text-ink-500">{note}</p>}
 
             {/*
               The codes the desk has running, rather than a box you have to
@@ -1123,7 +1123,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             */}
             {!applied && offers.length > 0 && (
               <div className="mt-4">
-                <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
+                <p className="text-[12px] lg:text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
                   Offers for you
                 </p>
                 <ul className="mt-2 space-y-2">
@@ -1136,19 +1136,19 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                         <Ticket size={18} />
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-[14px] font-bold tracking-wide text-ink-900">
+                        <p className="truncate text-[12.5px] lg:text-[14px] font-bold tracking-wide text-ink-900">
                           {o.coupon}
                         </p>
-                        <p className="truncate text-[13px] text-ink-600">{offerLine(o)}</p>
+                        <p className="truncate text-[12px] lg:text-[13px] text-ink-600">{offerLine(o)}</p>
                         {o.endsOn && (
-                          <p className="text-[12px] text-ink-400">Ends {shortDate(o.endsOn)}</p>
+                          <p className="text-[11px] lg:text-[12px] text-ink-400">Ends {shortDate(o.endsOn)}</p>
                         )}
                       </div>
                       <button
                         type="button"
                         onClick={() => applyCoupon(o.coupon)}
                         disabled={checking}
-                        className="shrink-0 rounded-lg border border-action-500 px-3.5 py-1.5 text-[13px] font-bold text-action-500 transition hover:bg-action-500 hover:text-white disabled:opacity-60"
+                        className="shrink-0 rounded-lg border border-action-500 px-3.5 py-1.5 text-[12px] lg:text-[13px] font-bold text-action-500 transition hover:bg-action-500 hover:text-white disabled:opacity-60"
                       >
                         Apply
                       </button>
@@ -1160,10 +1160,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
             {gifts.length > 0 && (
               <>
-                <h3 className="mt-6 text-[15px] font-bold text-action-500">Gift Conditions</h3>
+                <h3 className="mt-6 text-[13.5px] lg:text-[15px] font-bold text-action-500">Gift Conditions</h3>
                 <ul className="mt-2 space-y-2">
                   {membershipGiftConditions.map((c) => (
-                    <li key={c} className="flex gap-2.5 text-[14px] leading-snug text-ink-600">
+                    <li key={c} className="flex gap-2.5 text-[12.5px] lg:text-[14px] leading-snug text-ink-600">
                       <Info size={17} className="mt-0.5 shrink-0 text-action-500" />
                       {c.replace('Gold', plan.label)}
                     </li>
@@ -1183,15 +1183,15 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   onChange={(e) => setSharing(e.target.checked)}
                   className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
                 />
-                <span className="text-[15px] font-bold leading-snug text-ink-900">
+                <span className="text-[13.5px] lg:text-[15px] font-bold leading-snug text-ink-900">
                   Share Your Membership Benefits With Your Relatives &amp; Friends
                 </span>
               </label>
 
-              <p className="mt-4 text-[15px] text-ink-900">
+              <p className="mt-4 text-[13.5px] lg:text-[15px] text-ink-900">
                 Pay <span className="font-extrabold">{inr(plan.sharing.price)}</span>
               </p>
-              <p className="text-[14px] text-ink-500">{plan.sharing.label}</p>
+              <p className="text-[12.5px] lg:text-[14px] text-ink-500">{plan.sharing.label}</p>
             </section>
           )}
 
@@ -1203,7 +1203,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 h-5 w-5 shrink-0 accent-action-500"
               />
-              <span className="text-[14px] leading-relaxed text-ink-900">
+              <span className="text-[12.5px] lg:text-[14px] leading-relaxed text-ink-900">
                 I have read &amp; Understood the{' '}
                 <a href="/more/terms" className="text-action-500">Terms &amp; Conditions</a>
               </span>
@@ -1211,7 +1211,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
             <a
               href="/more/terms"
-              className="mt-5 block text-center text-[15px] font-semibold text-action-500 underline"
+              className="mt-5 block text-center text-[13.5px] lg:text-[15px] font-semibold text-action-500 underline"
             >
               View Detailed Membership Guidelines
             </a>
@@ -1219,10 +1219,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
           {/* -- What it comes to ----------------------------------- */}
           <section className="card p-4 sm:p-5">
-            <h2 className="text-lg font-bold text-ink-900">Price Summary</h2>
+            <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Price Summary</h2>
 
 
-            <dl className="mt-4 text-[14px]">
+            <dl className="mt-4 text-[12.5px] lg:text-[14px]">
               <div className="flex items-center justify-between gap-4 py-2.5">
                 <dt className="text-ink-900">Membership Fees</dt>
                 <dd className="font-semibold text-ink-900">{inr(plan.fee)}</dd>
@@ -1245,13 +1245,13 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                 )}
 
               <div className="flex items-center justify-between gap-4 pt-3">
-                <dt className="text-[15px] font-bold text-[#c0392b]">You Saved</dt>
-                <dd className="text-[15px] font-bold text-[#c0392b]">{inr(discount)}</dd>
+                <dt className="text-[13.5px] lg:text-[15px] font-bold text-[#c0392b]">You Saved</dt>
+                <dd className="text-[13.5px] lg:text-[15px] font-bold text-[#c0392b]">{inr(discount)}</dd>
               </div>
             </dl>
           </section>
 
-          <p className="flex items-center justify-center gap-2 py-4 text-[14px] text-ink-500">
+          <p className="flex items-center justify-center gap-2 py-4 text-[12.5px] lg:text-[14px] text-ink-500">
             <ShieldCheck size={19} className="text-ink-400" />
             100% Secure Payments
           </p>
@@ -1268,7 +1268,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             <div className="overflow-hidden rounded-2xl bg-white shadow-card">
               <p
                 style={{ backgroundImage: plan.gradientAcross }}
-                className="flex items-center gap-2 px-5 py-3 text-[14px] font-semibold text-white transition-colors"
+                className="flex items-center gap-2 px-5 py-3 text-[12.5px] lg:text-[14px] font-semibold text-white transition-colors"
               >
                 <Check size={17} strokeWidth={3} />
                 Selected Plan ({plan.label} Membership)
@@ -1277,9 +1277,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               <div className="relative p-5">
                 <span aria-hidden="true" style={{ backgroundImage: plan.gradient }} className="absolute inset-0 opacity-[0.08]" />
                 <div className="relative">
-                <p className="text-[14px] text-ink-700">Total Amount</p>
-                <p className="text-2xl font-extrabold text-ink-900">{inr(total)}</p>
-                <p className="text-[13px] text-ink-500">(Taxes Included)</p>
+                <p className="text-[12.5px] lg:text-[14px] text-ink-700">Total Amount</p>
+                <p className="text-[20px] lg:text-2xl font-extrabold text-ink-900">{inr(total)}</p>
+                <p className="text-[12px] lg:text-[13px] text-ink-500">(Taxes Included)</p>
 
                 <button
                   type="button"
@@ -1287,11 +1287,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   disabled={!agreed || joining}
                   title={agreed ? undefined : 'Agree to the terms first'}
                   style={{ backgroundImage: plan.gradientAcross }}
-                  className="mt-5 w-full rounded-lg py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
+                  className="mt-5 w-full rounded-lg py-4 text-[12.5px] lg:text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
                 >
                   {joining ? 'Sending…' : 'Pay now'}
                 </button>
-                {failed && <p role="alert" className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-[13px] font-medium text-red-600">{failed}</p>}
+                {failed && <p role="alert" className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-[12px] lg:text-[13px] font-medium text-red-600">{failed}</p>}
                 </div>
               </div>
             </div>
@@ -1311,11 +1311,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         <div className="overflow-hidden border-t border-surface-line bg-white shadow-[0_-4px_16px_-8px_rgba(17,24,32,0.18)]">
           {/* Right by the button, where someone who just pressed it is looking. */}
           {failed && (
-            <p role="alert" className="bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-600 sm:px-6">{failed}</p>
+            <p role="alert" className="bg-red-50 px-4 py-2.5 text-[12px] lg:text-[13px] font-medium text-red-600 sm:px-6">{failed}</p>
           )}
           <p
             style={{ backgroundImage: plan.gradientAcross }}
-            className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold text-white transition-colors sm:px-6"
+            className="flex items-center gap-2 px-4 py-2.5 text-[12.5px] lg:text-[14px] font-semibold text-white transition-colors sm:px-6"
           >
             <Check size={17} strokeWidth={3} />
             Selected Plan ({plan.label} Membership)
@@ -1326,9 +1326,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             style={{ paddingBottom: 'max(0.875rem, env(safe-area-inset-bottom))' }}
           >
             <div className="min-w-0 flex-1">
-              <p className="text-[14px] text-ink-700">Total Amount</p>
-              <p className="text-xl font-extrabold text-ink-900">{inr(total)}</p>
-              <p className="text-[13px] leading-tight text-ink-500">(Taxes Included)</p>
+              <p className="text-[12.5px] lg:text-[14px] text-ink-700">Total Amount</p>
+              <p className="text-[17px] lg:text-xl font-extrabold text-ink-900">{inr(total)}</p>
+              <p className="text-[12px] lg:text-[13px] leading-tight text-ink-500">(Taxes Included)</p>
             </div>
 
             <button
@@ -1337,7 +1337,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               disabled={!agreed || joining}
               title={agreed ? undefined : 'Agree to the terms first'}
               style={{ backgroundImage: plan.gradientAcross }}
-              className="min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
+              className="min-w-[10.5rem] shrink-0 rounded-lg px-8 py-4 text-[12.5px] lg:text-[14px] font-bold uppercase tracking-wide text-white shadow-card transition hover:brightness-105 disabled:opacity-50"
             >
               {joining ? 'Sending…' : 'Pay now'}
             </button>

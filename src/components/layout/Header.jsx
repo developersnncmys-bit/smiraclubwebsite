@@ -85,14 +85,19 @@ export default function Header() {
             {/* Who you are, and how much of that this site knows. */}
             <ProfileDot profile={profile} />
 
-            <Link href="/notifications" className="relative -mr-2 p-2" aria-label="Notifications">
-              <Bell size={21} className="text-ink-700" />
-              {unread > 0 && (
+            {/*
+              The bell only when it has something to ring about. An icon
+              that is always there and never has anything behind it is a
+              button people learn to stop pressing.
+            */}
+            {unread > 0 && (
+              <Link href="/notifications" className="relative -mr-2 p-2" aria-label={`Notifications (${unread} unread)`}>
+                <Bell size={21} className="text-ink-700" />
                 <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                   {unread > 9 ? '9+' : unread}
                 </span>
-              )}
-            </Link>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -112,14 +117,18 @@ export default function Header() {
 
             <ProfileDot profile={profile} size={36} />
 
-            <Link
-              href="/notifications"
-              className="relative grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"
-              aria-label="Notifications"
-            >
-              <Bell size={18} />
-              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500" />
-            </Link>
+            {unread > 0 && (
+              <Link
+                href="/notifications"
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-surface-line text-ink-600 transition hover:bg-surface-soft"
+                aria-label={`Notifications (${unread} unread)`}
+              >
+                <Bell size={18} />
+                <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {unread > 9 ? '9+' : unread}
+                </span>
+              </Link>
+            )}
 
             {/*
               One way in, signed in or not: the account page. Logging in and

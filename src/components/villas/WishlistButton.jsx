@@ -17,7 +17,8 @@ export default function WishlistButton({ label }) {
       onClick={() => setSaved((s) => !s)}
       aria-pressed={saved}
       aria-label={saved ? `Remove ${label} from wishlist` : `Save ${label} to wishlist`}
-      className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-ink-900/45 backdrop-blur transition hover:bg-ink-900/60"
+      /* Above the card-wide link, or the heart would open the villa. */
+      className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-ink-900/45 backdrop-blur transition hover:bg-ink-900/60"
     >
       <Heart
         size={20}
