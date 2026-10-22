@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { heroSlides as fallbackSlides } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
+import { isMember, useMembership } from '@/lib/membership';
 
 /**
  * The membership banner. Full-bleed and short on a phone, a rounded wide
@@ -13,11 +14,27 @@ import { toSrc } from '@/lib/imageSlot';
  * hold of it.
  */
 export default function Hero({ slides }) {
+  const { ready, membership } = useMembership();
+  const joined = ready && isMember(membership);
+
   // Normalised, so a render without the server's props still shows something.
-  const heroSlides = (slides?.length ? slides : fallbackSlides).map((s) => ({
+  const all = (slides?.length ? slides : fallbackSlides).map((s) => ({
     ...s,
     image: toSrc(s.image),
   }));
+
+  /*
+   * A member is not sold a membership.
+   *
+   * The banner that opens the site is an advert for joining, and a
+   * member who has joined reads it as the site forgetting them. Any
+   * slide whose button goes to /membership is dropped for them —
+   * which covers the ones the desk writes as well as the three the
+   * site ships with, without a flag to remember to set.
+   */
+  const heroSlides = joined
+    ? all.filter((s) => !String(s.cta?.href || '').startsWith('/membership'))
+    : all;
   const [at, setAt] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -27,11 +44,10 @@ export default function Hero({ slides }) {
     return () => clearInterval(timer);
   }, [paused]);
 
-  const slide = heroSlides[at];
-
   // A swipe moves between slides; a tap that is not a swipe opens the slide.
   const touchX = useRef(null);
   const swiped = useRef(false);
+
   const onTouchStart = (e) => {
     setPaused(true);
     touchX.current = e.touches[0].clientX;
@@ -45,6 +61,15 @@ export default function Hero({ slides }) {
     swiped.current = true;
     setAt((n) => (n + (dx < 0 ? 1 : -1) + heroSlides.length) % heroSlides.length);
   };
+
+  /*
+   * Nothing left to show: a member whose banners were all about
+   * joining gets no banner rather than an empty frame. After the
+   * hooks, because a component may not run fewer of them than it did
+   * on the render before.
+   */
+  const slide = heroSlides[at % Math.max(1, heroSlides.length)];
+  if (!slide) return null;
 
   return (
     <section

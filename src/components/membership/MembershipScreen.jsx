@@ -1013,51 +1013,58 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           <section className="card p-4 sm:p-5">
             {gifts.length > 0 && (
               <>
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-[12px] lg:text-[13px] font-extrabold uppercase tracking-[0.14em] text-action-500">
-                      Join. Unlock. Experience.
-                    </p>
-                    <h2 className="mt-1 text-[15px] lg:text-lg font-bold text-ink-900">
-                      Become a Member &amp; Claim Your Exclusive Gifts!
-                    </h2>
-                    {/*
-                      The instruction, in the client's capitals, where
-                      there is a choice to make. Where the plan hands
-                      every gift over there is nothing to choose, so it
-                      says what they get instead.
-                    */}
-                    <p
-                      className={
-                        picksGifts
-                          ? 'mt-1 text-[14px] font-bold uppercase tracking-wide text-action-500'
-                          : 'mt-1 text-[14px] leading-snug text-ink-700'
-                      }
-                    >
+                <p className="text-[11px] lg:text-[12px] font-extrabold uppercase tracking-[0.14em] text-action-500">
+                  Join. Unlock. Experience.
+                </p>
+                <h2 className="mt-0.5 text-[14px] lg:text-[17px] font-bold leading-snug text-ink-900">
+                  Become a Member &amp; Claim Your Exclusive Gifts!
+                </h2>
+
+                {/*
+                  Counted the way the privileges are: what to do, how
+                  far through, and the window it has to happen in. The
+                  three used to be a heading, a line floating to the
+                  right of it and a count underneath, which read as
+                  three unrelated notices.
+                */}
+                <div className="mt-2.5 rounded-xl bg-white/70 p-3 lg:p-3.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="text-[12.5px] lg:text-[14px] font-bold text-ink-800">
                       {picksGifts
                         ? `Choose any ${giftLimit} gift${giftLimit > 1 ? 's' : ''}`
-                        : `Enjoy your premium gifts with your ${plan.label} membership`}
+                        : `Yours with ${plan.label}`}
                     </p>
+                    {picksGifts && (
+                      <p className="num shrink-0 text-[16px] lg:text-[19px] font-extrabold text-ink-900">
+                        {chosenGifts.length} / {giftLimit}
+                      </p>
+                    )}
                   </div>
+
+                  {picksGifts && (
+                    <div className="mt-2 flex gap-1" aria-hidden="true">
+                      {Array.from({ length: giftLimit }).map((_, i) => (
+                        <span
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={i}
+                          className="h-1.5 flex-1 rounded-full transition"
+                          style={{ background: i < chosenGifts.length ? plan.accent : "#e6eaef" }}
+                        />
+                      ))}
+                    </div>
+                  )}
 
                   {/*
                     The window runs from the day a member joins, so there
                     is nothing to count down to while they are still
-                    reading about it. It said what it is instead.
+                    reading about it. It says what it is instead.
                   */}
-                  <p className="shrink-0 text-right text-[12px] lg:text-[13px] text-ink-500">
-                    Claim within
-                    <span className="block font-bold text-ink-800">{GIFT_DAYS} days of joining</span>
+                  <p className="mt-2 text-[11.5px] lg:text-[12.5px] text-ink-500">
+                    Claim within <span className="font-bold text-ink-700">{GIFT_DAYS} days of joining</span>.
                   </p>
                 </div>
 
-                {picksGifts && (
-                  <p className="mt-3 text-[12.5px] lg:text-[14px] font-semibold text-action-500">
-                    {chosenGifts.length} of {giftLimit} chosen
-                  </p>
-                )}
-
-                <ul className="mt-4 space-y-3">
+                <ul className="mt-2.5 space-y-2">
                   {gifts.map((g) => {
                     const on = chosenGifts.includes(g);
                     // Spent the allowance: the rest are not theirs to take.
@@ -1066,12 +1073,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     const inside = (
                       <>
                         <span
-                          className="grid h-12 w-12 shrink-0 place-items-center rounded-xl"
+                          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl lg:h-11 lg:w-11"
                           style={{ background: plan.soft, color: plan.accent }}
                         >
-                          <Gift size={21} />
+                          <Gift size={19} />
                         </span>
-                        <span className="min-w-0 flex-1 text-[13.5px] lg:text-[15px] font-bold leading-snug text-ink-900">{g}</span>
+                        <span className="min-w-0 flex-1 text-[12.5px] lg:text-[14px] font-bold leading-snug text-ink-900">{g}</span>
                         {picksGifts && <Tick on={on} colour={plan.accent} />}
                       </>
                     );
@@ -1080,7 +1087,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                     // choice, and a tick box beside it would say it was.
                     if (!picksGifts) {
                       return (
-                        <li key={g} className="flex items-center gap-3.5 rounded-xl bg-[#fdf9ef] p-3.5">
+                        <li key={g} className="flex items-center gap-2.5 rounded-xl bg-[#fdf9ef] p-2.5 lg:gap-3 lg:p-3">
                           {inside}
                         </li>
                       );
@@ -1090,7 +1097,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                       <li key={g}>
                         <label
                           aria-disabled={locked}
-                          className={`flex w-full items-center gap-3.5 rounded-xl p-3.5 transition ${
+                          className={`flex w-full items-center gap-2.5 rounded-xl p-2.5 transition lg:gap-3 lg:p-3 ${
                             on
                               ? 'cursor-pointer bg-[#fdf3dd] ring-1 ring-inset'
                               : locked
