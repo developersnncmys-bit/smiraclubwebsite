@@ -6,7 +6,7 @@ import { SERVICE_ART_VERSION } from './src/lib/assetVersion.mjs';
  * served from /api/uploads, so that path is all that is opened up.
  */
 function apiPatterns() {
-  const base = process.env.NEXT_PUBLIC_API_URL || 'https://smiraclubbackend.vercel.app/api';
+  const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.smiraclub.com/api';
   const hosts = [];
   try {
     const u = new URL(base);
@@ -16,7 +16,7 @@ function apiPatterns() {
   }
   // Whatever the environment says, the deployed API is always allowed, and
   // so is a backend running on this machine.
-  hosts.push({ protocol: 'https', hostname: 'smiraclubbackend.vercel.app', pathname: '/api/uploads/**' });
+  hosts.push({ protocol: 'https', hostname: 'api.smiraclub.com', pathname: '/api/uploads/**' });
   hosts.push({ protocol: 'http', hostname: 'localhost', pathname: '/api/uploads/**' });
   hosts.push({ protocol: 'http', hostname: '127.0.0.1', pathname: '/api/uploads/**' });
 

@@ -7,7 +7,7 @@
  * desk is a partner application.
  */
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://smiraclubbackend.vercel.app/api').replace(/\/$/, '');
+const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://api.smiraclub.com/api').replace(/\/$/, '');
 
 class ApiError extends Error {
   constructor(status, message, details) {
