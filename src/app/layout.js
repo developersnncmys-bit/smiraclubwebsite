@@ -23,6 +23,25 @@ export const metadata = {
   description:
     'Memberships, free stays, hotels, villas and packages at member prices. One membership, every trip.',
   manifest: '/manifest.webmanifest',
+  /*
+    The Smira "S" as the tab icon, the Android install icon (through the
+    manifest) and the iPhone home-screen icon. Without these the browser had
+    nothing to install, so "Add to Home screen" was never offered properly.
+  */
+  icons: {
+    icon: [
+      { url: '/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
+  // Opened from an iPhone home screen, it runs full screen like an app.
+  appleWebApp: {
+    capable: true,
+    title: 'Smira',
+    statusBarStyle: 'default',
+  },
   openGraph: {
     title: site.name,
     description: 'Memberships, free stays, hotels, villas and packages at member prices.',

@@ -2,9 +2,16 @@
   "name": "Smira Club",
   "short_name": "Smira",
   "description": "Memberships, free stays, hotels, villas and packages at member prices.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#f4f6f8",
+  "orientation": "portrait",
+  "background_color": "#21608f",
   "theme_color": "#175074",
-  "icons": []
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
 }
