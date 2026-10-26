@@ -209,7 +209,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   const [privileges, setPrivileges] = useState([]);
   // The gifts and the benefits are the plan's, read from whatever the desk
   // has typed against it rather than held as a choice the member makes.
-  const [sharing, setSharing] = useState(true);
+  // Sharing is an extra the member chooses. It started ticked, so its price
+  // was in the total of everybody who did not notice the box.
+  const [sharing, setSharing] = useState(false);
   const [agreed, setAgreed] = useState(true);
 
   /**
@@ -1277,11 +1279,15 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                 />
                 <span className="text-[13.5px] lg:text-[15px] font-bold leading-snug text-ink-900">
                   Share Your Membership Benefits With Your Relatives &amp; Friends
+                  <span className="ml-1.5 rounded-full bg-surface-soft px-2 py-0.5 align-middle text-[11px] font-semibold text-ink-500">
+                    Optional
+                  </span>
                 </span>
               </label>
 
               <p className="mt-4 text-[13.5px] lg:text-[15px] text-ink-900">
-                Pay <span className="font-extrabold">{inr(plan.sharing.price)}</span>
+                {sharing ? 'Added: ' : 'Tick to add '}
+                <span className="font-extrabold">{inr(plan.sharing.price)}</span>
               </p>
               <p className="text-[12.5px] lg:text-[14px] text-ink-500">{plan.sharing.label}</p>
             </section>
