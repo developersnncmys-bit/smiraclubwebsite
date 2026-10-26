@@ -324,7 +324,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   const included = useMemo(
     () =>
       (plan.features || []).filter(Boolean).map((f) => {
-        const [title, ...rest] = String(f).split(/s+[—–-]s+/);
+        // A spaced dash parts the title from its line. It read /s+[—–-]s+/,
+        // without the backslashes, so it split on the letter s, never a space.
+        const [title, ...rest] = String(f).split(/\s+[—–-]\s+/);
         return { title: title.trim(), body: rest.join(' — ').trim() };
       }),
     [plan],
