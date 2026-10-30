@@ -41,10 +41,17 @@ export function isComplete(p) {
   );
 }
 
-/** Where to send someone to finish their profile, coming back here after. */
-export function completeProfileHref() {
+/**
+ * Where to send someone to finish their profile, coming back here after.
+ *
+ * `next` is for a booking waiting on the profile: step one is all it needs,
+ * so Continue on step one goes straight back. `after` walks all five steps
+ * first and comes back here once they are submitted — the right way in from
+ * anywhere that is not waiting to book.
+ */
+export function completeProfileHref({ allSteps = false } = {}) {
   const here = `${window.location.pathname}${window.location.search}`;
-  return `/profile/edit?next=${encodeURIComponent(here)}`;
+  return `/profile/edit?${allSteps ? 'after' : 'next'}=${encodeURIComponent(here)}`;
 }
 
 /**

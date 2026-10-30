@@ -106,6 +106,8 @@ export default function CompleteProfile() {
   const [photoNote, setPhotoNote] = useState('');
   /** Where to go once it is saved — the booking that sent them here, if any. */
   const [returnTo, setReturnTo] = useState('');
+  /** Where to go once every step is submitted, when nothing is waiting to book. */
+  const [finishTo, setFinishTo] = useState('');
 
   // Pick up what was saved before, and where they came from.
   useEffect(() => {
@@ -118,9 +120,13 @@ export default function CompleteProfile() {
       if (typeof saved.whatsapp === 'boolean') setWhatsapp(saved.whatsapp);
       if (saved.photo) setPhoto(saved.photo);
     }
-    const next = new URLSearchParams(window.location.search).get('next') || '';
+    const params = new URLSearchParams(window.location.search);
     // Only ever back into this site.
-    if (next.startsWith('/') && !next.startsWith('//')) setReturnTo(next);
+    const inSite = (v) => v.startsWith('/') && !v.startsWith('//');
+    const next = params.get('next') || '';
+    const after = params.get('after') || '';
+    if (inSite(next)) setReturnTo(next);
+    if (inSite(after)) setFinishTo(after);
   }, []);
 
   const persist = () => saveProfile({ details, birthdays, anniversary, address, whatsapp, photo });
@@ -194,7 +200,7 @@ export default function CompleteProfile() {
       window.scrollTo({ top: 0 });
       return;
     }
-    router.push(returnTo || '/profile');
+    router.push(returnTo || finishTo || '/profile');
   };
 
   const back = () => {

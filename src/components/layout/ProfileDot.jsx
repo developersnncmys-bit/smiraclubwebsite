@@ -125,7 +125,7 @@ export default function ProfileDot({ profile, size = 32 }) {
           )}
 
           <Link
-            href={done ? '/profile' : completeProfileHref()}
+            href={done ? '/profile' : completeProfileHref({ allSteps: true })}
             onClick={() => setOpen(false)}
             className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-action-500 py-2 text-[12px] font-bold text-white transition hover:brightness-105"
           >
