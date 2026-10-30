@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import UpgradeGate from '@/components/membership/UpgradeGate';
 import Attribution from '@/components/layout/Attribution';
 import AuthPopup from '@/components/auth/AuthPopup';
+import InstallPrompt from '@/components/layout/InstallPrompt';
 import { site } from '@/lib/content';
 import './globals.css';
 
@@ -75,6 +76,8 @@ export default function RootLayout({ children }) {
         <UpgradeGate />
         <Footer />
         <BottomNav />
+        {/* Offer to install the site as an app, once, to anyone who visits. */}
+        <InstallPrompt />
       </body>
     </html>
   );
