@@ -22,6 +22,8 @@ import PaySheet from '@/components/forms/PaySheet';
 import { MERCHANT } from '@/lib/payment';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
+import { getSessionToken } from '@/lib/session';
+import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 
 /** A ticked square in the chosen plan's own colour, as the Figma's grid draws them. */
 function Tick({ on, colour = '#b8860b' }) {
@@ -200,6 +202,9 @@ function fromDesk(p, d) {
  * here: nobody reading this page has started theirs yet.
  */
 const GIFT_DAYS = 6;
+
+/** What a signed-out visitor chose before Pay now sent them to sign in. */
+const RESUME_KEY = 'smira:membership-resume';
 export default function MembershipScreen({ hero, helper, compare, desk = [], offers = [], privilegeArt = {} }) {
   const router = useRouter();
   const [tab, setTab] = useState('plans');
@@ -404,6 +409,44 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     setChosenGifts([]);
   }, [plan.key]);
 
+  /*
+   * Coming back from signing in to pay.
+   *
+   * Pay now asks a signed-out visitor to sign in or register first, and the
+   * sign-in sheet reloads the page when it is done — which would throw away
+   * the plan, privileges, gift and coupon they had just picked. So those are
+   * kept for the visit, put back here, and the payment sheet opens on its
+   * own: they carry on exactly where they were. The plan goes back first
+   * and the gifts after, because changing plan clears the gifts.
+   */
+  const resume = useRef(null);
+  const [resumePay, setResumePay] = useState(false);
+  useEffect(() => {
+    if (!getSessionToken()) return;
+    try {
+      const raw = window.sessionStorage.getItem(RESUME_KEY);
+      if (!raw) return;
+      const r = JSON.parse(raw);
+      resume.current = r;
+      setTab('plans');
+      setPlanKey(r.planKey || '');
+      setPrivileges(Array.isArray(r.privileges) ? r.privileges : []);
+      setSharing(Boolean(r.sharing));
+      if (Array.isArray(r.quiz) && r.quiz.length) setQuiz(r.quiz);
+      setAgreed(true);
+    } catch {
+      /* storage blocked or garbled: they simply choose again */
+    }
+  }, []);
+  useEffect(() => {
+    const r = resume.current;
+    if (!r || plan.key !== r.planKey) return;
+    resume.current = null;
+    setChosenGifts(Array.isArray(r.gifts) ? r.gifts : []);
+    if (r.applied?.code) setApplied(r.applied);
+    setResumePay(true);
+  }, [plan.key]);
+
   const toggleGift = (gift) =>
     setChosenGifts((list) => {
       if (list.includes(gift)) return list.filter((g) => g !== gift);
@@ -453,11 +496,34 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    */
   const payNow = () => {
     if (joining || !agreed) return;
+    // Not signed in: sign in or register first, then carry on to pay.
+    if (!getSessionToken()) {
+      try {
+        window.sessionStorage.setItem(
+          RESUME_KEY,
+          JSON.stringify({ planKey: plan.key, privileges, sharing, gifts: chosenGifts, applied, quiz })
+        );
+      } catch {
+        /* storage blocked: they will choose again after signing in */
+      }
+      window.dispatchEvent(new Event(OPEN_AUTH));
+      return undefined;
+    }
     const current = profile || loadProfile();
     if (!isComplete(current)) return router.push(completeProfileHref());
     setFailed('');
+    // The choices are spent once the payment sheet is open.
+    try { window.sessionStorage.removeItem(RESUME_KEY); } catch { /* fine */ }
     return setPaying(true);
   };
+
+  // Signed in and choices back: open the payment sheet.
+  useEffect(() => {
+    if (!resumePay) return;
+    setResumePay(false);
+    payNow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resumePay]);
 
   const join = async (paidVia = 'UPI') => {
     if (joining || !agreed) return;
