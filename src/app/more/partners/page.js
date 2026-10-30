@@ -9,7 +9,14 @@ import {
   Landmark,
   Users,
 } from 'lucide-react';
-import PartnerWizard from '@/components/partners/PartnerWizard';
+/**
+ * Where a partner registers and fills in their listing: the partner portal.
+ * This page makes the case; the portal is where the account and the five
+ * steps live, so a partner has one place to come back to.
+ */
+const PORTAL = process.env.NEXT_PUBLIC_PARTNER_URL || 'https://partner.smiraclub.com';
+const REGISTER = `${PORTAL}/register`;
+const SIGN_IN = `${PORTAL}/login`;
 import { image } from '@/lib/images';
 
 export const metadata = {
@@ -104,8 +111,8 @@ export default function Page() {
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <a href="#apply" className="btn-action px-7 py-3.5">
-                  Apply to partner
+                <a href={REGISTER} className="btn-action px-7 py-3.5">
+                  Register as a partner
                   <ArrowRight size={18} />
                 </a>
                 <a href="tel:+919833733477" className="btn-quiet px-6 py-3.5">
@@ -153,7 +160,7 @@ export default function Page() {
 
         {/* -- How it works -------------------------------------------------- */}
         <section className="py-8 lg:py-12">
-          <h2 className="section-title">From this form to your first booking</h2>
+          <h2 className="section-title">From registering to your first booking</h2>
           <p className="mt-2 max-w-2xl text-[14px] text-ink-500">
             Six steps, and you can ask our desk where you are at any point using the reference we
             give you.
@@ -184,11 +191,12 @@ export default function Page() {
           */}
           <div className="lg:flex lg:items-start lg:justify-between lg:gap-10">
             <div className="lg:max-w-xl">
-              <h2 className="section-title">Apply to partner</h2>
+              <h2 className="section-title">Register as a partner</h2>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-500">
-                Five short steps — your property, its rooms, what it offers, your rates and the
-                paperwork. Only the property name and a phone number are needed to send it; our
-                desk collects whatever is missing when they call.
+                Register with your mobile number and business name, then fill in five short steps
+                on the Smira Partner portal — your property, its rooms, what it offers, your rates
+                and the paperwork. It saves as you go, and our desk helps with anything you are
+                unsure of.
               </p>
             </div>
 
@@ -205,13 +213,32 @@ export default function Page() {
                 ))}
               </ul>
               <p className="mt-4 text-[13px] leading-snug text-ink-400">
-                None of it is needed to send the form.
+                None of it is needed to register.
               </p>
             </div>
           </div>
 
-          <div className="mt-7">
-            <PartnerWizard />
+          {/*
+            Register and the five steps are on the partner portal now, where
+            the partner also signs in later to take bookings — one account,
+            one place, rather than a form here and a portal there.
+          */}
+          <div className="card mt-7 flex flex-col items-start gap-4 p-5 sm:flex-row sm:items-center sm:justify-between lg:p-6">
+            <div>
+              <p className="text-[15px] font-bold text-ink-900">Register on the Smira Partner portal</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-ink-500">
+                Your mobile number and business name to start. Your listing saves at every step, and
+                you can sign in any time to finish it, then take bookings there.
+              </p>
+            </div>
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <a href={REGISTER} className="btn-action justify-center px-6 py-3">
+                Register as a partner <ArrowRight size={17} />
+              </a>
+              <a href={SIGN_IN} className="btn-quiet justify-center px-5 py-3">
+                Already a partner? Sign in
+              </a>
+            </div>
           </div>
         </section>
 

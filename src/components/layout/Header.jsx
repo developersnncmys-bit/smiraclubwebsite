@@ -59,7 +59,7 @@ export default function Header() {
    */
   const memberBadge = isMember(membership)
     ? { label: `${membership.plan} Member`, href: '/membership' }
-    : { label: 'Join a Member', href: '/membership' };
+    : { label: 'Become Member', href: '/membership' };
   const { profile } = useProfile();
 
   return (
@@ -67,23 +67,18 @@ export default function Header() {
       {/* A slim bar: the mark sits nearer the edge and the row is shorter,
           so the page underneath starts higher up. */}
       <div className="shell px-3 lg:px-5">
-        {/* -- Phone ------------------------------------------------------ */}
-        <div className="relative flex h-12 items-center justify-between lg:hidden">
+        {/*
+          -- Phone ------------------------------------------------------
+          The mark on the left, a size larger; on the right search (and the
+          bell when it has something), then Become Member, and the profile
+          in the corner — the order a member's eye runs along the top.
+        */}
+        <div className="relative flex h-14 items-center justify-between gap-2 lg:hidden">
           <Logo compact />
 
           <div className="flex items-center gap-2">
-            <Link
-              href={memberBadge.href}
-              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-1.5 py-[1px] text-[8.5px] font-bold leading-[1.7] tracking-tight text-white transition hover:brightness-105"
-            >
-              {memberBadge.label}
-            </Link>
-
             {/* The page's own search, on the pages that have one. */}
             <HeaderSearch />
-
-            {/* Who you are, and how much of that this site knows. */}
-            <ProfileDot profile={profile} />
 
             {/*
               The bell only when it has something to ring about. An icon
@@ -91,31 +86,32 @@ export default function Header() {
               button people learn to stop pressing.
             */}
             {unread > 0 && (
-              <Link href="/notifications" className="relative -mr-2 p-2" aria-label={`Notifications (${unread} unread)`}>
+              <Link href="/notifications" className="relative p-1.5" aria-label={`Notifications (${unread} unread)`}>
                 <Bell size={21} className="text-ink-700" />
-                <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                <span className="absolute right-0.5 top-0.5 grid h-4 w-4 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                   {unread > 9 ? '9+' : unread}
                 </span>
               </Link>
             )}
-          </div>
-        </div>
 
-        {/* -- Desktop ---------------------------------------------------- */}
-        <div className="hidden h-14 items-center lg:flex">
-          <Logo />
-
-          <div className="ml-auto flex items-center gap-3">
             <Link
               href={memberBadge.href}
-              className="rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-1.5 py-[1px] text-[8.5px] font-bold leading-[1.7] tracking-tight text-white transition hover:brightness-105"
+              className="whitespace-nowrap rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-2.5 py-1 text-[11px] font-bold leading-tight text-white shadow-sm transition hover:brightness-105"
             >
               {memberBadge.label}
             </Link>
 
-            <HeaderSearch desktop />
+            {/* Who you are, and how much of that this site knows — in the corner. */}
+            <ProfileDot profile={profile} />
+          </div>
+        </div>
 
-            <ProfileDot profile={profile} size={36} />
+        {/* -- Desktop: the same order, with room to breathe. -------------- */}
+        <div className="hidden h-16 items-center lg:flex">
+          <Logo />
+
+          <div className="ml-auto flex items-center gap-3">
+            <HeaderSearch desktop />
 
             {unread > 0 && (
               <Link
@@ -130,15 +126,19 @@ export default function Header() {
               </Link>
             )}
 
-            {/*
-              One way in, signed in or not: the account page. Logging in and
-              registering happen there, and in the sheet — a header that says
-              "Log in" is a third place to keep in step with the other two,
-              and it went out of step.
-            */}
-            <Link href="/profile" className="btn-primary py-2.5">
-              Account
+            <Link
+              href={memberBadge.href}
+              className="whitespace-nowrap rounded-full bg-gradient-to-r from-[#d8a41f] to-[#b8860b] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:brightness-105"
+            >
+              {memberBadge.label}
             </Link>
+
+            {/*
+              The profile is the way into the account, signed in or not, so
+              it takes the corner; the separate Account button beside it said
+              the same thing twice.
+            */}
+            <ProfileDot profile={profile} size={40} />
           </div>
         </div>
       </div>
