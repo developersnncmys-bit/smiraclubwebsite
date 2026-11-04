@@ -45,6 +45,16 @@
   /* The phone frame keeps its own scroll; nothing should slide sideways. */
   body {
     overflow-x: hidden;
+    touch-action: manipulation;
+  }
+
+  /* An iPhone zooms in on a box with text under 16px when it is tapped. */
+  @media (max-width: 1023px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
   }
 
   h1, h2, h3, h4 {

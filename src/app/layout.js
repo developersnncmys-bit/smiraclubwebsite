@@ -54,6 +54,9 @@ export const viewport = {
   themeColor: '#175074',
   width: 'device-width',
   initialScale: 1,
+  // No pinch or tap zoom — a zoomed page was left half off the screen.
+  maximumScale: 1,
+  userScalable: false,
   viewportFit: 'cover',
 };
 
