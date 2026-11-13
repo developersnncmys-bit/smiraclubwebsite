@@ -75,10 +75,11 @@ export const api = {
    * Never cached: a code can run out between one person typing it and the
    * next, and the answer carries a price.
    */
-  checkCoupon: (code, spend, forWhat = 'Membership') =>
+  checkCoupon: (code, spend, forWhat = 'Membership', plan = '') =>
     request(
       `/website/coupon/${encodeURIComponent(String(code).trim().toUpperCase())}` +
-        `?spend=${Math.round(spend || 0)}&for=${forWhat}`,
+        `?spend=${Math.round(spend || 0)}&for=${forWhat}` +
+        (plan ? `&plan=${encodeURIComponent(plan)}` : ''),
       { next: { revalidate: 0 } },
     ),
 

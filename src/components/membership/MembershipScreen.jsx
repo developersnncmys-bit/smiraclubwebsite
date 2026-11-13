@@ -14,6 +14,7 @@ import Icon from '@/components/ui/Icon';
 import Portal from '@/components/ui/Portal';
 import MembershipQuiz from '@/components/membership/MembershipQuiz';
 import MembershipCompare from '@/components/membership/MembershipCompare';
+import PlanCouponPopup from '@/components/membership/PlanCouponPopup';
 import { toSrc } from '@/lib/imageSlot';
 import { inr, shortDate } from '@/lib/format';
 import { api } from '@/lib/api';
@@ -291,6 +292,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   }, [desk]);
   const plan =
     plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
+  /** The coupons for the plan on show: ones tied to it, and ones for every plan. */
+  const planOffers = useMemo(
+    () => offers.filter((o) => !o.plans?.length || o.plans.includes(plan?.key)),
+    [offers, plan?.key],
+  );
   const versus = tab === 'versus';
 
   /*
@@ -612,7 +618,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     setChecking(true);
     setNote('');
     try {
-      const res = await api.checkCoupon(code, gross, 'Membership');
+      const res = await api.checkCoupon(code, gross, 'Membership', plan.key);
       const c = res.data || {};
       if (c.valid) {
         setApplied({ code: c.code, off: c.off || 0, name: c.name || '', gives: c.gives || '' });
@@ -663,7 +669,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     if (!appliedCode) return undefined;
     let dropped = false;
     api
-      .checkCoupon(appliedCode, gross, 'Membership')
+      .checkCoupon(appliedCode, gross, 'Membership', plan.key)
       .then((res) => {
         if (dropped) return;
         const c = res.data || {};
@@ -677,10 +683,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     return () => {
       dropped = true;
     };
-  }, [appliedCode, gross]);
+  }, [appliedCode, gross, plan.key]);
 
   return (
     <div className="pb-40 lg:pb-12">
+      {/* Opening a plan pops up its coupon, if the desk has an active one for it. */}
+      <PlanCouponPopup plan={plan} offers={planOffers} spend={gross} onApply={(code) => applyCoupon(code)} />
       {/*
         The pitch. The comparison makes a different argument from the plans,
         so it gets its own banner rather than being sold the same way twice.
@@ -1281,13 +1289,13 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               the same check as typing it — nothing here decides what an
               offer is worth.
             */}
-            {!applied && offers.length > 0 && (
+            {!applied && planOffers.length > 0 && (
               <div className="mt-4">
                 <p className="text-[12px] lg:text-[13px] font-bold uppercase tracking-[0.08em] text-ink-400">
                   Offers for you
                 </p>
                 <ul className="mt-2 space-y-2">
-                  {offers.map((o) => (
+                  {planOffers.map((o) => (
                     <li
                       key={o.id || o.coupon}
                       className="flex items-center gap-3 rounded-xl border border-dashed border-action-500/40 bg-action-500/[0.04] px-3.5 py-3"
