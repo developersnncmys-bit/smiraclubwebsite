@@ -43,8 +43,18 @@
   }
 
   /* The phone frame keeps its own scroll; nothing should slide sideways. */
+  /*
+   * Nothing may make the page wider than the phone. With only body hidden,
+   * a phone browser still widened the page to fit something too wide, and
+   * the membership page opened shifted — the logo and headings cut off on
+   * the left. clip on both stops that without making a scroll box.
+   */
+  html,
   body {
-    overflow-x: hidden;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+  body {
     touch-action: manipulation;
   }
 
