@@ -552,10 +552,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         coupon: applied?.code || undefined,
         quiz: quiz.length ? quiz : undefined,
         paidVia,
-        // The UTR from their UPI app, for the desk to match in the account.
-        // Without one they asked to be called: no account is named then.
         paymentRef: paymentRef || undefined,
-        paidTo: paidVia === 'UPI' && paymentRef ? MERCHANT.upi : undefined,
+        // Sent to the UPI app to pay this account: the desk checks it there.
+        paidTo: paidVia === 'UPI' ? MERCHANT.upi : undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
