@@ -15,7 +15,7 @@ export const MERCHANT = {
   name: process.env.NEXT_PUBLIC_UPI_NAME || 'SMIRA SERVICES PRIVATE LIMITED',
   // Smira's UPI. Written here on purpose, not read from the server's
   // settings, so an old id left in a .env cannot send money to the wrong place.
-  upi: '9035300961@axl',
+  upi: 'smiraclub@axisbank',
 };
 
 /**
