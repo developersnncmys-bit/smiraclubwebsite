@@ -1,4 +1,5 @@
 import { membershipPrivileges } from '@/lib/content';
+import { isMember } from '@/lib/membership';
 
 /**
  * Which privilege covers which part of the site.
@@ -52,7 +53,9 @@ export function privilegeInfo(key) {
  */
 export function covers(membership, key) {
   if (!key) return true;
-  if (!membership) return true;
+  // Only an active member can be short of a privilege. A visitor, or someone
+  // whose payment is still pending, is not a member yet — nothing to upgrade.
+  if (!isMember(membership)) return true;
   const held = membership.privileges || [];
   if (!held.length) return true;
   return held.includes(key);
