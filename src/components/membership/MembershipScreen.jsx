@@ -500,8 +500,23 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    * The profile is still checked first: there is no point taking somebody
    * to a payment screen when we cannot tell them who it was for.
    */
+  // Privileges must be chosen before paying: the desk needs to know what was bought.
+  const privilegesRef = useRef(null);
+  const [needPick, setNeedPick] = useState(false);
+  useEffect(() => {
+    if (left === 0 && needPick) { setNeedPick(false); setFailed(''); }
+  }, [left, needPick]);
+  const mustPick = () => {
+    if (left <= 0) return false;
+    setNeedPick(true);
+    setFailed(`Please choose ${left} more privilege${left === 1 ? '' : 's'} before paying.`);
+    privilegesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return true;
+  };
+
   const payNow = () => {
     if (joining || !agreed) return;
+    if (mustPick()) return undefined;
     // Not signed in: sign in or register first, then carry on to pay.
     if (!getSessionToken()) {
       try {
@@ -533,6 +548,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
 
   const join = async (paidVia = 'UPI', paymentRef = '') => {
     if (joining || !agreed) return;
+    if (left > 0) return;
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
     if (!isComplete(current)) return router.push(completeProfileHref());
@@ -915,7 +931,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           )}
 
           {/* -- Pick your privileges ------------------------------- */}
-          <section>
+          <section ref={privilegesRef} className="scroll-mt-24">
             <h2 className="text-[15px] lg:text-lg font-bold text-ink-900">Smira Privilege Rate</h2>
 
             {/*
@@ -923,7 +939,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
               a fact; a bar with five lengths and one filled is the same
               fact read at a glance, and it says how many are left.
             */}
-            <div className="card mt-2 p-3.5 lg:p-4">
+            <div className={`card mt-2 p-3.5 lg:p-4 ${needPick ? 'ring-2 ring-red-500' : ''}`}>
+              {needPick && left > 0 && (
+                <p role="alert" className="mb-2 rounded-lg bg-red-50 px-3 py-2 text-[12.5px] font-semibold text-red-600">
+                  Choose {left} more privilege{left === 1 ? '' : 's'} to continue to payment.
+                </p>
+              )}
               <div className="flex items-baseline justify-between gap-3">
                 <p className="text-[13px] lg:text-[14px] font-semibold text-ink-700">
                   {plan.label} members choose
