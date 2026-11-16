@@ -531,7 +531,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resumePay]);
 
-  const join = async (paidVia = 'UPI') => {
+  const join = async (paidVia = 'UPI', paymentRef = '') => {
     if (joining || !agreed) return;
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
@@ -552,9 +552,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         coupon: applied?.code || undefined,
         quiz: quiz.length ? quiz : undefined,
         paidVia,
-        // Only a UPI payment goes to the account directly; the other two
-        // are a link the desk raises, so there is no account to name.
-        paidTo: paidVia === 'UPI' ? MERCHANT.upi : undefined,
+        // The UTR from their UPI app, for the desk to match in the account.
+        // Without one they asked to be called: no account is named then.
+        paymentRef: paymentRef || undefined,
+        paidTo: paidVia === 'UPI' && paymentRef ? MERCHANT.upi : undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
@@ -1526,7 +1527,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         note={`Smira ${plan.label} membership`}
         busy={joining}
         error={failed}
-        onPaid={(paidVia) => join(paidVia)}
+        onPaid={(paidVia, ref) => join(paidVia, ref)}
       />
     </div>
   );
