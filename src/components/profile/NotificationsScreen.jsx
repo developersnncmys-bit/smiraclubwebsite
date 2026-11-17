@@ -7,6 +7,7 @@ import Icon from '@/components/ui/Icon';
 import { notificationTones } from '@/lib/content';
 import { api } from '@/lib/api';
 import { getSessionToken } from '@/lib/session';
+import { hasAccount } from '@/lib/account';
 import { ago } from '@/lib/format';
 
 /**
@@ -26,7 +27,7 @@ export default function NotificationsScreen() {
   useEffect(() => {
     const token = getSessionToken();
     if (!token) {
-      setSignedIn(false);
+      setSignedIn(hasAccount());
       setNotifications([]);
       return undefined;
     }

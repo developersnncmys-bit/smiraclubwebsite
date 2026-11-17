@@ -12,6 +12,7 @@ import { toSrc } from '@/lib/imageSlot';
 import { nightsBetween } from '@/lib/format';
 import { api } from '@/lib/api';
 import { getSessionToken } from '@/lib/session';
+import { hasAccount } from '@/lib/account';
 
 /** How each status announces itself at the top of a card. */
 const STATUS = {
@@ -78,7 +79,7 @@ export default function MyBookings({ art = {} }) {
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     const token = getSessionToken();
-    setSignedIn(Boolean(token));
+    setSignedIn(Boolean(token) || hasAccount());
     if (!token) return undefined;
     let live = true;
     const load = () =>

@@ -24,6 +24,7 @@ import { MERCHANT } from '@/lib/payment';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 import { getSessionToken } from '@/lib/session';
+import { hasAccount } from '@/lib/account';
 import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 
 /** A ticked square in the chosen plan's own colour, as the Figma's grid draws them. */
@@ -428,7 +429,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   const resume = useRef(null);
   const [resumePay, setResumePay] = useState(false);
   useEffect(() => {
-    if (!getSessionToken()) return;
+    if (!hasAccount()) return;
     try {
       const raw = window.sessionStorage.getItem(RESUME_KEY);
       if (!raw) return;
@@ -518,7 +519,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     if (joining || !agreed) return;
     if (mustPick()) return undefined;
     // Not signed in: sign in or register first, then carry on to pay.
-    if (!getSessionToken()) {
+    // Signed in means the same here as on the profile page — a session, a
+    // membership, or a saved name and number — so nobody already in is asked again.
+    if (!hasAccount()) {
       try {
         window.sessionStorage.setItem(
           RESUME_KEY,

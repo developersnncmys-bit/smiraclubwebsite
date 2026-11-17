@@ -6,6 +6,7 @@ import { Loader2, TicketPercent, Crown } from 'lucide-react';
 import { inr, fullDate } from '@/lib/format';
 import { api } from '@/lib/api';
 import { getSessionToken } from '@/lib/session';
+import { hasAccount } from '@/lib/account';
 
 /**
  * Where the savings came from, booking by booking.
@@ -22,7 +23,9 @@ export default function SavingsScreen() {
   useEffect(() => {
     const token = getSessionToken();
     if (!token) {
-      setSignedIn(false);
+      // Signed in without a session (profile saved): nothing to read yet, not "sign in".
+      if (hasAccount()) setSaved({ total: 0, across: 0, bookings: [] });
+      else setSignedIn(false);
       return undefined;
     }
     let live = true;
