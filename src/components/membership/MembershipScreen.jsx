@@ -21,7 +21,7 @@ import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import PaySheet from '@/components/forms/PaySheet';
 import { payMembership } from '@/lib/payment';
-import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
+import { completeProfileHref, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 import { getSessionToken } from '@/lib/session';
 import { hasAccount } from '@/lib/account';
@@ -292,7 +292,9 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     });
   }, [desk]);
   const plan =
-    plans.find((p) => p.key === planKey) || plans.find((p) => p.popular) || plans[0];
+    plans.find((p) => p.key === planKey) ||
+    // Someone new starts on the entry plan (Silver), not the most expensive one.
+    [...plans].sort((a, b) => (Number(a.fee) || 0) - (Number(b.fee) || 0))[0];
   /** The coupons for the plan on show: ones tied to it, and ones for every plan. */
   const planOffers = useMemo(
     () => offers.filter((o) => !o.plans?.length || o.plans.includes(plan?.key)),
@@ -515,6 +517,12 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     return true;
   };
 
+  /** A name and a 10-digit number — what paying needs. Email is optional. */
+  const canPay = (p) => {
+    const d = p?.details;
+    return Boolean(d?.name?.trim()?.length >= 2 && /^[6-9]\d{9}$/.test(String(d.phone || '').replace(/\D/g, '').slice(-10)));
+  };
+
   const payNow = () => {
     if (joining || !agreed) return;
     if (mustPick()) return undefined;
@@ -534,7 +542,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
       return undefined;
     }
     const current = profile || loadProfile();
-    if (!isComplete(current)) return router.push(completeProfileHref());
+    // Signed in is enough: only a name and a number are needed to pay.
+    if (!canPay(current)) return router.push(completeProfileHref());
     setFailed('');
     // The choices are spent once the payment sheet is open.
     try { window.sessionStorage.removeItem(RESUME_KEY); } catch { /* fine */ }
@@ -554,7 +563,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     if (left > 0) return;
     // Read it now rather than trust the first render, which may not have it yet.
     const current = profile || loadProfile();
-    if (!isComplete(current)) return router.push(completeProfileHref());
+    if (!canPay(current)) return router.push(completeProfileHref());
     setJoining(true);
     setFailed('');
     try {
@@ -618,7 +627,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
   const keepQuiz = (pairs, suggested) => {
     setQuiz(pairs);
     const current = profile || loadProfile();
-    if (!isComplete(current)) return;
+    if (!canPay(current)) return;
     const d = current.details;
     api
       .tellQuiz({
