@@ -118,7 +118,7 @@ export default function MembershipCard() {
 
         <div className="min-w-0">
           <h2 className="truncate text-[14px] font-bold leading-tight sm:text-[16px] lg:text-[15px]">
-            {member ? `${membership.plan} Member` : 'Become a Smira Club Member'}
+            {member ? `${membership.plan} Member${membership.memberId ? ` · ${membership.memberId}` : ''}` : 'Become a Smira Club Member'}
           </h2>
           <p className="mt-0.5 text-[11.5px] leading-snug text-white/85">
             {member
