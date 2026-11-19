@@ -172,8 +172,8 @@ export const api = {
    */
   memberOtpRequest: (phone) =>
     request('/website/member/otp', { method: 'POST', body: { phone }, next: { revalidate: 0 } }),
-  memberVerify: (phone, code) =>
-    request('/website/member/verify', { method: 'POST', body: { phone, code }, next: { revalidate: 0 } }),
+  memberVerify: (phone, code, name) =>
+    request('/website/member/verify', { method: 'POST', body: { phone, code, name }, next: { revalidate: 0 } }),
 
   /**
    * The member's wishlist, kept against their account rather than the

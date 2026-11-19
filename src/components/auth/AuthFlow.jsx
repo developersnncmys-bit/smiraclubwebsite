@@ -127,7 +127,7 @@ export default function AuthFlow({ onDone, footer, autoFocus = false }) {
     setBusy(true);
     setFailed('');
     try {
-      const res = await api.memberVerify(form.phone, code);
+      const res = await api.memberVerify(form.phone, code, form.name.trim());
       const { member, membership, token, isNew } = res.data || {};
       setSessionToken(token || '');
       const digits = tenDigits(form.phone);
