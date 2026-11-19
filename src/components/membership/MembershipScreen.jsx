@@ -20,7 +20,7 @@ import { inr, shortDate } from '@/lib/format';
 import { api } from '@/lib/api';
 import { readAttribution } from '@/components/layout/Attribution';
 import PaySheet from '@/components/forms/PaySheet';
-import { MERCHANT } from '@/lib/payment';
+import { payMembership } from '@/lib/payment';
 import { completeProfileHref, isComplete, loadProfile, profileForBooking, useProfile } from '@/lib/profile';
 import { saveMembership } from '@/lib/membership';
 import { getSessionToken } from '@/lib/session';
@@ -549,7 +549,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resumePay]);
 
-  const join = async (paidVia = 'UPI', paymentRef = '') => {
+  const join = async () => {
     if (joining || !agreed) return;
     if (left > 0) return;
     // Read it now rather than trust the first render, which may not have it yet.
@@ -570,19 +570,18 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         sharing,
         coupon: applied?.code || undefined,
         quiz: quiz.length ? quiz : undefined,
-        paidVia,
-        paymentRef: paymentRef || undefined,
-        // Sent to the UPI app to pay this account: the desk checks it there.
-        paidTo: paidVia === 'UPI' ? MERCHANT.upi : undefined,
         profile: profileForBooking(current),
         attribution: readAttribution(),
       });
+      // Razorpay Checkout: resolves once the server has checked the payment.
+      const paid = await payMembership(res.data?.payRef, { note: `Smira ${plan.label} membership` });
+      const active = paid.status === 'Active';
       saveMembership({
         plan: plan.label,
-        reference: res.data?.reference,
+        reference: paid.reference || res.data?.reference,
         since: new Date().toISOString(),
-        expiresOn: res.data?.expiresOn,
-        status: 'Payment pending',
+        expiresOn: paid.expiresOn || res.data?.expiresOn,
+        status: active ? 'Active' : 'Payment pending',
         // What they chose, so a booking page can tell straight away
         // whether the service in front of them is one they hold.
         privileges,
@@ -592,7 +591,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
       router.push(next.startsWith('/') && !next.startsWith('//') ? next : '/profile');
     } catch (err) {
       setJoining(false);
-      setFailed(err?.status ? err.message : 'We could not reach our desk just now. Please try again in a moment.');
+      setFailed(
+        err?.closed || err?.status
+          ? err.message
+          : 'We could not open the payment just now. Please try again in a moment.'
+      );
     }
   };
 
@@ -1542,7 +1545,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
       </div>
       )}
 
-      {/* The QR and the UPI id, over whatever they were reading. */}
+      {/* Amount and Pay securely, which opens Razorpay. */}
       <PaySheet
         open={paying}
         onClose={() => setPaying(false)}
@@ -1550,7 +1553,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
         note={`Smira ${plan.label} membership`}
         busy={joining}
         error={failed}
-        onPaid={(paidVia, ref) => join(paidVia, ref)}
+        onPay={join}
       />
     </div>
   );

@@ -219,6 +219,8 @@ export const api = {
 
   joinMembership: (form) =>
     request('/website/membership', { method: 'POST', body: form, next: { revalidate: 0 } }),
+  payOrder: (ref) => request('/website/pay/order', { method: 'POST', body: { ref }, next: { revalidate: 0 } }),
+  payVerify: (result) => request('/website/pay/verify', { method: 'POST', body: result, next: { revalidate: 0 } }),
 
   login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
   me: (token) => request('/auth/me', { token }),

@@ -1,40 +1,80 @@
 /**
- * Who money is paid to, and how a phone is asked to pay it.
+ * Paying Smira through Razorpay.
  *
- * There is no payment gateway. What there is, is Smira's own merchant
- * account at SBI — so the member pays into it from their own UPI app, and
- * the desk matches the payment against the reference the member hands back.
- * Nothing here can confirm a payment; only the desk can, by looking at the
- * account. That is why a membership stays pending until they do.
- *
- * The id lives in one place, with an environment override, so moving to a
- * different account is a setting rather than a search through the code.
+ * The server opens the order and checks the result — the page only shows
+ * Razorpay's own Checkout (UPI, cards, net banking, wallets) in between. The
+ * amount comes from the server, never from this page, and the key secret
+ * never leaves the server.
  */
+import { api } from '@/lib/api';
 
 export const MERCHANT = {
-  name: process.env.NEXT_PUBLIC_UPI_NAME || 'SMIRA SERVICES PRIVATE LIMITED',
-  // Smira's UPI. Written here on purpose, not read from the server's
-  // settings, so an old id left in a .env cannot send money to the wrong place.
-  upi: 'smiraclub@axisbank',
+  name: 'SMIRA SERVICES PRIVATE LIMITED',
 };
 
+const CHECKOUT = 'https://checkout.razorpay.com/v1/checkout.js';
+let loading = null;
+
+/** Razorpay's Checkout script, loaded once, when it is first needed. */
+export function loadCheckout() {
+  if (typeof window === 'undefined') return Promise.reject(new Error('No window'));
+  if (window.Razorpay) return Promise.resolve(window.Razorpay);
+  if (!loading) {
+    loading = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = CHECKOUT;
+      s.async = true;
+      s.onload = () => (window.Razorpay ? resolve(window.Razorpay) : reject(new Error('Razorpay did not load')));
+      s.onerror = () => {
+        loading = null;
+        reject(new Error('Razorpay did not load'));
+      };
+      document.body.appendChild(s);
+    });
+  }
+  return loading;
+}
+
+/** Thrown when the member closes Checkout without paying. */
+export class PaymentClosed extends Error {
+  constructor() {
+    super('Payment was not completed. You can try again.');
+    this.closed = true;
+  }
+}
+
 /**
- * The UPI intent a QR encodes and a phone's UPI app opens.
- *
- * The amount travels in it, which is the whole reason for drawing our own
- * QR rather than printing the counter sticker: a member scanning this one
- * cannot pay the wrong amount by mistyping it.
+ * Pay for one membership (by its payRef). Resolves with the server's verdict
+ * once Razorpay has taken the money and the server has checked it.
  */
-export function upiLink({ amount, note } = {}) {
-  const q = new URLSearchParams({
-    pa: MERCHANT.upi,
-    pn: MERCHANT.name,
-    cu: 'INR',
+export async function payMembership(payRef, { note, color = '#123a63' } = {}) {
+  const [Razorpay, res] = await Promise.all([loadCheckout(), api.payOrder(payRef)]);
+  const o = res.data || {};
+  if (o.paid) return o; // already paid — nothing to charge
+
+  return new Promise((resolve, reject) => {
+    const rzp = new Razorpay({
+      key: o.keyId,
+      order_id: o.orderId,
+      amount: o.amount,
+      currency: o.currency || 'INR',
+      name: 'Smira Club',
+      description: note || o.description || 'Membership',
+      prefill: { name: o.name || '', contact: o.phone || '', email: o.email || '' },
+      theme: { color },
+      handler: (r) => {
+        api
+          .payVerify({
+            razorpay_order_id: r.razorpay_order_id,
+            razorpay_payment_id: r.razorpay_payment_id,
+            razorpay_signature: r.razorpay_signature,
+          })
+          .then((v) => resolve(v.data || {}))
+          // Money taken but our check did not answer: the webhook still settles it.
+          .catch(() => resolve({ status: 'Payment pending', checking: true }));
+      },
+      modal: { ondismiss: () => reject(new PaymentClosed()) },
+    });
+    rzp.open();
   });
-  if (amount > 0) q.set('am', String(Math.round(amount)));
-  if (note) q.set('tn', String(note).slice(0, 50));
-  // URLSearchParams writes a space as "+", which some UPI apps take
-  // literally and show the merchant as "SMIRA+SERVICES". %20 is read the
-  // same way by all of them.
-  return `upi://pay?${q.toString().split('+').join('%20')}`;
 }
