@@ -9,6 +9,7 @@ import { member, rewards, rewardsHero, rewardsNote } from '@/lib/content';
 import { toSrc } from '@/lib/imageSlot';
 import { api } from '@/lib/api';
 import { getSessionToken } from '@/lib/session';
+import { isMember, useMembership } from '@/lib/membership';
 import { inr } from '@/lib/format';
 
 /** How each state announces itself, and in what colour. */
@@ -33,6 +34,9 @@ const STATES = {
  * made-up "2 of 3 completed" against their own name.
  */
 export default function RewardsScreen({ hero, art = {} }) {
+  // The member's own tier and Member ID (SCS-1…), not the sample ones.
+  const { membership: held } = useMembership();
+  const holds = isMember(held);
   /** The gifts on this member's account, or null until we know. */
   const [mine, setMine] = useState(null);
   const [busy, setBusy] = useState('');
@@ -100,9 +104,9 @@ export default function RewardsScreen({ hero, art = {} }) {
             </span>
             <div className="min-w-0">
               <p className="text-[15px] font-bold uppercase tracking-wide text-white">
-                {member.tier}
+                {holds ? `${held.plan} Member` : member.tier}
               </p>
-              <p className="text-[13px] text-white/75">Member ID: {member.memberId}</p>
+              {holds && held.memberId && <p className="text-[13px] text-white/75">Member ID: {held.memberId}</p>}
             </div>
           </div>
 
