@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { getSessionToken } from '@/lib/session';
+import { getSessionToken, setSessionToken } from '@/lib/session';
+
+/** Fired when the saved membership changes, so every card on the page updates. */
+export const MEMBERSHIP_CHANGED = 'smira:membership';
 
 /**
  * Whether this visitor is a Smira Club member, kept in this browser.
@@ -28,6 +31,11 @@ export function saveMembership(m) {
     window.localStorage.setItem(KEY, JSON.stringify(m));
   } catch {
     /* storage blocked — membership lasts until the tab closes */
+  }
+  try {
+    window.dispatchEvent(new Event(MEMBERSHIP_CHANGED));
+  } catch {
+    /* no window */
   }
 }
 
@@ -85,8 +93,13 @@ export function useMembership() {
     const saved = loadMembership();
     setState({ ready: true, membership: saved });
 
+    // Signing in (or paying) elsewhere on the page updates this one too.
+    const changed = () => setState({ ready: true, membership: loadMembership() });
+    window.addEventListener(MEMBERSHIP_CHANGED, changed);
+    const stop = () => window.removeEventListener(MEMBERSHIP_CHANGED, changed);
+
     const token = getSessionToken();
-    if (!token) return;
+    if (!token) return stop;
 
     api
       .memberMe(token)
@@ -97,9 +110,13 @@ export function useMembership() {
         saveMembership(merged);
         setState({ ready: true, membership: merged });
       })
-      .catch(() => {
-        /* offline or signed out — the saved copy still stands */
+      .catch((err) => {
+        // A session the server no longer accepts is dropped, so the card
+        // can offer to sign in again rather than show stale nothing.
+        if (err?.status === 401 || err?.status === 403) setSessionToken('');
+        /* offline — the saved copy still stands */
       });
+    return stop;
   }, []);
 
   return state;

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Check, ChevronRight, Crown } from 'lucide-react';
 import { isMember, useMembership } from '@/lib/membership';
 import { api } from '@/lib/api';
+import { getSessionToken } from '@/lib/session';
+import { OPEN_AUTH } from '@/components/auth/AuthPopup';
 import { useSavings } from '@/lib/savings';
 import { inr } from '@/lib/format';
 import { privilegeInfo } from '@/lib/privileges';
@@ -98,6 +100,9 @@ export default function MembershipCard() {
   // Only once the membership is theirs: someone still paying sees none.
   const { benefits, facts } = usePlanBenefits(membership, member);
   const [allShown, setAllShown] = useState(false);
+  // Read after mount: no session means the desk could not be asked.
+  const [noSession, setNoSession] = useState(false);
+  useEffect(() => setNoSession(!getSessionToken()), [membership]);
   const shownBenefits = allShown ? benefits : benefits.slice(0, FIRST);
 
   return (
@@ -220,6 +225,15 @@ export default function MembershipCard() {
         {member ? 'Explore membership Benefits' : 'Explore Membership Plans'}
         <ChevronRight size={18} className="shrink-0 text-ink-500" />
       </Link>
+      {!member && noSession && (
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event(OPEN_AUTH))}
+          className="mt-2 w-full text-center text-[12px] font-semibold text-white/90 underline underline-offset-2"
+        >
+          Already a member? Verify your number to show it
+        </button>
+      )}
     </section>
   );
 }
