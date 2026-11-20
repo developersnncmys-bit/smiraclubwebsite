@@ -838,19 +838,14 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   style={{ backgroundImage: p.gradient }}
                   className={`relative flex w-[8.5rem] shrink-0 flex-col items-center justify-center rounded-t-2xl px-3 text-white transition ${
                     on
-                      ? 'z-10 h-[6.25rem] shadow-[0_-6px_18px_rgba(17,24,32,0.14)] ring-[3px] ring-[#f5b301] ring-offset-2 ring-offset-white'
-                      : 'h-[5.25rem] opacity-80 hover:opacity-100'
+                      ? 'z-10 h-[6.25rem] shadow-[0_-6px_18px_rgba(17,24,32,0.14)]'
+                      : 'h-[5.25rem] opacity-60 hover:opacity-90'
                   }`}
                 >
                   {(p.popular || entry) && (
                     <span className={`absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white ${p.popular ? 'bg-ink-900' : 'bg-emerald-600'}`}>
                       <Crown size={11} className="text-gold" fill="currentColor" strokeWidth={0} />
                       {p.popular ? 'Most Popular' : 'New Member'}
-                    </span>
-                  )}
-                  {on && (
-                    <span className="absolute right-2 top-2 grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-extrabold text-ink-900">
-                      ✓
                     </span>
                   )}
                   <span className="block text-[13.5px] lg:text-[15px] font-extrabold uppercase tracking-wide">
