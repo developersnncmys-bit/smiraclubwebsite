@@ -845,7 +845,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   {(p.popular || entry) && (
                     <span className={`absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white ${p.popular ? 'bg-ink-900' : 'bg-emerald-600'}`}>
                       <Crown size={11} className="text-gold" fill="currentColor" strokeWidth={0} />
-                      {p.popular ? 'Most Popular' : 'New Member'}
+                      Try &amp; Experience
                     </span>
                   )}
                   <span className="block text-[13.5px] lg:text-[15px] font-extrabold uppercase tracking-wide">
