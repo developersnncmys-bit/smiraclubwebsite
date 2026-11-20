@@ -50,14 +50,14 @@ export const deskHref = (item) => `${DESK_ROUTE[item.category] || '/listing'}/${
 
 /** A picture for a desk item: its own if it has one, else the slot we keep. */
 const FALLBACK_SLOT = {
-  Hotels: 'hotel-la-calypso',
+  Hotels: 'lux-resort',
   Villas: 'villa-hero-beach',
   Restaurants: 'rest-courtyard-tree',
   'Spa and salon': 'spa-serenity',
   Activities: 'act-beach-camping',
   Attractions: 'park-wet-joy',
   Experiences: 'lux-helicopter',
-  Packages: 'pkg-goa-escape',
+  Packages: 'ai-goa-resorts',
   Transport: 'hero-benefits',
   Flights: 'hero-benefits',
 };

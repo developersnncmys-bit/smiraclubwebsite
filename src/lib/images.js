@@ -35,6 +35,10 @@ export function image(slot) {
         break;
       }
     }
+    // Neither a photo nor its drawing exists: the generic placeholder, never a broken image.
+    if (found.startsWith('/img/') && !fs.existsSync(path.join(DIR, found.slice('/img/'.length)))) {
+      found = '/img/placeholder.svg';
+    }
   } catch {
     // On any filesystem trouble the placeholder is still a good answer.
   }
