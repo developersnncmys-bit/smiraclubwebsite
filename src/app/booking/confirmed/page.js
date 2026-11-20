@@ -4,7 +4,7 @@ import { ArrowUpRight, CircleCheck, ChevronLeft, Flower2, Sparkles, Tent, Trees 
 import { image } from '@/lib/images';
 import { inr } from '@/lib/format';
 
-export const metadata = { title: 'Booking Confirmed' };
+export const metadata = { title: 'Booking request sent' };
 
 /** One line of the summary: label left, value right, value can wrap. */
 function Row({ label, children }) {
@@ -102,7 +102,7 @@ export default async function Page({ searchParams }) {
             )}
 
             <h1 className="mt-5 text-[21px] font-extrabold text-ink-900 lg:text-3xl">
-              {requested ? 'Request received' : 'Booking Confirmed!'}
+              {requested ? 'Request received' : 'Booking request sent'}
             </h1>
             {requested ? (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
@@ -111,8 +111,8 @@ export default async function Page({ searchParams }) {
               </p>
             ) : (
               <p className="mt-2 text-[14px] text-ink-500 lg:text-base">
-                Your {k.noun} {k.art ? 'has been' : 'is'} booked successfully.
-                {k.extra && <span className="block">{k.extra}</span>}
+                Please wait for confirmation.
+                <span className="block">Our team will confirm your {k.noun} shortly.</span>
               </p>
             )}
           </div>
@@ -132,7 +132,7 @@ export default async function Page({ searchParams }) {
               {location && <Row label="Location">{location}</Row>}
 
               {total > 0 && (
-                <Row label={requested ? 'Total Amount' : 'Total Amount Paid'}>
+                <Row label="Total Amount">
                   {inr(total)}
                   <span className="block text-[13px] font-normal text-ink-500">(Incl. taxes &amp; fees)</span>
                 </Row>
