@@ -316,7 +316,13 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
    */
   const chosenTab = useRef(null);
   useEffect(() => {
-    chosenTab.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    // Scroll only the row of tabs (not the page), so the chosen one is in view
+    // and the first plan sits flush at the start.
+    const t = chosenTab.current;
+    const rail = t?.parentElement;
+    if (!t || !rail) return;
+    const left = rail.scrollLeft + t.getBoundingClientRect().left - rail.getBoundingClientRect().left - (rail.clientWidth - t.clientWidth) / 2;
+    rail.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
   }, [plan.key, tab]);
 
   /** How many privileges are still theirs to pick. */
@@ -811,7 +817,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             what is selected — a pill that is merely taller does not.
           */}
           <div>
-          <div className="rail items-end gap-2 pt-5">
+          <div className="rail items-end gap-2 px-1.5 pt-5">
             {plans.map((p) => {
               // The entry plan (Silver) carries the New Member badge.
               const entry = p.key === entryKey;
@@ -830,16 +836,16 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   onClick={() => setPlanKey(p.key)}
                   aria-pressed={on}
                   style={{ backgroundImage: p.gradient }}
-                  className={`relative w-[8.5rem] shrink-0 rounded-t-2xl px-3 text-white transition ${
+                  className={`relative flex w-[8.5rem] shrink-0 flex-col items-center justify-center rounded-t-2xl px-3 text-white transition ${
                     on
-                      ? 'z-10 py-7 shadow-[0_-6px_18px_rgba(17,24,32,0.14)] ring-[3px] ring-[#f5b301] ring-offset-2 ring-offset-white'
-                      : 'py-4 opacity-80 hover:opacity-100'
+                      ? 'z-10 h-[6.25rem] shadow-[0_-6px_18px_rgba(17,24,32,0.14)] ring-[3px] ring-[#f5b301] ring-offset-2 ring-offset-white'
+                      : 'h-[5.25rem] opacity-80 hover:opacity-100'
                   }`}
                 >
-                  {entry && (
-                    <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                  {(p.popular || entry) && (
+                    <span className={`absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white ${p.popular ? 'bg-ink-900' : 'bg-emerald-600'}`}>
                       <Crown size={11} className="text-gold" fill="currentColor" strokeWidth={0} />
-                      New Member
+                      {p.popular ? 'Most Popular' : 'New Member'}
                     </span>
                   )}
                   {on && (
@@ -850,7 +856,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   <span className="block text-[13.5px] lg:text-[15px] font-extrabold uppercase tracking-wide">
                     {p.label}
                   </span>
-                  {!on && <span className="mt-1 block text-[12px] lg:text-[13px] leading-tight">{p.audience}</span>}
+                  {!on && <span className="mt-1 block w-full truncate text-[12px] lg:text-[13px] leading-tight">{p.audience}</span>}
                 </button>
               );
             })}
