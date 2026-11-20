@@ -291,6 +291,11 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
       return { ...fromDesk(base, d), key: d.code || String(d._id || `plan-${i}`) };
     });
   }, [desk]);
+  /** The entry plan — the cheapest, Silver — shown first and badged New Member. */
+  const entryKey = useMemo(
+    () => [...plans].sort((a, b) => (Number(a.fee) || 0) - (Number(b.fee) || 0))[0]?.key,
+    [plans],
+  );
   const plan =
     plans.find((p) => p.key === planKey) ||
     // Someone new starts on the entry plan (Silver), not the most expensive one.
@@ -806,8 +811,10 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             what is selected — a pill that is merely taller does not.
           */}
           <div>
-          <div className="rail items-end gap-2 pt-4">
+          <div className="rail items-end gap-2 pt-5">
             {plans.map((p) => {
+              // The entry plan (Silver) carries the New Member badge.
+              const entry = p.key === entryKey;
               /*
                * Marked against the plan on show, not the key last
                * pressed. Nothing is pressed when the page opens, so the
@@ -825,14 +832,19 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
                   style={{ backgroundImage: p.gradient }}
                   className={`relative w-[8.5rem] shrink-0 rounded-t-2xl px-3 text-white transition ${
                     on
-                      ? 'z-10 py-7 shadow-[0_-6px_18px_rgba(17,24,32,0.14)]'
+                      ? 'z-10 py-7 shadow-[0_-6px_18px_rgba(17,24,32,0.14)] ring-[3px] ring-[#f5b301] ring-offset-2 ring-offset-white'
                       : 'py-4 opacity-80 hover:opacity-100'
                   }`}
                 >
-                  {p.popular && (
-                    <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide">
+                  {entry && (
+                    <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
                       <Crown size={11} className="text-gold" fill="currentColor" strokeWidth={0} />
-                      Most Popular
+                      New Member
+                    </span>
+                  )}
+                  {on && (
+                    <span className="absolute right-2 top-2 grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-extrabold text-ink-900">
+                      ✓
                     </span>
                   )}
                   <span className="block text-[13.5px] lg:text-[15px] font-extrabold uppercase tracking-wide">
