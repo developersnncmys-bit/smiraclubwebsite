@@ -816,8 +816,8 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
             into the panel it opened, which is how the design marks
             what is selected — a pill that is merely taller does not.
           */}
-          <div>
-          <div className="rail items-end gap-2 px-1.5 pt-5">
+          <div className="contents">
+          <div className="rail sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 items-end gap-2 bg-surface-soft px-1.5 pt-5 lg:top-16">
             {plans.map((p) => {
               // The entry plan (Silver) carries the New Member badge.
               const entry = p.key === entryKey;
@@ -860,7 +860,7 @@ export default function MembershipScreen({ hero, helper, compare, desk = [], off
           {/* -- What that tier is, hanging from the tab ------------ */}
           <section
             style={{ backgroundImage: plan.gradient }}
-            className="-mt-1 overflow-hidden rounded-b-2xl rounded-tr-xl pt-2.5"
+            className="!-mt-1 overflow-hidden rounded-b-2xl rounded-tr-xl pt-2.5"
           >
             <div className="rounded-b-2xl rounded-t-xl bg-white p-4 sm:p-5">
               <h2 className="text-[17px] lg:text-xl font-bold" style={{ color: plan.accent }}>{plan.title}</h2>
